@@ -1,6 +1,4 @@
 import { SanityImage } from "@/components/ui/sanity-image";
-import { Heading } from "@/components/ui/heading";
-import { Paragraph } from "@/components/ui/paragraph";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 
@@ -23,98 +21,81 @@ interface TourCardProps {
   className?: string;
 }
 
+function formatPrice(value: number, currency: string): string {
+  // Форматируем число с пробелами для тысяч и добавляем валюту
+  const formattedValue = value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  return `OT ${formattedValue} ${currency}`;
+}
+
 export function TourCard({ tour, className }: TourCardProps) {
+  const formattedPrice = tour.price
+    ? formatPrice(tour.price.value, tour.price.currency)
+    : null;
+
   return (
     <Link
       href={`/tours/${tour.slug.current}`}
       className={cn(
-        "group relative block overflow-hidden bg-white transition-all duration-700 hover:-translate-y-2",
+        "group relative block overflow-hidden rounded-2xl transition-all duration-300",
         className
       )}
     >
-      {/* Декоративный номер/индикатор (будет динамически меняться) */}
-      <div className="absolute top-6 right-6 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-        <div className="w-12 h-12 rounded-full bg-[#bea692]/10 backdrop-blur-sm border border-[#bea692]/30 flex items-center justify-center">
-          <span className="text-[#bea692] text-xs font-bold">→</span>
-        </div>
-      </div>
-
-      {/* Изображение с асимметричным наложением */}
-      <div className="relative aspect-[3/4] overflow-hidden">
-        {/* Декоративная линия сверху */}
-        <div className="absolute top-0 left-0 right-0 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-          <div className="h-1 bg-gradient-to-r from-[#bea692] via-[#bea692]/50 to-transparent" />
-        </div>
-        
-        {/* Градиентное наложение */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#1a1a1a]/60 via-[#1a1a1a]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10" />
-        
-        {/* Изображение */}
+      {/* Контейнер карточки - весь контент поверх изображения */}
+      <div className="relative aspect-[3/4] w-full">
+        {/* Изображение на фоне */}
         <SanityImage
           image={tour.mainImage}
-          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-          width={600}
-          height={800}
+          className="absolute inset-0 h-full w-full object-cover rounded-2xl"
+          fill
           alt={tour.name}
         />
-        
-        {/* Декоративный угол */}
-        <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-      </div>
 
-      {/* Контент с нестандартным размещением */}
-      <div className="relative p-6 md:p-8 bg-white">
-        {/* Вертикальная декоративная линия */}
-        <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#bea692] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-        
-        {/* Заголовок с декоративным элементом */}
-        <div className="relative mb-4">
-          <div className="absolute -left-4 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[#bea692] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-          <Heading as="h3" className="text-xl md:text-2xl mb-0 text-foreground group-hover:text-[#bea692] transition-colors duration-300 relative pl-2">
-            {tour.name}
-          </Heading>
-        </div>
-        
-        {/* Описание */}
-        <Paragraph className="text-sm md:text-base text-muted-foreground leading-relaxed line-clamp-3 mb-6">
-          {tour.shortDescription}
-        </Paragraph>
-        
-        {/* Футер с информацией */}
-        {(tour.dates || tour.price) && (
-          <div className="mt-6 pt-6 border-t border-[#e5e0db] relative">
-            {/* Декоративная точка на границе */}
-            <div className="absolute -top-1 left-0 w-2 h-2 rounded-full bg-[#bea692] opacity-50" />
-            
-            <div className="flex items-center justify-between gap-4">
-              {tour.dates && (
-                <div className="flex items-center gap-2">
-                  <div className="w-1 h-1 rounded-full bg-[#6b6661]" />
-                  <span className="text-xs md:text-sm font-medium text-[#6b6661] uppercase tracking-wider">
-                    {tour.dates}
-                  </span>
-                </div>
-              )}
-              {tour.price && (
-                <div className="ml-auto flex items-baseline gap-2">
-                  <span className="text-lg md:text-xl font-bold text-[#bea692]">
-                    {tour.price.value}
-                  </span>
-                  <span className="text-sm text-muted-foreground">
-                    {tour.price.currency}
-                  </span>
-                </div>
-              )}
+        {/* Overlay - легкое затемнение по умолчанию, сильное при hover */}
+        <div className="absolute inset-0 bg-black/40 transition-all duration-300 group-hover:bg-black/75 rounded-2xl z-10" />
+
+        {/* Светлая граница/подсветка по краям */}
+        <div className="absolute inset-0 rounded-2xl border border-white/30 pointer-events-none z-20" />
+
+        {/* Весь контент поверх изображения */}
+        <div className="absolute inset-0 flex flex-col justify-between p-6 md:p-8 z-20">
+          {/* Верхняя часть: название, даты, цена */}
+          <div className="flex flex-col gap-2 md:gap-3">
+            {/* Название тура */}
+            <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold uppercase tracking-tight leading-tight text-white">
+              {tour.name}
+            </h3>
+
+            {/* Даты */}
+            {tour.dates && (
+              <p className="text-sm md:text-base uppercase tracking-wider font-medium text-white">
+                {tour.dates}
+              </p>
+            )}
+
+            {/* Цена */}
+            {formattedPrice && (
+              <p className="text-base md:text-lg lg:text-xl font-bold mt-1 text-white">
+                {formattedPrice}
+              </p>
+            )}
+
+            {/* Описание - появляется только при hover */}
+            <div className="mt-4 overflow-hidden">
+              <p className="text-sm md:text-base leading-relaxed text-white opacity-0 max-h-0 transition-all duration-300 ease-in-out group-hover:opacity-100 group-hover:max-h-[500px]">
+                {tour.shortDescription}
+              </p>
             </div>
           </div>
-        )}
-        
-        {/* Декоративный элемент внизу */}
-        <div className="absolute bottom-0 right-0 w-16 h-16 bg-gradient-to-tl from-[#bea692]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-      </div>
 
-      {/* Внешняя тень при hover */}
-      <div className="absolute inset-0 shadow-card-elevated opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl" />
+          {/* Нижняя часть: кнопка "Подробнее" */}
+          <div className="flex items-center gap-2 text-sm md:text-base font-medium uppercase tracking-wide text-white">
+            <span>Подробнее</span>
+            <span className="transition-transform duration-300 group-hover:translate-x-1 inline-block">
+              →
+            </span>
+          </div>
+        </div>
+      </div>
     </Link>
   );
 }

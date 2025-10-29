@@ -8,6 +8,7 @@ interface SanityImageProps {
   width?: number;
   height?: number;
   alt?: string;
+  fill?: boolean;
 }
 
 export function SanityImage({
@@ -16,14 +17,15 @@ export function SanityImage({
   width = 800,
   height = 800,
   alt = "",
+  fill = false,
 }: SanityImageProps) {
   if (!image?.asset) {
     return (
       <div
         className={className}
         style={{
-          width: `${width}px`,
-          height: `${height}px`,
+          width: fill ? "100%" : `${width}px`,
+          height: fill ? "100%" : `${height}px`,
           backgroundColor: "#f3f4f6",
           display: "flex",
           alignItems: "center",
@@ -36,7 +38,21 @@ export function SanityImage({
   }
 
   try {
-    const imageUrl = urlFor(image).width(width).height(height).url();
+    const imageUrl = fill
+      ? urlFor(image).width(1200).height(1600).url()
+      : urlFor(image).width(width).height(height).url();
+
+    if (fill) {
+      return (
+        <Image
+          src={imageUrl}
+          alt={alt}
+          fill
+          className={className}
+          style={{ objectFit: "cover" }}
+        />
+      );
+    }
 
     return (
       <Image
@@ -52,8 +68,8 @@ export function SanityImage({
       <div
         className={className}
         style={{
-          width: `${width}px`,
-          height: `${height}px`,
+          width: fill ? "100%" : `${width}px`,
+          height: fill ? "100%" : `${height}px`,
           backgroundColor: "#f3f4f6",
           display: "flex",
           alignItems: "center",
