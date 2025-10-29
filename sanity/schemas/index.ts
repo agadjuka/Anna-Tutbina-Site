@@ -1,7 +1,8 @@
-import {defineType, defineField} from 'sanity'
+import tour from './tour'
+import review from './review'
+import about from './about'
+import customTour from './customTour'
 
-export const schemaTypes = [
-  // Схемы будут добавлены позже
-]
+export const schemaTypes = [tour, review, about, customTour]
 
 

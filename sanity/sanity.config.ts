@@ -18,6 +18,11 @@ export default defineConfig({
   schema: {
     types: schemaTypes,
   },
+
+  api: {
+    projectId: 'i8t1squc',
+    dataset: 'production',
+  },
 })
 
 
