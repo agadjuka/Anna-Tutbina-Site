@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { ttDrugs, theanoDidot } from "@/lib/fonts";
 import { Footer } from "@/components/sections/footer";
+import { Header } from "@/components/sections/header";
 
 export const metadata: Metadata = {
   title: {
@@ -21,6 +22,7 @@ export default function RootLayout({
       <body
         className={`${ttDrugs.variable} ${theanoDidot.variable} antialiased`}
       >
+        <Header />
         {children}
         <Footer />
       </body>

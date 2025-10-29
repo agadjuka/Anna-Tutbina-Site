@@ -26,13 +26,13 @@ export function CustomTourSection({ title, mainImage }: CustomTourSectionProps) 
         backgroundAttachment: "fixed",
       }}
     >
-      <div className="absolute inset-0 bg-black/40" />
+      <div className="absolute inset-0 bg-black/50" />
       <Container>
-        <div className="relative flex flex-col items-center justify-center text-center py-24 md:py-40 gap-6">
-          <Heading as="h2" className="text-white drop-shadow-md">
+        <div className="relative flex flex-col items-center justify-center text-center py-28 md:py-44 gap-6">
+          <Heading as="h2" className="text-white text-4xl md:text-6xl drop-shadow-md">
             {title || "Индивидуальный тур"}
           </Heading>
-          <Button asChild variant="secondary" className="backdrop-blur-sm">
+          <Button asChild variant="primary" className="px-8 py-4 shadow-sm">
             <Link href="/custom-tour">Узнать подробнее</Link>
           </Button>
         </div>

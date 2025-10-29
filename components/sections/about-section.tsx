@@ -12,7 +12,7 @@ export function AboutSection({ image, bio }: AboutSectionProps) {
   return (
     <section className="py-8 md:py-12">
       <Container>
-        <div className="grid md:grid-cols-2 gap-8 items-start">
+        <div className="grid md:grid-cols-2 gap-16 items-start">
           <div>
             <SanityImage
               image={image}
@@ -21,8 +21,8 @@ export function AboutSection({ image, bio }: AboutSectionProps) {
             />
           </div>
           <div>
-            <Heading as="h2" className="mb-4">Обо мне</Heading>
-            <PortableTextContent value={bio} className="mb-0" />
+            <Heading as="h2" className="mb-6">Обо мне</Heading>
+            <PortableTextContent value={bio} className="mb-0 text-lg leading-relaxed" />
           </div>
         </div>
       </Container>

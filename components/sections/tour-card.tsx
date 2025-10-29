@@ -28,7 +28,7 @@ export function TourCard({ tour, className }: TourCardProps) {
     <Link
       href={`/tours/${tour.slug.current}`}
       className={cn(
-        "group block overflow-hidden rounded-lg bg-white transition-shadow hover:shadow-md",
+        "group block overflow-hidden rounded-lg bg-white transition-shadow hover:shadow-md transition-transform duration-300 hover:-translate-y-2",
         className
       )}
     >
@@ -41,15 +41,15 @@ export function TourCard({ tour, className }: TourCardProps) {
           alt={tour.name}
         />
       </div>
-      <div className="space-y-3 p-6">
-        <Heading as="h3" className="text-xl">
+      <div className="p-6">
+        <Heading as="h3" className="text-2xl md:text-3xl">
           {tour.name}
         </Heading>
-        <Paragraph className="text-sm text-gray-600">
+        <Paragraph className="mt-4 text-base text-gray-600">
           {tour.shortDescription}
         </Paragraph>
         {(tour.dates || tour.price) && (
-          <div className="flex items-center justify-between pt-2">
+          <div className="mt-6 flex items-center justify-between">
             {tour.dates && (
               <span className="text-sm font-medium text-gray-700">
                 {tour.dates}

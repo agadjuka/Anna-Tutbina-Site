@@ -48,11 +48,11 @@ export default async function HomePage() {
   return (
     <main className="min-h-screen py-8">
       {about && (
-        <section id="about">
+        <section id="about" className="py-16 md:py-24">
           <AboutSection image={about.image} bio={about.bio} />
         </section>
       )}
-      <section id="tours">
+      <section id="tours" className="py-16 md:py-24">
       <Container>
         <div className="space-y-8">
           <Heading as="h2">Наши туры</Heading>
@@ -64,7 +64,7 @@ export default async function HomePage() {
         </div>
       </Container>
       </section>
-      <section id="reviews">
+      <section id="reviews" className="py-16 md:py-24">
       <Container>
         <ReviewsSection reviews={reviews} />
       </Container>

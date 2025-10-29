@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { Heading } from "@/components/ui/heading";
 import { ReviewCard } from "@/components/sections/review-card";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface ReviewItem {
   _id: string;
@@ -42,31 +43,33 @@ export function ReviewsSection({ reviews }: ReviewsSectionProps) {
     <section className="py-12">
       <div className="mb-6 flex items-center justify-between">
         <Heading as="h2">Что говорят наши участницы</Heading>
-        <div className="flex gap-2">
+        <div className="flex gap-3">
           <button
             type="button"
             onClick={scrollPrev}
             disabled={!canScrollPrev}
-            className="rounded-md border border-gray-200 px-3 py-2 text-sm disabled:opacity-50"
+            className="h-10 w-10 rounded-full border border-zinc-200 bg-white text-zinc-800 hover:bg-zinc-100 disabled:opacity-50 flex items-center justify-center transition-colors"
+            aria-label="Назад"
           >
-            Назад
+            <ChevronLeft className="h-5 w-5" />
           </button>
           <button
             type="button"
             onClick={scrollNext}
             disabled={!canScrollNext}
-            className="rounded-md border border-gray-200 px-3 py-2 text-sm disabled:opacity-50"
+            className="h-10 w-10 rounded-full border border-zinc-200 bg-white text-zinc-800 hover:bg-zinc-100 disabled:opacity-50 flex items-center justify-center transition-colors"
+            aria-label="Вперёд"
           >
-            Вперёд
+            <ChevronRight className="h-5 w-5" />
           </button>
         </div>
       </div>
 
       <div className="overflow-hidden" ref={emblaRef}>
-        <div className="-ml-4 flex">
+        <div className="-ml-8 flex">
           {reviews.map((review) => (
-            <div key={review._id} className="min-w-0 shrink-0 grow-0 basis-full pl-4 md:basis-1/2 lg:basis-1/3">
-              <div className="h-[260px]">
+            <div key={review._id} className="min-w-0 shrink-0 grow-0 basis-full pl-8 md:basis-1/2 lg:basis-1/3">
+              <div className="h-[300px]">
                 <ReviewCard review={review} />
               </div>
             </div>
