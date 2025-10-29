@@ -13,3 +13,17 @@ export const toursQuery = groq`
 `;
 
 
+export const tourBySlugQuery = groq`
+  *[_type == "tour" && slug.current == $slug][0]{
+    _id,
+    name,
+    slug,
+    mainImage,
+    gallery,
+    fullProgram,
+    dates,
+    price
+  }
+`;
+
+

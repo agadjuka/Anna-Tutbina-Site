@@ -2,6 +2,7 @@ import { SanityImage } from "@/components/ui/sanity-image";
 import { Heading } from "@/components/ui/heading";
 import { Paragraph } from "@/components/ui/paragraph";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 interface Price {
   value: number;
@@ -14,6 +15,7 @@ interface Tour {
   shortDescription: string;
   dates?: string;
   price?: Price;
+  slug: { current: string };
 }
 
 interface TourCardProps {
@@ -23,9 +25,10 @@ interface TourCardProps {
 
 export function TourCard({ tour, className }: TourCardProps) {
   return (
-    <div
+    <Link
+      href={`/tours/${tour.slug.current}`}
       className={cn(
-        "group overflow-hidden rounded-lg bg-white transition-shadow hover:shadow-md",
+        "group block overflow-hidden rounded-lg bg-white transition-shadow hover:shadow-md",
         className
       )}
     >
@@ -60,7 +63,7 @@ export function TourCard({ tour, className }: TourCardProps) {
           </div>
         )}
       </div>
-    </div>
+    </Link>
   );
 }
 
