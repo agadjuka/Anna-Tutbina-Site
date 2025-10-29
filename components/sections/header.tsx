@@ -9,15 +9,9 @@ export function Header() {
           {/* Декоративная линия слева */}
           <div className="absolute left-0 bottom-0 top-0 w-px bg-gradient-to-b from-[#bea692] via-transparent to-[#bea692] opacity-30 hidden lg:block" />
           
-          <Link 
-            href="/" 
-            className="relative text-xl md:text-2xl font-heading font-bold tracking-tight text-foreground hover:text-[#bea692] transition-colors duration-300 group"
-            style={{ fontFamily: 'var(--font-leotaro), serif' }}
-          >
-            <span className="relative z-10">Anna Turbina Tours</span>
-            {/* Декоративное подчеркивание */}
-            <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#bea692] group-hover:w-full transition-all duration-500" />
-          </Link>
+          <div className="text-xl md:text-2xl font-heading font-bold tracking-tight text-foreground">
+            Anna Turbina Tours
+          </div>
           
           <nav>
             <ul className="flex items-center gap-8 md:gap-12 text-sm md:text-base">
