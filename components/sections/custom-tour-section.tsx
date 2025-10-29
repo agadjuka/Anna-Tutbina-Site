@@ -17,14 +17,16 @@ export function CustomTourSection({ title, mainImage }: CustomTourSectionProps) 
       
       <Container>
         <div className="relative flex flex-col items-center justify-center text-center py-20 md:py-28 lg:py-32 gap-8">
-          <div className="space-y-6 max-w-4xl">
+          <div className="space-y-6 w-full">
             <SectionHeading as="h2" className="mb-6">
               {title || "Индивидуальный тур"}
             </SectionHeading>
             
-            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              Персональные маршруты, созданные специально для вас
-            </p>
+            <div className="max-w-4xl mx-auto">
+              <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+                Персональные маршруты, созданные специально для вас
+              </p>
+            </div>
           </div>
           
           <div className="mt-6">
