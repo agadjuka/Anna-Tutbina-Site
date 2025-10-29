@@ -1,24 +1,24 @@
 import { cn } from "@/lib/utils";
-import { type HTMLAttributes } from "react";
+import { type HTMLAttributes, type ReactNode } from "react";
 
 interface HeadingProps extends HTMLAttributes<HTMLHeadingElement> {
   as?: "h1" | "h2" | "h3" | "h4";
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 export function Heading({ as = "h1", children, className, ...props }: HeadingProps) {
   const Component = as;
 
   const headingStyles = {
-    h1: "text-4xl md:text-6xl font-bold",
-    h2: "text-3xl md:text-5xl font-bold",
-    h3: "text-2xl md:text-4xl font-semibold",
-    h4: "text-xl md:text-3xl font-semibold",
+    h1: "text-4xl md:text-6xl lg:text-7xl font-bold leading-[1.1] mb-6",
+    h2: "text-3xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6",
+    h3: "text-2xl md:text-4xl font-semibold leading-tight mb-4",
+    h4: "text-xl md:text-3xl font-semibold leading-tight mb-3",
   };
 
   return (
     <Component
-      className={cn("font-heading", headingStyles[as], className)}
+      className={cn("font-heading text-foreground", headingStyles[as], className)}
       {...props}
     >
       {children}

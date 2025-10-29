@@ -5,12 +5,20 @@
   --font-sans: var(--font-tt-drugs), sans-serif;
   --font-heading: var(--font-theano-didot), serif;
 
-  /* Кастомная цветовая палитра */
+  /* Пастельная коричневая палитра */
   --color-background: #f9f9f9;
   --color-foreground: #1a1a1a;
   --color-primary: #bea692;
+  --color-primary-light: #d4c4b5;
+  --color-primary-dark: #a68f7a;
   --color-muted: #e5e0db;
   --color-muted-foreground: #6b6661;
+  --color-accent: #bea692;
+  --color-card: #ffffff;
+  --color-border: #e5e0db;
+  --color-border-light: #f5f3f0;
+  --color-text-muted: #6b6661;
+  --color-text-light: #8a8681;
 }
 
 @layer base {
@@ -19,7 +27,8 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply bg-background text-foreground font-sans antialiased;
+    @apply text-muted-foreground;
   }
 
   h1,
@@ -28,6 +37,25 @@
   h4,
   h5,
   h6 {
-    @apply font-heading;
+    @apply font-heading text-foreground;
+    @apply tracking-tight;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .shadow-card {
+    box-shadow: 0 2px 12px rgba(107, 102, 97, 0.08), 0 1px 3px rgba(107, 102, 97, 0.05);
+  }
+  
+  .shadow-card-hover {
+    box-shadow: 0 8px 24px rgba(107, 102, 97, 0.12), 0 4px 8px rgba(107, 102, 97, 0.08);
+  }
+  
+  .gradient-overlay {
+    background: linear-gradient(180deg, rgba(249, 249, 249, 0) 0%, rgba(249, 249, 249, 0.95) 100%);
   }
 }

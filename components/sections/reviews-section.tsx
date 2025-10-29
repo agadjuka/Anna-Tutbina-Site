@@ -41,14 +41,19 @@ export function ReviewsSection({ reviews }: ReviewsSectionProps) {
 
   return (
     <section className="py-12">
-      <div className="mb-6 flex items-center justify-between">
-        <Heading as="h2">Что говорят наши участницы</Heading>
-        <div className="flex gap-3">
+      <div className="mb-8 md:mb-12 flex items-center justify-between">
+        <div>
+          <span className="text-sm md:text-base uppercase tracking-wider text-[#bea692] font-medium mb-2 block">
+            Отзывы
+          </span>
+          <Heading as="h2" className="mb-0">Что говорят наши участницы</Heading>
+        </div>
+        <div className="flex gap-2">
           <button
             type="button"
             onClick={scrollPrev}
             disabled={!canScrollPrev}
-            className="h-10 w-10 rounded-full border border-zinc-200 bg-white text-zinc-800 hover:bg-zinc-100 disabled:opacity-50 flex items-center justify-center transition-colors"
+            className="h-11 w-11 rounded-full border border-[#e5e0db] bg-white text-muted-foreground hover:text-foreground hover:bg-[#e5e0db] hover:border-[#bea692] disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center transition-all duration-300 shadow-sm"
             aria-label="Назад"
           >
             <ChevronLeft className="h-5 w-5" />
@@ -57,7 +62,7 @@ export function ReviewsSection({ reviews }: ReviewsSectionProps) {
             type="button"
             onClick={scrollNext}
             disabled={!canScrollNext}
-            className="h-10 w-10 rounded-full border border-zinc-200 bg-white text-zinc-800 hover:bg-zinc-100 disabled:opacity-50 flex items-center justify-center transition-colors"
+            className="h-11 w-11 rounded-full border border-[#e5e0db] bg-white text-muted-foreground hover:text-foreground hover:bg-[#e5e0db] hover:border-[#bea692] disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center transition-all duration-300 shadow-sm"
             aria-label="Вперёд"
           >
             <ChevronRight className="h-5 w-5" />
