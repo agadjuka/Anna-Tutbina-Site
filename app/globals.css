@@ -1,0 +1,157 @@
+@import "tailwindcss";
+
+@theme {
+  /* Кастомные шрифты */
+  --font-sans: var(--font-kinetika), sans-serif;
+  --font-heading: var(--font-leotaro), serif;
+
+  /* Пастельная коричневая палитра */
+  --color-background: #f9f9f9;
+  --color-foreground: #1a1a1a;
+  --color-primary: #bea692;
+  --color-primary-light: #d4c4b5;
+  --color-primary-dark: #a68f7a;
+  --color-muted: #e5e0db;
+  --color-muted-foreground: #6b6661;
+  --color-accent: #bea692;
+  --color-card: #ffffff;
+  --color-border: #e5e0db;
+  --color-border-light: #f5f3f0;
+  --color-text-muted: #6b6661;
+  --color-text-light: #8a8681;
+}
+
+@layer base {
+  * {
+    @apply transition-colors duration-200;
+  }
+
+  body {
+    font-family: var(--font-kinetika), system-ui, arial, sans-serif;
+    font-weight: 500;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    @apply bg-background text-foreground;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-leotaro), serif;
+    @apply text-foreground;
+    @apply tracking-tight;
+  }
+}
+
+@layer utilities {
+  .font-heading {
+    font-family: var(--font-leotaro), serif;
+  }
+  
+  .font-sans {
+    font-family: var(--font-kinetika), system-ui, arial, sans-serif;
+  }
+  
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .shadow-card {
+    box-shadow: 0 2px 12px rgba(107, 102, 97, 0.08), 0 1px 3px rgba(107, 102, 97, 0.05);
+  }
+  
+  .shadow-card-hover {
+    box-shadow: 0 8px 24px rgba(107, 102, 97, 0.12), 0 4px 8px rgba(107, 102, 97, 0.08);
+  }
+  
+  .shadow-card-elevated {
+    box-shadow: 0 20px 60px rgba(107, 102, 97, 0.15), 0 8px 16px rgba(107, 102, 97, 0.1);
+  }
+  
+  .gradient-overlay {
+    background: linear-gradient(180deg, rgba(249, 249, 249, 0) 0%, rgba(249, 249, 249, 0.95) 100%);
+  }
+  
+  .text-gradient {
+    background: linear-gradient(135deg, #1a1a1a 0%, #6b6661 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .text-gradient-accent {
+    background: linear-gradient(135deg, #bea692 0%, #a68f7a 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .decorative-bg {
+    background-image: 
+      radial-gradient(circle at 20% 50%, rgba(190, 166, 146, 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(190, 166, 146, 0.03) 0%, transparent 50%);
+  }
+  
+  .rotate-3d {
+    transform-style: preserve-3d;
+    perspective: 1000px;
+  }
+  
+  .asymmetric-clip {
+    clip-path: polygon(0 0, 100% 0, 95% 100%, 5% 100%);
+  }
+  
+  .asymmetric-clip-reverse {
+    clip-path: polygon(5% 0, 100% 0, 100% 100%, 0 100%);
+  }
+  
+  .text-justify-smooth p {
+    text-align: justify;
+    text-justify: inter-word;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+    -ms-hyphens: auto;
+    word-spacing: 0.05em;
+  }
+  
+  /* Применяем Кинетику ко всем текстовым элементам по умолчанию */
+  p, 
+  span:not([class*="heading"]):not([class*="font-heading"]):not(.text-white),
+  .prose p,
+  .prose span:not(.text-white),
+  .prose li,
+  .prose strong,
+  .prose em,
+  .prose a {
+    font-family: var(--font-kinetika), system-ui, arial, sans-serif;
+    font-weight: 500;
+    font-size: 1rem; /* 16px - исходный размер */
+    color: #2a2a2a;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  /* Исключаем белый текст из глобальных стилей */
+  .text-white,
+  span.text-white,
+  .text-white span {
+    color: #ffffff !important;
+  }
+  
+  @media (min-width: 768px) {
+    p, 
+    .prose p,
+    .prose span,
+    .prose li {
+      font-size: 1.1875rem; /* 19px - на 1 пункт больше исходного 18px */
+    }
+  }
+  
+  /* Затемняем muted текст */
+  .text-muted-foreground {
+    color: #4a4a4a !important;
+  }
+}
