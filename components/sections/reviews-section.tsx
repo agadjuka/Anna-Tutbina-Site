@@ -41,7 +41,7 @@ export function ReviewsSection({ reviews }: ReviewsSectionProps) {
   if (!reviews?.length) return null;
 
   return (
-    <section className="relative py-16 md:py-20 lg:py-24 bg-background overflow-hidden">
+    <section className="relative py-10 md:py-12 lg:py-16 bg-background overflow-hidden">
       {/* Декоративные элементы фона */}
       <div className="absolute top-1/4 right-0 w-64 h-64 bg-[#bea692]/5 rounded-full blur-3xl" />
       <div className="absolute bottom-1/4 left-0 w-80 h-80 bg-[#e5e0db]/5 rounded-full blur-3xl" />
@@ -50,9 +50,9 @@ export function ReviewsSection({ reviews }: ReviewsSectionProps) {
         {/* Декоративная линия слева */}
         <div className="absolute left-0 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-[#bea692]/30 to-transparent hidden lg:block" />
         
-        <div className="mb-8 md:mb-10 lg:mb-12 relative">
+        <div className="mb-6 md:mb-8 relative">
           {/* Заголовок секции по центру */}
-          <div className="mb-6 md:mb-8 relative">
+          <div className="mb-4 md:mb-6 relative">
             <SectionHeading as="h2">
               Что говорят наши участницы
             </SectionHeading>

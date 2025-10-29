@@ -12,7 +12,7 @@ interface AboutSectionProps {
 
 export function AboutSection({ image, bio }: AboutSectionProps) {
   return (
-    <section className="relative py-16 md:py-20 lg:py-24 bg-background overflow-hidden">
+    <section className="relative py-10 md:py-12 lg:py-16 bg-background overflow-hidden">
       {/* Декоративные элементы фона */}
       <DecorativeBlur className="top-20 left-10 w-96 h-96" />
       <DecorativeBlur className="bottom-20 right-10 w-80 h-80" />
@@ -27,13 +27,13 @@ export function AboutSection({ image, bio }: AboutSectionProps) {
           </div>
           
           {/* Заголовок секции по центру */}
-          <div className="mb-8 md:mb-10">
+          <div className="mb-6 md:mb-8">
             <SectionHeading as="h1" className="mb-0">
               Обо мне
             </SectionHeading>
           </div>
           
-          <div className="grid md:grid-cols-[1.2fr_0.8fr] lg:grid-cols-[1.1fr_0.9fr] gap-10 lg:gap-16 items-start">
+          <div className="grid md:grid-cols-[1.2fr_0.8fr] lg:grid-cols-[1.1fr_0.9fr] gap-8 lg:gap-12 items-start">
             {/* Левая колонка - текст по центру */}
             <div className="space-y-8 relative z-10">
               <div className="relative pt-4">

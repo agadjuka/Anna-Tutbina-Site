@@ -54,22 +54,22 @@ export default async function HomePage() {
           <AboutSection image={about.image} bio={about.bio} />
         </section>
       )}
-      <section id="tours" className="relative py-16 md:py-20 lg:py-24 bg-background overflow-hidden">
+      <section id="tours" className="relative py-10 md:py-12 lg:py-16 bg-background overflow-hidden">
         {/* Декоративные элементы фона */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-[#bea692]/3 rounded-full blur-3xl" />
         <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#e5e0db]/5 rounded-full blur-3xl" />
         
         <Container>
-          <div className="relative space-y-10 md:space-y-12">
+          <div className="relative space-y-6 md:space-y-8">
             {/* Заголовок секции */}
             <div className="relative">
-              <SectionHeading as="h2" className="mb-6">
+              <SectionHeading as="h2" className="mb-4">
                 Наши туры
               </SectionHeading>
             </div>
             
             {/* Сетка с центрированием, максимум 3 в ряд */}
-            <div className="flex flex-wrap justify-center gap-8 md:gap-10 lg:gap-12">
+            <div className="flex flex-wrap justify-center gap-6 md:gap-8 lg:gap-10">
               {tours.map((tour) => (
                 <div
                   key={tour._id}

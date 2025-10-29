@@ -16,9 +16,9 @@ export function CustomTourSection({ title, mainImage }: CustomTourSectionProps) 
       <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#e5e0db]/5 rounded-full blur-3xl" />
       
       <Container>
-        <div className="relative flex flex-col items-center justify-center text-center py-20 md:py-28 lg:py-32 gap-8">
-          <div className="space-y-6 w-full">
-            <SectionHeading as="h2" className="mb-6">
+        <div className="relative flex flex-col items-center justify-center text-center py-12 md:py-16 lg:py-20 gap-6">
+          <div className="space-y-4 w-full">
+            <SectionHeading as="h2" className="mb-4">
               {title || "Индивидуальный тур"}
             </SectionHeading>
             
@@ -29,7 +29,7 @@ export function CustomTourSection({ title, mainImage }: CustomTourSectionProps) 
             </div>
           </div>
           
-          <div className="mt-6">
+          <div className="mt-4">
             <Button asChild variant="secondary" className="relative overflow-hidden">
               <Link href="/custom-tour" className="relative z-10">
                 Узнать подробнее
