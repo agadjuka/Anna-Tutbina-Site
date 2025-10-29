@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export function Header() {
   return (
-    <header className="sticky top-0 z-50 border-b border-[#e5e0db] bg-white/95 backdrop-blur-md supports-[backdrop-filter]:bg-white/90">
+    <header className="sticky top-0 z-50 border-b border-[#e5e0db] bg-[#e8e8e8]/65 backdrop-blur-md supports-[backdrop-filter]:bg-[#e8e8e8]/60">
       <Container>
         <div className="relative flex items-center justify-between py-6 md:py-7">
           {/* Декоративная линия слева */}

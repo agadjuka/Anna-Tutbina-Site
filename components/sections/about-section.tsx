@@ -12,7 +12,7 @@ interface AboutSectionProps {
 
 export function AboutSection({ image, bio }: AboutSectionProps) {
   return (
-    <section className="relative py-10 md:py-12 lg:py-16 bg-background overflow-hidden">
+    <section className="relative py-6 md:py-8 lg:py-10 bg-background overflow-hidden">
       {/* Декоративные элементы фона */}
       <DecorativeBlur className="top-20 left-10 w-96 h-96" />
       <DecorativeBlur className="bottom-20 right-10 w-80 h-80" />
@@ -27,27 +27,27 @@ export function AboutSection({ image, bio }: AboutSectionProps) {
           </div>
           
           {/* Заголовок секции по центру */}
-          <div className="mb-6 md:mb-8">
+          <div className="mb-4 md:mb-6">
             <SectionHeading as="h1" className="mb-0">
               Обо мне
             </SectionHeading>
           </div>
           
-          <div className="grid md:grid-cols-[1.2fr_0.8fr] lg:grid-cols-[1.1fr_0.9fr] gap-8 lg:gap-12 items-start">
+          <div className="grid md:grid-cols-[1.2fr_0.8fr] lg:grid-cols-[1.1fr_0.9fr] gap-6 lg:gap-8 items-start">
             {/* Левая колонка - текст по центру */}
-            <div className="space-y-8 relative z-10">
-              <div className="relative pt-4">
-                <div className="prose prose-lg max-w-none mx-auto text-justify-smooth">
+            <div className="space-y-4 relative z-10">
+              <div className="relative pt-2">
+                <div className="prose max-w-none mx-auto text-justify-smooth">
                   <PortableTextContent 
                     value={bio} 
-                    className="text-base md:text-xl leading-[1.8] text-muted-foreground" 
+                    className="text-xs md:text-sm leading-[1.5] text-muted-foreground" 
                   />
                 </div>
               </div>
             </div>
             
             {/* Правая колонка - изображение с нестандартным размещением */}
-            <div className="relative mt-12 md:mt-0">
+            <div className="relative mt-6 md:mt-0">
               {/* Декоративные элементы вокруг изображения */}
               <div className="absolute -top-6 -right-6 w-24 h-24 border-2 border-[#bea692]/20 rounded-full hidden md:block" />
               <div className="absolute -bottom-8 -left-8 w-32 h-32 border border-[#e5e0db] rounded-full hidden lg:block" />
@@ -58,14 +58,14 @@ export function AboutSection({ image, bio }: AboutSectionProps) {
                 
                 {/* Основное изображение с асимметричным смещением */}
                 <div className="relative transform rotate-[-1deg] md:rotate-1 hover:rotate-0 transition-transform duration-700">
-                  <div className="absolute -inset-4 bg-white/80 rounded-2xl blur-xl" />
-                  <div className="relative overflow-hidden rounded-2xl shadow-card-elevated">
+                  <div className="absolute -inset-3 bg-white/80 rounded-2xl blur-xl" />
+                  <div className="relative overflow-hidden rounded-2xl shadow-card-elevated max-w-[400px] mx-auto">
                     <SanityImage
                       image={image}
                       alt="Анна Турбина"
                       className="w-full h-auto object-cover"
-                      width={600}
-                      height={800}
+                      width={400}
+                      height={533}
                     />
                   </div>
                 </div>
