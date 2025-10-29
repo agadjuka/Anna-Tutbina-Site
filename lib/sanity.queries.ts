@@ -34,3 +34,12 @@ export const aboutQuery = groq`
   }
 `;
 
+
+export const reviewsQuery = groq`
+  *[_type == "review"]{
+    _id,
+    authorName,
+    authorImage,
+    text
+  }
+`;
