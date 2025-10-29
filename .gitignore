@@ -39,3 +39,13 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# sanity studio
+sanity/node_modules
+sanity/.sanity
+sanity/dist
+sanity/.sanityclient
+sanity/package-lock.json
+
+# photos folder
+Фото/
