@@ -14,19 +14,19 @@ interface ReviewCardProps {
 
 export function ReviewCard({ review }: ReviewCardProps) {
   return (
-    <div className="group relative flex h-full flex-col justify-between rounded-2xl border border-[#e5e0db] bg-white p-6 md:p-8 shadow-card hover:shadow-card-hover transition-all duration-500 hover:border-[#bea692]/30">
+    <div className="group relative flex h-full flex-col justify-between rounded-2xl border border-[#e5e0db] bg-white px-6 pt-4 pb-6 md:px-8 md:pt-5 md:pb-8 shadow-card hover:shadow-card-hover transition-all duration-500 hover:border-[#bea692]/30">
       {/* Декоративные элементы */}
       <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-[#bea692]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-bl-2xl" />
       <div className="absolute top-4 -left-2 w-1 h-16 bg-gradient-to-b from-[#bea692] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-full" />
       
-      <div className="mb-4 relative z-10">
+      <div className="mb-4 relative z-10 -mt-2">
         {/* Декоративная кавычка */}
-        <div className="relative mb-2">
-          <div className="text-4xl md:text-5xl text-[#bea692]/20 leading-none font-heading">"</div>
-          <div className="absolute top-1.5 left-6 w-10 h-px bg-[#bea692]/20" />
+        <div className="relative mb-0 mt-4">
+          <div className="text-3xl md:text-4xl text-[#bea692]/20 leading-none font-heading">"</div>
+          <div className="absolute top-1 left-5 w-8 h-px bg-[#bea692]/20" />
         </div>
         
-        <Paragraph className="text-sm md:text-base italic text-muted-foreground leading-[1.8]">
+        <Paragraph className="text-sm md:text-base italic text-muted-foreground leading-[1.8] -mt-2">
           {review.text}
         </Paragraph>
       </div>
