@@ -12,6 +12,7 @@ export function Header() {
           <Link 
             href="/" 
             className="relative text-xl md:text-2xl font-heading font-bold tracking-tight text-foreground hover:text-[#bea692] transition-colors duration-300 group"
+            style={{ fontFamily: 'var(--font-leotaro), serif' }}
           >
             <span className="relative z-10">Anna Turbina Tours</span>
             {/* Декоративное подчеркивание */}

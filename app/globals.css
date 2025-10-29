@@ -3,7 +3,7 @@
 @theme {
   /* Кастомные шрифты */
   --font-sans: var(--font-tt-drugs), sans-serif;
-  --font-heading: var(--font-theano-didot), serif;
+  --font-heading: var(--font-leotaro), serif;
 
   /* Пастельная коричневая палитра */
   --color-background: #f9f9f9;
@@ -37,12 +37,17 @@
   h4,
   h5,
   h6 {
-    @apply font-heading text-foreground;
+    font-family: var(--font-leotaro), serif;
+    @apply text-foreground;
     @apply tracking-tight;
   }
 }
 
 @layer utilities {
+  .font-heading {
+    font-family: var(--font-leotaro), serif;
+  }
+  
   .text-balance {
     text-wrap: balance;
   }
@@ -94,5 +99,14 @@
   
   .asymmetric-clip-reverse {
     clip-path: polygon(5% 0, 100% 0, 100% 100%, 0 100%);
+  }
+  
+  .text-justify-smooth p {
+    text-align: justify;
+    text-justify: inter-word;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+    -ms-hyphens: auto;
+    word-spacing: 0.05em;
   }
 }

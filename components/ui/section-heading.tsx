@@ -27,7 +27,7 @@ export function SectionHeading({
         <div className={cn("h-px flex-1", lineColor)} />
         <Component 
           className={cn(
-            "text-sm md:text-base uppercase tracking-[0.2em] font-medium whitespace-nowrap shrink-0",
+            "font-heading text-base md:text-lg uppercase tracking-[0.2em] font-medium whitespace-nowrap shrink-0",
             textColor
           )}
         >

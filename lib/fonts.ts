@@ -37,3 +37,11 @@ export const theanoDidot = localFont({
   fallback: ["serif"],
 });
 
+// Leotaro для заголовков
+export const leotaro = localFont({
+  src: "../public/fonts/leotaro-regular.otf",
+  variable: "--font-leotaro",
+  display: "swap",
+  fallback: ["serif"],
+});
+

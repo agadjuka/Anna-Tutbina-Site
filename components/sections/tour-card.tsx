@@ -62,7 +62,7 @@ export function TourCard({ tour, className }: TourCardProps) {
           {/* Верхняя часть: название, даты, цена */}
           <div className="flex flex-col gap-2 md:gap-3">
             {/* Название тура */}
-            <h3 className="text-xl md:text-2xl lg:text-3xl font-bold uppercase tracking-tight leading-tight text-white">
+            <h3 className="font-heading text-xl md:text-2xl lg:text-3xl font-bold uppercase tracking-tight leading-tight text-white">
               {tour.name}
             </h3>
 
