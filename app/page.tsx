@@ -1,27 +1,38 @@
 import { Container } from "@/components/ui/container";
 import { Heading } from "@/components/ui/heading";
 import { TourCard } from "@/components/sections/tour-card";
+import { sanityClient } from "@/lib/sanity.client";
+import { toursQuery } from "@/lib/sanity.queries";
 
-export default function HomePage() {
-  const mockTour = {
-    name: "Экскурсия по историческому центру города",
-    mainImage: null,
-    shortDescription:
-      "Погрузитесь в атмосферу исторического наследия города с нашим увлекательным туром по самым знаменитым достопримечательностям.",
-    dates: "10-20 мая",
-    price: {
-      value: 4500,
-      currency: "₽",
-    },
-  };
+type SanitySlug = { current: string };
+
+interface SanityPrice {
+  value: number;
+  currency: string;
+}
+
+interface TourItem {
+  _id: string;
+  name: string;
+  slug: SanitySlug;
+  mainImage: any;
+  shortDescription: string;
+  dates?: string;
+  price?: SanityPrice;
+}
+
+export default async function HomePage() {
+  const tours = await sanityClient.fetch<TourItem[]>(toursQuery);
 
   return (
     <main className="min-h-screen py-8">
       <Container>
         <div className="space-y-8">
-          <Heading as="h1">Главная страница</Heading>
-          <div className="max-w-sm">
-            <TourCard tour={mockTour} />
+          <Heading as="h2">Наши туры</Heading>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {tours.map((tour) => (
+              <TourCard key={tour._id} tour={tour} />)
+            )}
           </div>
         </div>
       </Container>
