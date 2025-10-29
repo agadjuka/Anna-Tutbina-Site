@@ -68,15 +68,13 @@ export default async function HomePage() {
               </SectionHeading>
             </div>
             
-            {/* Сетка с асимметрией */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 lg:gap-12">
-              {tours.map((tour, index) => (
+            {/* Сетка с центрированием, максимум 3 в ряд */}
+            <div className="flex flex-wrap justify-center gap-8 md:gap-10 lg:gap-12">
+              {tours.map((tour) => (
                 <div
                   key={tour._id}
-                  className={cn(
-                    index % 3 === 1 ? "md:mt-12 lg:mt-0" : "",
-                    index % 3 === 2 ? "md:mt-8 lg:mt-16" : ""
-                  )}
+                  className="w-full sm:w-[calc(50%-1.25rem)] lg:w-[calc(33.333%-1.67rem)]"
+                  style={{ maxWidth: '400px', flexShrink: 0 }}
                 >
                   <TourCard tour={tour} />
                 </div>
