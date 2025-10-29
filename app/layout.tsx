@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { ttDrugs, theanoDidot } from "@/lib/fonts";
+import { Footer } from "@/components/sections/footer";
 
 export const metadata: Metadata = {
   title: "Anna Turbina Tours",
@@ -18,6 +19,7 @@ export default function RootLayout({
         className={`${ttDrugs.variable} ${theanoDidot.variable} antialiased`}
       >
         {children}
+        <Footer />
       </body>
     </html>
   );

@@ -43,3 +43,12 @@ export const reviewsQuery = groq`
     text
   }
 `;
+
+
+export const customTourQuery = groq`
+  *[_type == "customTour"][0]{
+    title,
+    mainImage,
+    description
+  }
+`;

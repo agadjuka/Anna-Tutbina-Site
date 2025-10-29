@@ -22,13 +22,7 @@ export function AboutSection({ image, bio }: AboutSectionProps) {
           </div>
           <div>
             <Heading as="h2" className="mb-4">Обо мне</Heading>
-            <PortableTextContent value={bio} className="mb-6" />
-            <a
-              href="#"
-              className="inline-block px-5 py-2 rounded-md bg-black text-white hover:bg-gray-800 transition-colors"
-            >
-              Читать далее
-            </a>
+            <PortableTextContent value={bio} className="mb-0" />
           </div>
         </div>
       </Container>
