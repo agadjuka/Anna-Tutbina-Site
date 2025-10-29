@@ -3,6 +3,7 @@ import { Heading } from "@/components/ui/heading";
 import { PortableTextContent } from "@/components/ui/portable-text";
 import { SanityImage } from "@/components/ui/sanity-image";
 import { DecorativeBlur, DecorativeLine, DecorativeDot } from "@/components/ui/decorative-elements";
+import { SectionHeading } from "@/components/ui/section-heading";
 
 interface AboutSectionProps {
   image: any;
@@ -25,24 +26,16 @@ export function AboutSection({ image, bio }: AboutSectionProps) {
             <DecorativeDot className="w-2 h-2" />
           </div>
           
+          {/* Заголовок секции по центру */}
+          <div className="mb-12 md:mb-16">
+            <SectionHeading as="h1" className="mb-0">
+              Обо мне
+            </SectionHeading>
+          </div>
+          
           <div className="grid md:grid-cols-[1.2fr_0.8fr] lg:grid-cols-[1.1fr_0.9fr] gap-16 lg:gap-24 items-start">
             {/* Левая колонка - текст с асимметрией */}
             <div className="space-y-8 relative z-10">
-              <div className="relative">
-                <div className="absolute -left-6 top-0 w-1 h-20 bg-[#bea692]/30 hidden md:block" />
-                <div className="space-y-4">
-                  <div className="inline-flex items-center gap-3 mb-4">
-                    <span className="text-xs md:text-sm uppercase tracking-[0.2em] text-[#bea692] font-medium">
-                      Познакомьтесь
-                    </span>
-                    <DecorativeLine className="flex-1 max-w-24" />
-                  </div>
-                  <Heading as="h1" className="text-5xl md:text-6xl lg:text-7xl leading-[1.1] mb-0 text-foreground">
-                    Обо мне
-                  </Heading>
-                  <div className="absolute -right-8 top-1/2 -translate-y-1/2 w-32 h-32 border border-[#bea692]/10 rounded-full hidden lg:block" />
-                </div>
-              </div>
               
               <div className="relative pl-4 md:pl-8 border-l-2 border-[#e5e0db]">
                 <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-background border-2 border-[#bea692]" />

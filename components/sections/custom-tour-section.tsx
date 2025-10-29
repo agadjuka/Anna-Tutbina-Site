@@ -1,6 +1,7 @@
 import { Container } from "@/components/ui/container";
 import { Heading } from "@/components/ui/heading";
 import { Button } from "@/components/ui/button";
+import { SectionHeading } from "@/components/ui/section-heading";
 import Link from "next/link";
 import { urlFor } from "@/lib/sanity.client";
 
@@ -38,17 +39,9 @@ export function CustomTourSection({ title, mainImage }: CustomTourSectionProps) 
           <div className="absolute top-10 left-1/2 -translate-x-1/2 w-24 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
           
           <div className="space-y-6 max-w-4xl">
-            <div className="inline-flex items-center gap-3 mb-4">
-              <div className="w-1 h-12 bg-white/30 rounded-full" />
-              <span className="text-xs md:text-sm uppercase tracking-[0.2em] text-white/90 font-medium">
-                Создайте свой тур
-              </span>
-              <div className="w-12 h-px bg-gradient-to-r from-white/30 to-transparent" />
-            </div>
-            
-            <Heading as="h2" className="text-white text-4xl md:text-6xl lg:text-8xl drop-shadow-2xl mb-0 leading-[1.1]">
+            <SectionHeading as="h2" variant="light" className="mb-6">
               {title || "Индивидуальный тур"}
-            </Heading>
+            </SectionHeading>
             
             <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto leading-relaxed">
               Персональные маршруты, созданные специально для вас

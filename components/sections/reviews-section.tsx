@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { Heading } from "@/components/ui/heading";
 import { ReviewCard } from "@/components/sections/review-card";
+import { SectionHeading } from "@/components/ui/section-heading";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface ReviewItem {
@@ -49,44 +50,34 @@ export function ReviewsSection({ reviews }: ReviewsSectionProps) {
         {/* Декоративная линия слева */}
         <div className="absolute left-0 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-[#bea692]/30 to-transparent hidden lg:block" />
         
-        <div className="mb-12 md:mb-16 lg:mb-20 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
-          <div className="relative max-w-2xl">
-            {/* Декоративный элемент */}
-            <div className="absolute -left-6 top-0 w-1 h-20 bg-[#bea692] rounded-full hidden md:block" />
+        <div className="mb-12 md:mb-16 lg:mb-20 relative">
+          {/* Заголовок секции по центру */}
+          <div className="mb-8 md:mb-12 relative">
+            <SectionHeading as="h2">
+              Что говорят наши участницы
+            </SectionHeading>
             
-            <div className="space-y-4 pl-0 md:pl-6">
-              <div className="inline-flex items-center gap-3">
-                <span className="text-xs md:text-sm uppercase tracking-[0.2em] text-[#bea692] font-medium">
-                  Отзывы
-                </span>
-                <div className="flex-1 h-px bg-gradient-to-r from-[#bea692]/30 to-transparent max-w-24" />
-              </div>
-              <Heading as="h2" className="text-4xl md:text-6xl lg:text-7xl leading-[1.1] mb-0">
-                Что говорят наши участницы
-              </Heading>
+            {/* Кнопки навигации - абсолютное позиционирование справа на десктопе */}
+            <div className="flex items-center justify-center gap-3 mt-6 md:mt-0 md:absolute md:right-0 md:top-1/2 md:-translate-y-1/2">
+              <button
+                type="button"
+                onClick={scrollPrev}
+                disabled={!canScrollPrev}
+                className="group h-14 w-14 rounded-full border-2 border-[#e5e0db] bg-white text-muted-foreground hover:text-foreground hover:bg-[#bea692] hover:border-[#bea692] disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:border-[#e5e0db] flex items-center justify-center transition-all duration-300 shadow-sm hover:shadow-md"
+                aria-label="Назад"
+              >
+                <ChevronLeft className="h-5 w-5 group-hover:text-white transition-colors" />
+              </button>
+              <button
+                type="button"
+                onClick={scrollNext}
+                disabled={!canScrollNext}
+                className="group h-14 w-14 rounded-full border-2 border-[#e5e0db] bg-white text-muted-foreground hover:text-foreground hover:bg-[#bea692] hover:border-[#bea692] disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:border-[#e5e0db] flex items-center justify-center transition-all duration-300 shadow-sm hover:shadow-md"
+                aria-label="Вперёд"
+              >
+                <ChevronRight className="h-5 w-5 group-hover:text-white transition-colors" />
+              </button>
             </div>
-          </div>
-          
-          {/* Кнопки навигации с улучшенным дизайном */}
-          <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={scrollPrev}
-              disabled={!canScrollPrev}
-              className="group h-14 w-14 rounded-full border-2 border-[#e5e0db] bg-white text-muted-foreground hover:text-foreground hover:bg-[#bea692] hover:border-[#bea692] disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:border-[#e5e0db] flex items-center justify-center transition-all duration-300 shadow-sm hover:shadow-md"
-              aria-label="Назад"
-            >
-              <ChevronLeft className="h-5 w-5 group-hover:text-white transition-colors" />
-            </button>
-            <button
-              type="button"
-              onClick={scrollNext}
-              disabled={!canScrollNext}
-              className="group h-14 w-14 rounded-full border-2 border-[#e5e0db] bg-white text-muted-foreground hover:text-foreground hover:bg-[#bea692] hover:border-[#bea692] disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:border-[#e5e0db] flex items-center justify-center transition-all duration-300 shadow-sm hover:shadow-md"
-              aria-label="Вперёд"
-            >
-              <ChevronRight className="h-5 w-5 group-hover:text-white transition-colors" />
-            </button>
           </div>
         </div>
 

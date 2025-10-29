@@ -6,6 +6,7 @@ import { toursQuery, aboutQuery, reviewsQuery, customTourQuery } from "@/lib/san
 import { AboutSection } from "@/components/sections/about-section";
 import { ReviewsSection } from "@/components/sections/reviews-section";
 import { CustomTourSection } from "@/components/sections/custom-tour-section";
+import { SectionHeading } from "@/components/ui/section-heading";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 
@@ -60,34 +61,11 @@ export default async function HomePage() {
         
         <Container>
           <div className="relative space-y-16 md:space-y-20">
-            {/* Заголовок с нестандартным размещением */}
-            <div className="relative max-w-4xl">
-              {/* Декоративная вертикальная линия */}
-              <div className="absolute -left-8 top-0 bottom-0 w-px bg-gradient-to-b from-[#bea692] via-[#bea692]/50 to-transparent hidden lg:block" />
-              
-              <div className="space-y-6 pl-0 lg:pl-8">
-                <div className="inline-flex items-center gap-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-1 h-12 bg-[#bea692] rounded-full" />
-                    <span className="text-xs md:text-sm uppercase tracking-[0.2em] text-[#bea692] font-medium">
-                      Наши программы
-                    </span>
-                  </div>
-                  <div className="flex-1 h-px bg-gradient-to-r from-[#bea692]/30 to-transparent max-w-32" />
-                </div>
-                
-                <div className="space-y-4">
-                  <Heading as="h2" className="text-4xl md:text-6xl lg:text-7xl leading-[1.1] mb-0">
-                    Наши туры
-                  </Heading>
-                  <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl">
-                    Эксклюзивные путешествия, созданные для женщин, которые ценят уникальный опыт и красоту окружающего мира
-                  </p>
-                </div>
-              </div>
-              
-              {/* Декоративный элемент справа */}
-              <div className="absolute -right-12 top-1/2 -translate-y-1/2 w-24 h-24 border border-[#bea692]/10 rounded-full hidden xl:block" />
+            {/* Заголовок секции */}
+            <div className="relative">
+              <SectionHeading as="h2" className="mb-8">
+                Наши туры
+              </SectionHeading>
             </div>
             
             {/* Сетка с асимметрией */}
