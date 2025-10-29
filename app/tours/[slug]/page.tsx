@@ -115,7 +115,7 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
               <div className="prose prose-lg max-w-none">
                 <PortableTextContent 
                   value={tour.fullProgram} 
-                  className="text-base md:text-lg leading-relaxed text-muted-foreground" 
+                  className="text-base md:text-xl leading-relaxed text-muted-foreground" 
                 />
               </div>
             </section>

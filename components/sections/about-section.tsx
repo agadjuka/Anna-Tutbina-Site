@@ -40,7 +40,7 @@ export function AboutSection({ image, bio }: AboutSectionProps) {
                 <div className="prose prose-lg max-w-none mx-auto text-justify-smooth">
                   <PortableTextContent 
                     value={bio} 
-                    className="text-base md:text-lg leading-[1.8] text-muted-foreground" 
+                    className="text-base md:text-xl leading-[1.8] text-muted-foreground" 
                   />
                 </div>
               </div>

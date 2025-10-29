@@ -90,8 +90,8 @@ export function TourCard({ tour, className }: TourCardProps) {
 
           {/* Нижняя часть: кнопка "Подробнее" */}
           <div className="flex items-center gap-2 text-xs md:text-sm font-medium uppercase tracking-wide text-white">
-            <span className="transition-all duration-700 ease-out group-hover:opacity-90">Подробнее</span>
-            <span className="transition-transform duration-700 ease-out group-hover:translate-x-2 inline-block">
+            <span className="text-white transition-all duration-700 ease-out group-hover:opacity-90" style={{ color: '#ffffff' }}>Подробнее</span>
+            <span className="text-white transition-transform duration-700 ease-out group-hover:translate-x-2 inline-block" style={{ color: '#ffffff' }}>
               →
             </span>
           </div>

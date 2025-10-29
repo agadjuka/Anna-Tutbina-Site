@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { ttDrugs, theanoDidot, leotaro } from "@/lib/fonts";
+import { ttDrugs, theanoDidot, leotaro, kinetika } from "@/lib/fonts";
 import { Footer } from "@/components/sections/footer";
 import { Header } from "@/components/sections/header";
 
@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <body
-        className={`${ttDrugs.variable} ${theanoDidot.variable} ${leotaro.variable} antialiased`}
+        className={`${ttDrugs.variable} ${theanoDidot.variable} ${leotaro.variable} ${kinetika.variable} antialiased`}
       >
         <Header />
         {children}

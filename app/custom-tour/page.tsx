@@ -62,7 +62,7 @@ export default async function CustomTourPage() {
               <div className="prose prose-lg max-w-none">
                 <PortableTextContent 
                   value={data.description} 
-                  className="text-base md:text-lg leading-relaxed text-muted-foreground" 
+                  className="text-base md:text-xl leading-relaxed text-muted-foreground" 
                 />
               </div>
             </div>

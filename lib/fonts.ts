@@ -45,3 +45,11 @@ export const leotaro = localFont({
   fallback: ["serif"],
 });
 
+// Кинетика для основного текста
+export const kinetika = localFont({
+  src: "../public/fonts/kinetika.ttf",
+  variable: "--font-kinetika",
+  display: "swap",
+  fallback: ["system-ui", "arial"],
+});
+

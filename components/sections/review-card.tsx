@@ -26,7 +26,7 @@ export function ReviewCard({ review }: ReviewCardProps) {
           <div className="absolute top-2 left-8 w-12 h-px bg-[#bea692]/20" />
         </div>
         
-        <Paragraph className="text-base md:text-lg italic text-muted-foreground leading-[1.8] line-clamp-6">
+        <Paragraph className="text-base md:text-xl italic text-muted-foreground leading-[1.8] line-clamp-6">
           {review.text}
         </Paragraph>
       </div>
@@ -48,7 +48,7 @@ export function ReviewCard({ review }: ReviewCardProps) {
             />
           </div>
           <div>
-            <Paragraph className="font-semibold text-foreground text-base md:text-lg mb-1">
+            <Paragraph className="font-semibold text-foreground text-base md:text-xl mb-1">
               {review.authorName}
             </Paragraph>
             <div className="flex items-center gap-1">
