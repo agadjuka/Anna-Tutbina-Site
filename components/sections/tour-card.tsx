@@ -19,6 +19,7 @@ interface Tour {
 interface TourCardProps {
   tour: Tour;
   className?: string;
+  isActive?: boolean;
 }
 
 function formatPrice(value: number, currency: string): string {
@@ -27,7 +28,7 @@ function formatPrice(value: number, currency: string): string {
   return `${formattedValue} ${currency}`;
 }
 
-export function TourCard({ tour, className }: TourCardProps) {
+export function TourCard({ tour, className, isActive = false }: TourCardProps) {
   const formattedPrice = tour.price
     ? formatPrice(tour.price.value, tour.price.currency)
     : null;
@@ -38,6 +39,7 @@ export function TourCard({ tour, className }: TourCardProps) {
       className={cn(
         "group relative block overflow-hidden rounded-2xl transition-all duration-700 ease-out",
         "hover:scale-[1.02] hover:-translate-y-1 hover:shadow-2xl",
+        isActive && "scale-[1.02] -translate-y-1 shadow-2xl",
         className
       )}
     >
@@ -46,16 +48,28 @@ export function TourCard({ tour, className }: TourCardProps) {
         {/* Изображение на фоне */}
         <SanityImage
           image={tour.mainImage}
-          className="absolute inset-0 h-full w-full object-cover rounded-2xl transition-transform duration-700 ease-out group-hover:scale-105"
+          className={cn(
+            "absolute inset-0 h-full w-full object-cover rounded-2xl transition-transform duration-700 ease-out",
+            "group-hover:scale-105",
+            isActive && "scale-105"
+          )}
           fill
           alt={tour.name}
         />
 
-        {/* Overlay - легкое затемнение по умолчанию, сильное при hover */}
-        <div className="absolute inset-0 bg-black/20 transition-all duration-700 ease-out group-hover:bg-black/75 rounded-2xl z-10" />
+        {/* Overlay - легкое затемнение по умолчанию, сильное при hover или активном состоянии */}
+        <div className={cn(
+          "absolute inset-0 rounded-2xl z-10 transition-all duration-700 ease-out",
+          "bg-black/20 group-hover:bg-black/75",
+          isActive && "bg-black/75"
+        )} />
 
         {/* Светлая граница/подсветка по краям */}
-        <div className="absolute inset-0 rounded-2xl border border-white/30 pointer-events-none z-20 transition-opacity duration-700 ease-out group-hover:border-white/40" />
+        <div className={cn(
+          "absolute inset-0 rounded-2xl border pointer-events-none z-20 transition-opacity duration-700 ease-out",
+          "border-white/30 group-hover:border-white/40",
+          isActive && "border-white/40"
+        )} />
 
         {/* Весь контент поверх изображения */}
         <div className="absolute inset-0 flex flex-col justify-between p-6 md:p-8 z-20">
@@ -80,9 +94,13 @@ export function TourCard({ tour, className }: TourCardProps) {
               </p>
             )}
 
-            {/* Описание - появляется только при hover */}
+            {/* Описание - появляется только при hover или активном состоянии */}
             <div className="mt-4 overflow-hidden">
-              <p className="text-sm md:text-base leading-relaxed text-white opacity-0 max-h-0 translate-y-4 transition-all duration-700 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:opacity-100 group-hover:max-h-[500px] group-hover:translate-y-0">
+              <p className={cn(
+                "text-sm md:text-base leading-relaxed text-white translate-y-4 transition-all duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]",
+                "opacity-0 max-h-0 group-hover:opacity-100 group-hover:max-h-[500px] group-hover:translate-y-0",
+                isActive && "opacity-100 max-h-[500px] translate-y-0"
+              )}>
                 {tour.shortDescription}
               </p>
             </div>
@@ -90,8 +108,16 @@ export function TourCard({ tour, className }: TourCardProps) {
 
           {/* Нижняя часть: кнопка "Подробнее" */}
           <div className="flex items-center gap-2 text-xs md:text-sm font-medium uppercase tracking-wide text-white">
-            <span className="text-white transition-all duration-700 ease-out group-hover:opacity-90" style={{ color: '#ffffff' }}>Подробнее</span>
-            <span className="text-white transition-transform duration-700 ease-out group-hover:translate-x-2 inline-block" style={{ color: '#ffffff' }}>
+            <span className={cn(
+              "text-white transition-all duration-700 ease-out",
+              "group-hover:opacity-90",
+              isActive && "opacity-90"
+            )} style={{ color: '#ffffff' }}>Подробнее</span>
+            <span className={cn(
+              "text-white transition-transform duration-700 ease-out inline-block",
+              "group-hover:translate-x-2",
+              isActive && "translate-x-2"
+            )} style={{ color: '#ffffff' }}>
               →
             </span>
           </div>

@@ -1,6 +1,7 @@
 import { Container } from "@/components/ui/container";
 import { Heading } from "@/components/ui/heading";
 import { TourCard } from "@/components/sections/tour-card";
+import { ToursCarousel } from "@/components/sections/tours-carousel";
 import { sanityClient } from "@/lib/sanity.client";
 import { toursQuery, aboutQuery, reviewsQuery, customTourQuery } from "@/lib/sanity.queries";
 import { AboutSection } from "@/components/sections/about-section";
@@ -68,8 +69,11 @@ export default async function HomePage() {
               </SectionHeading>
             </div>
             
-            {/* Сетка с центрированием, максимум 3 в ряд */}
-            <div className="flex flex-wrap justify-center gap-6 md:gap-8 lg:gap-10">
+            {/* Карусель для мобильных устройств */}
+            <ToursCarousel tours={tours} />
+            
+            {/* Сетка с центрированием для десктопа, максимум 3 в ряд */}
+            <div className="hidden md:flex flex-wrap justify-center gap-6 md:gap-8 lg:gap-10">
               {tours.map((tour) => (
                 <div
                   key={tour._id}
