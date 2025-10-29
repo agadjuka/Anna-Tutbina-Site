@@ -1,8 +1,8 @@
 import { cn } from "@/lib/utils";
-import { type HTMLAttributes } from "react";
+import { type HTMLAttributes, type ReactNode } from "react";
 
 interface ContainerProps extends HTMLAttributes<HTMLDivElement> {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 export function Container({ children, className, ...props }: ContainerProps) {

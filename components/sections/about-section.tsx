@@ -2,6 +2,7 @@ import { Container } from "@/components/ui/container";
 import { Heading } from "@/components/ui/heading";
 import { PortableTextContent } from "@/components/ui/portable-text";
 import { SanityImage } from "@/components/ui/sanity-image";
+import { DecorativeBlur, DecorativeLine, DecorativeDot } from "@/components/ui/decorative-elements";
 
 interface AboutSectionProps {
   image: any;
@@ -10,33 +11,77 @@ interface AboutSectionProps {
 
 export function AboutSection({ image, bio }: AboutSectionProps) {
   return (
-    <section className="py-16 md:py-24 bg-background">
+    <section className="relative py-24 md:py-32 lg:py-40 bg-background overflow-hidden">
+      {/* Декоративные элементы фона */}
+      <DecorativeBlur className="top-20 left-10 w-96 h-96" />
+      <DecorativeBlur className="bottom-20 right-10 w-80 h-80" />
+      
       <Container>
-        <div className="grid md:grid-cols-2 gap-12 md:gap-16 lg:gap-20 items-center">
-          <div className="relative">
-            <div className="absolute -inset-4 bg-gradient-to-br from-[#bea692]/20 to-[#e5e0db]/30 rounded-3xl blur-xl"></div>
-            <div className="relative overflow-hidden rounded-2xl shadow-card">
-              <SanityImage
-                image={image}
-                alt="Анна Турбина"
-                className="w-full h-auto object-cover"
-                width={600}
-                height={800}
-              />
-            </div>
+        <div className="relative">
+          {/* Декоративные элементы */}
+          <div className="absolute -left-20 top-1/2 -translate-y-1/2 hidden lg:block">
+            <DecorativeDot className="w-3 h-3 mb-6" />
+            <DecorativeLine className="w-16 h-px mb-4" />
+            <DecorativeDot className="w-2 h-2" />
           </div>
-          <div className="space-y-6">
-            <div className="inline-block">
-              <span className="text-sm md:text-base uppercase tracking-wider text-[#bea692] font-medium mb-2 block">
-                Познакомьтесь
-              </span>
-              <Heading as="h2" className="mb-0">Обо мне</Heading>
+          
+          <div className="grid md:grid-cols-[1.2fr_0.8fr] lg:grid-cols-[1.1fr_0.9fr] gap-16 lg:gap-24 items-start">
+            {/* Левая колонка - текст с асимметрией */}
+            <div className="space-y-8 relative z-10">
+              <div className="relative">
+                <div className="absolute -left-6 top-0 w-1 h-20 bg-[#bea692]/30 hidden md:block" />
+                <div className="space-y-4">
+                  <div className="inline-flex items-center gap-3 mb-4">
+                    <span className="text-xs md:text-sm uppercase tracking-[0.2em] text-[#bea692] font-medium">
+                      Познакомьтесь
+                    </span>
+                    <DecorativeLine className="flex-1 max-w-24" />
+                  </div>
+                  <Heading as="h1" className="text-5xl md:text-6xl lg:text-7xl leading-[1.1] mb-0 text-foreground">
+                    Обо мне
+                  </Heading>
+                  <div className="absolute -right-8 top-1/2 -translate-y-1/2 w-32 h-32 border border-[#bea692]/10 rounded-full hidden lg:block" />
+                </div>
+              </div>
+              
+              <div className="relative pl-4 md:pl-8 border-l-2 border-[#e5e0db]">
+                <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-background border-2 border-[#bea692]" />
+                <div className="prose prose-lg max-w-none pt-4">
+                  <PortableTextContent 
+                    value={bio} 
+                    className="text-base md:text-lg leading-[1.8] text-muted-foreground" 
+                  />
+                </div>
+              </div>
             </div>
-            <div className="prose prose-lg max-w-none">
-              <PortableTextContent 
-                value={bio} 
-                className="text-base md:text-lg leading-relaxed text-muted-foreground" 
-              />
+            
+            {/* Правая колонка - изображение с нестандартным размещением */}
+            <div className="relative mt-12 md:mt-0">
+              {/* Декоративные элементы вокруг изображения */}
+              <div className="absolute -top-6 -right-6 w-24 h-24 border-2 border-[#bea692]/20 rounded-full hidden md:block" />
+              <div className="absolute -bottom-8 -left-8 w-32 h-32 border border-[#e5e0db] rounded-full hidden lg:block" />
+              
+              <div className="relative">
+                {/* Градиентный фон */}
+                <div className="absolute -inset-8 bg-gradient-to-br from-[#bea692]/10 via-[#e5e0db]/20 to-transparent rounded-3xl blur-2xl" />
+                
+                {/* Основное изображение с асимметричным смещением */}
+                <div className="relative transform rotate-[-1deg] md:rotate-1 hover:rotate-0 transition-transform duration-700">
+                  <div className="absolute -inset-4 bg-white/80 rounded-2xl blur-xl" />
+                  <div className="relative overflow-hidden rounded-2xl shadow-card-elevated">
+                    <SanityImage
+                      image={image}
+                      alt="Анна Турбина"
+                      className="w-full h-auto object-cover"
+                      width={600}
+                      height={800}
+                    />
+                  </div>
+                </div>
+                
+                {/* Декоративный элемент сверху */}
+                <div className="absolute -top-4 -left-4 w-16 h-16 bg-[#bea692]/10 rounded-full blur-md hidden md:block" />
+              </div>
             </div>
           </div>
         </div>

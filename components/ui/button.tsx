@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import React from "react";
@@ -36,7 +34,15 @@ export function Button({
 }: ButtonProps) {
   const classes = cn(baseClasses, variantClasses[variant], className);
 
-  if (asChild && href) {
+  if (asChild) {
+    return (
+      <div className={classes}>
+        {children}
+      </div>
+    );
+  }
+
+  if (href) {
     return (
       <Link href={href} className={classes}>
         {children}

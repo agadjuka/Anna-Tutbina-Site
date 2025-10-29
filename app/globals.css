@@ -55,7 +55,44 @@
     box-shadow: 0 8px 24px rgba(107, 102, 97, 0.12), 0 4px 8px rgba(107, 102, 97, 0.08);
   }
   
+  .shadow-card-elevated {
+    box-shadow: 0 20px 60px rgba(107, 102, 97, 0.15), 0 8px 16px rgba(107, 102, 97, 0.1);
+  }
+  
   .gradient-overlay {
     background: linear-gradient(180deg, rgba(249, 249, 249, 0) 0%, rgba(249, 249, 249, 0.95) 100%);
+  }
+  
+  .text-gradient {
+    background: linear-gradient(135deg, #1a1a1a 0%, #6b6661 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .text-gradient-accent {
+    background: linear-gradient(135deg, #bea692 0%, #a68f7a 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .decorative-bg {
+    background-image: 
+      radial-gradient(circle at 20% 50%, rgba(190, 166, 146, 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(190, 166, 146, 0.03) 0%, transparent 50%);
+  }
+  
+  .rotate-3d {
+    transform-style: preserve-3d;
+    perspective: 1000px;
+  }
+  
+  .asymmetric-clip {
+    clip-path: polygon(0 0, 100% 0, 95% 100%, 5% 100%);
+  }
+  
+  .asymmetric-clip-reverse {
+    clip-path: polygon(5% 0, 100% 0, 100% 100%, 0 100%);
   }
 }
