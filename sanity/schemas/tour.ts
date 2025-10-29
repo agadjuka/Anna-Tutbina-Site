@@ -52,7 +52,20 @@ const tour = defineType({
     defineField({
       name: 'price',
       title: 'Цена',
-      type: 'number',
+      type: 'object',
+      fields: [
+        {
+          name: 'value',
+          title: 'Сумма',
+          type: 'number',
+        },
+        {
+          name: 'currency',
+          title: 'Валюта',
+          type: 'string',
+          description: 'Например: ₽, $, €',
+        },
+      ],
     }),
     defineField({
       name: 'dates',
@@ -64,7 +77,6 @@ const tour = defineType({
       name: 'shortDescription',
       title: 'Краткое описание для карточки',
       type: 'text',
-      validation: (Rule) => Rule.max(200),
     }),
     defineField({
       name: 'fullProgram',

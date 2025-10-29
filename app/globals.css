@@ -1,1 +1,33 @@
 @import "tailwindcss";
+
+@theme {
+  /* Кастомные шрифты */
+  --font-sans: var(--font-tt-drugs), sans-serif;
+  --font-heading: var(--font-theano-didot), serif;
+
+  /* Кастомная цветовая палитра */
+  --color-background: #f9f9f9;
+  --color-foreground: #1a1a1a;
+  --color-primary: #bea692;
+  --color-muted: #e5e0db;
+  --color-muted-foreground: #6b6661;
+}
+
+@layer base {
+  * {
+    @apply transition-colors duration-200;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-heading;
+  }
+}
