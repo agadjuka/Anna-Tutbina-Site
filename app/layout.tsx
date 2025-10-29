@@ -4,8 +4,11 @@ import { ttDrugs, theanoDidot } from "@/lib/fonts";
 import { Footer } from "@/components/sections/footer";
 
 export const metadata: Metadata = {
-  title: "Anna Turbina Tours",
-  description: "Эксклюзивные туры от Anna Turbina",
+  title: {
+    template: "%s | Anna Turbina Tours",
+    default: "Anna Turbina Tours",
+  },
+  description: "Авторские женские туры и ретриты с Анной Турбиной",
 };
 
 export default function RootLayout({

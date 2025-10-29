@@ -4,6 +4,12 @@ import { SanityImage } from "@/components/ui/sanity-image";
 import { PortableTextContent } from "@/components/ui/portable-text";
 import { sanityClient } from "@/lib/sanity.client";
 import { customTourQuery } from "@/lib/sanity.queries";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Индивидуальный тур",
+  description: "Создайте свой уникальный тур с Анной Турбиной. Индивидуальные программы и маршруты.",
+};
 
 interface CustomTourDoc {
   title: string;

@@ -1,36 +1,98 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Anna Turbina Tours
 
-## Getting Started
+Сайт авторских женских туров и ретритов с Анной Турбиной.
 
-First, run the development server:
+## Стек технологий
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Next.js** 16.0.1 — React-фреймворк с App Router
+- **TypeScript** — типизация кода
+- **Tailwind CSS** — стилизация компонентов
+- **Sanity.io** — CMS для управления контентом
+
+## Запуск проекта локально
+
+### Предварительные требования
+
+- Node.js 18+ 
+- npm или yarn
+
+### Установка
+
+1. **Клонируйте репозиторий:**
+   ```bash
+   git clone <repository-url>
+   cd "Anna Turbina Site"
+   ```
+
+2. **Установите зависимости:**
+   ```bash
+   npm install
+   ```
+
+3. **Настройте переменные окружения:**
+   
+   Создайте файл `.env.local` в корне проекта и добавьте следующие переменные:
+   ```env
+   NEXT_PUBLIC_SANITY_PROJECT_ID=your_project_id
+   NEXT_PUBLIC_SANITY_DATASET=production
+   NEXT_PUBLIC_SANITY_API_VERSION=2024-01-01
+   ```
+   
+   > **Важно:** Значение `NEXT_PUBLIC_SANITY_PROJECT_ID` необходимо получить из настроек проекта Sanity.
+
+4. **Запустите фронтенд:**
+   ```bash
+   npm run dev
+   ```
+   
+   Сайт будет доступен по адресу [http://localhost:3000](http://localhost:3000)
+
+5. **Запустите Sanity Studio (опционально):**
+   ```bash
+   npm run sanity:dev
+   ```
+   
+   Sanity Studio будет доступен по адресу [http://localhost:3333](http://localhost:3333)
+
+## Команды проекта
+
+- `npm run dev` — запуск dev-сервера Next.js
+- `npm run build` — сборка проекта для production
+- `npm run start` — запуск production-сервера
+- `npm run lint` — проверка кода линтером
+- `npm run sanity:dev` — запуск Sanity Studio в режиме разработки
+- `npm run sanity:deploy` — деплой Sanity Studio
+
+## Структура проекта
+
+```
+├── app/                    # Страницы Next.js (App Router)
+│   ├── layout.tsx         # Корневой layout с глобальными мета-тегами
+│   ├── page.tsx           # Главная страница
+│   ├── tours/[slug]/     # Динамические страницы туров
+│   └── custom-tour/       # Страница индивидуального тура
+├── components/            # React-компоненты
+│   ├── sections/          # Секции страниц
+│   └── ui/                # UI-компоненты
+├── lib/                   # Утилиты и конфигурация
+│   ├── sanity.client.ts   # Клиент Sanity
+│   └── sanity.queries.ts  # GROQ-запросы к Sanity
+└── sanity/                # Конфигурация Sanity Studio
+    └── schemas/           # Схемы документов Sanity
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## SEO-оптимизация
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Проект использует встроенные механизмы Next.js для SEO:
+- Глобальные мета-теги настроены в `app/layout.tsx`
+- Динамические мета-теги для страниц туров генерируются через `generateMetadata`
+- Статические мета-теги для основных страниц
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Полезные ссылки
 
-## Learn More
+- **Sanity Studio:** [ссылка после деплоя]
+- **Деплой на Vercel:** [ссылка после деплоя]
 
-To learn more about Next.js, take a look at the following resources:
+## Дополнительная информация
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Проект полностью функционален и готов к деплою. Все мета-теги настроены для базовой SEO-оптимизации.

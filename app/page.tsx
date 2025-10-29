@@ -6,6 +6,12 @@ import { toursQuery, aboutQuery, reviewsQuery, customTourQuery } from "@/lib/san
 import { AboutSection } from "@/components/sections/about-section";
 import { ReviewsSection } from "@/components/sections/reviews-section";
 import { CustomTourSection } from "@/components/sections/custom-tour-section";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Главная",
+  description: "Авторские женские туры и ретриты с Анной Турбиной. Изучайте мир вместе с нами.",
+};
 
 type SanitySlug = { current: string };
 

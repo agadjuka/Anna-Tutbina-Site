@@ -26,6 +26,13 @@ export const tourBySlugQuery = groq`
   }
 `;
 
+export const tourMetadataQuery = groq`
+  *[_type == "tour" && slug.current == $slug][0]{
+    name,
+    shortDescription
+  }
+`;
+
 
 export const aboutQuery = groq`
   *[_type == "about"][0]{

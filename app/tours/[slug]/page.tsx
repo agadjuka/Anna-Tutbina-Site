@@ -1,12 +1,41 @@
 import { sanityClient } from "@/lib/sanity.client";
-import { tourBySlugQuery } from "@/lib/sanity.queries";
+import { tourBySlugQuery, tourMetadataQuery } from "@/lib/sanity.queries";
 import { Heading } from "@/components/ui/heading";
 import { SanityImage } from "@/components/ui/sanity-image";
 import { PortableTextContent } from "@/components/ui/portable-text";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
+
+export async function generateMetadata({ params }: { params: Promise<{ slug?: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+
+  if (!slug) {
+    return {
+      title: "Тур не найден",
+      description: "Запрашиваемый тур не найден",
+    };
+  }
+
+  const tour = await sanityClient.fetch<{ name?: string; shortDescription?: string } | null>(
+    tourMetadataQuery,
+    { slug }
+  );
+
+  if (!tour || !tour.name) {
+    return {
+      title: "Тур не найден",
+      description: "Запрашиваемый тур не найден",
+    };
+  }
+
+  return {
+    title: tour.name,
+    description: tour.shortDescription || `Подробная информация о туре ${tour.name}`,
+  };
+}
 
 interface Price {
   value: number;
