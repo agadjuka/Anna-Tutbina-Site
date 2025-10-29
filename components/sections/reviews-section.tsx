@@ -35,7 +35,7 @@ export function ReviewsSection({ reviews }: ReviewsSectionProps) {
         </div>
 
         {/* Сетка с отзывами - все 4 отзыва одновременно */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 items-stretch">
           {reviews.map((review) => (
             <div key={review._id} className="flex">
               <ReviewCard review={review} />
