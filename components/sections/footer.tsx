@@ -4,7 +4,7 @@ import { Instagram, Send, Mail, Phone } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="border-t border-[#e5e0db] bg-white">
+    <footer className="border-t border-[#e5e0db] bg-background">
       <Container>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 py-16 md:py-20">
           <div className="space-y-4">

@@ -22,17 +22,17 @@ export function SectionHeading({
     : "bg-[#bea692]";
 
   return (
-    <div className={cn("flex items-center justify-center gap-4 w-full", className)}>
-      <div className={cn("flex-1 h-px max-w-40 md:max-w-64 lg:max-w-80", lineColor)} />
+    <div className={cn("w-full flex items-center justify-center gap-4", className)}>
+      <div className={cn("h-px w-48 md:w-80 lg:w-96 shrink-0", lineColor)} />
       <Component 
         className={cn(
-          "text-sm md:text-base uppercase tracking-[0.2em] font-medium whitespace-nowrap",
+          "text-sm md:text-base uppercase tracking-[0.2em] font-medium whitespace-nowrap shrink-0",
           textColor
         )}
       >
         {children}
       </Component>
-      <div className={cn("flex-1 h-px max-w-40 md:max-w-64 lg:max-w-80", lineColor)} />
+      <div className={cn("h-px w-48 md:w-80 lg:w-96 shrink-0", lineColor)} />
     </div>
   );
 }

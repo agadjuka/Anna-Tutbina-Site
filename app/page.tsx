@@ -54,16 +54,16 @@ export default async function HomePage() {
           <AboutSection image={about.image} bio={about.bio} />
         </section>
       )}
-      <section id="tours" className="relative py-24 md:py-32 lg:py-40 bg-background overflow-hidden">
+      <section id="tours" className="relative py-16 md:py-20 lg:py-24 bg-background overflow-hidden">
         {/* Декоративные элементы фона */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-[#bea692]/3 rounded-full blur-3xl" />
         <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#e5e0db]/5 rounded-full blur-3xl" />
         
         <Container>
-          <div className="relative space-y-16 md:space-y-20">
+          <div className="relative space-y-10 md:space-y-12">
             {/* Заголовок секции */}
             <div className="relative">
-              <SectionHeading as="h2" className="mb-8">
+              <SectionHeading as="h2" className="mb-6">
                 Наши туры
               </SectionHeading>
             </div>
@@ -85,7 +85,7 @@ export default async function HomePage() {
           </div>
         </Container>
       </section>
-      <section id="reviews" className="relative bg-white">
+      <section id="reviews" className="relative bg-background">
         <Container>
           <ReviewsSection reviews={reviews} />
         </Container>

@@ -12,7 +12,7 @@ interface AboutSectionProps {
 
 export function AboutSection({ image, bio }: AboutSectionProps) {
   return (
-    <section className="relative py-24 md:py-32 lg:py-40 bg-background overflow-hidden">
+    <section className="relative py-16 md:py-20 lg:py-24 bg-background overflow-hidden">
       {/* Декоративные элементы фона */}
       <DecorativeBlur className="top-20 left-10 w-96 h-96" />
       <DecorativeBlur className="bottom-20 right-10 w-80 h-80" />
@@ -27,19 +27,17 @@ export function AboutSection({ image, bio }: AboutSectionProps) {
           </div>
           
           {/* Заголовок секции по центру */}
-          <div className="mb-12 md:mb-16">
+          <div className="mb-8 md:mb-10">
             <SectionHeading as="h1" className="mb-0">
               Обо мне
             </SectionHeading>
           </div>
           
-          <div className="grid md:grid-cols-[1.2fr_0.8fr] lg:grid-cols-[1.1fr_0.9fr] gap-16 lg:gap-24 items-start">
-            {/* Левая колонка - текст с асимметрией */}
+          <div className="grid md:grid-cols-[1.2fr_0.8fr] lg:grid-cols-[1.1fr_0.9fr] gap-10 lg:gap-16 items-start">
+            {/* Левая колонка - текст по центру */}
             <div className="space-y-8 relative z-10">
-              
-              <div className="relative pl-4 md:pl-8 border-l-2 border-[#e5e0db]">
-                <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-background border-2 border-[#bea692]" />
-                <div className="prose prose-lg max-w-none pt-4">
+              <div className="relative pt-4">
+                <div className="prose prose-lg max-w-none text-center mx-auto prose-p:text-center">
                   <PortableTextContent 
                     value={bio} 
                     className="text-base md:text-lg leading-[1.8] text-muted-foreground" 
