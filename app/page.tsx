@@ -2,7 +2,8 @@ import { Container } from "@/components/ui/container";
 import { Heading } from "@/components/ui/heading";
 import { TourCard } from "@/components/sections/tour-card";
 import { sanityClient } from "@/lib/sanity.client";
-import { toursQuery } from "@/lib/sanity.queries";
+import { toursQuery, aboutQuery } from "@/lib/sanity.queries";
+import { AboutSection } from "@/components/sections/about-section";
 
 type SanitySlug = { current: string };
 
@@ -22,10 +23,14 @@ interface TourItem {
 }
 
 export default async function HomePage() {
-  const tours = await sanityClient.fetch<TourItem[]>(toursQuery);
+  const [tours, about] = await Promise.all([
+    sanityClient.fetch<TourItem[]>(toursQuery),
+    sanityClient.fetch<{ image: any; bio: any }>(aboutQuery),
+  ]);
 
   return (
     <main className="min-h-screen py-8">
+      {about && <AboutSection image={about.image} bio={about.bio} />}
       <Container>
         <div className="space-y-8">
           <Heading as="h2">Наши туры</Heading>

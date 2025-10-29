@@ -27,3 +27,10 @@ export const tourBySlugQuery = groq`
 `;
 
 
+export const aboutQuery = groq`
+  *[_type == "about"][0]{
+    "image": images[0],
+    bio
+  }
+`;
+
