@@ -34,7 +34,7 @@ export function FloatingContacts() {
             <Send className="h-4 w-4" />
           </Link>
           <Link
-            href="#"
+            href="https://wa.me/79539527212"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="WhatsApp"

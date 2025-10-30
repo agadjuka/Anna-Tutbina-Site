@@ -1,6 +1,6 @@
 import { Container } from "@/components/ui/container";
 import Link from "next/link";
-import { Send, Mail, Phone } from "lucide-react";
+import { Send, Phone } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
 
 export function Footer() {
@@ -23,26 +23,18 @@ export function Footer() {
             </div>
             <div className="flex flex-col gap-1.5 text-[12px] md:text-[13px]">
               <a 
-                href="tel:+79999999999" 
+                href="tel:+79539527212" 
                 className="flex items-center gap-2.5 text-muted-foreground hover:text-foreground transition-colors duration-300 min-h-8"
               >
                 <div className="h-8 w-8 p-1 shrink-0 flex items-center justify-center rounded-md bg-[#e5e0db]/50 overflow-visible">
                   <Phone className="h-3.5 w-3.5" />
                 </div>
-                <span className="leading-5">+7 (999) 999-99-99</span>
+                <span className="leading-5">+7 (953) 952-72-12</span>
               </a>
-              <a 
-                href="mailto:info@annaturbina.tours" 
-                className="flex items-center gap-2.5 text-muted-foreground hover:text-foreground transition-colors duration-300 min-h-8"
-              >
-                <div className="h-8 w-8 p-1 shrink-0 flex items-center justify-center rounded-md bg-[#e5e0db]/50 overflow-visible">
-                  <Mail className="h-3.5 w-3.5" />
-                </div>
-                <span className="leading-5">info@annaturbina.tours</span>
-              </a>
+              
               <div className="flex items-center gap-2 pt-0.5">
                 <a 
-                  href="https://wa.me/79999999999" 
+                  href="https://wa.me/79539527212" 
                   aria-label="WhatsApp" 
                   className="h-8 w-8 p-1 shrink-0 flex items-center justify-center rounded-md bg-[#e5e0db]/50 text-muted-foreground hover:text-[#25D366] hover:bg-[#e5e0db] transition-all duration-300 overflow-visible"
                   target="_blank" rel="noopener noreferrer"
