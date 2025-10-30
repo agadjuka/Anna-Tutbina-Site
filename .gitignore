@@ -40,6 +40,10 @@ dist/
 # === Sanity ===
 sanity/node_modules/
 sanity/dist/
+sanity/.sanity/
+
+# === TypeScript ===
+*.tsbuildinfo
 
 # === Local raw assets (keep out of git) ===
 Фото/
