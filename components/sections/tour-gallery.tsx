@@ -63,14 +63,14 @@ export function TourGallery({ title = "Галерея", images, tourName }: Tour
         index={index}
         slides={slides}
         styles={{
-          // Делаем фон лайтбокса прозрачным. Фон с блюром добавим отдельным оверлеем ниже,
-          // чтобы контролировать задержку появления затемнения.
-          container: { backgroundColor: "transparent" },
+          container: {
+            backgroundColor: "rgba(10,10,12,0.40)",
+            backdropFilter: "blur(12px) saturate(120%)",
+            WebkitBackdropFilter: "blur(12px) saturate(120%)",
+          },
         }}
+        animation={{ fade: 0, swipe: 300 }}
       />
-      {index >= 0 && (
-        <div className="lightbox-backdrop" aria-hidden="true" />
-      )}
     </section>
   );
 }

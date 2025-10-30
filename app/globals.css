@@ -172,8 +172,8 @@
   position: fixed;
   inset: 0;
   background-color: rgba(10, 10, 12, 0.55);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(24px) saturate(120%);
+  -webkit-backdrop-filter: blur(24px) saturate(120%);
   opacity: 0;
   pointer-events: none; /* клики проходят в лайтбокс */
   z-index: 999; /* ниже внутренних кнопок лайтбокса */
