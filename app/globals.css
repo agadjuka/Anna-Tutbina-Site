@@ -184,3 +184,38 @@
   from { opacity: 0; }
   to { opacity: 1; }
 }
+
+/* Универсальный адаптив */
+@layer base {
+  html, body, #__next, main {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+  img, video, input, textarea, button {
+    max-width: 100%;
+    height: auto;
+    box-sizing: border-box;
+  }
+}
+
+@layer utilities {
+  .truncate-long {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 600px) {
+  h1, h2, h3, h4, h5, h6 {
+    font-size: 5vw;
+    word-break: break-word;
+    white-space: normal;
+  }
+  .p-6, .md\:p-8, .px-8, .md\:px-12 {
+    padding: 1rem !important;
+  }
+  .gap-2, .md\:gap-3 {
+    gap: 0.25rem !important;
+  }
+}
