@@ -165,3 +165,22 @@
     display: none; /* Chrome, Safari, Opera */
   }
 }
+
+/* Минимальный оверлей для лайтбокса: блюр + затемнение с задержкой,
+   чтобы совпасть с отрисовкой blur в браузере */
+.lightbox-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(10, 10, 12, 0.55);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  opacity: 0;
+  pointer-events: none; /* клики проходят в лайтбокс */
+  z-index: 999; /* ниже внутренних кнопок лайтбокса */
+  animation: lbOpacityIn 280ms ease 160ms forwards; /* задержка ≈ задержке блюра */
+}
+
+@keyframes lbOpacityIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

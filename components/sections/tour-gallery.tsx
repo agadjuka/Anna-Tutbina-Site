@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
-import FancyLightbox from "@/components/ui/fancy-lightbox";
+import Lightbox from "yet-another-react-lightbox";
+import "yet-another-react-lightbox/styles.css";
 import { urlFor } from "@/lib/sanity.client";
 import { Heading } from "@/components/ui/heading";
 
@@ -56,12 +57,20 @@ export function TourGallery({ title = "Галерея", images, tourName }: Tour
         ))}
       </div>
 
-      <FancyLightbox
+      <Lightbox
         open={index >= 0}
-        onClose={() => setIndex(-1)}
+        close={() => setIndex(-1)}
         index={index}
         slides={slides}
+        styles={{
+          // Делаем фон лайтбокса прозрачным. Фон с блюром добавим отдельным оверлеем ниже,
+          // чтобы контролировать задержку появления затемнения.
+          container: { backgroundColor: "transparent" },
+        }}
       />
+      {index >= 0 && (
+        <div className="lightbox-backdrop" aria-hidden="true" />
+      )}
     </section>
   );
 }
