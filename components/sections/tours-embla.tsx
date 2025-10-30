@@ -32,27 +32,40 @@ export function ToursEmbla({ tours }: ToursEmblaProps) {
   const [active, setActive] = useState<number | null>(null);
   const isDraggingRef = useRef(false);
 
-  // Проверяем, находится ли текущий выбранный слайд в центральной 60% экрана
-  const isSelectedInVerticalCenter = useCallback((api: EmblaCarouselType) => {
+  // Границы центральной зоны и гистерезис (чтобы не мигало на границе)
+  const ACTIVATE_TOP = 0.2;   // активируем, если центр попал в [20%, 80%]
+  const ACTIVATE_BOTTOM = 0.8;
+  const DEACTIVATE_TOP = 0.18;  // деактивируем, только если вышел за [18%, 82%]
+  const DEACTIVATE_BOTTOM = 0.82;
+
+  const getSelectedCenterPercent = useCallback((api: EmblaCarouselType) => {
     const idx = api.selectedScrollSnap();
     const slide = api.slideNodes()[idx] as HTMLElement | undefined;
-    if (!slide) return false;
+    if (!slide) return null;
     const rect = slide.getBoundingClientRect();
-    const vh = window.innerHeight;
-    const topBound = vh * 0.2; // верхняя граница центральной зоны (20%)
-    const bottomBound = vh * 0.8; // нижняя граница (80%)
-    const slideCenterY = rect.top + rect.height / 2;
-    return slideCenterY >= topBound && slideCenterY <= bottomBound;
+    const vh = window.innerHeight || 1;
+    const centerY = rect.top + rect.height / 2;
+    return centerY / vh; // 0..1
   }, []);
 
   const activateIfEligible = useCallback((api: EmblaCarouselType) => {
     if (!api) return;
-    if (isSelectedInVerticalCenter(api)) {
-      setActive(api.selectedScrollSnap());
-    } else {
-      setActive(null);
+    const p = getSelectedCenterPercent(api);
+    if (p == null) return;
+    const idx = api.selectedScrollSnap();
+
+    // Если уже активен этот же слайд — держим активным, пока он в мягкой зоне
+    if (active === idx) {
+      if (p >= DEACTIVATE_TOP && p <= DEACTIVATE_BOTTOM) return; // остаётся активным
+      setActive(null); // вышел из зоны — деактивируем
+      return;
     }
-  }, [isSelectedInVerticalCenter]);
+
+    // Иначе активируем только если попал в жёсткую центральную зону
+    if (p >= ACTIVATE_TOP && p <= ACTIVATE_BOTTOM) {
+      setActive(idx);
+    }
+  }, [active, getSelectedCenterPercent]);
 
   useEffect(() => {
     if (!embla) return;
