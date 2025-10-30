@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <body
-        className={`${ttDrugs.variable} ${theanoDidot.variable} ${leotaro.variable} ${kinetika.variable} antialiased`}
+        className={`pt-16 ${ttDrugs.variable} ${theanoDidot.variable} ${leotaro.variable} ${kinetika.variable} antialiased`}
       >
         <Header />
         {children}
