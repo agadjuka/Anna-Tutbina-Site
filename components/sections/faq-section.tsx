@@ -39,8 +39,9 @@ export function FaqSection({items}: FaqSectionProps) {
             >
               <span style={{fontSize: '1.125rem', lineHeight: 1.3, fontWeight: 500}}>{item.question}</span>
               <span
+                style={{fontSize: '1.7rem', lineHeight: 1, fontWeight: 200}}
                 className={cn(
-                  "ml-4 text-5xl leading-none font-thin transition-transform duration-300", // большой плюс/крестик
+                  "ml-4 leading-none font-thin transition-transform duration-300", // убираю text-5xl/text-6xl чтобы не мешало
                   openIndex === idx ? "rotate-45 text-[#bea692]" : "rotate-0"
                 )}
                 aria-hidden="true"
