@@ -1,6 +1,7 @@
 "use client";
 
-import useEmblaCarousel, { type EmblaOptionsType, type EmblaCarouselType } from "embla-carousel-react";
+import useEmblaCarousel from "embla-carousel-react";
+import type { EmblaOptionsType, EmblaCarouselType } from "embla-carousel";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { TourCard } from "./tour-card";
 import { cn } from "@/lib/utils";

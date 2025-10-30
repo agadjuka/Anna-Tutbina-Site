@@ -1,6 +1,7 @@
 "use client";
 
-import useEmblaCarousel, { type EmblaOptionsType } from "embla-carousel-react";
+import useEmblaCarousel from "embla-carousel-react";
+import type { EmblaOptionsType } from "embla-carousel";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ReviewCard } from "@/components/sections/review-card";
 
@@ -66,7 +67,7 @@ export function ReviewsEmbla({ reviews }: ReviewsEmblaProps) {
             <div key={review._id} style={slideStyle}>
               {/* Высота выравнивается по максимальной среди карточек */}
               <div
-                ref={(el) => (cardRefs.current[idx] = el)}
+                ref={el => { cardRefs.current[idx] = el }}
                 style={maxHeight ? { height: maxHeight } : undefined}
                 className={maxHeight ? "h-full" : ""}
               >

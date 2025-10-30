@@ -103,7 +103,7 @@ export function FaqSection({items}: FaqSectionProps) {
               </button>
               <div
                 id={`faq-content-${idx}`}
-                ref={el => contentRefs.current[idx] = el}
+                ref={el => { contentRefs.current[idx] = el }}
                 style={{
                   height: isOpen ? heights[idx] : 0,
                   opacity: isOpen ? 1 : 0,
