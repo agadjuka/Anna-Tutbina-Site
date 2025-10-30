@@ -12,5 +12,6 @@ export default (S, context) => S.list()
     S.documentTypeListItem('review').title('Отзывы'),
     S.documentTypeListItem('about').title('Обо мне'),
     S.documentTypeListItem('customTour').title('Индивидуальный тур'),
+    S.documentTypeListItem('faq').title('FAQ'),
   ]);
 

@@ -54,7 +54,7 @@ export function Footer() {
           </div>
         </div>
       </Container>
-      <div className="border-t border-[#e5e0db] py-4 text-center text-xs text-muted-foreground leading-tight">
+      <div className="border-t border-[#e5e0db] py-4 text-center text-xs md:text-sm text-muted-foreground leading-tight">
         <div className="mb-1">Разработка сайта @markov1u</div>
         <div>© {new Date().getFullYear()} Anna Turbina Tours. Все права защищены.</div>
       </div>
