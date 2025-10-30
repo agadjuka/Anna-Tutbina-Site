@@ -15,6 +15,53 @@ interface FaqSectionProps {
   items: FaqItem[];
 }
 
+function PlusIconAnimated({ open }: { open: boolean }) {
+  // уменьшенный размер
+  const color = '#bea692';
+  const thickness = 1; // px
+  const length = 14; // уменьшенная длина линии
+  const size = 18; // сам контейнер меньше
+  return (
+    <span
+      className={cn(
+        "relative block transition-transform duration-300",
+        open ? "rotate-45" : "rotate-0"
+      )}
+      style={{ width: size, height: size, display: 'inline-block' }}
+      aria-hidden="true"
+    >
+      <span
+        style={{
+          position: 'absolute',
+          left: '50%',
+          top: '50%',
+          width: length,
+          height: thickness,
+          backgroundColor: color,
+          borderRadius: 1,
+          transform: 'translate(-50%, -50%)',
+          transition: 'background-color 0.2s',
+          pointerEvents: 'none',
+        }}
+      />
+      <span
+        style={{
+          position: 'absolute',
+          left: '50%',
+          top: '50%',
+          width: thickness,
+          height: length,
+          backgroundColor: color,
+          borderRadius: 1,
+          transform: 'translate(-50%, -50%)',
+          transition: 'background-color 0.2s',
+          pointerEvents: 'none',
+        }}
+      />
+    </span>
+  );
+}
+
 export function FaqSection({items}: FaqSectionProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const contentRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -52,16 +99,7 @@ export function FaqSection({items}: FaqSectionProps) {
                 style={{ outline: "none" }}
               >
                 <span style={{ fontSize: '1.125rem', lineHeight: 1.3, fontWeight: 500 }}>{item.question}</span>
-                <span
-                  style={{ fontSize: '1.7rem', lineHeight: 1, fontWeight: 200 }}
-                  className={cn(
-                    "ml-4 leading-none font-thin transition-transform duration-300",
-                    isOpen ? "rotate-45 text-[#bea692]" : "rotate-0"
-                  )}
-                  aria-hidden="true"
-                >
-                  +
-                </span>
+                <PlusIconAnimated open={isOpen} />
               </button>
               <div
                 id={`faq-content-${idx}`}
@@ -76,7 +114,7 @@ export function FaqSection({items}: FaqSectionProps) {
                 }}
                 aria-hidden={!isOpen}
               >
-                <div style={{padding: isOpen ? '20px 4px 0 4px' : '0 4px' }}>
+                <div style={{padding: isOpen ? '0 4px' : '0 4px' }}>
                   <PortableTextContent value={item.answer} style={{ fontSize: '16px', lineHeight: 1.6, fontWeight: 400 }} smallFont={true} />
                 </div>
               </div>
