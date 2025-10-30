@@ -46,7 +46,7 @@ export function ToursEmbla({ tours }: ToursEmblaProps) {
 
   return (
     <div className="md:hidden pt-6 -mx-4 px-4">
-      <div className="overflow-hidden" ref={viewportRef}>
+      <div className="overflow-x-hidden overflow-y-visible py-2" ref={viewportRef}>
         <div className={cn("flex gap-6")}> 
           {tours.map((t, i) => (
             <div key={t._id} style={slideStyle}>

@@ -38,8 +38,8 @@ export function TourCard({ tour, className, isActive = false }: TourCardProps) {
       href={`/tours/${tour.slug.current}`}
       className={cn(
         "group relative block overflow-hidden rounded-2xl transition-all duration-700 ease-out",
-        "hover:scale-[1.02] hover:-translate-y-1 hover:shadow-2xl",
-        isActive && "scale-[1.02] -translate-y-1 shadow-2xl",
+        "hover:scale-[1.02] md:hover:-translate-y-1 hover:shadow-2xl",
+        isActive && "scale-[1.02] md:-translate-y-1 shadow-2xl",
         className
       )}
     >
