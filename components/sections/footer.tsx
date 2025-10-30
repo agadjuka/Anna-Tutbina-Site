@@ -9,7 +9,7 @@ export function Footer() {
       <Container>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-8 py-6 md:py-8">
           <div className="space-y-2">
-            <div className="text-base md:text-2xl font-heading font-bold tracking-tight text-foreground">
+            <div className="text-base md:text-2xl font-heading font-bold tracking-tight text-[#7b6f6f]">
               Anna Turbina Tours
             </div>
             <p className="text-[12.5px] md:text-sm text-muted-foreground leading-snug max-w-sm">

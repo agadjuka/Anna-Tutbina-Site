@@ -71,7 +71,7 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
   return (
     <main className="min-h-screen bg-background py-12 md:py-16">
       <Container>
-        <div className="max-w-4xl mx-auto space-y-12 md:space-y-16">
+        <div className="space-y-12 md:space-y-16">
           <header className="space-y-6">
             <div className="space-y-4">
               <Heading as="h1" className="mb-0">{tour.name}</Heading>

@@ -1,7 +1,7 @@
 import { groq } from "next-sanity";
 
 export const toursQuery = groq`
-  *[_type == "tour"]{
+  *[_type == "tour"]|order(orderRank){
     _id,
     name,
     slug,

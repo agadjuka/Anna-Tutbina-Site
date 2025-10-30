@@ -1,10 +1,12 @@
 import {defineType, defineField} from 'sanity'
+import {orderRankField} from '@sanity/orderable-document-list'
 
 const tour = defineType({
   name: 'tour',
   title: 'Тур',
   type: 'document',
   fields: [
+    orderRankField({ type: 'tour' }),
     defineField({
       name: 'name',
       title: 'Название тура',

@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 import { urlFor } from "@/lib/sanity.client";
 import { Heading } from "@/components/ui/heading";
+import PhotoAlbum from "react-photo-album";
 
 interface TourGalleryProps {
   title?: string;
@@ -33,6 +34,58 @@ function buildSlides(images: any[], tourName?: string) {
 export function TourGallery({ title = "Галерея", images, tourName }: TourGalleryProps) {
   const slides = buildSlides(images, tourName);
   const [index, setIndex] = useState<number>(-1);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [containerWidth, setContainerWidth] = useState(0);
+  useEffect(() => {
+    function onResize() {
+      if (containerRef.current) {
+        setContainerWidth(containerRef.current.offsetWidth);
+      }
+    }
+    onResize();
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+
+  // Параметры
+  const rowHeight = 320; // фиксированная высота строки
+  const gap = 8; // между фото
+  const minRowImages = 2;
+  const maxRowImages = 5;
+  // Разделение на строки (максимально pack)
+  const rows = useMemo(() => {
+    if (!containerWidth || slides.length === 0) return [];
+    const out: Array<{ photos: typeof slides; scaledHeights: number[]; widths: number[]; }> = [];
+    let curr: any[] = [];
+    let i = 0;
+    while (i < slides.length) {
+      curr.push(slides[i]);
+      // сколько брать в строку
+      // считаем желаемую сумму ширин при h = rowHeight
+      let sumWidth = 0;
+      for (const s of curr) {
+        sumWidth += (s.width / s.height) * rowHeight;
+      }
+      const totalGaps = (curr.length - 1) * gap;
+      // если плотная строка
+      if ((sumWidth + totalGaps > containerWidth && curr.length >= minRowImages) || curr.length >= maxRowImages) {
+        // масштабируем ширину до контейнера
+        const scale = (containerWidth - totalGaps) / sumWidth;
+        const scaledHeights = curr.map(() => rowHeight);
+        const widths = curr.map(s => Math.round((s.width / s.height) * rowHeight * scale));
+        out.push({ photos: curr, scaledHeights, widths });
+        curr = [];
+      }
+      i++;
+    }
+    // Остатки — последней строкой, не растягивать
+    if (curr.length) {
+      const scaledHeights = curr.map(() => rowHeight);
+      const widths = curr.map(s => Math.round((s.width / s.height) * rowHeight));
+      out.push({ photos: curr, scaledHeights, widths });
+    }
+    return out;
+  }, [containerWidth, slides, rowHeight, gap, minRowImages, maxRowImages]);
 
   if (!slides.length) return null;
 
@@ -40,21 +93,30 @@ export function TourGallery({ title = "Галерея", images, tourName }: Tour
     <section className="space-y-6">
       <Heading as="h2" className="mb-0">{title}</Heading>
 
-      {/* Карусель на мобильных */}
       <MobileGalleryCarousel slides={slides} onOpen={(i) => setIndex(i)} />
 
-      {/* Колонки начиная с md */}
-      <div className="hidden md:block [&>figure]:mb-5 lg:[&>figure]:mb-6 md:columns-2 lg:columns-3 md:gap-5 lg:gap-6">
-        {slides.map((slide, i) => (
-          <figure key={i} className="break-inside-avoid overflow-hidden bg-white cursor-zoom-in shadow-card hover:shadow-card-hover" onClick={() => setIndex(i)}>
-            <img
-              src={slide.src}
-              alt={slide.alt}
-              loading="lazy"
-              className="block w-full h-auto object-contain"
-            />
-          </figure>
-        ))}
+      {/* Justified строковая галерея на desktop */}
+      <div ref={containerRef} className="hidden md:block w-full">
+        <div className="flex flex-col gap-y-[12px]">
+          {rows.map((row, rowIdx) => (
+            <div key={rowIdx} className="flex flex-row" style={{ gap }}>
+              {row.photos.map((s, i) => (
+                <img
+                  key={i}
+                  src={s.src}
+                  alt={s.alt}
+                  loading="lazy"
+                  style={{ height: `${row.scaledHeights[i]}px`, width: `${row.widths[i]}px`, objectFit: "cover", cursor: "pointer", display: "block" }}
+                  onClick={() => {
+                    // Складываем количество фото до этой строки + индекс
+                    const idx = rows.slice(0, rowIdx).reduce((a, r) => a + r.photos.length, 0) + i;
+                    setIndex(idx);
+                  }}
+                />
+              ))}
+            </div>
+          ))}
+        </div>
       </div>
 
       <Lightbox
