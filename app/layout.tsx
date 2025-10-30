@@ -3,6 +3,7 @@ import "./globals.css";
 import { ttDrugs, theanoDidot, leotaro, kinetika } from "@/lib/fonts";
 import { Footer } from "@/components/sections/footer";
 import { Header } from "@/components/sections/header";
+import { FloatingContacts } from "@/components/ui/floating-contacts";
 
 export const metadata: Metadata = {
   title: {
@@ -24,6 +25,7 @@ export default function RootLayout({
       >
         <Header />
         {children}
+        <FloatingContacts />
         <Footer />
       </body>
     </html>
