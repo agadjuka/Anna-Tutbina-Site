@@ -219,3 +219,9 @@
     gap: 0.25rem !important;
   }
 }
+
+.faq-answer-custom {
+  font-size: 0.4375rem !important; /* 7px */
+  line-height: 1.6 !important;
+  font-weight: 400 !important;
+}

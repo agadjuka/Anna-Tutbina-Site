@@ -29,7 +29,7 @@ export function FaqSection({items}: FaqSectionProps) {
           <div key={item._id} className="border-b border-[#e5e0db] last:border-b-0">
             <button
               className={cn(
-                "w-full flex justify-between items-center py-5 text-lg md:text-xl text-left transition-colors",
+                "w-full flex justify-between items-center py-5 text-lg md:text-xl text-left transition-colors", // увеличенный размер вопроса
                 openIndex === idx ? "text-[#bea692]" : "text-white/90"
               )}
               onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
@@ -37,10 +37,10 @@ export function FaqSection({items}: FaqSectionProps) {
               aria-controls={`faq-content-${idx}`}
               style={{outline: "none"}}
             >
-              <span>{item.question}</span>
+              <span style={{fontSize: '1.125rem', lineHeight: 1.3, fontWeight: 500}}>{item.question}</span>
               <span
                 className={cn(
-                  "ml-4 text-3xl leading-none font-thin transition-transform duration-300",
+                  "ml-4 text-5xl leading-none font-thin transition-transform duration-300", // большой плюс/крестик
                   openIndex === idx ? "rotate-45 text-[#bea692]" : "rotate-0"
                 )}
                 aria-hidden="true"
@@ -53,7 +53,7 @@ export function FaqSection({items}: FaqSectionProps) {
                 id={`faq-content-${idx}`}
                 className="pb-5 px-1 animate-fadeIn"
               >
-                <PortableTextContent value={item.answer} className="text-base md:text-lg text-muted-foreground"/>
+                <PortableTextContent value={item.answer} style={{fontSize: '16px', lineHeight: 1.6, fontWeight: 400}} smallFont={true} />
               </div>
             )}
           </div>
