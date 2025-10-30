@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
-import Lightbox from "yet-another-react-lightbox";
-import "yet-another-react-lightbox/styles.css";
+import FancyLightbox from "@/components/ui/fancy-lightbox";
 import { urlFor } from "@/lib/sanity.client";
 import { Heading } from "@/components/ui/heading";
 
@@ -57,9 +56,9 @@ export function TourGallery({ title = "Галерея", images, tourName }: Tour
         ))}
       </div>
 
-      <Lightbox
+      <FancyLightbox
         open={index >= 0}
-        close={() => setIndex(-1)}
+        onClose={() => setIndex(-1)}
         index={index}
         slides={slides}
       />
