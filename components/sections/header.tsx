@@ -9,9 +9,9 @@ export function Header() {
           {/* Декоративная линия слева */}
           <div className="absolute left-0 bottom-0 top-0 w-px bg-gradient-to-b from-[#bea692] via-transparent to-[#bea692] opacity-30 hidden lg:block" />
           
-          <div className="text-xl md:text-2xl font-heading font-bold tracking-tight text-foreground">
+          <Link href="/" className="inline-flex items-center -my-6 md:-my-7 py-6 md:py-7 px-3 md:px-4 text-xl md:text-2xl font-heading font-bold tracking-tight text-foreground hover:opacity-90 transition-opacity">
             Anna Turbina Tours
-          </div>
+          </Link>
           
           <nav>
             <ul className="flex items-center gap-8 md:gap-12 text-sm md:text-base">
