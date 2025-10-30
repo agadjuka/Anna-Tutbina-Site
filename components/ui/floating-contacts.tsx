@@ -10,7 +10,7 @@ export function FloatingContacts() {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="fixed z-[60] right-4 bottom-4 md:right-8 md:bottom-8">
+    <div className="fixed z-[60] right-4 bottom-20 md:right-8 md:bottom-24">
       <div className="relative flex flex-col items-end gap-3">
         {/* Дочерние кнопки-иконки в стиле футера */}
         <div className="flex flex-col items-end gap-2">
@@ -21,7 +21,7 @@ export function FloatingContacts() {
             aria-label="Telegram"
             title="Telegram"
             className={
-              "h-10 w-10 md:h-11 md:w-11 p-1.5 shrink-0 flex items-center justify-center rounded-md bg-[#e5e0db]/50 text-muted-foreground transition-all overflow-visible" +
+              "h-10 w-10 md:h-11 md:w-11 p-1.5 shrink-0 flex items-center justify-center rounded-md bg-[#e5e0db] text-muted-foreground transition-all overflow-visible" +
               (open
                 ? " opacity-100 translate-y-0 duration-300 hover:text-[#bea692] hover:bg-[#e5e0db] scale-100"
                 : " opacity-0 translate-y-2 pointer-events-none duration-200 scale-95")
@@ -37,7 +37,7 @@ export function FloatingContacts() {
             aria-label="WhatsApp"
             title="WhatsApp"
             className={
-              "h-10 w-10 md:h-11 md:w-11 p-1.5 shrink-0 flex items-center justify-center rounded-md bg-[#e5e0db]/50 text-muted-foreground transition-all overflow-visible" +
+              "h-10 w-10 md:h-11 md:w-11 p-1.5 shrink-0 flex items-center justify-center rounded-md bg-[#e5e0db] text-muted-foreground transition-all overflow-visible" +
               (open
                 ? " opacity-100 translate-y-0 duration-500 hover:text-[#25D366] hover:bg-[#e5e0db] scale-100"
                 : " opacity-0 translate-y-2 pointer-events-none duration-200 scale-95")
