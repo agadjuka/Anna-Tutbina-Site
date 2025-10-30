@@ -29,6 +29,33 @@ export function ToursCarousel({ tours }: ToursCarouselProps) {
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
   const isScrollingRef = useRef(false);
 
+  // Находит индекс карточки, чей центр ближе всего к центру контейнера
+  const getClosestIndex = (): { index: number; distancePx: number; widthPx: number } => {
+    const container = containerRef.current;
+    if (!container) return { index: 0, distancePx: 0, widthPx: 1 };
+
+    const containerRect = container.getBoundingClientRect();
+    const containerCenter = containerRect.left + containerRect.width / 2;
+
+    let closestIndex = 0;
+    let closestDistance = Infinity;
+    let closestWidth = 1;
+
+    cardsRef.current.forEach((card, index) => {
+      if (!card) return;
+      const rect = card.getBoundingClientRect();
+      const center = rect.left + rect.width / 2;
+      const distance = Math.abs(center - containerCenter);
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        closestIndex = index;
+        closestWidth = rect.width;
+      }
+    });
+
+    return { index: closestIndex, distancePx: closestDistance, widthPx: closestWidth };
+  };
+
   // Функция для центрирования карточки по индексу
   const scrollToCard = (index: number) => {
     const card = cardsRef.current[index];
@@ -36,12 +63,11 @@ export function ToursCarousel({ tours }: ToursCarouselProps) {
     
     if (card && container && !isScrollingRef.current) {
       isScrollingRef.current = true;
-      const cardOffsetLeft = card.offsetLeft;
       const containerWidth = container.offsetWidth;
       const cardWidth = card.offsetWidth;
-      
-      // Рассчитываем позицию для центрирования
-      const targetScroll = cardOffsetLeft - (containerWidth / 2) + (cardWidth / 2);
+      // Центр элемента относительно контейнера, учитывая текущий scrollLeft
+      const cardCenterX = card.offsetLeft + cardWidth / 2;
+      const targetScroll = Math.round(cardCenterX - containerWidth / 2);
       
       container.scrollTo({
         left: targetScroll,
@@ -51,7 +77,7 @@ export function ToursCarousel({ tours }: ToursCarouselProps) {
       // Сбрасываем флаг после завершения прокрутки
       setTimeout(() => {
         isScrollingRef.current = false;
-      }, 500);
+      }, 350);
     }
   };
 
@@ -64,111 +90,57 @@ export function ToursCarousel({ tours }: ToursCarouselProps) {
     const timeout = setTimeout(() => {
       if (cardsRef.current[0] && !isScrollingRef.current) {
         scrollToCard(0);
+        setActiveIndex(0);
       }
     }, 100);
 
     return () => clearTimeout(timeout);
   }, [tours.length]);
 
-  // Используем Intersection Observer для определения активной карточки
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container || cardsRef.current.length === 0) return;
-
-    const observerOptions = {
-      root: container,
-      rootMargin: "0px",
-      threshold: [0.5, 0.6, 0.7], // Карточка активна, если больше половины видна в центре
-    };
-
-    const handleIntersection = (entries: IntersectionObserverEntry[]) => {
-      // Находим карточку с наибольшим intersectionRatio
-      let maxRatio = 0;
-      let activeCardIndex = activeIndex;
-
-      entries.forEach((entry) => {
-        if (entry.isIntersecting && entry.intersectionRatio > maxRatio) {
-          maxRatio = entry.intersectionRatio;
-          const index = cardsRef.current.findIndex((card) => card === entry.target);
-          if (index !== -1) {
-            activeCardIndex = index;
-          }
-        }
-      });
-
-      // Обновляем активную карточку только если не происходит программная прокрутка
-      if (maxRatio >= 0.6 && activeCardIndex !== activeIndex && !isScrollingRef.current) {
-        setActiveIndex(activeCardIndex);
-      }
-    };
-
-    const observer = new IntersectionObserver(handleIntersection, observerOptions);
-
-    // Наблюдаем за всеми карточками
-    const observeCards = () => {
-      cardsRef.current.forEach((card) => {
-        if (card) {
-          observer.observe(card);
-        }
-      });
-    };
-
-    // Небольшая задержка для гарантии, что все карточки отрендерены
-    const timeout = setTimeout(observeCards, 50);
-
-    return () => {
-      clearTimeout(timeout);
-      observer.disconnect();
-    };
-  }, [tours.length, activeIndex]);
-
-  // Обработка завершения прокрутки для центрирования ближайшей карточки
+  // Слежение за прокруткой: определяем ближайшую к центру карточку
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
+    let raf = 0;
     let scrollTimeout: NodeJS.Timeout;
 
-    const handleScroll = () => {
-      if (isScrollingRef.current) return; // Игнорируем программную прокрутку
-      
+    const updateActiveByCenter = () => {
+      const { index: closestIndex } = getClosestIndex();
+
+      // Всегда синхронизируем активную карточку с ближайшей к центру
+      if (closestIndex !== activeIndex && !isScrollingRef.current) {
+        setActiveIndex(closestIndex);
+      }
+
+      // После окончания прокрутки принудительно центрируем ближайшую
       clearTimeout(scrollTimeout);
-      
       scrollTimeout = setTimeout(() => {
-        // Находим карточку, наиболее близкую к центру контейнера
-        const containerRect = container.getBoundingClientRect();
-        const containerCenter = containerRect.left + containerRect.width / 2;
-        
-        let closestIndex = 0;
-        let closestDistance = Infinity;
-
-        cardsRef.current.forEach((card, index) => {
-          if (!card) return;
-          
-          const cardRect = card.getBoundingClientRect();
-          const cardCenter = cardRect.left + cardRect.width / 2;
-          const distance = Math.abs(cardCenter - containerCenter);
-          
-          if (distance < closestDistance) {
-            closestDistance = distance;
-            closestIndex = index;
-          }
-        });
-
-        // Центрируем ближайшую карточку, если она не уже активна
-        if (closestIndex !== activeIndex && !isScrollingRef.current) {
+        if (!isScrollingRef.current) {
           scrollToCard(closestIndex);
+          setActiveIndex(closestIndex);
         }
-      }, 200); // Задержка для определения остановки прокрутки
+      }, 120);
     };
 
-    container.addEventListener("scroll", handleScroll, { passive: true });
+    const onScroll = () => {
+      if (isScrollingRef.current) return;
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(updateActiveByCenter);
+    };
+
+    container.addEventListener("scroll", onScroll, { passive: true });
+    // Инициализируем активную карточку
+    updateActiveByCenter();
 
     return () => {
-      container.removeEventListener("scroll", handleScroll);
+      container.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(raf);
       clearTimeout(scrollTimeout);
     };
   }, [activeIndex]);
+
+  // Удалён лишний debounce-блок: центрирование происходит в useEffect выше
 
   // Обработка событий touch для лучшего контроля на мобильных
   useEffect(() => {
@@ -177,41 +149,63 @@ export function ToursCarousel({ tours }: ToursCarouselProps) {
 
     let touchStartX = 0;
     let touchStartScrollLeft = 0;
+    let lastX = 0;
+    let lastT = 0;
+    let velocity = 0;
+    let dragging = false;
 
     const handleTouchStart = (e: TouchEvent) => {
+      dragging = true;
       touchStartX = e.touches[0].clientX;
       touchStartScrollLeft = container.scrollLeft;
+      lastX = touchStartX;
+      lastT = performance.now();
     };
 
-    const handleTouchEnd = (e: TouchEvent) => {
-      const touchEndX = e.changedTouches[0].clientX;
-      const diff = touchStartX - touchEndX;
-      const threshold = 50; // Минимальное расстояние для переключения
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!dragging) return;
+      e.preventDefault(); // отключаем нативную инерцию для полного контроля
+      const x = e.touches[0].clientX;
+      const now = performance.now();
+      const dx = touchStartX - x; // положительно при свайпе влево
+      container.scrollLeft = touchStartScrollLeft + dx;
+      velocity = (lastX - x) / Math.max(1, now - lastT); // px/ms
+      lastX = x;
+      lastT = now;
+    };
 
-      if (Math.abs(diff) > threshold) {
-        // Определяем направление и находим следующую/предыдущую карточку
-        const currentCard = cardsRef.current[activeIndex];
-        if (!currentCard) return;
-
-        const cardWidth = currentCard.offsetWidth;
-        const gap = 24; // gap-6 в Tailwind = 1.5rem = 24px
-        const scrollDistance = cardWidth + gap;
-
-        if (diff > 0 && activeIndex < tours.length - 1) {
-          // Свайп влево - следующая карточка
-          scrollToCard(activeIndex + 1);
-        } else if (diff < 0 && activeIndex > 0) {
-          // Свайп вправо - предыдущая карточка
-          scrollToCard(activeIndex - 1);
-        }
+    const handleTouchEnd = () => {
+      if (!dragging) return;
+      dragging = false;
+      // Если уже близко к центру (<=25% ширины) — дотягиваем ровно в центр
+      const { index: closestIndex, distancePx, widthPx } = getClosestIndex();
+      const proximityThreshold = widthPx * 0.25;
+      if (distancePx <= proximityThreshold) {
+        scrollToCard(closestIndex);
+        return;
       }
+      // Иначе используем скорость для выбора направления
+      const speedPxMs = velocity; // px/ms
+      const speedThreshold = 0.5; // эмпирически
+      if (speedPxMs > speedThreshold && activeIndex > 0) {
+        scrollToCard(activeIndex - 1);
+        return;
+      }
+      if (speedPxMs < -speedThreshold && activeIndex < tours.length - 1) {
+        scrollToCard(activeIndex + 1);
+        return;
+      }
+      // Фолбэк: ближайшая к центру
+      scrollToCard(closestIndex);
     };
 
     container.addEventListener("touchstart", handleTouchStart, { passive: true });
+    container.addEventListener("touchmove", handleTouchMove, { passive: false });
     container.addEventListener("touchend", handleTouchEnd, { passive: true });
 
     return () => {
       container.removeEventListener("touchstart", handleTouchStart);
+      container.removeEventListener("touchmove", handleTouchMove as any);
       container.removeEventListener("touchend", handleTouchEnd);
     };
   }, [activeIndex, tours.length]);
@@ -240,7 +234,7 @@ export function ToursCarousel({ tours }: ToursCarouselProps) {
             cardsRef.current[index] = el;
           }}
           className={cn(
-            "flex-shrink-0 snap-center", // Каждая карточка центрируется при прокрутке
+            "flex-shrink-0 snap-center snap-always", // Каждая карточка центрируется при прокрутке и всегда останавливается на снап-точке
             "w-[80vw]", // Ширина карточки 80% экрана
             "max-w-[400px]" // Максимальная ширина
           )}
