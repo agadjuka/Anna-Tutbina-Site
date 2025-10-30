@@ -68,6 +68,11 @@ export function TourGallery({ title = "Галерея", images, tourName }: Tour
             backdropFilter: "blur(12px) saturate(120%)",
             WebkitBackdropFilter: "blur(12px) saturate(120%)",
           },
+          button: {
+            boxShadow: "none",
+            filter: "none",
+            textShadow: "none",
+          },
         }}
         animation={{ fade: 0, swipe: 300 }}
       />
