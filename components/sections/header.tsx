@@ -20,7 +20,7 @@ export function Header() {
                   href="/#tours" 
                   className="text-muted-foreground hover:text-foreground transition-colors duration-300 relative pb-1 group"
                 >
-                  <span className="relative z-10">Туры</span>
+                  <span className="relative z-10 whitespace-nowrap">Туры</span>
                   <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#bea692] group-hover:w-full transition-all duration-300" />
                   <div className="absolute -left-1 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-[#bea692] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </Link>
@@ -30,7 +30,7 @@ export function Header() {
                   href="/#about" 
                   className="text-muted-foreground hover:text-foreground transition-colors duration-300 relative pb-1 group"
                 >
-                  <span className="relative z-10">Обо мне</span>
+                  <span className="relative z-10 whitespace-nowrap">Обо мне</span>
                   <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#bea692] group-hover:w-full transition-all duration-300" />
                   <div className="absolute -left-1 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-[#bea692] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </Link>
@@ -40,7 +40,7 @@ export function Header() {
                   href="/#reviews" 
                   className="text-muted-foreground hover:text-foreground transition-colors duration-300 relative pb-1 group"
                 >
-                  <span className="relative z-10">Отзывы</span>
+                  <span className="relative z-10 whitespace-nowrap">Отзывы</span>
                   <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#bea692] group-hover:w-full transition-all duration-300" />
                   <div className="absolute -left-1 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-[#bea692] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </Link>

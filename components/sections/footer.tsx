@@ -50,9 +50,10 @@ export function Footer() {
                   <FaWhatsapp className="h-3.5 w-3.5" />
                 </a>
                 <a 
-                  href="#" 
+                  href="https://t.me/Anna_Turbina" 
                   aria-label="Telegram" 
                   className="h-8 w-8 p-1 shrink-0 flex items-center justify-center rounded-md bg-[#e5e0db]/50 text-muted-foreground hover:text-[#bea692] hover:bg-[#e5e0db] transition-all duration-300 overflow-visible"
+                  target="_blank" rel="noopener noreferrer"
                 >
                   <Send className="h-3.5 w-3.5" />
                 </a>
@@ -62,7 +63,8 @@ export function Footer() {
         </div>
       </Container>
       <div className="border-t border-[#e5e0db] py-4 text-center text-xs text-muted-foreground leading-tight">
-        © {new Date().getFullYear()} Anna Turbina Tours. Все права защищены.
+        <div className="mb-1">Разработка сайта @markov1u</div>
+        <div>© {new Date().getFullYear()} Anna Turbina Tours. Все права защищены.</div>
       </div>
     </footer>
   );

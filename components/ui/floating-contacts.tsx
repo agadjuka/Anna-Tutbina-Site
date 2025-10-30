@@ -10,12 +10,15 @@ export function FloatingContacts() {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="fixed z-[60] right-4 bottom-20 md:right-8 md:bottom-24">
+    <div
+      className="fixed z-[60] right-4 md:right-8 transform-gpu will-change-[transform]"
+      style={{ bottom: "max(6rem, calc(10svh + env(safe-area-inset-bottom, 0px)))" }}
+    >
       <div className="relative flex flex-col items-end gap-3">
         {/* Дочерние кнопки-иконки в стиле футера */}
         <div className="flex flex-col items-end gap-2">
           <Link
-            href="#"
+            href="https://t.me/Anna_Turbina"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Telegram"
