@@ -1,4 +1,5 @@
 import { ReviewCard } from "@/components/sections/review-card";
+import { ReviewsEmbla } from "@/components/sections/reviews-embla";
 import { SectionHeading } from "@/components/ui/section-heading";
 
 interface ReviewItem {
@@ -34,8 +35,13 @@ export function ReviewsSection({ reviews }: ReviewsSectionProps) {
           </div>
         </div>
 
-        {/* Сетка с отзывами - все 4 отзыва одновременно */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 items-stretch">
+        {/* Мобильная горизонтальная карусель */}
+        <div className="md:hidden">
+          <ReviewsEmbla reviews={reviews} />
+        </div>
+
+        {/* Десктопная сетка (как было) */}
+        <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 items-stretch">
           {reviews.map((review) => (
             <div key={review._id} className="flex">
               <ReviewCard review={review} />
