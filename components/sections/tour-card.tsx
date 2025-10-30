@@ -95,9 +95,13 @@ export function TourCard({ tour, className, isActive = false }: TourCardProps) {
             )}
 
             {/* Описание - появляется только при hover или активном состоянии */}
-            <div className="mt-4 overflow-hidden">
+            <div className={cn(
+              "mt-4 overflow-hidden",
+              "group-hover:mt-0 group-hover:-mt-1",
+              isActive && "mt-0 -mt-1"
+            )}>
               <p className={cn(
-                "text-sm md:text-base leading-relaxed text-white translate-y-4 transition-all duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]",
+                "text-sm md:text-base leading-relaxed text-white text-justify translate-y-4 transition-all duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]",
                 "opacity-0 max-h-0 group-hover:opacity-100 group-hover:max-h-[500px] group-hover:translate-y-0",
                 isActive && "opacity-100 max-h-[500px] translate-y-0"
               )}>
