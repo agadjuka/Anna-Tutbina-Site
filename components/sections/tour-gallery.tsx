@@ -6,7 +6,6 @@ import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 import { urlFor } from "@/lib/sanity.client";
 import { Heading } from "@/components/ui/heading";
-import PhotoAlbum from "react-photo-album";
 
 interface TourGalleryProps {
   title?: string;
