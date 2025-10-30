@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import useEmblaCarousel from "embla-carousel-react";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 import { urlFor } from "@/lib/sanity.client";
@@ -38,7 +39,12 @@ export function TourGallery({ title = "Галерея", images, tourName }: Tour
   return (
     <section className="space-y-6">
       <Heading as="h2" className="mb-0">{title}</Heading>
-      <div className="[&>figure]:mb-4 sm:[&>figure]:mb-5 lg:[&>figure]:mb-6 columns-1 sm:columns-2 lg:columns-3 gap-4 sm:gap-5 lg:gap-6">
+
+      {/* Карусель на мобильных */}
+      <MobileGalleryCarousel slides={slides} onOpen={(i) => setIndex(i)} />
+
+      {/* Колонки начиная с md */}
+      <div className="hidden md:block [&>figure]:mb-5 lg:[&>figure]:mb-6 md:columns-2 lg:columns-3 md:gap-5 lg:gap-6">
         {slides.map((slide, i) => (
           <figure key={i} className="break-inside-avoid overflow-hidden bg-white cursor-zoom-in shadow-card hover:shadow-card-hover" onClick={() => setIndex(i)}>
             <img
@@ -58,6 +64,42 @@ export function TourGallery({ title = "Галерея", images, tourName }: Tour
         slides={slides}
       />
     </section>
+  );
+}
+
+
+function MobileGalleryCarousel({ slides, onOpen }: { slides: { src: string; alt?: string; width?: number; height?: number }[]; onOpen: (i: number) => void }) {
+  const options = { align: "center", containScroll: "trimSnaps", dragFree: false } as const;
+  const [viewportRef] = useEmblaCarousel(options);
+  const heightPx = 240; // фиксированная высота
+
+  return (
+    <div className="md:hidden -mx-4 px-4">
+      <div className="overflow-x-hidden" ref={viewportRef}>
+        <div className="flex gap-4 py-2">
+          {slides.map((s, i) => {
+            // Вычисляем aspect-ratio для чистого изображения
+            const ratio = s.width && s.height ? `${s.width}/${s.height}` : undefined;
+            return (
+              <div
+                key={i}
+                className="shrink-0"
+                style={{
+                  height: `${heightPx}px`,
+                  aspectRatio: ratio,
+                  flex: "0 0 auto",
+                  maxWidth: "80%",
+                }}
+              >
+                <button type="button" className="w-full h-full cursor-zoom-in" onClick={() => onOpen(i)}>
+                  <img src={s.src} alt={s.alt || "Фото"} className="w-full h-full object-contain" loading="lazy" />
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
   );
 }
 
