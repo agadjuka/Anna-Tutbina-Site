@@ -1,6 +1,7 @@
 import { Container } from "@/components/ui/container";
 import Link from "next/link";
-import { MessageCircle, Send, Mail, Phone } from "lucide-react";
+import { Send, Mail, Phone } from "lucide-react";
+import { FaWhatsapp } from "react-icons/fa";
 
 export function Footer() {
   return (
@@ -46,7 +47,7 @@ export function Footer() {
                   className="h-8 w-8 p-1 shrink-0 flex items-center justify-center rounded-md bg-[#e5e0db]/50 text-muted-foreground hover:text-[#25D366] hover:bg-[#e5e0db] transition-all duration-300 overflow-visible"
                   target="_blank" rel="noopener noreferrer"
                 >
-                  <MessageCircle className="h-3.5 w-3.5" />
+                  <FaWhatsapp className="h-3.5 w-3.5" />
                 </a>
                 <a 
                   href="#" 
