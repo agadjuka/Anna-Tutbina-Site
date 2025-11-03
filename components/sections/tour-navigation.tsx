@@ -41,16 +41,18 @@ export function TourNavigation({ sections }: TourNavigationProps) {
           onClick={() => scrollToSection(section.id)}
           className={cn(
             "group relative inline-flex items-center justify-center",
-            "px-0 py-1 flex-1 min-w-0",
+            "px-2 md:px-3 py-1.5 flex-1 min-w-0",
             "text-[11px] md:text-xs",
             "font-normal tracking-normal",
             "text-muted-foreground",
             "hover:text-[#bea692]",
-            "transition-colors duration-200 ease-in-out",
+            "transition-all duration-200 ease-in-out",
             "whitespace-nowrap",
-            "border-b border-transparent",
-            "hover:border-[#bea692]/30",
-            "focus:outline-none"
+            "border-b border-[#e5e0db]/40",
+            "hover:border-[#bea692]/60 hover:border-b-2",
+            "focus:outline-none",
+            "rounded-sm",
+            "bg-transparent hover:bg-[#bea692]/5"
           )}
           aria-label={`Перейти к разделу ${section.label}`}
         >
