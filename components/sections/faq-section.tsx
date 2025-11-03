@@ -2,6 +2,7 @@
 
 import {useState, useRef, useLayoutEffect} from "react";
 import {SectionHeading} from "@/components/ui/section-heading";
+import {Container} from "@/components/ui/container";
 import {PortableTextContent} from "@/components/ui/portable-text";
 import {cn} from "@/lib/utils";
 
@@ -80,10 +81,11 @@ export function FaqSection({items}: FaqSectionProps) {
   if (!items?.length) return null;
   return (
     <section className="relative w-full bg-background py-8 md:py-12 lg:py-16">
-      <div className="mb-8">
-        <SectionHeading as="h2">FAQ</SectionHeading>
-      </div>
-      <div className="max-w-3xl mx-auto">
+      <Container>
+        <div className="mb-8">
+          <SectionHeading as="h2">FAQ</SectionHeading>
+        </div>
+        <div className="max-w-3xl mx-auto">
         {items.map((item, idx) => {
           const isOpen = openIndex === idx;
           return (
@@ -121,7 +123,8 @@ export function FaqSection({items}: FaqSectionProps) {
             </div>
           );
         })}
-      </div>
+        </div>
+      </Container>
     </section>
   );
 }
