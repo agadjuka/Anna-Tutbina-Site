@@ -10,6 +10,7 @@ import type { Metadata } from "next";
 import { TourGallery } from "@/components/sections/tour-gallery";
 import { ProgramDaysCarousel } from "@/components/sections/program-days-carousel";
 import { AccommodationCarousel } from "@/components/sections/accommodation-carousel";
+import { IncludedNotIncludedSection } from "@/components/sections/included-not-included-section";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -73,6 +74,8 @@ interface TourData {
   dates?: string;
   price?: Price;
   pricingDetails?: any;
+  included?: any;
+  notIncluded?: any;
 }
 
 export default async function TourPage({ params }: { params: Promise<{ slug?: string }> }) {
@@ -216,6 +219,20 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
                   />
                 </div>
               </div>
+            </section>
+          )}
+
+          {(tour.included || tour.notIncluded) && (
+            <section className="space-y-6">
+              <div className="relative">
+                <SectionHeading as="h2" className="mb-6 md:mb-8">
+                  Условия
+                </SectionHeading>
+              </div>
+              <IncludedNotIncludedSection 
+                included={tour.included}
+                notIncluded={tour.notIncluded}
+              />
             </section>
           )}
 

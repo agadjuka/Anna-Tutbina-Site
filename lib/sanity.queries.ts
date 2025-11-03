@@ -65,7 +65,9 @@ export const tourBySlugQuery = groq`
     },
     dates,
     price,
-    pricingDetails
+    pricingDetails,
+    included,
+    notIncluded
   }
 `;
 
