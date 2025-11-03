@@ -103,7 +103,7 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
 
   return (
     <section className="relative">
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         <div className="relative">
           <div className="overflow-hidden">
             <div ref={viewportRef} className="overflow-hidden">
@@ -113,85 +113,80 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
                     key={index}
                     className="min-w-0 shrink-0 w-full"
                   >
-                    <div className="bg-white rounded-2xl shadow-card overflow-hidden">
-                      {/* Заголовок локации */}
-                      {location.locationName && (
-                        <div className="px-6 md:px-8 pt-6 md:pt-8 pb-4 md:pb-6 border-b border-[#e5e0db]">
-                          <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground">
+                    <div className="relative">
+                      {/* Фотографии в сетке 2x2 - главный элемент */}
+                      {location.locationImages && location.locationImages.length > 0 ? (
+                        <div className="grid grid-cols-2 gap-4 md:gap-6 lg:gap-8 mb-8 md:mb-12">
+                          {location.locationImages.slice(0, 4).map((img, imgIdx) => {
+                            const slideIndex = findSlideIndex(index, imgIdx);
+                            const dims = img?.asset?.metadata?.dimensions;
+                            const aspectRatio = dims?.aspectRatio || 1;
+                            
+                            return (
+                              <button
+                                key={imgIdx}
+                                type="button"
+                                onClick={() => setLightboxIndex(slideIndex)}
+                                className={cn(
+                                  "group relative overflow-hidden",
+                                  "bg-gray-100 cursor-pointer transition-all duration-300",
+                                  "hover:scale-[1.02]"
+                                )}
+                                style={{ aspectRatio }}
+                              >
+                                <SanityImage
+                                  image={img}
+                                  width={dims?.width || 1200}
+                                  height={dims?.height || 800}
+                                  className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
+                                  alt={location.locationName || `Локация ${index + 1}`}
+                                />
+                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-all duration-300 flex items-center justify-center">
+                                  <svg
+                                    width="40"
+                                    height="40"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-white drop-shadow-lg"
+                                  >
+                                    <path
+                                      d="M15 12C15 13.6569 13.6569 15 12 15C10.3431 15 9 13.6569 9 12C9 10.3431 10.3431 9 12 9C13.6569 9 15 10.3431 15 12Z"
+                                      stroke="currentColor"
+                                      strokeWidth="1.5"
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                    />
+                                    <path
+                                      d="M2.458 12C3.732 7.943 7.523 5 12 5C16.478 5 20.268 7.943 21.542 12C20.268 16.057 16.478 19 12 19C7.523 19 3.732 16.057 2.458 12Z"
+                                      stroke="currentColor"
+                                      strokeWidth="1.5"
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                    />
+                                  </svg>
+                                </div>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      ) : null}
+
+                      {/* Блок с заголовком и описанием снизу */}
+                      <div className="space-y-4 md:space-y-6">
+                        {location.locationName && (
+                          <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground leading-tight">
                             {location.locationName}
                           </h3>
-                        </div>
-                      )}
-
-                      <div className="p-6 md:p-8">
-                        <div className="flex flex-col lg:flex-row gap-6 md:gap-8">
-                          {/* Левая часть - фотографии в сетке 2x2 */}
-                          <div className="w-full lg:w-1/2">
-                            {location.locationImages && location.locationImages.length > 0 ? (
-                              <div className="grid grid-cols-2 gap-3 md:gap-4">
-                                {location.locationImages.slice(0, 4).map((img, imgIdx) => {
-                                  const slideIndex = findSlideIndex(index, imgIdx);
-                                  return (
-                                    <button
-                                      key={imgIdx}
-                                      type="button"
-                                      onClick={() => setLightboxIndex(slideIndex)}
-                                      className={cn(
-                                        "group relative overflow-hidden rounded-lg",
-                                        "bg-gray-100 cursor-pointer transition-all duration-300",
-                                        "aspect-square hover:scale-[1.02] hover:shadow-lg"
-                                      )}
-                                    >
-                                      <SanityImage
-                                        image={img}
-                                        fill
-                                        className="object-cover transition-transform duration-300 group-hover:scale-110"
-                                        alt={location.locationName || `Локация ${index + 1}`}
-                                      />
-                                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-300 flex items-center justify-center">
-                                        <svg
-                                          width="36"
-                                          height="36"
-                                          viewBox="0 0 24 24"
-                                          fill="none"
-                                          xmlns="http://www.w3.org/2000/svg"
-                                          className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-white drop-shadow-lg"
-                                        >
-                                          <path
-                                            d="M15 12C15 13.6569 13.6569 15 12 15C10.3431 15 9 13.6569 9 12C9 10.3431 10.3431 9 12 9C13.6569 9 15 10.3431 15 12Z"
-                                            stroke="currentColor"
-                                            strokeWidth="1.5"
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                          />
-                                          <path
-                                            d="M2.458 12C3.732 7.943 7.523 5 12 5C16.478 5 20.268 7.943 21.542 12C20.268 16.057 16.478 19 12 19C7.523 19 3.732 16.057 2.458 12Z"
-                                            stroke="currentColor"
-                                            strokeWidth="1.5"
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                          />
-                                        </svg>
-                                      </div>
-                                    </button>
-                                  );
-                                })}
-                              </div>
-                            ) : null}
+                        )}
+                        {location.locationDescription && (
+                          <div className="prose prose-lg max-w-none">
+                            <PortableTextContent
+                              value={location.locationDescription}
+                              className="text-base md:text-lg lg:text-xl leading-relaxed text-muted-foreground"
+                            />
                           </div>
-
-                          {/* Правая часть - описание */}
-                          <div className="w-full lg:w-1/2 flex flex-col justify-center">
-                            {location.locationDescription && (
-                              <div className="prose prose-lg max-w-none">
-                                <PortableTextContent
-                                  value={location.locationDescription}
-                                  className="text-base md:text-lg leading-relaxed text-muted-foreground"
-                                />
-                              </div>
-                            )}
-                          </div>
-                        </div>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -205,7 +200,7 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
       {/* Стрелки навигации */}
       {locations.length > 1 && (
         <div className="absolute inset-0 flex items-center pointer-events-none">
-          <div className="max-w-6xl mx-auto w-full relative h-full">
+          <div className="max-w-7xl mx-auto w-full relative h-full">
             <button
               onClick={scrollPrev}
               disabled={!canScrollPrev}
@@ -277,7 +272,7 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
 
       {/* Индикаторы точек (dots) */}
       {locations.length > 1 && (
-        <div className="flex justify-center gap-2 mt-6 md:mt-8">
+        <div className="flex justify-center gap-2 mt-8 md:mt-12">
           {locations.map((_, idx) => (
             <button
               key={idx}

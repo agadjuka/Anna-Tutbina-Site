@@ -263,6 +263,25 @@ export function ProgramDaysCarousel({ days }: ProgramDaysCarouselProps) {
         </div>
       )}
 
+      {/* Индикаторы точек (dots) */}
+      {days.length > 1 && (
+        <div className="flex justify-center gap-2 mt-6 md:mt-8">
+          {days.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => embla?.scrollTo(idx)}
+              className={cn(
+                "w-2 h-2 rounded-full transition-all duration-300",
+                selectedIndex === idx
+                  ? "bg-[#bea692] w-8"
+                  : "bg-[#e5e0db] hover:bg-[#bea692]/50"
+              )}
+              aria-label={`Перейти к дню ${idx + 1}`}
+            />
+          ))}
+        </div>
+      )}
+
       <Lightbox
         open={lightboxIndex >= 0}
         close={() => setLightboxIndex(-1)}
