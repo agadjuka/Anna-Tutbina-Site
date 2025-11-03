@@ -160,21 +160,24 @@ function MobileGalleryCarousel({ slides, onOpen }: { slides: { src: string; alt?
       <div className="overflow-x-hidden" ref={viewportRef}>
         <div className="flex gap-4 py-2">
           {slides.map((s, i) => {
-            // Вычисляем aspect-ratio для чистого изображения
-            const ratio = s.width && s.height ? `${s.width}/${s.height}` : undefined;
             return (
               <div
                 key={i}
                 className="shrink-0"
                 style={{
                   height: `${heightPx}px`,
-                  aspectRatio: ratio,
                   flex: "0 0 auto",
-                  maxWidth: "80%",
+                  display: "inline-flex",
+                  alignItems: "center",
                 }}
               >
-                <button type="button" className="w-full h-full cursor-zoom-in" onClick={() => onOpen(i)}>
-                  <img src={s.src} alt={s.alt || "Фото"} className="w-full h-full object-contain" loading="lazy" />
+                <button type="button" className="h-full cursor-zoom-in" onClick={() => onOpen(i)}>
+                  <img
+                    src={s.src}
+                    alt={s.alt || "Фото"}
+                    loading="lazy"
+                    style={{ height: "100%", width: "auto", objectFit: "contain", display: "block" }}
+                  />
                 </button>
               </div>
             );
