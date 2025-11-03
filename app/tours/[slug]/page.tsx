@@ -81,7 +81,7 @@ interface TourData {
   mainImage: any;
   overlayTitle?: any;
   introText?: any;
-  gallery?: any[];
+  atmosphereGallery?: any[];
   fullProgram?: any;
   programByDays?: ProgramDay[];
   accommodation?: AccommodationLocation[];
@@ -277,16 +277,16 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
             <RecommendedFlightsSection flights={tour.recommendedFlights} />
           )}
 
-          {!!tour.gallery?.length && (
-            <TourGallery images={tour.gallery!} tourName={tour.name} />
-          )}
-
           {reviews && reviews.length > 0 && (
             <TourReviewsSection reviews={reviews} />
           )}
 
           {tour.organizers && tour.organizers.length > 0 && (
             <OrganizersSection organizers={tour.organizers} />
+          )}
+
+          {tour.atmosphereGallery && tour.atmosphereGallery.length > 0 && (
+            <TourGallery images={tour.atmosphereGallery} tourName={tour.name} title="Атмосфера наших туров" />
           )}
         </div>
       </Container>
