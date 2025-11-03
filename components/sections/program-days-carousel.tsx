@@ -68,8 +68,9 @@ export function ProgramDaysCarousel({ days }: ProgramDaysCarouselProps) {
   const findSlideIndex = useCallback((dayIndex: number, imageIndex: number): number => {
     let currentIndex = 0;
     for (let i = 0; i < dayIndex; i++) {
-      if (days[i]?.dayImage) {
-        currentIndex += days[i].dayImage.length;
+      const images = days[i]?.dayImage;
+      if (images && images.length > 0) {
+        currentIndex += images.length;
       }
     }
     return currentIndex + imageIndex;

@@ -1,6 +1,7 @@
 "use client";
 
 import { PortableText } from "@portabletext/react";
+import type { PortableTextReactComponents } from "@portabletext/react";
 
 interface IncludedNotIncludedSectionProps {
   included?: any;
@@ -12,31 +13,31 @@ export function IncludedNotIncludedSection({
   notIncluded 
 }: IncludedNotIncludedSectionProps) {
   // Компоненты для рендеринга PortableText с кастомными списками
-  const listComponents = {
+  const listComponents: Partial<PortableTextReactComponents> = {
     block: {
-      normal: ({ children }: { children: React.ReactNode }) => (
+      normal: (props) => (
         <p className="text-base md:text-lg leading-relaxed text-muted-foreground mb-3">
-          {children}
+          {props.children}
         </p>
       ),
     },
     marks: {
-      strong: ({ children }: { children: React.ReactNode }) => (
-        <strong className="font-semibold">{children}</strong>
+      strong: (props) => (
+        <strong className="font-semibold">{props.children}</strong>
       ),
     },
     list: {
-      bullet: ({ children }: { children: React.ReactNode }) => (
+      bullet: (props) => (
         <ul className="list-none space-y-3 md:space-y-4 pl-0 mt-0">
-          {children}
+          {props.children}
         </ul>
       ),
     },
     listItem: {
-      bullet: ({ children }: { children: React.ReactNode }) => (
+      bullet: (props) => (
         <li className="flex items-start gap-3 md:gap-4 text-base md:text-lg leading-relaxed text-muted-foreground">
           <span className="text-[#bea692] font-medium shrink-0 mt-0.5">—</span>
-          <span className="flex-1">{children}</span>
+          <span className="flex-1">{props.children}</span>
         </li>
       ),
     },

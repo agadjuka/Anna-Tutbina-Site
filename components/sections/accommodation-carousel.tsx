@@ -66,8 +66,9 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
   const findSlideIndex = useCallback((locationIndex: number, imageIndex: number): number => {
     let currentIndex = 0;
     for (let i = 0; i < locationIndex; i++) {
-      if (locations[i]?.locationImages) {
-        currentIndex += locations[i].locationImages.length;
+      const images = locations[i]?.locationImages;
+      if (images && images.length > 0) {
+        currentIndex += images.length;
       }
     }
     return currentIndex + imageIndex;

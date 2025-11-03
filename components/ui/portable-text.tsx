@@ -1,4 +1,5 @@
 import { PortableText } from "@portabletext/react";
+import type { PortableTextReactComponents } from "@portabletext/react";
 import { cn } from "@/lib/utils";
 
 interface PortableTextContentProps {
@@ -11,20 +12,20 @@ export function PortableTextContent({ value, className, smallFont, style }: Port
   if (!value) return null;
 
   // Компоненты для обработки жирного текста
-  const textComponents = {
+  const textComponents: Partial<PortableTextReactComponents> = {
     marks: {
-      strong: ({ children }: { children: React.ReactNode }) => (
+      strong: (props) => (
         <strong style={{ fontFamily: 'var(--font-tt-drugs), system-ui, arial, sans-serif', fontWeight: 700, fontSize: 'inherit', lineHeight: 'inherit' }}>
-          {children}
+          {props.children}
         </strong>
       ),
     },
     block: {
-      normal: ({ children }: { children: React.ReactNode }) => {
+      normal: (props) => {
         if (style && style.fontSize) {
-          return <p style={style}>{children}</p>;
+          return <p style={style}>{props.children}</p>;
         }
-        return <p>{children}</p>;
+        return <p>{props.children}</p>;
       },
     },
   };
