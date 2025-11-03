@@ -59,6 +59,7 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState<number>(-1);
+  const [mounted, setMounted] = useState(false);
 
   const slides = useMemo(() => buildSlides(locations), [locations]);
 
@@ -98,6 +99,10 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
       embla.off("reInit", onSelect);
     };
   }, [embla, onSelect]);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   if (!locations || locations.length === 0) return null;
 
@@ -401,25 +406,27 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
         </div>
       )}
 
-      <Lightbox
-        open={lightboxIndex >= 0}
-        close={() => setLightboxIndex(-1)}
-        index={lightboxIndex}
-        slides={slides.map(s => ({ src: s.src, width: s.width, height: s.height, alt: s.alt }))}
-        styles={{
-          container: {
-            backgroundColor: "rgba(10,10,12,0.40)",
-            backdropFilter: "blur(12px) saturate(120%)",
-            WebkitBackdropFilter: "blur(12px) saturate(120%)",
-          },
-          button: {
-            boxShadow: "none",
-            filter: "none",
-            textShadow: "none",
-          },
-        }}
-        animation={{ fade: 0, swipe: 300 }}
-      />
+      {mounted && (
+        <Lightbox
+          open={lightboxIndex >= 0}
+          close={() => setLightboxIndex(-1)}
+          index={lightboxIndex}
+          slides={slides.map(s => ({ src: s.src, width: s.width, height: s.height, alt: s.alt }))}
+          styles={{
+            container: {
+              backgroundColor: "rgba(10,10,12,0.40)",
+              backdropFilter: "blur(12px) saturate(120%)",
+              WebkitBackdropFilter: "blur(12px) saturate(120%)",
+            },
+            button: {
+              boxShadow: "none",
+              filter: "none",
+              textShadow: "none",
+            },
+          }}
+          animation={{ fade: 0, swipe: 300 }}
+        />
+      )}
     </section>
   );
 }

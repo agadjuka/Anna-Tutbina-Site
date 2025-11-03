@@ -33,9 +33,11 @@ function buildSlides(images: any[], tourName?: string) {
 export function TourGallery({ title = "Галерея", images, tourName }: TourGalleryProps) {
   const slides = buildSlides(images, tourName);
   const [index, setIndex] = useState<number>(-1);
+  const [mounted, setMounted] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(0);
   useEffect(() => {
+    setMounted(true);
     function onResize() {
       if (containerRef.current) {
         setContainerWidth(containerRef.current.offsetWidth);
@@ -126,25 +128,27 @@ export function TourGallery({ title = "Галерея", images, tourName }: Tour
         </div>
       </div>
 
-      <Lightbox
-        open={index >= 0}
-        close={() => setIndex(-1)}
-        index={index}
-        slides={slides}
-        styles={{
-          container: {
-            backgroundColor: "rgba(10,10,12,0.40)",
-            backdropFilter: "blur(12px) saturate(120%)",
-            WebkitBackdropFilter: "blur(12px) saturate(120%)",
-          },
-          button: {
-            boxShadow: "none",
-            filter: "none",
-            textShadow: "none",
-          },
-        }}
-        animation={{ fade: 0, swipe: 300 }}
-      />
+      {mounted && (
+        <Lightbox
+          open={index >= 0}
+          close={() => setIndex(-1)}
+          index={index}
+          slides={slides}
+          styles={{
+            container: {
+              backgroundColor: "rgba(10,10,12,0.40)",
+              backdropFilter: "blur(12px) saturate(120%)",
+              WebkitBackdropFilter: "blur(12px) saturate(120%)",
+            },
+            button: {
+              boxShadow: "none",
+              filter: "none",
+              textShadow: "none",
+            },
+          }}
+          animation={{ fade: 0, swipe: 300 }}
+        />
+      )}
     </section>
   );
 }
