@@ -10,17 +10,32 @@ interface PortableTextContentProps {
 export function PortableTextContent({ value, className, smallFont, style }: PortableTextContentProps & { style?: React.CSSProperties }) {
   if (!value) return null;
 
+  // Компоненты для обработки жирного текста
+  const textComponents = {
+    marks: {
+      strong: ({ children }: { children: React.ReactNode }) => (
+        <strong style={{ fontFamily: 'var(--font-tt-drugs), system-ui, arial, sans-serif', fontWeight: 700, fontSize: 'inherit', lineHeight: 'inherit' }}>
+          {children}
+        </strong>
+      ),
+    },
+    block: {
+      normal: ({ children }: { children: React.ReactNode }) => {
+        if (style && style.fontSize) {
+          return <p style={style}>{children}</p>;
+        }
+        return <p>{children}</p>;
+      },
+    },
+  };
+
   // Если явно передан стиль шрифта — пробрасываем его внутрь PortableText
   if (style && style.fontSize) {
     return (
       <div>
         <PortableText
           value={value}
-          components={{
-            block: {
-              normal: ({ children }) => <p style={style}>{children}</p>
-            }
-          }}
+          components={textComponents}
         />
       </div>
     );
@@ -29,7 +44,7 @@ export function PortableTextContent({ value, className, smallFont, style }: Port
   if (style) {
     return (
       <div style={style}>
-        <PortableText value={value} />
+        <PortableText value={value} components={textComponents} />
       </div>
     );
   }
@@ -37,14 +52,14 @@ export function PortableTextContent({ value, className, smallFont, style }: Port
   if (smallFont) {
     return (
       <div className={cn("text-sm md:text-base text-muted-foreground", className)}>
-        <PortableText value={value} />
+        <PortableText value={value} components={textComponents} />
       </div>
     );
   }
 
   return (
     <div className={cn("", className)}>
-      <PortableText value={value} />
+      <PortableText value={value} components={textComponents} />
     </div>
   );
 }

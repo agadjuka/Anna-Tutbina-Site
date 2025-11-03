@@ -135,11 +135,13 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
                   О туре
                 </SectionHeading>
               </div>
-              <div className="prose prose-lg max-w-none">
-                <PortableTextContent 
-                  value={tour.introText} 
-                  className="text-base md:text-xl leading-relaxed text-muted-foreground" 
-                />
+              <div className="w-full flex justify-center">
+                <div className="max-w-4xl w-full prose prose-lg">
+                  <PortableTextContent 
+                    value={tour.introText} 
+                    className="text-base md:text-xl leading-relaxed text-muted-foreground" 
+                  />
+                </div>
               </div>
             </section>
           )}

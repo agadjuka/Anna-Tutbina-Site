@@ -123,7 +123,6 @@
   .prose p,
   .prose span:not(.text-white),
   .prose li,
-  .prose strong,
   .prose em,
   .prose a {
     font-family: var(--font-kinetika), system-ui, arial, sans-serif;
@@ -132,6 +131,15 @@
     color: #2a2a2a;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+  
+  /* Жирный текст использует TT Drugs */
+  .prose strong,
+  strong:not([class*="heading"]):not([class*="font-heading"]) {
+    font-family: var(--font-tt-drugs), system-ui, arial, sans-serif;
+    font-weight: 700;
+    font-size: inherit;
+    color: inherit;
   }
   
   /* Исключаем белый текст из глобальных стилей */
