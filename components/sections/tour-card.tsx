@@ -81,7 +81,7 @@ export function TourCard({ tour, className, isActive = false }: TourCardProps) {
             gap: '0.375em'
           } as React.CSSProperties}>
             {/* Название тура */}
-            <h3 className="font-heading font-bold uppercase tracking-tight leading-tight text-white break-words" style={{
+            <h3 className="font-sans font-bold uppercase tracking-tight leading-tight text-white break-words" style={{
               fontSize: '1.875em',
               lineHeight: '1.2'
             } as React.CSSProperties}>

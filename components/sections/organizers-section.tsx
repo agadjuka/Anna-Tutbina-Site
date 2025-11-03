@@ -97,7 +97,7 @@ export function OrganizersSection({ organizers }: OrganizersSectionProps) {
                   {/* Имя */}
                   {organizer.name && (
                     <div>
-                      <h3 className="text-lg md:text-xl lg:text-2xl font-heading font-semibold text-foreground mb-3">
+                      <h3 className="text-lg md:text-xl lg:text-2xl font-sans font-semibold text-foreground mb-3">
                         {organizer.name}
                       </h3>
                       {/* Декоративная линия под именем */}
