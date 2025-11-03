@@ -103,7 +103,7 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
 
   return (
     <section className="relative">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-4xl mx-auto">
         <div className="relative">
           <div className="overflow-hidden">
             <div ref={viewportRef} className="overflow-hidden">
@@ -197,10 +197,10 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
         </div>
       </div>
 
-      {/* Стрелки навигации */}
+      {/* Стрелки навигации - вне контентной области */}
       {locations.length > 1 && (
         <div className="absolute inset-0 flex items-center pointer-events-none">
-          <div className="max-w-7xl mx-auto w-full relative h-full">
+          <div className="max-w-4xl mx-auto w-full relative h-full">
             <button
               onClick={scrollPrev}
               disabled={!canScrollPrev}
