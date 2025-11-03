@@ -39,8 +39,8 @@ export function SanityImage({
 
   try {
     const imageUrl = fill
-      ? urlFor(image).width(1200).height(1600).url()
-      : urlFor(image).width(width).height(height).url();
+      ? urlFor(image).width(1200).height(1600).auto("format").quality(90).url()
+      : urlFor(image).width(width * 2).height(height * 2).auto("format").quality(90).url();
 
     if (fill) {
       return (
