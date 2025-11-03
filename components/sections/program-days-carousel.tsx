@@ -2,10 +2,13 @@
 
 import useEmblaCarousel from "embla-carousel-react";
 import type { EmblaCarouselType } from "embla-carousel";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useMemo } from "react";
 import { SanityImage } from "@/components/ui/sanity-image";
 import { PortableTextContent } from "@/components/ui/portable-text";
 import { cn } from "@/lib/utils";
+import Lightbox from "yet-another-react-lightbox";
+import "yet-another-react-lightbox/styles.css";
+import { urlFor } from "@/lib/sanity.client";
 
 interface ProgramDay {
   dayTitle?: string;
@@ -15,6 +18,33 @@ interface ProgramDay {
 
 interface ProgramDaysCarouselProps {
   days: ProgramDay[];
+}
+
+function buildSlides(days: ProgramDay[]) {
+  const slides: Array<{ src: string; width: number; height: number; alt: string; dayIndex: number; imageIndex: number }> = [];
+  
+  days.forEach((day, dayIdx) => {
+    if (day.dayImage && day.dayImage.length > 0) {
+      day.dayImage.forEach((img, imgIdx) => {
+        if (img?.asset) {
+          const dims = img.asset?.metadata?.dimensions;
+          const width = Math.max(1, Math.floor(dims?.width || 1600));
+          const height = Math.max(1, Math.floor(dims?.height || 900));
+
+          slides.push({
+            src: urlFor(img).width(Math.min(2000, width)).auto("format").url(),
+            width,
+            height,
+            alt: day.dayTitle || `День ${dayIdx + 1} — фото ${imgIdx + 1}`,
+            dayIndex: dayIdx,
+            imageIndex: imgIdx,
+          });
+        }
+      });
+    }
+  });
+  
+  return slides;
 }
 
 export function ProgramDaysCarousel({ days }: ProgramDaysCarouselProps) {
@@ -28,6 +58,21 @@ export function ProgramDaysCarousel({ days }: ProgramDaysCarouselProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState<number>(-1);
+
+  // Создаем слайды для лайтбокса из всех фотографий всех дней
+  const slides = useMemo(() => buildSlides(days), [days]);
+
+  // Функция для поиска индекса слайда по дню и изображению
+  const findSlideIndex = useCallback((dayIndex: number, imageIndex: number): number => {
+    let currentIndex = 0;
+    for (let i = 0; i < dayIndex; i++) {
+      if (days[i]?.dayImage) {
+        currentIndex += days[i].dayImage.length;
+      }
+    }
+    return currentIndex + imageIndex;
+  }, [days]);
 
   const scrollPrev = useCallback(() => {
     if (embla) embla.scrollPrev();
@@ -74,19 +119,24 @@ export function ProgramDaysCarousel({ days }: ProgramDaysCarouselProps) {
                     <div className="w-full md:w-2/5">
                       {day.dayImage && day.dayImage.length > 0 ? (
                         <div className="grid grid-cols-2 gap-2 md:gap-2.5">
-                          {day.dayImage.slice(0, 4).map((img, imgIdx) => (
-                            <div
-                              key={imgIdx}
-                              className="relative overflow-hidden aspect-square bg-gray-100"
-                            >
-                              <SanityImage
-                                image={img}
-                                fill
-                                className="object-cover"
-                                alt={day.dayTitle || `День ${index + 1}`}
-                              />
-                            </div>
-                          ))}
+                          {day.dayImage.slice(0, 4).map((img, imgIdx) => {
+                            const slideIndex = findSlideIndex(index, imgIdx);
+                            return (
+                              <button
+                                key={imgIdx}
+                                type="button"
+                                onClick={() => setLightboxIndex(slideIndex)}
+                                className="relative overflow-hidden aspect-square bg-gray-100 cursor-pointer hover:opacity-90 transition-opacity"
+                              >
+                                <SanityImage
+                                  image={img}
+                                  fill
+                                  className="object-cover"
+                                  alt={day.dayTitle || `День ${index + 1}`}
+                                />
+                              </button>
+                            );
+                          })}
                         </div>
                       ) : null}
                     </div>
@@ -187,6 +237,26 @@ export function ProgramDaysCarousel({ days }: ProgramDaysCarouselProps) {
           </div>
         </div>
       )}
+
+      <Lightbox
+        open={lightboxIndex >= 0}
+        close={() => setLightboxIndex(-1)}
+        index={lightboxIndex}
+        slides={slides.map(s => ({ src: s.src, width: s.width, height: s.height, alt: s.alt }))}
+        styles={{
+          container: {
+            backgroundColor: "rgba(10,10,12,0.40)",
+            backdropFilter: "blur(12px) saturate(120%)",
+            WebkitBackdropFilter: "blur(12px) saturate(120%)",
+          },
+          button: {
+            boxShadow: "none",
+            filter: "none",
+            textShadow: "none",
+          },
+        }}
+        animation={{ fade: 0, swipe: 300 }}
+      />
     </section>
   );
 }
