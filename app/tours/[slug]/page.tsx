@@ -206,7 +206,7 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
 
           <TourNavigation
             sections={[
-              { id: "about-tour", label: "Атуре", available: !!tour.introText },
+              { id: "about-tour", label: "О туре", available: !!tour.introText },
               { id: "program", label: "Что нас ждет?", available: !!(tour.programByDays && tour.programByDays.length > 0) },
               { id: "accommodation", label: "Размещение", available: !!(tour.accommodation && tour.accommodation.length > 0) },
               { id: "pricing", label: "Стоимость", available: !!tour.pricingDetails },
