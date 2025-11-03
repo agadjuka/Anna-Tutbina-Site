@@ -12,6 +12,7 @@ import { ProgramDaysCarousel } from "@/components/sections/program-days-carousel
 import { AccommodationCarousel } from "@/components/sections/accommodation-carousel";
 import { IncludedNotIncludedSection } from "@/components/sections/included-not-included-section";
 import { TourReviewsSection } from "@/components/sections/tour-reviews-section";
+import { OrganizersSection } from "@/components/sections/organizers-section";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -61,6 +62,12 @@ interface AccommodationLocation {
   locationDescription?: any;
 }
 
+interface Organizer {
+  name?: string;
+  photo?: any;
+  bio?: string;
+}
+
 interface TourData {
   _id: string;
   name: string;
@@ -77,6 +84,7 @@ interface TourData {
   pricingDetails?: any;
   included?: any;
   notIncluded?: any;
+  organizers?: Organizer[];
 }
 
 interface ReviewItem {
@@ -252,6 +260,10 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
 
           {reviews && reviews.length > 0 && (
             <TourReviewsSection reviews={reviews} />
+          )}
+
+          {tour.organizers && tour.organizers.length > 0 && (
+            <OrganizersSection organizers={tour.organizers} />
           )}
         </div>
       </Container>
