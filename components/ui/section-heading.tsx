@@ -35,7 +35,7 @@ export function SectionHeading({
           className={cn(
             // Мобильные: меньше межбуквенный интервал, переносы строк и длинных слов
             // Десктоп: поведение без изменений
-            "font-heading text-base md:text-lg uppercase tracking-[0.14em] md:tracking-[0.2em] font-medium text-center md:text-left break-words [hyphens:auto] md:whitespace-nowrap",
+            "font-heading text-base md:text-lg uppercase tracking-[0.14em] md:tracking-[0.2em] font-medium text-center md:text-left leading-tight md:leading-normal break-normal whitespace-normal hyphens-none md:whitespace-nowrap",
             textColor
           )}
         >
