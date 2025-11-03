@@ -92,7 +92,7 @@ export function ProgramDaysCarousel({ days }: ProgramDaysCarouselProps) {
                     </div>
 
                     {/* Правая часть - текст */}
-                    <div className="w-full md:w-3/5 flex flex-col justify-center space-y-3 md:space-y-4">
+                    <div className="w-full md:w-3/5 md:ml-6 lg:ml-8 flex flex-col justify-center space-y-3 md:space-y-4">
                       {day.dayTitle && (
                         <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-foreground leading-tight">
                           {day.dayTitle}
@@ -130,7 +130,7 @@ export function ProgramDaysCarousel({ days }: ProgramDaysCarouselProps) {
                 "transition-all duration-200",
                 "hover:bg-white hover:shadow-md",
                 "disabled:opacity-30 disabled:cursor-not-allowed",
-                "left-0 -translate-x-full"
+                "left-0 -translate-x-full -ml-4 md:-ml-6"
               )}
               aria-label="Предыдущий день"
             >
@@ -163,7 +163,7 @@ export function ProgramDaysCarousel({ days }: ProgramDaysCarouselProps) {
                 "transition-all duration-200",
                 "hover:bg-white hover:shadow-md",
                 "disabled:opacity-30 disabled:cursor-not-allowed",
-                "right-0 translate-x-full"
+                "right-0 translate-x-full -mr-4 md:-mr-6"
               )}
               aria-label="Следующий день"
             >
