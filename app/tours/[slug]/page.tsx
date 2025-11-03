@@ -122,54 +122,62 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
         <div className="space-y-12 md:space-y-16">
           {(tour.dates || tour.price) && (
             <header className="space-y-6">
-              <div className="flex flex-wrap items-center gap-6 pt-6 border-t border-[#e5e0db]">
-                {tour.dates && (
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm md:text-base uppercase tracking-wider text-muted-foreground font-medium">Даты:</span>
-                    <span className="text-lg md:text-2xl font-medium text-foreground">{tour.dates}</span>
+              <div className="w-full flex justify-center">
+                <div className="max-w-4xl w-full">
+                  <div className="flex flex-wrap items-center gap-6 pt-6 border-t border-[#e5e0db]">
+                    {tour.dates && (
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm md:text-base uppercase tracking-wider text-muted-foreground font-medium">Даты:</span>
+                        <span className="text-lg md:text-2xl font-medium text-foreground">{tour.dates}</span>
+                      </div>
+                    )}
+                    {tour.price && (
+                      <div className="flex items-center gap-2 ml-auto">
+                        <span className="text-2xl md:text-3xl font-bold text-[#bea692]">
+                          {tour.price.value} {tour.price.currency}
+                        </span>
+                      </div>
+                    )}
                   </div>
-                )}
-                {tour.price && (
-                  <div className="flex items-center gap-2 ml-auto">
-                    <span className="text-2xl md:text-3xl font-bold text-[#bea692]">
-                      {tour.price.value} {tour.price.currency}
-                    </span>
-                  </div>
-                )}
+                </div>
               </div>
             </header>
           )}
 
           {tour.mainImage && (
-            <div className="relative overflow-hidden rounded-2xl shadow-card">
-              <SanityImage
-                image={tour.mainImage}
-                width={1280}
-                height={720}
-                alt={tour.name}
-                className="w-full h-auto object-cover"
-              />
-              {tour.overlayTitle && (
-                <div className="absolute left-0 right-0 flex justify-center pointer-events-none" style={{ top: '70%' }}>
-                  <div className="text-center px-4 md:px-8 max-w-full">
-                    <PortableText
-                      value={tour.overlayTitle}
-                      components={{
-                        block: {
-                          normal: ({ children }) => (
-                            <p 
-                              className="text-white text-base md:text-lg lg:text-xl xl:text-2xl font-bold drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]"
-                              style={{ color: 'white' }}
-                            >
-                              {children}
-                            </p>
-                          ),
-                        },
-                      }}
-                    />
-                  </div>
+            <div className="w-full flex justify-center">
+              <div className="max-w-4xl w-full">
+                <div className="relative overflow-hidden rounded-2xl shadow-card">
+                  <SanityImage
+                    image={tour.mainImage}
+                    width={1280}
+                    height={720}
+                    alt={tour.name}
+                    className="w-full h-auto object-cover"
+                  />
+                  {tour.overlayTitle && (
+                    <div className="absolute left-0 right-0 flex justify-center pointer-events-none" style={{ top: '70%' }}>
+                      <div className="text-center px-4 md:px-8 max-w-full">
+                        <PortableText
+                          value={tour.overlayTitle}
+                          components={{
+                            block: {
+                              normal: ({ children }) => (
+                                <p 
+                                  className="text-white text-base md:text-lg lg:text-xl xl:text-2xl font-bold drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]"
+                                  style={{ color: 'white' }}
+                                >
+                                  {children}
+                                </p>
+                              ),
+                            },
+                          }}
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
-              )}
+              </div>
             </div>
           )}
 
@@ -203,17 +211,21 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
           )}
 
           {tour.fullProgram && (
-            <section className="space-y-6 bg-white rounded-2xl p-8 md:p-12 shadow-card">
-              <div className="relative">
-                <SectionHeading as="h2" className="mb-4">
-                  Полная программа тура
-                </SectionHeading>
-              </div>
-              <div className="prose prose-lg max-w-none">
-                <PortableTextContent 
-                  value={tour.fullProgram} 
-                  className="text-base md:text-xl leading-relaxed text-muted-foreground" 
-                />
+            <section className="space-y-6">
+              <div className="w-full flex justify-center">
+                <div className="max-w-4xl w-full bg-white rounded-2xl p-8 md:p-12 shadow-card">
+                  <div className="relative">
+                    <SectionHeading as="h2" className="mb-4">
+                      Полная программа тура
+                    </SectionHeading>
+                  </div>
+                  <div className="prose prose-lg max-w-none">
+                    <PortableTextContent 
+                      value={tour.fullProgram} 
+                      className="text-base md:text-xl leading-relaxed text-muted-foreground" 
+                    />
+                  </div>
+                </div>
               </div>
             </section>
           )}

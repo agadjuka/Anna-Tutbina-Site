@@ -96,29 +96,33 @@ export function TourGallery({ title = "Галерея", images, tourName }: Tour
         </SectionHeading>
       </div>
 
-      <MobileGalleryCarousel slides={slides} onOpen={(i) => setIndex(i)} />
+      <div className="w-full flex justify-center">
+        <div className="max-w-4xl w-full">
+          <MobileGalleryCarousel slides={slides} onOpen={(i) => setIndex(i)} />
 
-      {/* Justified строковая галерея на desktop */}
-      <div ref={containerRef} className="hidden md:block w-full">
-        <div className="flex flex-col gap-y-[12px]">
-          {rows.map((row, rowIdx) => (
-            <div key={rowIdx} className="flex flex-row" style={{ gap }}>
-              {row.photos.map((s, i) => (
-                <img
-                  key={i}
-                  src={s.src}
-                  alt={s.alt}
-                  loading="lazy"
-                  style={{ height: `${row.scaledHeights[i]}px`, width: `${row.widths[i]}px`, objectFit: "cover", cursor: "pointer", display: "block" }}
-                  onClick={() => {
-                    // Складываем количество фото до этой строки + индекс
-                    const idx = rows.slice(0, rowIdx).reduce((a, r) => a + r.photos.length, 0) + i;
-                    setIndex(idx);
-                  }}
-                />
+          {/* Justified строковая галерея на desktop */}
+          <div ref={containerRef} className="hidden md:block w-full">
+            <div className="flex flex-col gap-y-[12px]">
+              {rows.map((row, rowIdx) => (
+                <div key={rowIdx} className="flex flex-row" style={{ gap }}>
+                  {row.photos.map((s, i) => (
+                    <img
+                      key={i}
+                      src={s.src}
+                      alt={s.alt}
+                      loading="lazy"
+                      style={{ height: `${row.scaledHeights[i]}px`, width: `${row.widths[i]}px`, objectFit: "cover", cursor: "pointer", display: "block" }}
+                      onClick={() => {
+                        // Складываем количество фото до этой строки + индекс
+                        const idx = rows.slice(0, rowIdx).reduce((a, r) => a + r.photos.length, 0) + i;
+                        setIndex(idx);
+                      }}
+                    />
+                  ))}
+                </div>
               ))}
             </div>
-          ))}
+          </div>
         </div>
       </div>
 
