@@ -50,36 +50,38 @@ export function IncludedNotIncludedSection({
 
   return (
     <div className="w-full flex justify-center">
-      <div className="max-w-4xl w-full space-y-10 md:space-y-12">
-        {/* Что включено */}
-        {included && (
-          <div className="space-y-4 md:space-y-5">
-            <h3 className="text-base md:text-lg uppercase tracking-[0.15em] font-medium text-[#bea692] mb-4 md:mb-6">
-              Что включено
-            </h3>
-            <div>
-              <PortableText 
-                value={included} 
-                components={listComponents}
-              />
+      <div className="max-w-4xl w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16 lg:gap-20">
+          {/* Что включено */}
+          {included && (
+            <div className="space-y-4 md:space-y-5">
+              <h3 className="text-base md:text-lg uppercase tracking-[0.15em] font-medium text-[#bea692] mb-4 md:mb-6">
+                Что включено
+              </h3>
+              <div>
+                <PortableText 
+                  value={included} 
+                  components={listComponents}
+                />
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* Что не включено */}
-        {notIncluded && (
-          <div className="space-y-4 md:space-y-5">
-            <h3 className="text-base md:text-lg uppercase tracking-[0.15em] font-medium text-[#bea692] mb-4 md:mb-6">
-              Не входит в стоимость
-            </h3>
-            <div>
-              <PortableText 
-                value={notIncluded} 
-                components={listComponents}
-              />
+          {/* Что не включено */}
+          {notIncluded && (
+            <div className="space-y-4 md:space-y-5">
+              <h3 className="text-base md:text-lg uppercase tracking-[0.15em] font-medium text-[#bea692] mb-4 md:mb-6">
+                Не входит в стоимость
+              </h3>
+              <div>
+                <PortableText 
+                  value={notIncluded} 
+                  components={listComponents}
+                />
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
