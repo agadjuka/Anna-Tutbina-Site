@@ -127,32 +127,45 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
                       )}
 
                       {/* Фотографии в сетке 2x2 - главный элемент */}
-                      {location.locationImages && location.locationImages.length > 0 ? (
-                        <div className="grid grid-cols-2 gap-4 md:gap-6 lg:gap-8 mb-4 md:mb-6">
-                          {location.locationImages.slice(0, 4).map((img, imgIdx) => {
-                            const slideIndex = findSlideIndex(index, imgIdx);
+                      {location.locationImages && location.locationImages.length > 0 ? (() => {
+                        // Вычисляем среднее соотношение сторон для всех изображений в локации
+                        const imagesToShow = location.locationImages.slice(0, 4);
+                        const aspectRatios = imagesToShow
+                          .map(img => {
                             const dims = img?.asset?.metadata?.dimensions;
-                            const aspectRatio = dims?.aspectRatio || 1;
-                            
-                            return (
-                              <button
-                                key={imgIdx}
-                                type="button"
-                                onClick={() => setLightboxIndex(slideIndex)}
-                                className={cn(
-                                  "group relative overflow-hidden",
-                                  "bg-gray-100 cursor-pointer transition-all duration-300",
-                                  "hover:scale-[1.02]"
-                                )}
-                                style={{ aspectRatio }}
-                              >
-                                <SanityImage
-                                  image={img}
-                                  width={dims?.width || 1200}
-                                  height={dims?.height || 800}
-                                  className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
-                                  alt={location.locationName || `Локация ${index + 1}`}
-                                />
+                            return dims?.aspectRatio || (dims?.width && dims?.height ? dims.width / dims.height : 1);
+                          })
+                          .filter(ar => ar > 0);
+                        
+                        const averageAspectRatio = aspectRatios.length > 0
+                          ? aspectRatios.reduce((sum, ar) => sum + ar, 0) / aspectRatios.length
+                          : 1;
+
+                        return (
+                          <div className="grid grid-cols-2 gap-4 md:gap-6 lg:gap-8 mb-4 md:mb-6">
+                            {imagesToShow.map((img, imgIdx) => {
+                              const slideIndex = findSlideIndex(index, imgIdx);
+                              const dims = img?.asset?.metadata?.dimensions;
+                              
+                              return (
+                                <button
+                                  key={imgIdx}
+                                  type="button"
+                                  onClick={() => setLightboxIndex(slideIndex)}
+                                  className={cn(
+                                    "group relative overflow-hidden",
+                                    "bg-gray-100 cursor-pointer transition-all duration-300",
+                                    "hover:scale-[1.02]"
+                                  )}
+                                  style={{ aspectRatio: averageAspectRatio }}
+                                >
+                                  <SanityImage
+                                    image={img}
+                                    width={dims?.width || 1200}
+                                    height={dims?.height || 800}
+                                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                    alt={location.locationName || `Локация ${index + 1}`}
+                                  />
                                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-all duration-300 flex items-center justify-center">
                                   <svg
                                     width="40"
@@ -181,8 +194,9 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
                               </button>
                             );
                           })}
-                        </div>
-                      ) : null}
+                          </div>
+                        );
+                      })() : null}
 
                       {/* Описание снизу */}
                       {location.locationDescription && (
