@@ -186,11 +186,19 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
 
                       {/* Описание снизу */}
                       {location.locationDescription && (
-                        <div className="prose prose-lg max-w-none">
-                          <PortableTextContent
-                            value={location.locationDescription}
-                            className="text-base md:text-lg lg:text-xl leading-relaxed text-muted-foreground"
-                          />
+                        <div className="relative">
+                          {/* Декоративная линия слева */}
+                          <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[#bea692] via-[#bea692]/60 to-transparent rounded-full"></div>
+                          
+                          {/* Текстовое содержимое */}
+                          <div className="pl-6 md:pl-8 pt-4 pb-4 md:pt-5 md:pb-5">
+                            <div className="prose prose-lg max-w-none">
+                              <PortableTextContent
+                                value={location.locationDescription}
+                                className="text-base md:text-lg lg:text-xl leading-relaxed text-muted-foreground"
+                              />
+                            </div>
+                          </div>
                         </div>
                       )}
                     </div>
