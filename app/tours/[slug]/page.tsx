@@ -136,7 +136,7 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
                     {tour.price && (
                       <div className="flex items-center gap-2 ml-auto">
                         <span className="text-2xl md:text-3xl font-bold text-[#bea692]">
-                          {tour.price.value} {tour.price.currency}
+                          от {tour.price.value} {tour.price.currency}
                         </span>
                       </div>
                     )}

@@ -73,9 +73,9 @@ export function TourCard({ tour, className, isActive = false }: TourCardProps) {
         )} />
 
         {/* Весь контент поверх изображения */}
-        <div className="absolute inset-0 flex flex-col justify-between p-6 md:p-8 z-20">
+        <div className="absolute inset-0 flex flex-col justify-between p-5 md:p-7 z-20">
           {/* Верхняя часть: название, даты, цена */}
-          <div className="flex flex-col gap-2 md:gap-3">
+          <div className="flex flex-col gap-1.5 md:gap-2">
             {/* Название тура */}
             <h3 className="font-heading text-xl md:text-2xl lg:text-3xl font-bold uppercase tracking-tight leading-tight text-white break-words">
               {tour.name}
@@ -90,14 +90,14 @@ export function TourCard({ tour, className, isActive = false }: TourCardProps) {
 
             {/* Цена */}
             {formattedPrice && (
-              <p className="text-sm md:text-base lg:text-lg font-bold mt-1 text-white">
-                {formattedPrice}
+              <p className="text-sm md:text-base lg:text-lg font-bold mt-0.5 text-white">
+                от {formattedPrice}
               </p>
             )}
 
             {/* Описание - появляется только при hover или активном состоянии */}
             <div className={cn(
-              "mt-4 overflow-hidden",
+              "mt-2 overflow-hidden",
               "group-hover:mt-0 group-hover:-mt-1",
               isActive && "mt-0 -mt-1"
             )}>
