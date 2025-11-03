@@ -31,6 +31,7 @@ export const tourBySlugQuery = groq`
         metadata{dimensions{width,height,aspectRatio}}
       }
     },
+    overlayTitle,
     gallery[]{
       ...,
       asset->{
