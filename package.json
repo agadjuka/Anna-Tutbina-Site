@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "prebuild": "npm run update-fonts",
     "start": "next start",
     "lint": "eslint",
     "update-fonts": "tsx scripts/update-fonts.ts",
