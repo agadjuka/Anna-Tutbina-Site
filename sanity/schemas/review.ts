@@ -25,6 +25,17 @@ const review = defineType({
       type: 'text',
       validation: (Rule) => Rule.required(),
     }),
+    defineField({
+      name: 'tours',
+      title: 'Отзыв относится к турам',
+      type: 'array',
+      of: [
+        {
+          type: 'reference',
+          to: [{type: 'tour'}],
+        },
+      ],
+    }),
   ],
   preview: {
     select: {

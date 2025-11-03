@@ -39,8 +39,20 @@ const tour = defineType({
       }),
     }),
     defineField({
-      name: 'gallery',
-      title: 'Галерея фото',
+      name: 'overlayTitle',
+      title: 'Заголовок на фото',
+      type: 'array',
+      of: [{type: 'block'}],
+    }),
+    defineField({
+      name: 'introText',
+      title: 'Вводный текст под фото',
+      type: 'array',
+      of: [{type: 'block'}],
+    }),
+    defineField({
+      name: 'atmosphereGallery',
+      title: 'Атмосфера наших туров',
       type: 'array',
       of: [
         {
@@ -81,10 +93,145 @@ const tour = defineType({
       type: 'text',
     }),
     defineField({
-      name: 'fullProgram',
-      title: 'Полная программа тура',
+      name: 'programByDays',
+      title: 'Программа по дням',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            {
+              name: 'dayTitle',
+              title: 'День (напр. \'День 1: Прибытие\')',
+              type: 'string',
+            },
+            {
+              name: 'dayImage',
+              title: 'Фото дня',
+              type: 'array',
+              of: [
+                {
+                  type: 'image',
+                  options: {
+                    hotspot: true,
+                  },
+                },
+              ],
+            },
+            {
+              name: 'dayDescription',
+              title: 'Описание дня',
+              type: 'array',
+              of: [{type: 'block'}],
+            },
+          ],
+        },
+      ],
+    }),
+    defineField({
+      name: 'accommodation',
+      title: 'Размещение',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            {
+              name: 'locationName',
+              title: 'Название локации',
+              type: 'string',
+            },
+            {
+              name: 'locationImages',
+              title: 'Фотографии локации',
+              type: 'array',
+              of: [
+                {
+                  type: 'image',
+                  options: {
+                    hotspot: true,
+                  },
+                },
+              ],
+            },
+            {
+              name: 'locationDescription',
+              title: 'Описание локации',
+              type: 'array',
+              of: [{type: 'block'}],
+            },
+          ],
+        },
+      ],
+    }),
+    defineField({
+      name: 'pricingDetails',
+      title: 'Детали стоимости',
       type: 'array',
       of: [{type: 'block'}],
+    }),
+    defineField({
+      name: 'included',
+      title: 'Что включено',
+      type: 'array',
+      of: [{type: 'block'}],
+    }),
+    defineField({
+      name: 'notIncluded',
+      title: 'Что не включено',
+      type: 'array',
+      of: [{type: 'block'}],
+    }),
+    defineField({
+      name: 'recommendedFlights',
+      title: 'Рекомендуемые рейсы',
+      type: 'object',
+      fields: [
+        {
+          name: 'image',
+          title: 'Изображение (скриншот)',
+          type: 'image',
+          options: {
+            hotspot: true,
+          },
+        },
+        {
+          name: 'text',
+          title: 'Текст с пояснениями',
+          type: 'array',
+          of: [{type: 'block'}],
+        },
+      ],
+    }),
+    defineField({
+      name: 'organizers',
+      title: 'Организаторы',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            {
+              name: 'name',
+              title: 'Имя организатора',
+              type: 'string',
+            },
+            {
+              name: 'photo',
+              title: 'Фото',
+              type: 'image',
+              options: {
+                hotspot: true,
+              },
+            },
+            {
+              name: 'bio',
+              title: 'Краткая биография',
+              type: 'text',
+            },
+          ],
+        },
+      ],
     }),
   ],
   preview: {

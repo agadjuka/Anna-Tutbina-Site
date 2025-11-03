@@ -1,6 +1,7 @@
 import { ReviewCard } from "@/components/sections/review-card";
 import { ReviewsEmbla } from "@/components/sections/reviews-embla";
 import { SectionHeading } from "@/components/ui/section-heading";
+import { shuffleReviews, getRandomReviews } from "@/lib/utils/reviews";
 
 interface ReviewItem {
   _id: string;
@@ -15,6 +16,12 @@ interface ReviewsSectionProps {
 
 export function ReviewsSection({ reviews }: ReviewsSectionProps) {
   if (!reviews?.length) return null;
+
+  // Для мобильной версии: все отзывы в случайном порядке
+  const shuffledReviews = shuffleReviews(reviews);
+  
+  // Для десктопной версии: только 4 случайных отзыва
+  const desktopReviews = getRandomReviews(reviews, 4);
 
   return (
     <section className="relative pt-4 pb-6 md:pt-6 md:pb-8 bg-background overflow-hidden">
@@ -35,14 +42,14 @@ export function ReviewsSection({ reviews }: ReviewsSectionProps) {
           </div>
         </div>
 
-        {/* Мобильная горизонтальная карусель */}
+        {/* Мобильная горизонтальная карусель - все отзывы в случайном порядке */}
         <div className="md:hidden">
-          <ReviewsEmbla reviews={reviews} />
+          <ReviewsEmbla reviews={shuffledReviews} />
         </div>
 
-        {/* Десктопная сетка (как было) */}
+        {/* Десктопная сетка - только 4 случайных отзыва */}
         <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 items-stretch">
-          {reviews.map((review) => (
+          {desktopReviews.map((review) => (
             <div key={review._id} className="flex">
               <ReviewCard review={review} />
             </div>
