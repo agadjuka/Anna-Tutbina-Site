@@ -1,6 +1,7 @@
 import { ReviewCard } from "@/components/sections/review-card";
 import { ReviewsEmbla } from "@/components/sections/reviews-embla";
 import { SectionHeading } from "@/components/ui/section-heading";
+import { cn } from "@/lib/utils";
 
 interface ReviewItem {
   _id: string;
@@ -16,32 +17,40 @@ interface TourReviewsSectionProps {
 export function TourReviewsSection({ reviews }: TourReviewsSectionProps) {
   if (!reviews?.length) return null;
 
+  // Определяем количество колонок в зависимости от количества отзывов
+  const getGridCols = (count: number) => {
+    if (count === 1) return "md:grid-cols-1";
+    if (count === 2) return "md:grid-cols-2";
+    if (count === 3) return "md:grid-cols-3";
+    return "md:grid-cols-2 lg:grid-cols-4";
+  };
+
+  // Определяем максимальную ширину контейнера для 1 отзыва
+  const getContainerWidth = (count: number) => {
+    if (count === 1) return "max-w-md";
+    return "max-w-4xl";
+  };
+
   return (
-    <section className="relative pt-4 pb-6 md:pt-6 md:pb-8 bg-background overflow-hidden">
-      {/* Декоративные элементы фона */}
-      <div className="absolute top-1/4 right-0 w-64 h-64 bg-[#bea692]/5 rounded-full blur-3xl" />
-      <div className="absolute bottom-1/4 left-0 w-80 h-80 bg-[#e5e0db]/5 rounded-full blur-3xl" />
-      
+    <section className="space-y-6">
       <div className="relative">
-        {/* Декоративная линия слева */}
-        <div className="absolute left-0 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-[#bea692]/30 to-transparent hidden lg:block" />
-        
-        <div className="mb-3 md:mb-4 relative">
-          {/* Заголовок секции по центру */}
-          <div className="relative">
-            <SectionHeading as="h2">
-              Что говорят наши участницы
-            </SectionHeading>
-          </div>
-        </div>
+        <SectionHeading as="h2" className="mb-6 md:mb-8">
+          Что говорят наши участницы
+        </SectionHeading>
+      </div>
 
-        {/* Мобильная горизонтальная карусель - все отзывы */}
-        <div className="md:hidden">
-          <ReviewsEmbla reviews={reviews} />
-        </div>
+      {/* Мобильная горизонтальная карусель - все отзывы */}
+      <div className="md:hidden">
+        <ReviewsEmbla reviews={reviews} />
+      </div>
 
-        {/* Десктопная сетка - все отзывы тура */}
-        <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 items-stretch">
+      {/* Десктопная сетка с динамической шириной */}
+      <div className="w-full flex justify-center">
+        <div className={cn(
+          "hidden md:grid gap-4 md:gap-6 items-stretch w-full",
+          getGridCols(reviews.length),
+          getContainerWidth(reviews.length)
+        )}>
           {reviews.map((review) => (
             <div key={review._id} className="flex">
               <ReviewCard review={review} />
