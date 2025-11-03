@@ -190,9 +190,9 @@ export function ProgramDaysCarousel({ days }: ProgramDaysCarouselProps) {
         </div>
       </div>
 
-      {/* Стрелки навигации - вне контентной области */}
+      {/* Стрелки навигации - вне контентной области (только для десктопа) */}
       {days.length > 1 && (
-        <div className="absolute inset-0 flex items-center pointer-events-none">
+        <div className="hidden md:flex absolute inset-0 items-center pointer-events-none">
           <div className="max-w-4xl mx-auto w-full relative h-full">
             <button
               onClick={scrollPrev}
@@ -263,22 +263,108 @@ export function ProgramDaysCarousel({ days }: ProgramDaysCarouselProps) {
         </div>
       )}
 
-      {/* Индикаторы точек (dots) */}
+      {/* Индикаторы точек (dots) и мобильные кнопки навигации */}
       {days.length > 1 && (
-        <div className="flex justify-center gap-2 mt-6 md:mt-8">
-          {days.map((_, idx) => (
+        <div className="flex flex-col md:flex-row items-center justify-center gap-4 mt-6 md:mt-8">
+          {/* Мобильные кнопки навигации */}
+          <div className="relative md:hidden w-full h-12">
             <button
-              key={idx}
-              onClick={() => embla?.scrollTo(idx)}
+              onClick={scrollPrev}
+              disabled={!canScrollPrev}
               className={cn(
-                "w-2 h-2 rounded-full transition-all duration-300",
-                selectedIndex === idx
-                  ? "bg-[#bea692] w-8"
-                  : "bg-[#e5e0db] hover:bg-[#bea692]/50"
+                "absolute left-0 top-1/2 -translate-y-1/2",
+                "w-12 h-12 rounded-full",
+                "flex items-center justify-center",
+                "bg-white/95 backdrop-blur-sm border-2 border-[#bea692]",
+                "transition-all duration-200",
+                "active:bg-white active:shadow-xl active:scale-110",
+                "disabled:opacity-30 disabled:cursor-not-allowed disabled:active:scale-100"
               )}
-              aria-label={`Перейти к дню ${idx + 1}`}
-            />
-          ))}
+              aria-label="Предыдущий день"
+            >
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className="text-[#bea692]"
+              >
+                <path
+                  d="M15 18L9 12L15 6"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+
+            <div className="flex justify-center gap-2 px-14 h-full items-center">
+              {days.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => embla?.scrollTo(idx)}
+                  className={cn(
+                    "w-2 h-2 rounded-full transition-all duration-300",
+                    selectedIndex === idx
+                      ? "bg-[#bea692] w-8"
+                      : "bg-[#e5e0db] active:bg-[#bea692]/50"
+                  )}
+                  aria-label={`Перейти к дню ${idx + 1}`}
+                />
+              ))}
+            </div>
+
+            <button
+              onClick={scrollNext}
+              disabled={!canScrollNext}
+              className={cn(
+                "absolute right-0 top-1/2 -translate-y-1/2",
+                "w-12 h-12 rounded-full",
+                "flex items-center justify-center",
+                "bg-white/95 backdrop-blur-sm border-2 border-[#bea692]",
+                "transition-all duration-200",
+                "active:bg-white active:shadow-xl active:scale-110",
+                "disabled:opacity-30 disabled:cursor-not-allowed disabled:active:scale-100"
+              )}
+              aria-label="Следующий день"
+            >
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className="text-[#bea692]"
+              >
+                <path
+                  d="M9 18L15 12L9 6"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
+
+          {/* Индикаторы для десктопа */}
+          <div className="hidden md:flex justify-center gap-2">
+            {days.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => embla?.scrollTo(idx)}
+                className={cn(
+                  "w-2 h-2 rounded-full transition-all duration-300",
+                  selectedIndex === idx
+                    ? "bg-[#bea692] w-8"
+                    : "bg-[#e5e0db] hover:bg-[#bea692]/50"
+                )}
+                aria-label={`Перейти к дню ${idx + 1}`}
+              />
+            ))}
+          </div>
         </div>
       )}
 
