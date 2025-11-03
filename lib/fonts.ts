@@ -5,7 +5,7 @@ import localFont from "next/font/local";
 
 // Шрифт для заголовков из public/fonts/headings/
 export const headingFont = localFont({
-  src: "../public/fonts/headings/leotaro-regular.otf",
+  src: "../public/fonts/headings/Vetrino.otf",
   variable: "--font-heading",
   display: "swap",
   fallback: ["serif"],
