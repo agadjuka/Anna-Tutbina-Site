@@ -46,13 +46,11 @@ export function TourNavigation({ sections }: TourNavigationProps) {
             "font-normal tracking-normal",
             "text-muted-foreground",
             "hover:text-[#bea692]",
-            "transition-all duration-200 ease-in-out",
+            "transition-colors duration-300 ease-out",
             "whitespace-nowrap",
             "border-b border-[#e5e0db]/40",
-            "hover:border-[#bea692]/60 hover:border-b-2",
-            "focus:outline-none",
-            "rounded-sm",
-            "bg-transparent hover:bg-[#bea692]/5"
+            "hover:border-[#bea692]/50",
+            "focus:outline-none"
           )}
           aria-label={`Перейти к разделу ${section.label}`}
         >
