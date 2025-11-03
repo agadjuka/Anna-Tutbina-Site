@@ -17,7 +17,7 @@ export function RecommendedFlightsSection({ flights }: RecommendedFlightsSection
   if (!flights || (!flights.image && !flights.text)) return null;
 
   return (
-    <section className="space-y-6">
+    <section id="flights" className="space-y-6">
       <div className="relative">
         <SectionHeading as="h2" className="mb-6 md:mb-8">
           Рекомендованные рейсы

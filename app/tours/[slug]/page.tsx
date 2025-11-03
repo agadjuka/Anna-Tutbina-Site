@@ -14,6 +14,7 @@ import { IncludedNotIncludedSection } from "@/components/sections/included-not-i
 import { TourReviewsSection } from "@/components/sections/tour-reviews-section";
 import { OrganizersSection } from "@/components/sections/organizers-section";
 import { RecommendedFlightsSection } from "@/components/sections/recommended-flights-section";
+import { TourNavigation } from "@/components/sections/tour-navigation";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -203,8 +204,22 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
             </div>
           )}
 
+          <TourNavigation
+            sections={[
+              { id: "about-tour", label: "Атуре", available: !!tour.introText },
+              { id: "program", label: "Что нас ждет?", available: !!(tour.programByDays && tour.programByDays.length > 0) },
+              { id: "accommodation", label: "Размещение", available: !!(tour.accommodation && tour.accommodation.length > 0) },
+              { id: "pricing", label: "Стоимость", available: !!tour.pricingDetails },
+              { id: "conditions", label: "Условия", available: !!(tour.included || tour.notIncluded) },
+              { id: "flights", label: "Рейсы", available: !!tour.recommendedFlights },
+              { id: "reviews", label: "Отзывы", available: !!(reviews && reviews.length > 0) },
+              { id: "organizers", label: "Организаторы", available: !!(tour.organizers && tour.organizers.length > 0) },
+              { id: "gallery", label: "Галерея", available: !!(tour.atmosphereGallery && tour.atmosphereGallery.length > 0) },
+            ]}
+          />
+
           {tour.introText && (
-            <section className="space-y-6">
+            <section id="about-tour" className="space-y-6">
               <div className="relative">
                 <SectionHeading as="h2" className="mb-4">
                   О туре
@@ -222,7 +237,7 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
           )}
 
           {tour.programByDays && tour.programByDays.length > 0 && (
-            <section className="space-y-6">
+            <section id="program" className="space-y-6">
               <div className="relative">
                 <SectionHeading as="h2" className="mb-6 md:mb-8">
                   Что нас ждет
@@ -253,7 +268,7 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
           )}
 
           {tour.accommodation && tour.accommodation.length > 0 && (
-            <section className="space-y-6">
+            <section id="accommodation" className="space-y-6">
               <div className="relative">
                 <SectionHeading as="h2" className="mb-6 md:mb-8">
                   Размещение
@@ -264,7 +279,7 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
           )}
 
           {tour.pricingDetails && (
-            <section className="space-y-6">
+            <section id="pricing" className="space-y-6">
               <div className="relative">
                 <SectionHeading as="h2" className="mb-4">
                   Стоимость
@@ -282,7 +297,7 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
           )}
 
           {(tour.included || tour.notIncluded) && (
-            <section className="space-y-6">
+            <section id="conditions" className="space-y-6">
               <div className="relative">
                 <SectionHeading as="h2" className="mb-6 md:mb-8">
                   Условия

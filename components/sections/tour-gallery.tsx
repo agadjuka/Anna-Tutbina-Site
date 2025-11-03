@@ -89,7 +89,7 @@ export function TourGallery({ title = "Галерея", images, tourName }: Tour
   if (!slides.length) return null;
 
   return (
-    <section className="space-y-6">
+    <section id="gallery" className="space-y-6">
       <div className="relative">
         <SectionHeading as="h2" className="mb-4">
           {title}

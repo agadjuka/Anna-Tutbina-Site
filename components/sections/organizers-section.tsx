@@ -29,7 +29,7 @@ export function OrganizersSection({ organizers }: OrganizersSectionProps) {
   };
 
   return (
-    <section className="space-y-6">
+    <section id="organizers" className="space-y-6">
       <div className="relative">
         <SectionHeading as="h2" className="mb-6 md:mb-8">
           Организаторы

@@ -32,7 +32,7 @@ export function TourReviewsSection({ reviews }: TourReviewsSectionProps) {
   };
 
   return (
-    <section className="space-y-6">
+    <section id="reviews" className="space-y-6">
       <div className="relative">
         <SectionHeading as="h2" className="mb-6 md:mb-8">
           Что говорят наши участницы
