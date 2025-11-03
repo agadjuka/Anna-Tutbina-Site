@@ -8,6 +8,7 @@ import { PortableText } from "@portabletext/react";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { TourGallery } from "@/components/sections/tour-gallery";
+import { ProgramDaysCarousel } from "@/components/sections/program-days-carousel";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -45,6 +46,12 @@ interface Price {
   currency: string;
 }
 
+interface ProgramDay {
+  dayTitle?: string;
+  dayImage?: any[];
+  dayDescription?: any;
+}
+
 interface TourData {
   _id: string;
   name: string;
@@ -54,6 +61,7 @@ interface TourData {
   introText?: any;
   gallery?: any[];
   fullProgram?: any;
+  programByDays?: ProgramDay[];
   dates?: string;
   price?: Price;
 }
@@ -143,6 +151,17 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
                   />
                 </div>
               </div>
+            </section>
+          )}
+
+          {tour.programByDays && tour.programByDays.length > 0 && (
+            <section className="space-y-6">
+              <div className="relative">
+                <SectionHeading as="h2" className="mb-6 md:mb-8">
+                  Что нас ждет
+                </SectionHeading>
+              </div>
+              <ProgramDaysCarousel days={tour.programByDays} />
             </section>
           )}
 

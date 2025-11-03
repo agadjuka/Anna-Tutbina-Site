@@ -41,6 +41,17 @@ export const tourBySlugQuery = groq`
       }
     },
     fullProgram,
+    programByDays[]{
+      dayTitle,
+      dayImage[]{
+        ...,
+        asset->{
+          _id,
+          metadata{dimensions{width,height,aspectRatio}}
+        }
+      },
+      dayDescription
+    },
     dates,
     price
   }
