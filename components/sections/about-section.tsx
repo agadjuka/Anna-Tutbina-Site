@@ -33,7 +33,19 @@ export function AboutSection({ image, bio }: AboutSectionProps) {
             </SectionHeading>
           </div>
           
-          <div className="md:grid md:grid-cols-[1.2fr_0.8fr] lg:grid-cols-[1.1fr_0.9fr] gap-6 lg:gap-8 items-start">
+          <div className="flex flex-col-reverse md:grid md:grid-cols-[1.2fr_0.8fr] lg:grid-cols-[1.1fr_0.9fr] gap-6 lg:gap-8 items-start">
+            {/* Блок текста (на мобильных ниже) */}
+            <div className="space-y-4 relative z-10 mt-6 md:mt-0 md:col-start-1">
+              <div className="relative pt-2">
+                <div className="prose max-w-none mx-auto text-justify-smooth">
+                  <PortableTextContent 
+                    value={bio} 
+                    className="text-xs md:text-sm leading-[1.5] text-muted-foreground" 
+                  />
+                </div>
+              </div>
+            </div>
+
             {/* Блок изображения (на мобильных сверху) */}
             <div className="relative md:col-start-2">
               {/* Декоративные элементы вокруг изображения */}
@@ -47,7 +59,7 @@ export function AboutSection({ image, bio }: AboutSectionProps) {
                 {/* Основное изображение с асимметричным смещением */}
                 <div className="relative transform rotate-[-1deg] md:rotate-1 hover:rotate-0 transition-transform duration-700">
                   <div className="absolute -inset-3 bg-white/80 rounded-2xl blur-xl" />
-                  <div className="relative overflow-hidden rounded-2xl shadow-card-elevated max-w-[400px] mx-auto">
+                  <div className="relative overflow-hidden rounded-2xl shadow-card-elevated w-full max-w-none md:max-w-[400px] mx-auto">
                     <SanityImage
                       image={image}
                       alt="Анна Турбина"
@@ -60,18 +72,6 @@ export function AboutSection({ image, bio }: AboutSectionProps) {
                 
                 {/* Декоративный элемент сверху */}
                 <div className="absolute -top-4 -left-4 w-16 h-16 bg-[#bea692]/10 rounded-full blur-md hidden md:block" />
-              </div>
-            </div>
-            
-            {/* Блок текста (на мобильных ниже) */}
-            <div className="space-y-4 relative z-10 mt-6 md:mt-0 md:col-start-1">
-              <div className="relative pt-2">
-                <div className="prose max-w-none mx-auto text-justify-smooth">
-                  <PortableTextContent 
-                    value={bio} 
-                    className="text-xs md:text-sm leading-[1.5] text-muted-foreground" 
-                  />
-                </div>
               </div>
             </div>
           </div>
