@@ -15,9 +15,13 @@ interface TourNavigationProps {
 function scrollToSection(id: string) {
   const element = document.getElementById(id);
   if (element) {
-    const offset = 140; // Отступ сверху для фиксированной шапки и видимости заголовка
+    const baseOffset = 140; // Базовый отступ для фиксированной шапки
+    const isMobile = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(max-width: 767px)').matches;
+    const mobileAdjust = 24; // На мобильном прокручиваем чуть ниже (~24px)
+    const effectiveOffset = baseOffset - (isMobile ? mobileAdjust : 0);
+
     const elementPosition = element.getBoundingClientRect().top;
-    const offsetPosition = elementPosition + window.pageYOffset - offset;
+    const offsetPosition = elementPosition + window.pageYOffset - effectiveOffset;
 
     window.scrollTo({
       top: offsetPosition,
