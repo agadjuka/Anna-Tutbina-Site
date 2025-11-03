@@ -128,7 +128,7 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
 
                       {/* Фотографии в сетке 2x2 - главный элемент */}
                       {location.locationImages && location.locationImages.length > 0 ? (
-                        <div className="grid grid-cols-2 gap-4 md:gap-6 lg:gap-8 mb-8 md:mb-12">
+                        <div className="grid grid-cols-2 gap-4 md:gap-6 lg:gap-8 mb-4 md:mb-6">
                           {location.locationImages.slice(0, 4).map((img, imgIdx) => {
                             const slideIndex = findSlideIndex(index, imgIdx);
                             const dims = img?.asset?.metadata?.dimensions;
@@ -276,7 +276,7 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
 
       {/* Индикаторы точек (dots) */}
       {locations.length > 1 && (
-        <div className="flex justify-center gap-2 mt-8 md:mt-12">
+        <div className="flex justify-center gap-2 mt-4 md:mt-6">
           {locations.map((_, idx) => (
             <button
               key={idx}
