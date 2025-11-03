@@ -50,7 +50,7 @@ function buildSlides(locations: AccommodationLocation[]) {
 export function AccommodationCarousel({ locations }: AccommodationCarouselProps) {
   const [viewportRef, embla] = useEmblaCarousel({
     align: "start",
-    containScroll: "trimSnaps",
+    containScroll: "keepSnaps",
     dragFree: false,
     loop: false,
   });
@@ -104,16 +104,28 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
   return (
     <section className="relative">
       <div className="max-w-4xl mx-auto">
-        <div className="relative">
-          <div className="overflow-hidden">
-            <div ref={viewportRef} className="overflow-hidden">
-              <div className="flex">
-                {locations.map((location, index) => (
-                  <div
-                    key={index}
-                    className="min-w-0 shrink-0 w-full"
-                  >
+        <div className="relative overflow-hidden">
+          <div ref={viewportRef} className="overflow-hidden" style={{ clipPath: 'inset(0)' }}>
+            <div className="flex">
+              {locations.map((location, index) => (
+                <div
+                  key={index}
+                  className="min-w-0 shrink-0 flex-shrink-0"
+                  style={{ width: '100%', minWidth: '100%', maxWidth: '100%' }}
+                >
                     <div className="relative">
+                      {/* Заголовок над фотографиями */}
+                      {location.locationName && (
+                        <div className="mb-4 md:mb-6 pl-2 pt-0">
+                          <div className="relative inline-block">
+                            <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-foreground leading-tight tracking-tight">
+                              {location.locationName}
+                            </h3>
+                            <div className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-[#bea692] via-[#bea692]/60 to-transparent rounded-full"></div>
+                          </div>
+                        </div>
+                      )}
+
                       {/* Фотографии в сетке 2x2 - главный элемент */}
                       {location.locationImages && location.locationImages.length > 0 ? (
                         <div className="grid grid-cols-2 gap-4 md:gap-6 lg:gap-8 mb-8 md:mb-12">
@@ -172,22 +184,15 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
                         </div>
                       ) : null}
 
-                      {/* Блок с заголовком и описанием снизу */}
-                      <div className="space-y-4 md:space-y-6">
-                        {location.locationName && (
-                          <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground leading-tight">
-                            {location.locationName}
-                          </h3>
-                        )}
-                        {location.locationDescription && (
-                          <div className="prose prose-lg max-w-none">
-                            <PortableTextContent
-                              value={location.locationDescription}
-                              className="text-base md:text-lg lg:text-xl leading-relaxed text-muted-foreground"
-                            />
-                          </div>
-                        )}
-                      </div>
+                      {/* Описание снизу */}
+                      {location.locationDescription && (
+                        <div className="prose prose-lg max-w-none">
+                          <PortableTextContent
+                            value={location.locationDescription}
+                            className="text-base md:text-lg lg:text-xl leading-relaxed text-muted-foreground"
+                          />
+                        </div>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -195,7 +200,6 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
             </div>
           </div>
         </div>
-      </div>
 
       {/* Стрелки навигации - вне контентной области */}
       {locations.length > 1 && (
