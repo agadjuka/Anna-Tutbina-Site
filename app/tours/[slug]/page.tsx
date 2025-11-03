@@ -72,6 +72,7 @@ interface TourData {
   accommodation?: AccommodationLocation[];
   dates?: string;
   price?: Price;
+  pricingDetails?: any;
 }
 
 export default async function TourPage({ params }: { params: Promise<{ slug?: string }> }) {
@@ -197,6 +198,24 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
                 </SectionHeading>
               </div>
               <AccommodationCarousel locations={tour.accommodation} />
+            </section>
+          )}
+
+          {tour.pricingDetails && (
+            <section className="space-y-6">
+              <div className="relative">
+                <SectionHeading as="h2" className="mb-4">
+                  Стоимость
+                </SectionHeading>
+              </div>
+              <div className="w-full flex justify-center">
+                <div className="max-w-4xl w-full prose prose-lg">
+                  <PortableTextContent 
+                    value={tour.pricingDetails} 
+                    className="text-base md:text-xl leading-relaxed text-muted-foreground text-justify" 
+                  />
+                </div>
+              </div>
             </section>
           )}
 
