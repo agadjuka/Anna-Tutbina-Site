@@ -15,6 +15,7 @@ import { TourReviewsSection } from "@/components/sections/tour-reviews-section";
 import { OrganizersSection } from "@/components/sections/organizers-section";
 import { RecommendedFlightsSection } from "@/components/sections/recommended-flights-section";
 import { TourNavigation } from "@/components/sections/tour-navigation";
+import { WantToJoinButton } from "@/components/sections/want-to-join-button";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -321,9 +322,14 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
             <OrganizersSection organizers={tour.organizers} />
           )}
 
-          {tour.atmosphereGallery && tour.atmosphereGallery.length > 0 && (
-            <TourGallery images={tour.atmosphereGallery} tourName={tour.name} title="Атмосфера наших туров" />
-          )}
+        {tour.atmosphereGallery && tour.atmosphereGallery.length > 0 && (
+          <TourGallery images={tour.atmosphereGallery} tourName={tour.name} title="Атмосфера наших туров" />
+        )}
+
+        {/* Кнопка "Хочу с Вами!" — в самом низу, сразу под галереей */}
+        <section className="pt-0 -mt-24 md:-mt-32 pb-0">
+          <WantToJoinButton />
+        </section>
         </div>
       </Container>
     </main>
