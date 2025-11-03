@@ -233,3 +233,14 @@
   line-height: 1.6 !important;
   font-weight: 400 !important;
 }
+
+/* Отступ для якорных ссылок при прокрутке */
+section[id] {
+  scroll-margin-top: 140px;
+}
+
+@media (max-width: 768px) {
+  section[id] {
+    scroll-margin-top: 120px;
+  }
+}

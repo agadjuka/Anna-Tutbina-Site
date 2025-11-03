@@ -15,7 +15,7 @@ interface TourNavigationProps {
 function scrollToSection(id: string) {
   const element = document.getElementById(id);
   if (element) {
-    const offset = 80; // Отступ сверху для фиксированной шапки
+    const offset = 140; // Отступ сверху для фиксированной шапки и видимости заголовка
     const elementPosition = element.getBoundingClientRect().top;
     const offsetPosition = elementPosition + window.pageYOffset - offset;
 
