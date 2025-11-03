@@ -2,9 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { TelegramIcon } from "@/components/ui/icons/telegram";
-import { WhatsappIcon } from "@/components/ui/icons/whatsapp";
-import { Heart } from "lucide-react";
+import { Send, Heart } from "lucide-react";
+import { FaWhatsapp } from "react-icons/fa";
 
 export function WantToJoinButton() {
   const [open, setOpen] = useState(false);
@@ -29,7 +28,7 @@ export function WantToJoinButton() {
             style={{ transitionProperty: "opacity, transform, background-color, color" }}
             onClick={() => setOpen(false)}
           >
-            <TelegramIcon className="h-7 w-7 md:h-8 md:w-8" />
+            <Send className="h-7 w-7 md:h-8 md:w-8" />
           </Link>
           <Link
             href="https://wa.me/79539527212"
@@ -46,14 +45,14 @@ export function WantToJoinButton() {
             style={{ transitionProperty: "opacity, transform, background-color, color" }}
             onClick={() => setOpen(false)}
           >
-            <WhatsappIcon className="h-7 w-7 md:h-8 md:w-8" />
+            <FaWhatsapp className="h-7 w-7 md:h-8 md:w-8" />
           </Link>
         </div>
 
-        {/* Главная кнопка "Хочу с Вами" */}
+        {/* Главная кнопка "Хочу с Вами!" */}
         <button
-          aria-label="Хочу с Вами"
-          title="Хочу с Вами"
+          aria-label="Хочу с Вами!"
+          title="Хочу с Вами!"
           aria-pressed={open}
           onClick={() => setOpen((v) => !v)}
           className="relative inline-flex items-center justify-center gap-2 px-10 py-5 md:px-12 md:py-6 text-lg md:text-xl font-medium text-white rounded-full bg-gradient-to-r from-[#bea692] via-[#c8b39e] to-[#bea692] shadow-2xl hover:shadow-[#bea692]/40 transition-all duration-500 focus:outline-none focus:ring-4 focus:ring-[#bea692]/30 overflow-hidden group"
@@ -109,14 +108,10 @@ export function WantToJoinButton() {
           {/* Содержимое кнопки */}
           <span className="relative z-10 flex items-center gap-2">
             <Heart
-              className={`h-5 w-5 md:h-6 md:w-6 transition-all duration-300 ${
-                open ? "rotate-180 scale-0 opacity-0" : "rotate-0 scale-100 opacity-100"
-              }`}
+              className="h-5 w-5 md:h-6 md:w-6"
               fill="currentColor"
             />
-            <span className={open ? "scale-90" : "scale-100"} style={{ transition: "transform 0.3s" }}>
-              {open ? "Выберите мессенджер" : "Хочу с Вами"}
-            </span>
+            <span>Хочу с Вами!</span>
           </span>
         </button>
       </div>
