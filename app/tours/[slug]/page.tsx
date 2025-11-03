@@ -13,6 +13,7 @@ import { AccommodationCarousel } from "@/components/sections/accommodation-carou
 import { IncludedNotIncludedSection } from "@/components/sections/included-not-included-section";
 import { TourReviewsSection } from "@/components/sections/tour-reviews-section";
 import { OrganizersSection } from "@/components/sections/organizers-section";
+import { RecommendedFlightsSection } from "@/components/sections/recommended-flights-section";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -68,6 +69,11 @@ interface Organizer {
   bio?: string;
 }
 
+interface RecommendedFlights {
+  image?: any;
+  text?: any;
+}
+
 interface TourData {
   _id: string;
   name: string;
@@ -84,6 +90,7 @@ interface TourData {
   pricingDetails?: any;
   included?: any;
   notIncluded?: any;
+  recommendedFlights?: RecommendedFlights;
   organizers?: Organizer[];
 }
 
@@ -252,6 +259,10 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
                 notIncluded={tour.notIncluded}
               />
             </section>
+          )}
+
+          {tour.recommendedFlights && (
+            <RecommendedFlightsSection flights={tour.recommendedFlights} />
           )}
 
           {!!tour.gallery?.length && (

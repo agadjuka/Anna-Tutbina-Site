@@ -68,6 +68,16 @@ export const tourBySlugQuery = groq`
     pricingDetails,
     included,
     notIncluded,
+    recommendedFlights{
+      image{
+        ...,
+        asset->{
+          _id,
+          metadata{dimensions{width,height,aspectRatio}}
+        }
+      },
+      text
+    },
     organizers[]{
       name,
       photo{
