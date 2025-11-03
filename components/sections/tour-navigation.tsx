@@ -34,33 +34,29 @@ export function TourNavigation({ sections }: TourNavigationProps) {
   }
 
   return (
-    <div className="w-full flex justify-center mt-4 md:mt-6 mb-2">
-      <div className="max-w-4xl w-full">
-        <div className="flex flex-nowrap items-center justify-center gap-3 md:gap-4 lg:gap-5 overflow-x-auto scrollbar-hide pb-1">
-          {availableSections.map((section) => (
-            <button
-              key={section.id}
-              onClick={() => scrollToSection(section.id)}
-              className={cn(
-                "group relative inline-flex items-center",
-                "px-0 py-1",
-                "text-[10px] md:text-xs",
-                "font-normal tracking-normal",
-                "text-muted-foreground",
-                "hover:text-[#bea692]",
-                "transition-colors duration-200 ease-in-out",
-                "whitespace-nowrap",
-                "border-b border-transparent",
-                "hover:border-[#bea692]/30",
-                "focus:outline-none"
-              )}
-              aria-label={`Перейти к разделу ${section.label}`}
-            >
-              {section.label}
-            </button>
-          ))}
-        </div>
-      </div>
+    <div className="flex items-center justify-between gap-2 md:gap-3 overflow-x-auto scrollbar-hide pb-1 mt-2">
+      {availableSections.map((section) => (
+        <button
+          key={section.id}
+          onClick={() => scrollToSection(section.id)}
+          className={cn(
+            "group relative inline-flex items-center justify-center",
+            "px-0 py-1 flex-1 min-w-0",
+            "text-[11px] md:text-xs",
+            "font-normal tracking-normal",
+            "text-muted-foreground",
+            "hover:text-[#bea692]",
+            "transition-colors duration-200 ease-in-out",
+            "whitespace-nowrap",
+            "border-b border-transparent",
+            "hover:border-[#bea692]/30",
+            "focus:outline-none"
+          )}
+          aria-label={`Перейти к разделу ${section.label}`}
+        >
+          {section.label}
+        </button>
+      ))}
     </div>
   );
 }

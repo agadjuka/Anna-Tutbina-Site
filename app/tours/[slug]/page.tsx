@@ -200,23 +200,22 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
                     </div>
                   )}
                 </div>
+                <TourNavigation
+                  sections={[
+                    { id: "about-tour", label: "О туре", available: !!tour.introText },
+                    { id: "program", label: "Что нас ждет?", available: !!(tour.programByDays && tour.programByDays.length > 0) },
+                    { id: "accommodation", label: "Размещение", available: !!(tour.accommodation && tour.accommodation.length > 0) },
+                    { id: "pricing", label: "Стоимость", available: !!tour.pricingDetails },
+                    { id: "conditions", label: "Условия", available: !!(tour.included || tour.notIncluded) },
+                    { id: "flights", label: "Рейсы", available: !!tour.recommendedFlights },
+                    { id: "reviews", label: "Отзывы", available: !!(reviews && reviews.length > 0) },
+                    { id: "organizers", label: "Организаторы", available: !!(tour.organizers && tour.organizers.length > 0) },
+                    { id: "gallery", label: "Галерея", available: !!(tour.atmosphereGallery && tour.atmosphereGallery.length > 0) },
+                  ]}
+                />
               </div>
             </div>
           )}
-
-          <TourNavigation
-            sections={[
-              { id: "about-tour", label: "О туре", available: !!tour.introText },
-              { id: "program", label: "Что нас ждет?", available: !!(tour.programByDays && tour.programByDays.length > 0) },
-              { id: "accommodation", label: "Размещение", available: !!(tour.accommodation && tour.accommodation.length > 0) },
-              { id: "pricing", label: "Стоимость", available: !!tour.pricingDetails },
-              { id: "conditions", label: "Условия", available: !!(tour.included || tour.notIncluded) },
-              { id: "flights", label: "Рейсы", available: !!tour.recommendedFlights },
-              { id: "reviews", label: "Отзывы", available: !!(reviews && reviews.length > 0) },
-              { id: "organizers", label: "Организаторы", available: !!(tour.organizers && tour.organizers.length > 0) },
-              { id: "gallery", label: "Галерея", available: !!(tour.atmosphereGallery && tour.atmosphereGallery.length > 0) },
-            ]}
-          />
 
           {tour.introText && (
             <section id="about-tour" className="space-y-6">
