@@ -1,5 +1,5 @@
 import { sanityClient } from "@/lib/sanity.client";
-import { tourBySlugQuery, tourMetadataQuery } from "@/lib/sanity.queries";
+import { tourBySlugQuery, tourMetadataQuery, tourReviewsQuery } from "@/lib/sanity.queries";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { Container } from "@/components/ui/container";
 import { SanityImage } from "@/components/ui/sanity-image";
@@ -11,6 +11,7 @@ import { TourGallery } from "@/components/sections/tour-gallery";
 import { ProgramDaysCarousel } from "@/components/sections/program-days-carousel";
 import { AccommodationCarousel } from "@/components/sections/accommodation-carousel";
 import { IncludedNotIncludedSection } from "@/components/sections/included-not-included-section";
+import { TourReviewsSection } from "@/components/sections/tour-reviews-section";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -78,6 +79,13 @@ interface TourData {
   notIncluded?: any;
 }
 
+interface ReviewItem {
+  _id: string;
+  authorName: string;
+  authorImage: any;
+  text: string;
+}
+
 export default async function TourPage({ params }: { params: Promise<{ slug?: string }> }) {
   const { slug } = await params;
 
@@ -90,6 +98,8 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
   if (!tour) {
     notFound();
   }
+
+  const reviews = await sanityClient.fetch<ReviewItem[]>(tourReviewsQuery, { tourId: tour._id });
 
   return (
     <main className="min-h-screen bg-background py-12 md:py-16">
@@ -238,6 +248,10 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
 
           {!!tour.gallery?.length && (
             <TourGallery images={tour.gallery!} tourName={tour.name} />
+          )}
+
+          {reviews && reviews.length > 0 && (
+            <TourReviewsSection reviews={reviews} />
           )}
         </div>
       </Container>

@@ -96,6 +96,15 @@ export const reviewsQuery = groq`
   }
 `;
 
+export const tourReviewsQuery = groq`
+  *[_type == "review" && $tourId in tours[]._ref]{
+    _id,
+    authorName,
+    authorImage,
+    text
+  }
+`;
+
 
 export const customTourQuery = groq`
   *[_type == "customTour"][0]{
