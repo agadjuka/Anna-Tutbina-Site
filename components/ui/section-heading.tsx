@@ -23,17 +23,31 @@ export function SectionHeading({
 
   return (
     <div className={cn("w-full flex justify-center", className)}>
-      <div className="max-w-4xl w-full flex items-center gap-4">
-        <div className={cn("h-px flex-1", lineColor)} />
+      <div className="max-w-4xl w-full flex items-center gap-3 md:gap-4">
+        <div
+          className={cn(
+            // Линия заполняет всё доступное пространство, но не уже 10% экрана
+            "h-px flex-1 min-w-[10vw] md:min-w-0",
+            lineColor
+          )}
+        />
         <Component 
           className={cn(
-            "font-heading text-base md:text-lg uppercase tracking-[0.2em] font-medium whitespace-nowrap shrink-0",
+            // Мобильные: меньше межбуквенный интервал, переносы строк и длинных слов
+            // Десктоп: поведение без изменений
+            "font-heading text-base md:text-lg uppercase tracking-[0.1em] md:tracking-[0.2em] font-medium text-center md:text-left break-words [hyphens:auto] md:whitespace-nowrap",
             textColor
           )}
         >
           {children}
         </Component>
-        <div className={cn("h-px flex-1", lineColor)} />
+        <div
+          className={cn(
+            // Линия заполняет всё доступное пространство, но не уже 10% экрана
+            "h-px flex-1 min-w-[10vw] md:min-w-0",
+            lineColor
+          )}
+        />
       </div>
     </div>
   );
