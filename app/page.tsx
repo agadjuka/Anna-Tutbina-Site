@@ -1,6 +1,6 @@
 import { Container } from "@/components/ui/container";
 import { Heading } from "@/components/ui/heading";
-import { TourCard } from "@/components/sections/tour-card";
+import { TourCardWrapper } from "@/components/sections/tour-card-wrapper";
 import { ToursEmbla } from "@/components/sections/tours-embla";
 import { sanityClient } from "@/lib/sanity.client";
 import { toursQuery, aboutQuery, reviewsQuery, customTourQuery, faqQuery } from "@/lib/sanity.queries";
@@ -82,7 +82,7 @@ export default async function HomePage() {
                   className="w-full sm:w-[calc(50%-1.25rem)] lg:w-[calc(33.333%-1.67rem)]"
                   style={{ maxWidth: '400px', flexShrink: 0 }}
                 >
-                  <TourCard tour={tour} />
+                  <TourCardWrapper tour={tour} />
                 </div>
               ))}
             </div>

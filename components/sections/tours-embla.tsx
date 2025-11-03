@@ -3,7 +3,7 @@
 import useEmblaCarousel from "embla-carousel-react";
 import type { EmblaOptionsType, EmblaCarouselType } from "embla-carousel";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { TourCard } from "./tour-card";
+import { TourCardWrapper } from "./tour-card-wrapper";
 import { cn } from "@/lib/utils";
 
 interface Price { value: number; currency: string }
@@ -109,7 +109,7 @@ export function ToursEmbla({ tours }: ToursEmblaProps) {
         <div className={cn("flex gap-6")}> 
           {tours.map((t, i) => (
             <div key={t._id} style={slideStyle}>
-              <TourCard tour={t} isActive={active === i} className="[&>div]:!aspect-[4/5]" />
+              <TourCardWrapper tour={t} isActive={active === i} className="[&>div]:!aspect-[4/5]" />
             </div>
           ))}
         </div>

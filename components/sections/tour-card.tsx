@@ -72,47 +72,69 @@ export function TourCard({ tour, className, isActive = false }: TourCardProps) {
           isActive && "border-white/40"
         )} />
 
-        {/* Весь контент поверх изображения */}
-        <div className="absolute inset-0 flex flex-col justify-between px-6 md:px-8 py-5 md:py-7 z-20">
+        {/* Весь контент поверх изображения - используем em для пропорционального масштабирования */}
+        <div className="absolute inset-0 flex flex-col justify-between z-20" style={{
+          padding: '1.25em 1.75em'
+        } as React.CSSProperties}>
           {/* Верхняя часть: название, даты, цена */}
-          <div className="flex flex-col gap-1.5 md:gap-2">
+          <div className="flex flex-col" style={{
+            gap: '0.375em'
+          } as React.CSSProperties}>
             {/* Название тура */}
-            <h3 className="font-heading text-xl md:text-2xl lg:text-3xl font-bold uppercase tracking-tight leading-tight text-white break-words">
+            <h3 className="font-heading font-bold uppercase tracking-tight leading-tight text-white break-words" style={{
+              fontSize: '1.875em',
+              lineHeight: '1.2'
+            } as React.CSSProperties}>
               {tour.name}
             </h3>
 
             {/* Даты */}
             {tour.dates && (
-              <p className="text-xs md:text-sm uppercase tracking-wider font-medium text-white">
+              <p className="uppercase tracking-wider font-medium text-white" style={{
+                fontSize: '0.875em',
+                lineHeight: '1.4'
+              } as React.CSSProperties}>
                 {tour.dates}
               </p>
             )}
 
             {/* Цена */}
             {formattedPrice && (
-              <p className="text-sm md:text-base lg:text-lg font-bold mt-0.5 text-white">
+              <p className="font-bold text-white" style={{
+                fontSize: '1.125em',
+                marginTop: '0.25em',
+                lineHeight: '1.4'
+              } as React.CSSProperties}>
                 от {formattedPrice}
               </p>
             )}
 
             {/* Описание - появляется только при hover или активном состоянии */}
             <div className={cn(
-              "mt-2 overflow-hidden",
+              "overflow-hidden",
               "group-hover:mt-0 group-hover:-mt-1",
               isActive && "mt-0 -mt-1"
-            )}>
+            )} style={{
+              marginTop: '0.75em'
+            } as React.CSSProperties}>
               <p className={cn(
-                "text-sm md:text-base leading-snug text-white text-justify translate-y-4 transition-all duration-700 ease-[cubic-bezier(0.4,0,0.2,1)] break-words",
+                "leading-snug text-white text-justify translate-y-4 transition-all duration-700 ease-[cubic-bezier(0.4,0,0.2,1)] break-words",
                 "opacity-0 max-h-0 group-hover:opacity-100 group-hover:max-h-[500px] group-hover:translate-y-0",
                 isActive && "opacity-100 max-h-[500px] translate-y-0"
-              )}>
+              )} style={{
+                fontSize: '1em',
+                lineHeight: '1.5'
+              } as React.CSSProperties}>
                 {tour.shortDescription}
               </p>
             </div>
           </div>
 
           {/* Нижняя часть: кнопка "Подробнее" */}
-          <div className="flex items-center gap-2 text-xs md:text-sm font-medium uppercase tracking-wide text-white">
+          <div className="flex items-center font-medium uppercase tracking-wide text-white" style={{
+            gap: '0.5em',
+            fontSize: '0.875em'
+          } as React.CSSProperties}>
             <span className={cn(
               "text-white transition-all duration-700 ease-out",
               "group-hover:opacity-90",
