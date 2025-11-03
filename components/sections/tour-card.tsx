@@ -10,6 +10,7 @@ interface Price {
 interface Tour {
   name: string;
   mainImage: any;
+  cardImage?: any;
   shortDescription: string;
   dates?: string;
   price?: Price;
@@ -47,7 +48,7 @@ export function TourCard({ tour, className, isActive = false }: TourCardProps) {
       <div className="relative aspect-[3/4] w-full">
         {/* Изображение на фоне */}
         <SanityImage
-          image={tour.mainImage}
+          image={tour.cardImage ?? tour.mainImage}
           className={cn(
             "absolute inset-0 h-full w-full object-cover rounded-2xl transition-transform duration-700 ease-out",
             "group-hover:scale-105",

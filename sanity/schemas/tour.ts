@@ -24,6 +24,15 @@ const tour = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'cardImage',
+      title: 'Фото для карточки (на главной)',
+      type: 'image',
+      options: {
+        hotspot: true,
+      },
+      description: 'Если указано, будет использоваться в карточке тура на главной странице. Иначе возьмется главное фото ниже.',
+    }),
+    defineField({
       name: 'mainImage',
       title: 'Главное фото',
       type: 'image',

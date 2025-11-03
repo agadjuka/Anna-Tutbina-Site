@@ -5,6 +5,13 @@ export const toursQuery = groq`
     _id,
     name,
     slug,
+    cardImage{
+      ...,
+      asset->{
+        _id,
+        metadata{dimensions{width,height,aspectRatio}}
+      }
+    },
     mainImage{
       ...,
       asset->{
@@ -24,6 +31,13 @@ export const tourBySlugQuery = groq`
     _id,
     name,
     slug,
+    cardImage{
+      ...,
+      asset->{
+        _id,
+        metadata{dimensions{width,height,aspectRatio}}
+      }
+    },
     mainImage{
       ...,
       asset->{
