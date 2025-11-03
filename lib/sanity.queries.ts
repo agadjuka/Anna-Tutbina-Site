@@ -32,6 +32,7 @@ export const tourBySlugQuery = groq`
       }
     },
     overlayTitle,
+    introText,
     gallery[]{
       ...,
       asset->{

@@ -1,6 +1,6 @@
 import { sanityClient } from "@/lib/sanity.client";
 import { tourBySlugQuery, tourMetadataQuery } from "@/lib/sanity.queries";
-import { Heading } from "@/components/ui/heading";
+import { SectionHeading } from "@/components/ui/section-heading";
 import { Container } from "@/components/ui/container";
 import { SanityImage } from "@/components/ui/sanity-image";
 import { PortableTextContent } from "@/components/ui/portable-text";
@@ -51,6 +51,7 @@ interface TourData {
   slug: { current: string };
   mainImage: any;
   overlayTitle?: any;
+  introText?: any;
   gallery?: any[];
   fullProgram?: any;
   dates?: string;
@@ -104,7 +105,7 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
                 className="w-full h-auto object-cover"
               />
               {tour.overlayTitle && (
-                <div className="absolute left-0 right-0 flex justify-center pointer-events-none" style={{ top: '66%' }}>
+                <div className="absolute left-0 right-0 flex justify-center pointer-events-none" style={{ top: '70%' }}>
                   <div className="text-center px-4 md:px-8 max-w-full">
                     <PortableText
                       value={tour.overlayTitle}
@@ -112,7 +113,7 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
                         block: {
                           normal: ({ children }) => (
                             <p 
-                              className="text-white text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]"
+                              className="text-white text-base md:text-lg lg:text-xl xl:text-2xl font-bold drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]"
                               style={{ color: 'white' }}
                             >
                               {children}
@@ -127,9 +128,29 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
             </div>
           )}
 
+          {tour.introText && (
+            <section className="space-y-6">
+              <div className="relative">
+                <SectionHeading as="h2" className="mb-4">
+                  О туре
+                </SectionHeading>
+              </div>
+              <div className="prose prose-lg max-w-none">
+                <PortableTextContent 
+                  value={tour.introText} 
+                  className="text-base md:text-xl leading-relaxed text-muted-foreground" 
+                />
+              </div>
+            </section>
+          )}
+
           {tour.fullProgram && (
             <section className="space-y-6 bg-white rounded-2xl p-8 md:p-12 shadow-card">
-              <Heading as="h2" className="mb-0">Полная программа тура</Heading>
+              <div className="relative">
+                <SectionHeading as="h2" className="mb-4">
+                  Полная программа тура
+                </SectionHeading>
+              </div>
               <div className="prose prose-lg max-w-none">
                 <PortableTextContent 
                   value={tour.fullProgram} 

@@ -5,7 +5,7 @@ import useEmblaCarousel from "embla-carousel-react";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 import { urlFor } from "@/lib/sanity.client";
-import { Heading } from "@/components/ui/heading";
+import { SectionHeading } from "@/components/ui/section-heading";
 
 interface TourGalleryProps {
   title?: string;
@@ -90,7 +90,11 @@ export function TourGallery({ title = "Галерея", images, tourName }: Tour
 
   return (
     <section className="space-y-6">
-      <Heading as="h2" className="mb-0">{title}</Heading>
+      <div className="relative">
+        <SectionHeading as="h2" className="mb-4">
+          {title}
+        </SectionHeading>
+      </div>
 
       <MobileGalleryCarousel slides={slides} onOpen={(i) => setIndex(i)} />
 
