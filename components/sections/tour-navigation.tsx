@@ -34,14 +34,15 @@ export function TourNavigation({ sections }: TourNavigationProps) {
   }
 
   return (
-    <div className="flex items-center justify-between gap-2 md:gap-3 overflow-x-auto scrollbar-hide pb-1 mt-2">
+    <div className="flex flex-wrap md:flex-nowrap items-center justify-center md:justify-between gap-2 md:gap-3 pb-1 mt-2">
       {availableSections.map((section) => (
         <button
           key={section.id}
           onClick={() => scrollToSection(section.id)}
           className={cn(
             "group relative inline-flex items-center justify-center",
-            "px-2 md:px-3 py-1.5 flex-1 min-w-0",
+            "px-2 md:px-3 py-1.5",
+            "w-[calc(50%-0.25rem)] md:w-auto md:flex-1 min-w-0",
             "text-[11px] md:text-xs",
             "font-normal tracking-normal",
             "text-muted-foreground",
