@@ -199,26 +199,26 @@ export function ProgramDaysCarousel({ days }: ProgramDaysCarouselProps) {
               disabled={!canScrollPrev}
               className={cn(
                 "absolute top-1/2 -translate-y-1/2 z-10 pointer-events-auto",
-                "w-10 h-10 md:w-12 md:h-12 rounded-full",
+                "w-12 h-12 md:w-14 md:h-14 rounded-full",
                 "flex items-center justify-center",
-                "bg-white/90 backdrop-blur-sm border border-[#e5e0db]",
+                "bg-white/95 backdrop-blur-sm border-2 border-[#bea692]",
                 "transition-all duration-200",
-                "hover:bg-white hover:shadow-md",
-                "disabled:opacity-30 disabled:cursor-not-allowed",
+                "hover:bg-white hover:shadow-xl hover:scale-110",
+                "disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:scale-100",
                 "left-0 -translate-x-full -ml-4 md:-ml-6"
               )}
               aria-label="Предыдущий день"
             >
               <svg
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                className="text-foreground"
+                className="text-[#bea692]"
               >
                 <path
-                  d="M12 15L7 10L12 5"
+                  d="M15 18L9 12L15 6"
                   stroke="currentColor"
                   strokeWidth="2"
                   strokeLinecap="round"
@@ -232,26 +232,26 @@ export function ProgramDaysCarousel({ days }: ProgramDaysCarouselProps) {
               disabled={!canScrollNext}
               className={cn(
                 "absolute top-1/2 -translate-y-1/2 z-10 pointer-events-auto",
-                "w-10 h-10 md:w-12 md:h-12 rounded-full",
+                "w-12 h-12 md:w-14 md:h-14 rounded-full",
                 "flex items-center justify-center",
-                "bg-white/90 backdrop-blur-sm border border-[#e5e0db]",
+                "bg-white/95 backdrop-blur-sm border-2 border-[#bea692]",
                 "transition-all duration-200",
-                "hover:bg-white hover:shadow-md",
-                "disabled:opacity-30 disabled:cursor-not-allowed",
+                "hover:bg-white hover:shadow-xl hover:scale-110",
+                "disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:scale-100",
                 "right-0 translate-x-full -mr-4 md:-mr-6"
               )}
               aria-label="Следующий день"
             >
               <svg
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                className="text-foreground"
+                className="text-[#bea692]"
               >
                 <path
-                  d="M8 5L13 10L8 15"
+                  d="M9 18L15 12L9 6"
                   stroke="currentColor"
                   strokeWidth="2"
                   strokeLinecap="round"

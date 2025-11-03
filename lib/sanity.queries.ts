@@ -52,6 +52,17 @@ export const tourBySlugQuery = groq`
       },
       dayDescription
     },
+    accommodation[]{
+      locationName,
+      locationImages[]{
+        ...,
+        asset->{
+          _id,
+          metadata{dimensions{width,height,aspectRatio}}
+        }
+      },
+      locationDescription
+    },
     dates,
     price
   }

@@ -9,6 +9,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { TourGallery } from "@/components/sections/tour-gallery";
 import { ProgramDaysCarousel } from "@/components/sections/program-days-carousel";
+import { AccommodationCarousel } from "@/components/sections/accommodation-carousel";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -52,6 +53,12 @@ interface ProgramDay {
   dayDescription?: any;
 }
 
+interface AccommodationLocation {
+  locationName?: string;
+  locationImages?: any[];
+  locationDescription?: any;
+}
+
 interface TourData {
   _id: string;
   name: string;
@@ -62,6 +69,7 @@ interface TourData {
   gallery?: any[];
   fullProgram?: any;
   programByDays?: ProgramDay[];
+  accommodation?: AccommodationLocation[];
   dates?: string;
   price?: Price;
 }
@@ -178,6 +186,17 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
                   className="text-base md:text-xl leading-relaxed text-muted-foreground" 
                 />
               </div>
+            </section>
+          )}
+
+          {tour.accommodation && tour.accommodation.length > 0 && (
+            <section className="space-y-6">
+              <div className="relative">
+                <SectionHeading as="h2" className="mb-6 md:mb-8">
+                  Размещение
+                </SectionHeading>
+              </div>
+              <AccommodationCarousel locations={tour.accommodation} />
             </section>
           )}
 
