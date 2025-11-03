@@ -73,7 +73,7 @@ export function TourCard({ tour, className, isActive = false }: TourCardProps) {
         )} />
 
         {/* Весь контент поверх изображения */}
-        <div className="absolute inset-0 flex flex-col justify-between p-5 md:p-7 z-20">
+        <div className="absolute inset-0 flex flex-col justify-between px-6 md:px-8 py-5 md:py-7 z-20">
           {/* Верхняя часть: название, даты, цена */}
           <div className="flex flex-col gap-1.5 md:gap-2">
             {/* Название тура */}
