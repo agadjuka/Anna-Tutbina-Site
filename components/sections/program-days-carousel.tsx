@@ -109,7 +109,7 @@ export function ProgramDaysCarousel({ days }: ProgramDaysCarouselProps) {
         <div className="relative">
           <div className="overflow-hidden">
             <div ref={viewportRef} className="overflow-hidden">
-              <div className="flex">
+              <div className="flex gap-4 md:gap-6 lg:gap-8">
                 {days.map((day, index) => (
                   <div
                     key={index}

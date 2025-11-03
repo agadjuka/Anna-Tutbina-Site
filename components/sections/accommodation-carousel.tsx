@@ -106,7 +106,7 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
       <div className="max-w-4xl mx-auto">
         <div className="relative overflow-hidden">
           <div ref={viewportRef} className="overflow-hidden" style={{ clipPath: 'inset(0)' }}>
-            <div className="flex">
+            <div className="flex gap-4 md:gap-6 lg:gap-8">
               {locations.map((location, index) => (
                 <div
                   key={index}
@@ -116,7 +116,7 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
                     <div className="relative">
                       {/* Заголовок над фотографиями */}
                       {location.locationName && (
-                        <div className="mb-4 md:mb-6 pl-2 pt-0">
+                        <div className="mb-4 md:mb-6 pt-0">
                           <div className="relative inline-block">
                             <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-foreground leading-tight tracking-tight">
                               {location.locationName}
