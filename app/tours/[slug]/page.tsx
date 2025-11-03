@@ -165,7 +165,7 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
                             block: {
                               normal: ({ children }) => (
                                 <p 
-                                  className="text-lg md:text-xl lg:text-2xl xl:text-3xl font-bold drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]"
+                                  className="text-lg md:text-xl lg:text-2xl xl:text-3xl font-normal drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]"
                                   style={{ color: 'rgba(255, 255, 255, 0.75)' }}
                                 >
                                   {children}
@@ -186,7 +186,7 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
                             block: {
                               normal: ({ children }) => (
                                 <p 
-                                  className="text-base md:text-lg lg:text-xl xl:text-2xl font-bold drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]"
+                                  className="text-base md:text-lg lg:text-xl xl:text-2xl font-normal drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]"
                                   style={{ color: 'rgba(255, 255, 255, 0.75)' }}
                                 >
                                   {children}
