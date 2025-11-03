@@ -39,8 +39,14 @@ const tour = defineType({
       }),
     }),
     defineField({
-      name: 'overlayTitle',
-      title: 'Заголовок на фото',
+      name: 'overlayName',
+      title: 'Название тура на фото',
+      type: 'array',
+      of: [{type: 'block'}],
+    }),
+    defineField({
+      name: 'overlayDate',
+      title: 'Дата на фото',
       type: 'array',
       of: [{type: 'block'}],
     }),

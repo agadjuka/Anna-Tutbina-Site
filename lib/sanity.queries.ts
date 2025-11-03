@@ -31,7 +31,8 @@ export const tourBySlugQuery = groq`
         metadata{dimensions{width,height,aspectRatio}}
       }
     },
-    overlayTitle,
+    overlayName,
+    overlayDate,
     introText,
     atmosphereGallery[]{
       ...,
@@ -136,7 +137,7 @@ export const customTourQuery = groq`
 `;
 
 export const faqQuery = groq`
-  *[_type == "faq"]|order(_createdAt asc){
+  *[_type == "faq"]|order(orderRank){
     _id,
     question,
     answer

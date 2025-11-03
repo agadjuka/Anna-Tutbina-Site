@@ -79,7 +79,8 @@ interface TourData {
   name: string;
   slug: { current: string };
   mainImage: any;
-  overlayTitle?: any;
+  overlayName?: any;
+  overlayDate?: any;
   introText?: any;
   atmosphereGallery?: any[];
   fullProgram?: any;
@@ -155,17 +156,38 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
                     alt={tour.name}
                     className="w-full h-auto object-cover"
                   />
-                  {tour.overlayTitle && (
-                    <div className="absolute left-0 right-0 flex justify-center pointer-events-none" style={{ top: '70%' }}>
+                  {tour.overlayName && (
+                    <div className="absolute left-0 right-0 flex items-center justify-center pointer-events-none" style={{ top: '30%' }}>
                       <div className="text-center px-4 md:px-8 max-w-full">
                         <PortableText
-                          value={tour.overlayTitle}
+                          value={tour.overlayName}
                           components={{
                             block: {
                               normal: ({ children }) => (
                                 <p 
-                                  className="text-white text-base md:text-lg lg:text-xl xl:text-2xl font-bold drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]"
-                                  style={{ color: 'white' }}
+                                  className="text-lg md:text-xl lg:text-2xl xl:text-3xl font-bold drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]"
+                                  style={{ color: 'rgba(255, 255, 255, 0.75)' }}
+                                >
+                                  {children}
+                                </p>
+                              ),
+                            },
+                          }}
+                        />
+                      </div>
+                    </div>
+                  )}
+                  {tour.overlayDate && (
+                    <div className="absolute left-0 right-0 flex items-center justify-center pointer-events-none" style={{ top: '66%' }}>
+                      <div className="text-center px-4 md:px-8 max-w-full">
+                        <PortableText
+                          value={tour.overlayDate}
+                          components={{
+                            block: {
+                              normal: ({ children }) => (
+                                <p 
+                                  className="text-base md:text-lg lg:text-xl xl:text-2xl font-bold drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]"
+                                  style={{ color: 'rgba(255, 255, 255, 0.75)' }}
                                 >
                                   {children}
                                 </p>
