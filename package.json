@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "update-fonts": "tsx scripts/update-fonts.ts",
     "sanity:dev": "npm --prefix sanity run dev",
     "sanity:deploy": "npm --prefix sanity run deploy",
     "reinstall": "node -e \"require('fs').rmSync('node_modules', {recursive: true, force: true}); try { require('fs').unlinkSync('package-lock.json'); } catch(e) {}\" && npm cache clean --force && npm install --legacy-peer-deps"
@@ -34,6 +35,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.0.1",
     "tailwindcss": "^4",
+    "tsx": "^4.20.6",
     "typescript": "^5"
   }
 }

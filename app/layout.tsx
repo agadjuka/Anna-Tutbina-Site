@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { ttDrugs, theanoDidot, leotaro, kinetika } from "@/lib/fonts";
+import { headingFont, bodyFont } from "@/lib/fonts";
 import { Footer } from "@/components/sections/footer";
 import { Header } from "@/components/sections/header";
 import { FloatingContacts } from "@/components/ui/floating-contacts";
@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <body
-        className={`pt-16 ${ttDrugs.variable} ${theanoDidot.variable} ${leotaro.variable} ${kinetika.variable} antialiased`}
+        className={`pt-16 ${headingFont.variable} ${bodyFont.variable} antialiased`}
       >
         <Header />
         {children}

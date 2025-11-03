@@ -2,8 +2,8 @@
 
 @theme {
   /* Кастомные шрифты */
-  --font-sans: var(--font-kinetika), sans-serif;
-  --font-heading: var(--font-leotaro), serif;
+  --font-sans: var(--font-body), sans-serif;
+  --font-heading: var(--font-heading), serif;
 
   /* Пастельная коричневая палитра */
   --color-background: #f9f9f9;
@@ -27,7 +27,7 @@
   }
 
   body {
-    font-family: var(--font-kinetika), system-ui, arial, sans-serif;
+    font-family: var(--font-body), system-ui, arial, sans-serif;
     font-weight: 500;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -40,7 +40,7 @@
   h4,
   h5,
   h6 {
-    font-family: var(--font-leotaro), serif;
+    font-family: var(--font-heading), serif;
     @apply text-foreground;
     @apply tracking-tight;
   }
@@ -48,11 +48,11 @@
 
 @layer utilities {
   .font-heading {
-    font-family: var(--font-leotaro), serif;
+    font-family: var(--font-heading), serif;
   }
   
   .font-sans {
-    font-family: var(--font-kinetika), system-ui, arial, sans-serif;
+    font-family: var(--font-body), system-ui, arial, sans-serif;
   }
   
   .text-balance {
@@ -117,7 +117,7 @@
     word-spacing: 0.05em;
   }
   
-  /* Применяем Кинетику ко всем текстовым элементам по умолчанию */
+  /* Применяем основной шрифт ко всем текстовым элементам по умолчанию */
   p, 
   span:not([class*="heading"]):not([class*="font-heading"]):not(.text-white),
   .prose p,
@@ -125,7 +125,7 @@
   .prose li,
   .prose em,
   .prose a {
-    font-family: var(--font-kinetika), system-ui, arial, sans-serif;
+    font-family: var(--font-body), system-ui, arial, sans-serif;
     font-weight: 500;
     font-size: 1rem; /* 16px - исходный размер */
     color: #2a2a2a;

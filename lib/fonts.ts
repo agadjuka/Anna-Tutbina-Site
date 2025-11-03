@@ -1,55 +1,22 @@
 import localFont from "next/font/local";
 
-// TT Drugs для основного текста
-export const ttDrugs = localFont({
-  src: [
-    {
-      path: "../public/fonts/tt-drugs-regular.otf",
-      weight: "400",
-      style: "normal",
-    },
-    {
-      path: "../public/fonts/tt-drugs-bold.otf",
-      weight: "700",
-      style: "normal",
-    },
-    {
-      path: "../public/fonts/tt-drugs-light.otf",
-      weight: "300",
-      style: "normal",
-    },
-    {
-      path: "../public/fonts/tt-drugs-thin.otf",
-      weight: "100",
-      style: "normal",
-    },
-  ],
-  variable: "--font-tt-drugs",
-  display: "swap",
-  fallback: ["system-ui", "arial"],
-});
+// Автоматически сгенерировано скриптом update-fonts.ts
+// Для обновления запустите: npm run update-fonts
 
-// Theano Didot для заголовков
-export const theanoDidot = localFont({
-  src: "../public/fonts/theano-didot-regular.ttf",
-  variable: "--font-theano-didot",
+// Шрифт для заголовков из public/fonts/headings/
+export const headingFont = localFont({
+  src: "../public/fonts/headings/leotaro-regular.otf",
+  variable: "--font-heading",
   display: "swap",
   fallback: ["serif"],
+  weight: "400",
 });
 
-// Leotaro для заголовков
-export const leotaro = localFont({
-  src: "../public/fonts/leotaro-regular.otf",
-  variable: "--font-leotaro",
-  display: "swap",
-  fallback: ["serif"],
-});
-
-// Кинетика для основного текста
-export const kinetika = localFont({
-  src: "../public/fonts/kinetika.ttf",
-  variable: "--font-kinetika",
+// Шрифт для основного текста из public/fonts/body/
+export const bodyFont = localFont({
+  src: "../public/fonts/body/kinetika.ttf",
+  variable: "--font-body",
   display: "swap",
   fallback: ["system-ui", "arial"],
+  weight: "400",
 });
-
