@@ -1,26 +1,42 @@
 "use client";
 
+import { useCallback } from "react";
 import { useReviewsExpand } from "@/components/sections/reviews-expand-context";
-import { cn } from "@/lib/utils";
+import {
+  reviewActionButtonClass,
+  reviewActionIconClass,
+} from "@/components/sections/review-action-button-styles";
+
+function scrollReviewsSectionIntoView() {
+  const el = document.getElementById("reviews");
+  if (!el) return;
+  const reduced =
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  el.scrollIntoView({
+    behavior: reduced ? "auto" : "smooth",
+    block: "start",
+  });
+}
 
 export function ReviewsCollapseBar() {
   const { allExpanded, collapseAll } = useReviewsExpand();
+
+  const handleCollapse = useCallback(() => {
+    collapseAll();
+    requestAnimationFrame(() => {
+      scrollReviewsSectionIntoView();
+    });
+  }, [collapseAll]);
 
   if (!allExpanded) return null;
 
   return (
     <div className="mt-6 flex justify-center md:mt-8">
-      <button
-        type="button"
-        onClick={collapseAll}
-        className={cn(
-          "group/btn inline-flex items-center gap-1.5 rounded-full border border-[#e5e0db] bg-white/80 px-3.5 py-1.5 font-sans text-xs text-muted-foreground transition-colors",
-          "hover:border-[#bea692]/35 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#bea692]/25 md:text-sm"
-        )}
-      >
-        <span>Свернуть</span>
+      <button type="button" onClick={handleCollapse} className={reviewActionButtonClass}>
+        <span className="relative z-10">Свернуть</span>
         <svg
-          className="h-3 w-3 shrink-0 text-[#bea692]/70 transition-transform duration-300 group-hover/btn:text-[#bea692]"
+          className={reviewActionIconClass}
           viewBox="0 0 12 12"
           fill="none"
           stroke="currentColor"
