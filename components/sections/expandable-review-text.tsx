@@ -14,6 +14,7 @@ import {
   reviewActionIconClass,
 } from "@/components/sections/review-action-button-styles";
 import { Paragraph } from "@/components/ui/paragraph";
+import { reviewCardTextWrapClass } from "@/lib/review-card-text";
 import { cn } from "@/lib/utils";
 
 const ANIM_EXPAND_MS = 640;
@@ -205,15 +206,19 @@ export function ExpandableReviewText({ text }: ExpandableReviewTextProps) {
   }, []);
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col">
+    <div className="flex min-h-0 min-w-0 flex-1 flex-col">
       <div
         ref={wrapRef}
-        className={cn("relative", canExpand === true && !expanded && "pb-1")}
+        className={cn(
+          "relative min-w-0",
+          canExpand === true && !expanded && "pb-1"
+        )}
       >
         <Paragraph
           ref={pRef}
           className={cn(
             "mb-0 text-sm md:text-base italic leading-[1.8] text-muted-foreground",
+            reviewCardTextWrapClass,
             !expanded && "line-clamp-4"
           )}
         >
