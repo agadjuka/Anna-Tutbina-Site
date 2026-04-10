@@ -17,6 +17,7 @@ export function TourReviewsSection({ reviews }: TourReviewsSectionProps) {
   if (!reviews?.length) return null;
 
   const useFullCarousel = reviews.length > 4;
+  const equalWidthRow = reviews.length > 0 && reviews.length < 4;
 
   return (
     <section id="reviews" className="space-y-6">
@@ -41,11 +42,24 @@ export function TourReviewsSection({ reviews }: TourReviewsSectionProps) {
               </div>
               <ReviewsGridRowAlign
                 alignKey={reviews.map((r) => r._id).join("|")}
-                className="hidden grid-cols-1 items-stretch gap-4 md:grid sm:grid-cols-2 lg:grid-cols-4 md:gap-6"
+                className={
+                  equalWidthRow
+                    ? "hidden md:flex md:flex-row md:items-stretch md:gap-6"
+                    : "hidden grid-cols-1 items-stretch gap-4 md:grid sm:grid-cols-2 lg:grid-cols-4 md:gap-6"
+                }
               >
-                {reviews.map((review) => (
-                  <ReviewCard key={review._id} review={review} />
-                ))}
+                {reviews.map((review) =>
+                  equalWidthRow ? (
+                    <div
+                      key={review._id}
+                      className="flex min-h-0 min-w-0 flex-1 basis-0 flex-col"
+                    >
+                      <ReviewCard review={review} />
+                    </div>
+                  ) : (
+                    <ReviewCard key={review._id} review={review} />
+                  )
+                )}
               </ReviewsGridRowAlign>
             </>
           )}

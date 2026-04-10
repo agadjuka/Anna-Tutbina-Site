@@ -15,6 +15,8 @@ export function ReviewsSection({ reviews }: ReviewsSectionProps) {
 
   const shuffledReviews = shuffleReviews(reviews);
   const useFullCarousel = reviews.length > 4;
+  /** 1–3 карточки: делим ширину поровну; 4 — прежняя сетка 2×2 / 4 колонки */
+  const equalWidthRow = shuffledReviews.length > 0 && shuffledReviews.length < 4;
 
   return (
     <section className="relative bg-background pt-4 pb-6 md:pt-6 md:pb-8">
@@ -38,11 +40,24 @@ export function ReviewsSection({ reviews }: ReviewsSectionProps) {
               </div>
               <ReviewsGridRowAlign
                 alignKey={shuffledReviews.map((r) => r._id).join("|")}
-                className="hidden grid-cols-1 items-stretch gap-4 md:grid sm:grid-cols-2 lg:grid-cols-4 md:gap-6"
+                className={
+                  equalWidthRow
+                    ? "hidden md:flex md:flex-row md:items-stretch md:gap-6"
+                    : "hidden grid-cols-1 items-stretch gap-4 md:grid sm:grid-cols-2 lg:grid-cols-4 md:gap-6"
+                }
               >
-                {shuffledReviews.map((review) => (
-                  <ReviewCard key={review._id} review={review} />
-                ))}
+                {shuffledReviews.map((review) =>
+                  equalWidthRow ? (
+                    <div
+                      key={review._id}
+                      className="flex min-h-0 min-w-0 flex-1 basis-0 flex-col"
+                    >
+                      <ReviewCard review={review} />
+                    </div>
+                  ) : (
+                    <ReviewCard key={review._id} review={review} />
+                  )
+                )}
               </ReviewsGridRowAlign>
             </>
           )}
