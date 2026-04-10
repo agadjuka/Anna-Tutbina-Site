@@ -181,9 +181,49 @@ const tour = defineType({
     }),
     defineField({
       name: 'pricingDetails',
-      title: 'Детали стоимости',
-      type: 'array',
-      of: [{type: 'block'}],
+      title: 'Стоимость',
+      type: 'object',
+      fields: [
+        defineField({
+          name: 'columns',
+          title: 'Колонки',
+          type: 'array',
+          description:
+            'Несколько колонок: у каждой — заголовок и текст (как на макете раздела «Стоимость»).',
+          of: [
+            {
+              type: 'object',
+              name: 'pricingColumn',
+              title: 'Колонка',
+              fields: [
+                defineField({
+                  name: 'title',
+                  title: 'Заголовок колонки',
+                  type: 'string',
+                }),
+                defineField({
+                  name: 'text',
+                  title: 'Текст колонки',
+                  type: 'text',
+                }),
+              ],
+              preview: {
+                select: {
+                  title: 'title',
+                  subtitle: 'text',
+                },
+              },
+            },
+          ],
+        }),
+        defineField({
+          name: 'mainText',
+          title: 'Основной текст',
+          type: 'text',
+          description:
+            'Общий текст раздела «Стоимость» (отдельно от колонок). Многострочный.',
+        }),
+      ],
     }),
     defineField({
       name: 'included',
