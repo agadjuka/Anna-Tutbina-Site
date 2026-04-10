@@ -4,64 +4,55 @@ import { ReviewsCollapseBar } from "@/components/sections/reviews-collapse-bar";
 import { ReviewsExpandProvider } from "@/components/sections/reviews-expand-context";
 import { ReviewsEmbla } from "@/components/sections/reviews-embla";
 import { SectionHeading } from "@/components/ui/section-heading";
-import { cn } from "@/lib/utils";
 import type { ReviewItem } from "@/lib/utils/reviews";
 
 interface TourReviewsSectionProps {
   reviews: ReviewItem[];
 }
 
+/**
+ * Та же логика, что на главной (карусель при >4), но ширина контента как у «Что нас ждет» — max-w-4xl.
+ */
 export function TourReviewsSection({ reviews }: TourReviewsSectionProps) {
   if (!reviews?.length) return null;
 
-  // Определяем количество колонок в зависимости от количества отзывов
-  const getGridCols = (count: number) => {
-    if (count === 1) return "md:grid-cols-1";
-    if (count === 2) return "md:grid-cols-2";
-    if (count === 3) return "md:grid-cols-3";
-    return "md:grid-cols-2 lg:grid-cols-4";
-  };
-
-  // Определяем максимальную ширину контейнера для 1 отзыва
-  const getContainerWidth = (count: number) => {
-    if (count === 1) return "max-w-md";
-    return "max-w-4xl";
-  };
+  const useFullCarousel = reviews.length > 4;
 
   return (
     <section id="reviews" className="space-y-6">
       <ReviewsExpandProvider>
-        <div className="relative">
-          <SectionHeading as="h2" className="mb-6 md:mb-8">
-            Что говорят наши участницы
-          </SectionHeading>
-        </div>
+        <div className="mx-auto w-full max-w-4xl">
+          <div className="relative">
+            <SectionHeading as="h2" className="mb-6 md:mb-8">
+              Что говорят наши участницы
+            </SectionHeading>
+          </div>
 
-        {/* Мобильная горизонтальная карусель - все отзывы */}
-        <div className="md:hidden">
-          <ReviewsEmbla reviews={reviews} />
-        </div>
+          {useFullCarousel ? (
+            <ReviewsEmbla
+              variant="full"
+              fullLayout="tour"
+              reviews={reviews}
+            />
+          ) : (
+            <>
+              <div className="md:hidden">
+                <ReviewsEmbla fullLayout="tour" reviews={reviews} />
+              </div>
+              <ReviewsGridRowAlign
+                alignKey={reviews.map((r) => r._id).join("|")}
+                className="hidden grid-cols-1 items-stretch gap-4 md:grid sm:grid-cols-2 lg:grid-cols-4 md:gap-6"
+              >
+                {reviews.map((review) => (
+                  <ReviewCard key={review._id} review={review} />
+                ))}
+              </ReviewsGridRowAlign>
+            </>
+          )}
 
-        {/* Десктопная сетка с динамической шириной */}
-        <div className="flex w-full justify-center">
-          <ReviewsGridRowAlign
-            alignKey={reviews.map((r) => r._id).join("|")}
-            className={cn(
-              "hidden w-full items-stretch md:grid",
-              "gap-4 md:gap-6",
-              getGridCols(reviews.length),
-              getContainerWidth(reviews.length)
-            )}
-          >
-            {reviews.map((review) => (
-              <ReviewCard key={review._id} review={review} />
-            ))}
-          </ReviewsGridRowAlign>
+          <ReviewsCollapseBar />
         </div>
-
-        <ReviewsCollapseBar />
       </ReviewsExpandProvider>
     </section>
   );
 }
-

@@ -4,6 +4,7 @@ import useEmblaCarousel from "embla-carousel-react";
 import type { EmblaCarouselType, EmblaOptionsType } from "embla-carousel";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ReviewCard } from "@/components/sections/review-card";
+import { ReviewsGridRowAlign } from "@/components/sections/reviews-grid-row-align";
 import { cn } from "@/lib/utils";
 import type { ReviewItem } from "@/lib/utils/reviews";
 
@@ -16,6 +17,11 @@ interface ReviewsEmblaProps {
    * `full` — главная при >4 отзывов: как ProgramDaysCarousel (стрелки, точки), 4 карточки в ряд на md+.
    */
   variant?: ReviewsEmblaVariant;
+  /**
+   * `home` — ширина как на главной (`max-w-screen-xl` + отступы).
+   * `tour` — внутри колонки страницы тура (`max-w-4xl` задаётся снаружи, здесь без лишнего px).
+   */
+  fullLayout?: "home" | "tour";
 }
 
 /** Как в ProgramDaysCarousel: круглые кнопки с обводкой #bea692 */
@@ -78,8 +84,10 @@ function ArrowIconRight({ className }: { className?: string }) {
 export function ReviewsEmbla({
   reviews,
   variant = "default",
+  fullLayout = "home",
 }: ReviewsEmblaProps) {
   const isFull = variant === "full";
+  const isTourLayout = fullLayout === "tour";
 
   const options = useMemo(
     () =>
@@ -188,7 +196,8 @@ export function ReviewsEmbla({
         className="overflow-x-hidden overflow-y-visible py-2"
         ref={viewportRef}
       >
-        <div
+        <ReviewsGridRowAlign
+          alignKey={reviewsKey}
           className={cn(
             "flex items-start pr-1",
             isFull ? "gap-6" : "gap-3 sm:gap-4"
@@ -199,7 +208,7 @@ export function ReviewsEmbla({
               <ReviewCard review={review} />
             </div>
           ))}
-        </div>
+        </ReviewsGridRowAlign>
       </div>
     </>
   );
@@ -262,7 +271,14 @@ export function ReviewsEmbla({
   /* ----- full: как ProgramDaysCarousel; стрелки внутри полосы (не за пределами — иначе режет overflow) ----- */
   return (
     <section className="pt-2 md:pt-4">
-      <div className="mx-auto w-full max-w-screen-xl px-4 md:px-8">
+      <div
+        className={cn(
+          "mx-auto w-full",
+          isTourLayout
+            ? "max-w-full px-0"
+            : "max-w-screen-xl px-4 md:px-8"
+        )}
+      >
         <div className="relative">
           {trackInner}
 
