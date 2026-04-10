@@ -55,7 +55,6 @@ export const tourBySlugQuery = groq`
         metadata{dimensions{width,height,aspectRatio}}
       }
     },
-    fullProgram,
     programByDays[]{
       dayTitle,
       dayImage[]{

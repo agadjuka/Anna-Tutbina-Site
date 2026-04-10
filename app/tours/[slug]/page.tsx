@@ -86,7 +86,6 @@ interface TourData {
   overlayDate?: any;
   introText?: any;
   atmosphereGallery?: any[];
-  fullProgram?: any;
   programByDays?: ProgramDay[];
   accommodation?: AccommodationLocation[];
   dates?: string;
@@ -239,26 +238,6 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
                 </SectionHeading>
               </div>
               <ProgramDaysCarousel days={tour.programByDays} />
-            </section>
-          )}
-
-          {tour.fullProgram && (
-            <section className="space-y-6">
-              <div className="w-full flex justify-center">
-                <div className="max-w-4xl w-full bg-white rounded-2xl p-8 md:p-12 shadow-card">
-                  <div className="relative">
-                    <SectionHeading as="h2" className="mb-4">
-                      Полная программа тура
-                    </SectionHeading>
-                  </div>
-                  <div className="prose prose-lg max-w-none">
-                    <PortableTextContent 
-                      value={tour.fullProgram} 
-                      className="text-base md:text-xl leading-relaxed text-muted-foreground" 
-                    />
-                  </div>
-                </div>
-              </div>
             </section>
           )}
 
