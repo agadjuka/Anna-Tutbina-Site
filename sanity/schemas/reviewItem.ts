@@ -12,6 +12,12 @@ const reviewItem = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'profession',
+      title: 'Профессия',
+      type: 'string',
+      description: 'Например: дизайнер, психолог, предприниматель',
+    }),
+    defineField({
       name: 'authorImage',
       title: 'Фото автора',
       type: 'image',
@@ -32,7 +38,7 @@ const reviewItem = defineType({
   preview: {
     select: {
       title: 'authorName',
-      subtitle: 'text',
+      subtitle: 'profession',
       media: 'authorImage',
     },
   },

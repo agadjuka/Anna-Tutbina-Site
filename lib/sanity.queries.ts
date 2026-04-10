@@ -106,6 +106,7 @@ export const tourBySlugQuery = groq`
     reviews[]{
       _key,
       authorName,
+      profession,
       authorImage{
         ...,
         asset->{
@@ -141,6 +142,7 @@ export const toursWithReviewsQuery = groq`
     reviews[]{
       _key,
       authorName,
+      profession,
       authorImage{
         ...,
         asset->{

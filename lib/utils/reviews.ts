@@ -1,6 +1,7 @@
 export interface ReviewItem {
   _id: string;
   authorName: string;
+  profession?: string | null;
   authorImage: any;
   text: string;
 }
@@ -8,6 +9,7 @@ export interface ReviewItem {
 export interface TourReviewRaw {
   _key: string;
   authorName: string;
+  profession?: string | null;
   authorImage: any;
   text: string;
 }
@@ -20,6 +22,7 @@ export function normalizeTourReviews(
   return (reviews ?? []).map((r) => ({
     _id: `${tourId}-${r._key}`,
     authorName: r.authorName,
+    profession: r.profession,
     authorImage: r.authorImage,
     text: r.text,
   }));
@@ -35,6 +38,7 @@ export function flattenReviewsFromTours(
       out.push({
         _id: `${t._id}-${r._key}`,
         authorName: r.authorName,
+        profession: r.profession,
         authorImage: r.authorImage,
         text: r.text,
       });

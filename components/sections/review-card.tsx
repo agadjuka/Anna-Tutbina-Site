@@ -20,28 +20,27 @@ export function ReviewCard({ review }: ReviewCardProps) {
           <div className="absolute -bottom-1 left-0 w-3 h-3 rounded-full bg-[#bea692] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
           <div className="flex w-full items-center gap-3">
-            <div className="relative">
+            <div className="relative shrink-0">
               <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#bea692]/30 to-[#e5e0db]/30 blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <SanityImage
-                image={review.authorImage}
-                width={56}
-                height={56}
-                alt={review.authorName}
-                className="relative h-10 w-10 md:h-12 md:w-12 rounded-full object-cover ring-2 ring-[#e5e0db] group-hover:ring-[#bea692]/30 transition-all duration-300"
-              />
+              <div className="relative h-10 w-10 md:h-12 md:w-12 overflow-hidden rounded-full ring-2 ring-[#e5e0db] group-hover:ring-[#bea692]/30 transition-all duration-300">
+                <SanityImage
+                  image={review.authorImage}
+                  width={56}
+                  height={56}
+                  alt={review.authorName}
+                  className="h-full w-full object-cover"
+                />
+              </div>
             </div>
-            <div>
-              <Paragraph className="mb-0.5 font-semibold text-foreground text-sm md:text-base">
+            <div className="min-w-0">
+              <Paragraph className="mb-0 font-semibold text-foreground text-sm md:text-base">
                 {review.authorName}
               </Paragraph>
-              <div className="flex items-center gap-1">
-                {[...Array(5)].map((_, i) => (
-                  <div
-                    key={i}
-                    className="h-1 w-1 rounded-full bg-[#bea692]/40"
-                  />
-                ))}
-              </div>
+              {review.profession?.trim() ? (
+                <Paragraph className="mt-0.5 mb-0 text-sm italic text-muted-foreground">
+                  {review.profession.trim()}
+                </Paragraph>
+              ) : null}
             </div>
           </div>
         </div>
