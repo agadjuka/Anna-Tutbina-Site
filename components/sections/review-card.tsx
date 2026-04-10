@@ -5,10 +5,6 @@ import { reviewCardTextWrapClass } from "@/lib/review-card-text";
 import { cn } from "@/lib/utils";
 import type { ReviewItem } from "@/lib/utils/reviews";
 
-/** Как у имени: все строки профессии с одного отступа (аватар + gap-3) */
-const professionIndent =
-  "pl-[calc(2.5rem+0.75rem)] md:pl-[calc(3rem+0.75rem)]";
-
 interface ReviewCardProps {
   review: ReviewItem;
 }
@@ -30,8 +26,8 @@ export function ReviewCard({ review }: ReviewCardProps) {
       >
         <div className="absolute -bottom-1 left-0 h-3 w-3 rounded-full bg-[#bea692] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
-        <div className="grid w-full min-w-0 grid-cols-[auto_1fr] gap-x-3 items-start">
-          <div className="relative row-start-1 shrink-0 self-start">
+        <div className="flex w-full min-w-0 items-start gap-3">
+          <div className="relative shrink-0 self-start">
             <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#bea692]/30 to-[#e5e0db]/30 opacity-0 blur-md transition-opacity duration-500 group-hover:opacity-100" />
             <div className="relative h-10 w-10 overflow-hidden rounded-full ring-2 ring-[#e5e0db] transition-all duration-300 group-hover:ring-[#bea692]/30 md:h-12 md:w-12">
               <SanityImage
@@ -43,25 +39,26 @@ export function ReviewCard({ review }: ReviewCardProps) {
               />
             </div>
           </div>
-          <Paragraph
-            className={cn(
-              "row-start-1 col-start-2 mb-0 text-sm font-semibold text-foreground md:text-base",
-              reviewCardTextWrapClass
-            )}
-          >
-            {review.authorName}
-          </Paragraph>
-          {review.profession?.trim() ? (
-            <p
+          <div className="flex min-h-0 min-w-0 flex-1 flex-col gap-0.5">
+            <Paragraph
               className={cn(
-                "col-span-2 row-start-2 mt-0.5 mb-0 text-xs italic leading-snug text-muted-foreground md:text-sm",
-                reviewCardTextWrapClass,
-                professionIndent
+                "mb-0 text-sm font-semibold text-foreground md:text-base",
+                reviewCardTextWrapClass
               )}
             >
-              {review.profession.trim()}
-            </p>
-          ) : null}
+              {review.authorName}
+            </Paragraph>
+            {review.profession?.trim() ? (
+              <p
+                className={cn(
+                  "mb-0 text-xs italic leading-snug text-muted-foreground md:text-sm",
+                  reviewCardTextWrapClass
+                )}
+              >
+                {review.profession.trim()}
+              </p>
+            ) : null}
+          </div>
         </div>
       </div>
 
