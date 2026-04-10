@@ -207,9 +207,9 @@ export function ProgramDaysCarousel({ days }: ProgramDaysCarouselProps) {
                 "absolute top-1/2 -translate-y-1/2 z-10 pointer-events-auto",
                 "w-12 h-12 md:w-14 md:h-14 rounded-full",
                 "flex items-center justify-center",
-                "bg-white/95 backdrop-blur-sm border-2 border-[#bea692]",
+                "border-2 border-[#bea692] bg-transparent backdrop-blur-sm",
                 "transition-all duration-200",
-                "hover:bg-white hover:shadow-xl hover:scale-110",
+                "hover:bg-[#bea692]/10 hover:shadow-xl hover:scale-110",
                 "disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:scale-100",
                 "left-0 -translate-x-full -ml-4 md:-ml-6"
               )}
@@ -240,9 +240,9 @@ export function ProgramDaysCarousel({ days }: ProgramDaysCarouselProps) {
                 "absolute top-1/2 -translate-y-1/2 z-10 pointer-events-auto",
                 "w-12 h-12 md:w-14 md:h-14 rounded-full",
                 "flex items-center justify-center",
-                "bg-white/95 backdrop-blur-sm border-2 border-[#bea692]",
+                "border-2 border-[#bea692] bg-transparent backdrop-blur-sm",
                 "transition-all duration-200",
-                "hover:bg-white hover:shadow-xl hover:scale-110",
+                "hover:bg-[#bea692]/10 hover:shadow-xl hover:scale-110",
                 "disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:scale-100",
                 "right-0 translate-x-full -mr-4 md:-mr-6"
               )}
@@ -281,9 +281,9 @@ export function ProgramDaysCarousel({ days }: ProgramDaysCarouselProps) {
                 "absolute left-0 top-1/2 -translate-y-1/2",
                 "w-12 h-12 rounded-full",
                 "flex items-center justify-center",
-                "bg-white/95 backdrop-blur-sm border-2 border-[#bea692]",
+                "border-2 border-[#bea692] bg-transparent backdrop-blur-sm",
                 "transition-all duration-200",
-                "active:bg-white active:shadow-xl active:scale-110",
+                "active:bg-[#bea692]/15 active:shadow-xl active:scale-110",
                 "disabled:opacity-30 disabled:cursor-not-allowed disabled:active:scale-100"
               )}
               aria-label="Предыдущий день"
@@ -329,9 +329,9 @@ export function ProgramDaysCarousel({ days }: ProgramDaysCarouselProps) {
                 "absolute right-0 top-1/2 -translate-y-1/2",
                 "w-12 h-12 rounded-full",
                 "flex items-center justify-center",
-                "bg-white/95 backdrop-blur-sm border-2 border-[#bea692]",
+                "border-2 border-[#bea692] bg-transparent backdrop-blur-sm",
                 "transition-all duration-200",
-                "active:bg-white active:shadow-xl active:scale-110",
+                "active:bg-[#bea692]/15 active:shadow-xl active:scale-110",
                 "disabled:opacity-30 disabled:cursor-not-allowed disabled:active:scale-100"
               )}
               aria-label="Следующий день"

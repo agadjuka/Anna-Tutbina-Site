@@ -59,11 +59,3 @@ export function shuffleReviews<T extends ReviewItem>(reviews: T[]): T[] {
   return shuffled;
 }
 
-/**
- * Выбирает случайно 4 отзыва из массива
- */
-export function getRandomReviews<T extends ReviewItem>(reviews: T[], count: number = 4): T[] {
-  const shuffled = shuffleReviews(reviews);
-  return shuffled.slice(0, Math.min(count, shuffled.length));
-}
-
