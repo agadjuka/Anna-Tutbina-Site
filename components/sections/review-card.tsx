@@ -37,9 +37,9 @@ export function ReviewCard({ review }: ReviewCardProps) {
                 {review.authorName}
               </Paragraph>
               {review.profession?.trim() ? (
-                <Paragraph className="mt-0.5 mb-0 text-sm italic text-muted-foreground">
+                <p className="mt-0.5 mb-0 text-xs leading-snug italic text-muted-foreground md:text-sm">
                   {review.profession.trim()}
-                </Paragraph>
+                </p>
               ) : null}
             </div>
           </div>
