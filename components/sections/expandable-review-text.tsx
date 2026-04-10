@@ -8,6 +8,7 @@ import {
   useState,
 } from "react";
 import { useReviewsExpand } from "@/components/sections/reviews-expand-context";
+import { FitOneLineActionLabel } from "@/components/sections/fit-one-line-action-label";
 import {
   reviewActionButtonClass,
   reviewActionIconClass,
@@ -227,14 +228,14 @@ export function ExpandableReviewText({ text }: ExpandableReviewTextProps) {
       </div>
 
       {canExpand === true && !expanded && (
-        <div className="mt-3 flex shrink-0 justify-center">
+        <div className="mt-3 flex w-full min-w-0 shrink-0 justify-center">
           <button
             type="button"
             onClick={expandAll}
             aria-expanded={false}
             className={reviewActionButtonClass}
           >
-            <span className="relative z-10">Читать дальше</span>
+            <FitOneLineActionLabel>Читать дальше</FitOneLineActionLabel>
             <svg
               className={reviewActionIconClass}
               viewBox="0 0 12 12"
