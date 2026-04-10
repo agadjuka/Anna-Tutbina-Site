@@ -1,12 +1,6 @@
 import { Paragraph } from "@/components/ui/paragraph";
 import { SanityImage } from "@/components/ui/sanity-image";
-
-interface ReviewItem {
-  _id: string;
-  authorName: string;
-  authorImage: any;
-  text: string;
-}
+import type { ReviewItem } from "@/lib/utils/reviews";
 
 interface ReviewCardProps {
   review: ReviewItem;

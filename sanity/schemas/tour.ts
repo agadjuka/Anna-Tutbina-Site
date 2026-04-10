@@ -248,6 +248,19 @@ const tour = defineType({
         },
       ],
     }),
+    defineField({
+      name: 'reviews',
+      title: 'Отзывы',
+      type: 'array',
+      of: [
+        {
+          type: 'reviewItem',
+          title: 'Отзыв',
+        },
+      ],
+      description:
+        'У каждого отзыва: имя автора, фото и текст. Порядок в списке — как на сайте. Блок на главной собирает отзывы со всех туров.',
+    }),
   ],
   preview: {
     select: {

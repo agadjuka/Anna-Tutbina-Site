@@ -2,13 +2,7 @@ import { ReviewCard } from "@/components/sections/review-card";
 import { ReviewsEmbla } from "@/components/sections/reviews-embla";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { cn } from "@/lib/utils";
-
-interface ReviewItem {
-  _id: string;
-  authorName: string;
-  authorImage: any;
-  text: string;
-}
+import type { ReviewItem } from "@/lib/utils/reviews";
 
 interface TourReviewsSectionProps {
   reviews: ReviewItem[];

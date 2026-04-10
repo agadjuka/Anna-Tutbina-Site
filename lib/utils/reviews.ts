@@ -1,8 +1,46 @@
-interface ReviewItem {
+export interface ReviewItem {
   _id: string;
   authorName: string;
   authorImage: any;
   text: string;
+}
+
+export interface TourReviewRaw {
+  _key: string;
+  authorName: string;
+  authorImage: any;
+  text: string;
+}
+
+/** Отзывы с страницы тура → стабильный _id для ключей React */
+export function normalizeTourReviews(
+  reviews: TourReviewRaw[] | undefined,
+  tourId: string
+): ReviewItem[] {
+  return (reviews ?? []).map((r) => ({
+    _id: `${tourId}-${r._key}`,
+    authorName: r.authorName,
+    authorImage: r.authorImage,
+    text: r.text,
+  }));
+}
+
+/** Все отзывы с туров для главной */
+export function flattenReviewsFromTours(
+  tours: {_id: string; reviews?: TourReviewRaw[]}[]
+): ReviewItem[] {
+  const out: ReviewItem[] = [];
+  for (const t of tours) {
+    for (const r of t.reviews ?? []) {
+      out.push({
+        _id: `${t._id}-${r._key}`,
+        authorName: r.authorName,
+        authorImage: r.authorImage,
+        text: r.text,
+      });
+    }
+  }
+  return out;
 }
 
 /**

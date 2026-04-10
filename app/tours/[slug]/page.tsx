@@ -1,5 +1,5 @@
 import { sanityClient } from "@/lib/sanity.client";
-import { tourBySlugQuery, tourMetadataQuery, tourReviewsQuery } from "@/lib/sanity.queries";
+import { tourBySlugQuery, tourMetadataQuery } from "@/lib/sanity.queries";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { Container } from "@/components/ui/container";
 import { SanityImage } from "@/components/ui/sanity-image";
@@ -16,6 +16,7 @@ import { OrganizersSection } from "@/components/sections/organizers-section";
 import { RecommendedFlightsSection } from "@/components/sections/recommended-flights-section";
 import { TourNavigation } from "@/components/sections/tour-navigation";
 import { WantToJoinButton } from "@/components/sections/want-to-join-button";
+import { normalizeTourReviews, type TourReviewRaw } from "@/lib/utils/reviews";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -95,13 +96,7 @@ interface TourData {
   notIncluded?: any;
   recommendedFlights?: RecommendedFlights;
   organizers?: Organizer[];
-}
-
-interface ReviewItem {
-  _id: string;
-  authorName: string;
-  authorImage: any;
-  text: string;
+  reviews?: TourReviewRaw[];
 }
 
 export default async function TourPage({ params }: { params: Promise<{ slug?: string }> }) {
@@ -117,7 +112,7 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
     notFound();
   }
 
-  const reviews = await sanityClient.fetch<ReviewItem[]>(tourReviewsQuery, { tourId: tour._id });
+  const reviews = normalizeTourReviews(tour.reviews, tour._id);
 
   return (
     <main className="min-h-screen bg-background py-12 md:py-16">

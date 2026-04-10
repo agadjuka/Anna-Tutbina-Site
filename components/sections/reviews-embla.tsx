@@ -4,13 +4,7 @@ import useEmblaCarousel from "embla-carousel-react";
 import type { EmblaOptionsType } from "embla-carousel";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ReviewCard } from "@/components/sections/review-card";
-
-interface ReviewItem {
-  _id: string;
-  authorName: string;
-  authorImage: any;
-  text: string;
-}
+import type { ReviewItem } from "@/lib/utils/reviews";
 
 interface ReviewsEmblaProps {
   reviews: ReviewItem[];

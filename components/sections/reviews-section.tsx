@@ -1,14 +1,7 @@
 import { ReviewCard } from "@/components/sections/review-card";
 import { ReviewsEmbla } from "@/components/sections/reviews-embla";
 import { SectionHeading } from "@/components/ui/section-heading";
-import { shuffleReviews, getRandomReviews } from "@/lib/utils/reviews";
-
-interface ReviewItem {
-  _id: string;
-  authorName: string;
-  authorImage: any;
-  text: string;
-}
+import { shuffleReviews, getRandomReviews, type ReviewItem } from "@/lib/utils/reviews";
 
 interface ReviewsSectionProps {
   reviews: ReviewItem[];

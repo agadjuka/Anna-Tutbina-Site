@@ -103,6 +103,18 @@ export const tourBySlugQuery = groq`
         }
       },
       bio
+    },
+    reviews[]{
+      _key,
+      authorName,
+      authorImage{
+        ...,
+        asset->{
+          _id,
+          metadata{dimensions{width,height,aspectRatio}}
+        }
+      },
+      text
     }
   }
 `;
@@ -123,21 +135,22 @@ export const aboutQuery = groq`
 `;
 
 
-export const reviewsQuery = groq`
-  *[_type == "review"]{
+/** Все отзывы из полей туров (для главной: объединяем и перемешиваем на клиенте) */
+export const toursWithReviewsQuery = groq`
+  *[_type == "tour"]|order(orderRank){
     _id,
-    authorName,
-    authorImage,
-    text
-  }
-`;
-
-export const tourReviewsQuery = groq`
-  *[_type == "review" && $tourId in tours[]._ref]{
-    _id,
-    authorName,
-    authorImage,
-    text
+    reviews[]{
+      _key,
+      authorName,
+      authorImage{
+        ...,
+        asset->{
+          _id,
+          metadata{dimensions{width,height,aspectRatio}}
+        }
+      },
+      text
+    }
   }
 `;
 

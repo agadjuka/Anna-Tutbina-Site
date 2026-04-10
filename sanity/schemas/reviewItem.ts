@@ -1,9 +1,9 @@
 import {defineType, defineField} from 'sanity'
 
-const review = defineType({
-  name: 'review',
+const reviewItem = defineType({
+  name: 'reviewItem',
   title: 'Отзыв',
-  type: 'document',
+  type: 'object',
   fields: [
     defineField({
       name: 'authorName',
@@ -23,28 +23,19 @@ const review = defineType({
       name: 'text',
       title: 'Текст отзыва',
       type: 'text',
+      options: {
+        rows: 6,
+      },
       validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: 'tours',
-      title: 'Отзыв относится к турам',
-      type: 'array',
-      of: [
-        {
-          type: 'reference',
-          to: [{type: 'tour'}],
-        },
-      ],
     }),
   ],
   preview: {
     select: {
       title: 'authorName',
-      media: 'authorImage',
       subtitle: 'text',
+      media: 'authorImage',
     },
   },
 })
 
-export default review
-
+export default reviewItem
