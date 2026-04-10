@@ -94,10 +94,9 @@ export function TourPricingSection({ pricingDetails }: TourPricingSectionProps) 
   const mainText = typeof p.mainText === "string" ? p.mainText.trim() : "";
   const n = columns.length;
 
-  const splitGridTwo =
-    "grid w-full max-w-3xl grid-cols-2 gap-x-4 gap-y-0 md:gap-x-6 mx-auto";
-  const splitGridThree =
-    "grid w-full grid-cols-3 gap-x-4 gap-y-0 md:gap-x-6";
+  /* Вся ширина родителя max-w-4xl — как блок основного текста; grid-cols-* даёт равные колонки */
+  const splitGridTwo = "grid w-full min-w-0 grid-cols-2 gap-x-4 gap-y-0 md:gap-x-6";
+  const splitGridThree = "grid w-full min-w-0 grid-cols-3 gap-x-4 gap-y-0 md:gap-x-6";
 
   return (
     <div className="w-full flex justify-center">
@@ -110,7 +109,7 @@ export function TourPricingSection({ pricingDetails }: TourPricingSectionProps) 
               </div>
             ) : n === 2 ? (
               <>
-                <div className="mx-auto flex w-full max-w-md flex-col gap-4 sm:hidden">
+                <div className="flex w-full min-w-0 flex-col gap-4 sm:hidden">
                   <SinglePricingCard title={columns[0].title} text={columns[0].text} />
                   <SinglePricingCard title={columns[1].title} text={columns[1].text} />
                 </div>
@@ -120,7 +119,7 @@ export function TourPricingSection({ pricingDetails }: TourPricingSectionProps) 
               </>
             ) : (
               <>
-                <div className="mx-auto flex w-full max-w-md flex-col gap-4 md:hidden">
+                <div className="flex w-full min-w-0 flex-col gap-4 md:hidden">
                   {columns.map((col, i) => (
                     <SinglePricingCard key={`stack-${i}`} title={col.title} text={col.text} />
                   ))}
