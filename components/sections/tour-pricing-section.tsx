@@ -20,8 +20,25 @@ function normalizeColumns(raw: PricingDetailsSanity): { title: string; text: str
     .filter((c) => c.title.length > 0 || c.text.length > 0);
 }
 
-/** Заголовки в одной строке grid — выравниваются по самой высокой ячейке; текст короче центрируется по вертикали */
-function PricingHeadersAndBodies({
+function SinglePricingCard({ title, text }: { title: string; text: string }) {
+  return (
+    <div className="flex min-h-0 flex-col overflow-hidden rounded-2xl border border-border/80 bg-card shadow-card">
+      <div className="flex min-h-[3.5rem] items-center justify-center bg-[#bea692] px-4 py-3 text-center md:px-5 md:py-4">
+        <p className="font-heading text-sm md:text-base font-medium uppercase tracking-[0.12em] text-white text-balance">
+          {title || "\u00a0"}
+        </p>
+      </div>
+      <div className="flex flex-1 flex-col px-4 py-5 md:px-5 md:py-6">
+        <p className="flex-1 whitespace-pre-wrap text-base md:text-lg leading-relaxed text-muted-foreground">
+          {text || "\u00a0"}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+/** Первая строка grid — только заголовки: высота строки = max(высот); короткий текст по центру по вертикали */
+function PricingHeadersThenBodies({
   columns,
   gridClass,
 }: {
@@ -43,7 +60,7 @@ function PricingHeadersAndBodies({
       {columns.map((col, i) => (
         <div
           key={`b-${i}-${col.title}`}
-          className="flex min-h-0 flex-col border border-border/80 border-t-0 bg-card px-4 py-5 shadow-card md:px-5 md:py-6 rounded-b-2xl"
+          className="flex min-h-0 flex-col rounded-b-2xl border border-border/80 border-t-0 bg-card px-4 py-5 shadow-card md:px-5 md:py-6"
         >
           <p className="flex-1 whitespace-pre-wrap text-base md:text-lg leading-relaxed text-muted-foreground">
             {col.text || "\u00a0"}
@@ -77,10 +94,10 @@ export function TourPricingSection({ pricingDetails }: TourPricingSectionProps) 
   const mainText = typeof p.mainText === "string" ? p.mainText.trim() : "";
   const n = columns.length;
 
-  const multiColumnGridClass =
-    n === 2
-      ? "grid w-full max-w-3xl grid-cols-1 grid-rows-[auto_auto] gap-x-4 gap-y-0 sm:grid-cols-2 sm:grid-rows-[auto_1fr] md:gap-x-6 mx-auto"
-      : "grid w-full grid-cols-1 gap-x-4 gap-y-0 md:grid-cols-3 md:gap-x-6";
+  const splitGridTwo =
+    "grid w-full max-w-3xl grid-cols-2 gap-x-4 gap-y-0 md:gap-x-6 mx-auto";
+  const splitGridThree =
+    "grid w-full grid-cols-3 gap-x-4 gap-y-0 md:gap-x-6";
 
   return (
     <div className="w-full flex justify-center">
@@ -89,21 +106,29 @@ export function TourPricingSection({ pricingDetails }: TourPricingSectionProps) 
           <div className="w-full">
             {n === 1 ? (
               <div className="mx-auto w-full max-w-md">
-                <div className="flex min-h-0 flex-col overflow-hidden rounded-2xl border border-border/80 bg-card shadow-card">
-                  <div className="flex min-h-[3.5rem] items-center justify-center bg-[#bea692] px-4 py-3 text-center md:px-5 md:py-4">
-                    <p className="font-heading text-sm md:text-base font-medium uppercase tracking-[0.12em] text-white text-balance">
-                      {columns[0].title || "\u00a0"}
-                    </p>
-                  </div>
-                  <div className="flex flex-1 flex-col px-4 py-5 md:px-5 md:py-6">
-                    <p className="flex-1 whitespace-pre-wrap text-base md:text-lg leading-relaxed text-muted-foreground">
-                      {columns[0].text || "\u00a0"}
-                    </p>
-                  </div>
-                </div>
+                <SinglePricingCard title={columns[0].title} text={columns[0].text} />
               </div>
+            ) : n === 2 ? (
+              <>
+                <div className="mx-auto flex w-full max-w-md flex-col gap-4 sm:hidden">
+                  <SinglePricingCard title={columns[0].title} text={columns[0].text} />
+                  <SinglePricingCard title={columns[1].title} text={columns[1].text} />
+                </div>
+                <div className="hidden sm:block">
+                  <PricingHeadersThenBodies columns={columns} gridClass={splitGridTwo} />
+                </div>
+              </>
             ) : (
-              <PricingHeadersAndBodies columns={columns} gridClass={multiColumnGridClass} />
+              <>
+                <div className="mx-auto flex w-full max-w-md flex-col gap-4 md:hidden">
+                  {columns.map((col, i) => (
+                    <SinglePricingCard key={`stack-${i}`} title={col.title} text={col.text} />
+                  ))}
+                </div>
+                <div className="hidden md:block">
+                  <PricingHeadersThenBodies columns={columns} gridClass={splitGridThree} />
+                </div>
+              </>
             )}
           </div>
         )}
