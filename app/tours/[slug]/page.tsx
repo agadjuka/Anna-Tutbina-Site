@@ -17,6 +17,8 @@ import { RecommendedFlightsSection } from "@/components/sections/recommended-fli
 import { TourNavigation } from "@/components/sections/tour-navigation";
 import { WantToJoinButton } from "@/components/sections/want-to-join-button";
 import { normalizeTourReviews, type TourReviewRaw } from "@/lib/utils/reviews";
+import { hasPricingSectionContent } from "@/lib/utils/tour-pricing";
+import { TourPricingSection } from "@/components/sections/tour-pricing-section";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -200,7 +202,7 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
                     { id: "about-tour", label: "О туре", available: !!tour.introText },
                     { id: "program", label: "Что нас ждет?", available: !!(tour.programByDays && tour.programByDays.length > 0) },
                     { id: "accommodation", label: "Размещение", available: !!(tour.accommodation && tour.accommodation.length > 0) },
-                    { id: "pricing", label: "Стоимость", available: !!tour.pricingDetails },
+                    { id: "pricing", label: "Стоимость", available: hasPricingSectionContent(tour.pricingDetails) },
                     { id: "conditions", label: "Условия", available: !!(tour.included || tour.notIncluded) },
                     { id: "flights", label: "Рейсы", available: !!tour.recommendedFlights },
                     { id: "reviews", label: "Отзывы", available: !!(reviews && reviews.length > 0) },
@@ -252,21 +254,14 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
             </section>
           )}
 
-          {tour.pricingDetails && (
+          {hasPricingSectionContent(tour.pricingDetails) && (
             <section id="pricing" className="space-y-6">
               <div className="relative">
                 <SectionHeading as="h2" className="mb-4">
                   Стоимость
                 </SectionHeading>
               </div>
-              <div className="w-full flex justify-center">
-                <div className="max-w-4xl w-full prose prose-lg">
-                  <PortableTextContent 
-                    value={tour.pricingDetails} 
-                    className="text-base md:text-xl leading-relaxed text-muted-foreground text-justify" 
-                  />
-                </div>
-              </div>
+              <TourPricingSection pricingDetails={tour.pricingDetails} />
             </section>
           )}
 
