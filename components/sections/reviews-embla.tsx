@@ -275,8 +275,9 @@ export function ReviewsEmbla({
                 className={cn(
                   programArrowClass,
                   programArrowHover,
-                  "absolute top-1/2 left-2 z-20 hidden -translate-y-1/2 md:flex",
-                  "h-12 w-12 md:left-3 md:h-14 md:w-14"
+                  /* Фиксировано от верха полосы: при раскрытии «Читать дальше» не ездит к центру */
+                  "absolute left-2 top-16 z-20 hidden md:flex",
+                  "h-12 w-12 md:left-3 md:top-20 md:h-14 md:w-14"
                 )}
                 aria-label="Предыдущие отзывы"
               >
@@ -289,8 +290,8 @@ export function ReviewsEmbla({
                 className={cn(
                   programArrowClass,
                   programArrowHover,
-                  "absolute top-1/2 right-2 z-20 hidden -translate-y-1/2 md:flex",
-                  "h-12 w-12 md:right-3 md:h-14 md:w-14"
+                  "absolute right-2 top-16 z-20 hidden md:flex",
+                  "h-12 w-12 md:right-3 md:top-20 md:h-14 md:w-14"
                 )}
                 aria-label="Следующие отзывы"
               >
