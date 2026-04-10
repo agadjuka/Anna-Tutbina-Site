@@ -1,10 +1,12 @@
 import { groq } from "next-sanity";
+import { GROQ_TOUR_VISIBLE_ON_SITE } from "./tour-visibility";
 
 export const toursQuery = groq`
-  *[_type == "tour" && hideFromSite != true]|order(orderRank){
+  *[_type == "tour" && (${GROQ_TOUR_VISIBLE_ON_SITE})]|order(orderRank){
     _id,
     name,
     slug,
+    hideFromSite,
     cardImage{
       ...,
       asset->{
@@ -27,7 +29,7 @@ export const toursQuery = groq`
 
 
 export const tourBySlugQuery = groq`
-  *[_type == "tour" && slug.current == $slug && hideFromSite != true][0]{
+  *[_type == "tour" && slug.current == $slug && (${GROQ_TOUR_VISIBLE_ON_SITE})][0]{
     _id,
     name,
     slug,
@@ -120,7 +122,7 @@ export const tourBySlugQuery = groq`
 `;
 
 export const tourMetadataQuery = groq`
-  *[_type == "tour" && slug.current == $slug && hideFromSite != true][0]{
+  *[_type == "tour" && slug.current == $slug && (${GROQ_TOUR_VISIBLE_ON_SITE})][0]{
     name,
     shortDescription
   }

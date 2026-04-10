@@ -1,17 +1,20 @@
+import { unstable_noStore as noStore } from "next/cache";
 import { Container } from "@/components/ui/container";
-import { Heading } from "@/components/ui/heading";
 import { TourCardWrapper } from "@/components/sections/tour-card-wrapper";
 import { ToursEmbla } from "@/components/sections/tours-embla";
 import { sanityClient } from "@/lib/sanity.client";
 import { toursQuery, aboutQuery, toursWithReviewsQuery, customTourQuery, faqQuery } from "@/lib/sanity.queries";
+import { isTourVisibleOnSite } from "@/lib/tour-visibility";
 import { AboutSection } from "@/components/sections/about-section";
 import { ReviewsSection } from "@/components/sections/reviews-section";
 import { CustomTourSection } from "@/components/sections/custom-tour-section";
 import { SectionHeading } from "@/components/ui/section-heading";
-import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { FaqSection } from "@/components/sections/faq-section";
 import { flattenReviewsFromTours, type TourReviewRaw } from "@/lib/utils/reviews";
+
+/** Список туров и отзывы должны совпадать с Sanity без устаревшего статического кэша. */
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Главная",
@@ -35,14 +38,22 @@ interface TourItem {
   price?: SanityPrice;
 }
 
+type TourItemFromSanity = TourItem & { hideFromSite?: boolean | null };
+
 export default async function HomePage() {
-  const [tours, about, toursForReviews, customTour, faqItems] = await Promise.all([
-    sanityClient.fetch<TourItem[]>(toursQuery),
+  noStore();
+
+  const [toursRaw, about, toursForReviews, customTour, faqItems] = await Promise.all([
+    sanityClient.fetch<TourItemFromSanity[]>(toursQuery),
     sanityClient.fetch<{ image: any; bio: any }>(aboutQuery),
     sanityClient.fetch<{ _id: string; reviews?: TourReviewRaw[] }[]>(toursWithReviewsQuery),
     sanityClient.fetch<{ title: string; mainImage: any } | null>(customTourQuery),
     sanityClient.fetch(faqQuery),
   ]);
+
+  const tours: TourItem[] = toursRaw
+    .filter((t) => isTourVisibleOnSite(t.hideFromSite))
+    .map(({ hideFromSite: _hidden, ...rest }) => rest);
 
   const reviews = flattenReviewsFromTours(toursForReviews);
 
