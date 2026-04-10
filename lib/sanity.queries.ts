@@ -135,9 +135,9 @@ export const aboutQuery = groq`
 `;
 
 
-/** Все отзывы из полей туров (для главной: объединяем и перемешиваем на клиенте) */
+/** Все отзывы из полей туров (для главной: объединяем и перемешиваем на клиенте). Скрытые туры в списке не показываются, но их отзывы здесь учитываются. */
 export const toursWithReviewsQuery = groq`
-  *[_type == "tour" && hideFromSite != true]|order(orderRank){
+  *[_type == "tour"]|order(orderRank){
     _id,
     reviews[]{
       _key,
