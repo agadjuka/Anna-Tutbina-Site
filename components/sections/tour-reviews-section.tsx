@@ -1,4 +1,6 @@
 import { ReviewCard } from "@/components/sections/review-card";
+import { ReviewsCollapseBar } from "@/components/sections/reviews-collapse-bar";
+import { ReviewsExpandProvider } from "@/components/sections/reviews-expand-context";
 import { ReviewsEmbla } from "@/components/sections/reviews-embla";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { cn } from "@/lib/utils";
@@ -27,31 +29,35 @@ export function TourReviewsSection({ reviews }: TourReviewsSectionProps) {
 
   return (
     <section id="reviews" className="space-y-6">
-      <div className="relative">
-        <SectionHeading as="h2" className="mb-6 md:mb-8">
-          Что говорят наши участницы
-        </SectionHeading>
-      </div>
-
-      {/* Мобильная горизонтальная карусель - все отзывы */}
-      <div className="md:hidden">
-        <ReviewsEmbla reviews={reviews} />
-      </div>
-
-      {/* Десктопная сетка с динамической шириной */}
-      <div className="w-full flex justify-center">
-        <div className={cn(
-          "hidden md:grid gap-4 md:gap-6 items-stretch w-full",
-          getGridCols(reviews.length),
-          getContainerWidth(reviews.length)
-        )}>
-          {reviews.map((review) => (
-            <div key={review._id} className="flex">
-              <ReviewCard review={review} />
-            </div>
-          ))}
+      <ReviewsExpandProvider>
+        <div className="relative">
+          <SectionHeading as="h2" className="mb-6 md:mb-8">
+            Что говорят наши участницы
+          </SectionHeading>
         </div>
-      </div>
+
+        {/* Мобильная горизонтальная карусель - все отзывы */}
+        <div className="md:hidden">
+          <ReviewsEmbla reviews={reviews} />
+        </div>
+
+        {/* Десктопная сетка с динамической шириной */}
+        <div className="w-full flex justify-center">
+          <div className={cn(
+            "hidden md:grid gap-4 md:gap-6 items-stretch w-full",
+            getGridCols(reviews.length),
+            getContainerWidth(reviews.length)
+          )}>
+            {reviews.map((review) => (
+              <div key={review._id} className="flex">
+                <ReviewCard review={review} />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <ReviewsCollapseBar />
+      </ReviewsExpandProvider>
     </section>
   );
 }

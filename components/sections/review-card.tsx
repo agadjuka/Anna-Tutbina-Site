@@ -1,3 +1,4 @@
+import { ExpandableReviewText } from "@/components/sections/expandable-review-text";
 import { Paragraph } from "@/components/ui/paragraph";
 import { SanityImage } from "@/components/ui/sanity-image";
 import type { ReviewItem } from "@/lib/utils/reviews";
@@ -50,14 +51,7 @@ export function ReviewCard({ review }: ReviewCardProps) {
             <div className="font-heading text-3xl leading-none text-[#bea692]/20 md:text-4xl">{"\u201C"}</div>
           </div>
 
-          <div className="flex min-h-0 flex-1 flex-col">
-            <Paragraph className="-mt-2 mb-0 text-sm md:text-base italic leading-[1.8] text-muted-foreground">
-              {review.text}
-            </Paragraph>
-            <div className="mt-1 flex-shrink-0 text-right font-heading text-3xl leading-none text-[#bea692]/20 md:mt-2 md:text-4xl">
-              {"\u201D"}
-            </div>
-          </div>
+          <ExpandableReviewText text={review.text} />
         </div>
       </div>
     </div>
