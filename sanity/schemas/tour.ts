@@ -302,11 +302,27 @@ const tour = defineType({
       description:
         'У каждого отзыва: имя автора, фото и текст. Порядок в списке — как на сайте. Блок на главной собирает отзывы со всех туров.',
     }),
+    defineField({
+      name: 'hideFromSite',
+      title: 'Скрыть с сайта',
+      type: 'boolean',
+      description:
+        'Если включено: тур не в списке на главной, страница тура недоступна, отзывы этого тура не попадают в блок отзывов на главной.',
+      initialValue: false,
+    }),
   ],
   preview: {
     select: {
       title: 'name',
       media: 'mainImage',
+      hidden: 'hideFromSite',
+    },
+    prepare({ title, media, hidden }) {
+      return {
+        title,
+        media,
+        subtitle: hidden ? 'Скрыт с сайта' : undefined,
+      }
     },
   },
 })

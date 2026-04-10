@@ -1,4 +1,5 @@
 import { ReviewCard } from "@/components/sections/review-card";
+import { ReviewsGridRowAlign } from "@/components/sections/reviews-grid-row-align";
 import { ReviewsCollapseBar } from "@/components/sections/reviews-collapse-bar";
 import { ReviewsExpandProvider } from "@/components/sections/reviews-expand-context";
 import { ReviewsEmbla } from "@/components/sections/reviews-embla";
@@ -42,18 +43,20 @@ export function TourReviewsSection({ reviews }: TourReviewsSectionProps) {
         </div>
 
         {/* Десктопная сетка с динамической шириной */}
-        <div className="w-full flex justify-center">
-          <div className={cn(
-            "hidden md:grid gap-4 md:gap-6 items-stretch w-full",
-            getGridCols(reviews.length),
-            getContainerWidth(reviews.length)
-          )}>
+        <div className="flex w-full justify-center">
+          <ReviewsGridRowAlign
+            alignKey={reviews.map((r) => r._id).join("|")}
+            className={cn(
+              "hidden w-full items-stretch md:grid",
+              "gap-4 md:gap-6",
+              getGridCols(reviews.length),
+              getContainerWidth(reviews.length)
+            )}
+          >
             {reviews.map((review) => (
-              <div key={review._id} className="flex">
-                <ReviewCard review={review} />
-              </div>
+              <ReviewCard key={review._id} review={review} />
             ))}
-          </div>
+          </ReviewsGridRowAlign>
         </div>
 
         <ReviewsCollapseBar />

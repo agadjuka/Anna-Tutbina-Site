@@ -1,4 +1,5 @@
 import { ReviewCard } from "@/components/sections/review-card";
+import { ReviewsGridRowAlign } from "@/components/sections/reviews-grid-row-align";
 import { ReviewsCollapseBar } from "@/components/sections/reviews-collapse-bar";
 import { ReviewsExpandProvider } from "@/components/sections/reviews-expand-context";
 import { ReviewsEmbla } from "@/components/sections/reviews-embla";
@@ -44,13 +45,14 @@ export function ReviewsSection({ reviews }: ReviewsSectionProps) {
           </div>
 
           {/* Десктопная сетка - только 4 случайных отзыва */}
-          <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 items-stretch">
+          <ReviewsGridRowAlign
+            alignKey={desktopReviews.map((r) => r._id).join("|")}
+            className="hidden grid-cols-1 items-stretch gap-4 md:grid sm:grid-cols-2 lg:grid-cols-4 md:gap-6"
+          >
             {desktopReviews.map((review) => (
-              <div key={review._id} className="flex">
-                <ReviewCard review={review} />
-              </div>
+              <ReviewCard key={review._id} review={review} />
             ))}
-          </div>
+          </ReviewsGridRowAlign>
 
           <ReviewsCollapseBar />
         </div>

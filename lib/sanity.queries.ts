@@ -1,7 +1,7 @@
 import { groq } from "next-sanity";
 
 export const toursQuery = groq`
-  *[_type == "tour"]|order(orderRank){
+  *[_type == "tour" && hideFromSite != true]|order(orderRank){
     _id,
     name,
     slug,
@@ -27,7 +27,7 @@ export const toursQuery = groq`
 
 
 export const tourBySlugQuery = groq`
-  *[_type == "tour" && slug.current == $slug][0]{
+  *[_type == "tour" && slug.current == $slug && hideFromSite != true][0]{
     _id,
     name,
     slug,
@@ -120,7 +120,7 @@ export const tourBySlugQuery = groq`
 `;
 
 export const tourMetadataQuery = groq`
-  *[_type == "tour" && slug.current == $slug][0]{
+  *[_type == "tour" && slug.current == $slug && hideFromSite != true][0]{
     name,
     shortDescription
   }
@@ -137,7 +137,7 @@ export const aboutQuery = groq`
 
 /** Все отзывы из полей туров (для главной: объединяем и перемешиваем на клиенте) */
 export const toursWithReviewsQuery = groq`
-  *[_type == "tour"]|order(orderRank){
+  *[_type == "tour" && hideFromSite != true]|order(orderRank){
     _id,
     reviews[]{
       _key,

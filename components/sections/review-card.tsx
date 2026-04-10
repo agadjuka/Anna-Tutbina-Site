@@ -9,49 +9,53 @@ interface ReviewCardProps {
 
 export function ReviewCard({ review }: ReviewCardProps) {
   return (
-    <div className="group relative flex flex-col h-full w-full rounded-2xl border border-[#e5e0db] bg-white px-6 pt-4 pb-4 md:px-8 md:pt-5 md:pb-5 shadow-card hover:shadow-card-hover transition-all duration-500 hover:border-[#bea692]/30">
+    <div
+      data-review-card
+      className="group relative flex h-full w-full flex-col rounded-2xl border border-[#e5e0db] bg-white px-6 pt-4 pb-4 shadow-card transition-all duration-500 hover:border-[#bea692]/30 hover:shadow-card-hover md:px-8 md:pt-5 md:pb-5"
+    >
       {/* Декоративные элементы */}
-      <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-[#bea692]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-bl-2xl" />
-      <div className="absolute top-4 -left-2 w-1 h-16 bg-gradient-to-b from-[#bea692] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-full" />
+      <div className="absolute top-0 right-0 w-24 h-24 rounded-bl-2xl bg-gradient-to-bl from-[#bea692]/5 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+      <div className="absolute top-4 -left-2 h-16 w-1 rounded-full bg-gradient-to-b from-[#bea692] to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
-      <div className="relative z-10 flex flex-1 flex-col min-h-0">
-        <div className="relative flex flex-shrink-0 items-center pb-4 border-b border-[#e5e0db]">
-          {/* Декоративная точка на границе (под блоком автора) */}
-          <div className="absolute -bottom-1 left-0 w-3 h-3 rounded-full bg-[#bea692] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      {/* Шапка: высота выравнивается по ряду через ReviewsGridRowAlign */}
+      <div
+        data-review-header
+        className="relative z-10 flex min-h-0 flex-col justify-start border-b border-[#e5e0db] pb-4 box-border"
+      >
+        <div className="absolute -bottom-1 left-0 h-3 w-3 rounded-full bg-[#bea692] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
-          <div className="flex w-full items-center gap-3">
-            <div className="relative shrink-0">
-              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#bea692]/30 to-[#e5e0db]/30 blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <div className="relative h-10 w-10 md:h-12 md:w-12 overflow-hidden rounded-full ring-2 ring-[#e5e0db] group-hover:ring-[#bea692]/30 transition-all duration-300">
-                <SanityImage
-                  image={review.authorImage}
-                  width={56}
-                  height={56}
-                  alt={review.authorName}
-                  className="h-full w-full object-cover"
-                />
-              </div>
-            </div>
-            <div className="min-w-0">
-              <Paragraph className="mb-0 font-semibold text-foreground text-sm md:text-base">
-                {review.authorName}
-              </Paragraph>
-              {review.profession?.trim() ? (
-                <p className="mt-0.5 mb-0 text-xs leading-snug italic text-muted-foreground md:text-sm">
-                  {review.profession.trim()}
-                </p>
-              ) : null}
+        <div className="flex w-full items-start gap-3">
+          <div className="relative shrink-0">
+            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#bea692]/30 to-[#e5e0db]/30 opacity-0 blur-md transition-opacity duration-500 group-hover:opacity-100" />
+            <div className="relative h-10 w-10 overflow-hidden rounded-full ring-2 ring-[#e5e0db] transition-all duration-300 group-hover:ring-[#bea692]/30 md:h-12 md:w-12">
+              <SanityImage
+                image={review.authorImage}
+                width={56}
+                height={56}
+                alt={review.authorName}
+                className="h-full w-full object-cover"
+              />
             </div>
           </div>
-        </div>
-
-        <div className="flex min-h-0 flex-1 flex-col pt-4 md:pt-5">
-          <div className="mb-0 flex-shrink-0">
-            <div className="font-heading text-3xl leading-none text-[#bea692]/20 md:text-4xl">{"\u201C"}</div>
+          <div className="min-w-0">
+            <Paragraph className="mb-0 text-sm font-semibold text-foreground md:text-base">
+              {review.authorName}
+            </Paragraph>
+            {review.profession?.trim() ? (
+              <p className="mb-0 mt-0.5 text-xs italic leading-snug text-muted-foreground md:text-sm">
+                {review.profession.trim()}
+              </p>
+            ) : null}
           </div>
-
-          <ExpandableReviewText text={review.text} />
         </div>
+      </div>
+
+      <div className="relative z-10 flex min-h-0 flex-1 flex-col pt-4 md:pt-5">
+        <div className="mb-0 flex-shrink-0">
+          <div className="font-heading text-3xl leading-none text-[#bea692]/20 md:text-4xl">{"\u201C"}</div>
+        </div>
+
+        <ExpandableReviewText text={review.text} />
       </div>
     </div>
   );
