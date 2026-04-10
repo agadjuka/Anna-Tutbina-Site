@@ -203,11 +203,8 @@ export function ExpandableReviewText({ text }: ExpandableReviewTextProps) {
     timersRef.current.forEach((id) => window.clearTimeout(id));
   }, []);
 
-  const showClosingQuote = canExpand === false || (canExpand === true && expanded);
-  const quoteVisible = canExpand === false || expanded;
-
   return (
-    <div className="-mt-2 flex min-h-0 flex-1 flex-col">
+    <div className="flex min-h-0 flex-1 flex-col">
       <div
         ref={wrapRef}
         className={cn("relative", canExpand === true && !expanded && "pb-1")}
@@ -228,24 +225,6 @@ export function ExpandableReviewText({ text }: ExpandableReviewTextProps) {
           />
         )}
       </div>
-
-      {showClosingQuote && (
-        <div
-          className={cn(
-            "mt-1 shrink-0 text-right font-heading text-3xl leading-none text-[#bea692]/20 md:mt-2 md:text-4xl",
-            canExpand === true &&
-              "motion-safe:transition-[opacity,transform] motion-safe:duration-500 motion-safe:ease-[cubic-bezier(0.16,1,0.3,1)]",
-            canExpand === true &&
-              expanded &&
-              "motion-safe:delay-100 motion-safe:duration-[560ms]",
-            quoteVisible
-              ? "translate-y-0 opacity-100"
-              : "translate-y-2 opacity-0"
-          )}
-        >
-          {"\u201D"}
-        </div>
-      )}
 
       {canExpand === true && !expanded && (
         <div className="mt-3 flex shrink-0 justify-center">
