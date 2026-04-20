@@ -149,6 +149,11 @@
     color: inherit;
   }
 
+  /* Хедер: глобальное правило для span (цвет #1E1E1C) не должно трогать пункты меню и логотип */
+  header a span {
+    color: inherit !important;
+  }
+
   /* Исключаем белый текст из глобальных стилей */
   .text-white,
   span.text-white,

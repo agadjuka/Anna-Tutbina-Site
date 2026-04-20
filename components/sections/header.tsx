@@ -34,10 +34,10 @@ export function Header() {
               <li>
                 <Link
                   href="/#tours"
-                  className="transition-colors duration-300 relative pb-1 group opacity-95 hover:opacity-100"
+                  className="transition-opacity duration-300 relative pb-1 group hover:opacity-90"
                   style={{ color: HEADER_FG }}
                 >
-                  <span className="relative z-10 whitespace-nowrap">Туры</span>
+                  <span className="relative z-10 whitespace-nowrap text-inherit">Туры</span>
                   <div
                     className="absolute bottom-0 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-300"
                     style={{ backgroundColor: HEADER_FG }}
@@ -51,10 +51,10 @@ export function Header() {
               <li>
                 <Link
                   href="/#about"
-                  className="transition-colors duration-300 relative pb-1 group opacity-95 hover:opacity-100"
+                  className="transition-opacity duration-300 relative pb-1 group hover:opacity-90"
                   style={{ color: HEADER_FG }}
                 >
-                  <span className="relative z-10 whitespace-nowrap">Обо мне</span>
+                  <span className="relative z-10 whitespace-nowrap text-inherit">Обо мне</span>
                   <div
                     className="absolute bottom-0 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-300"
                     style={{ backgroundColor: HEADER_FG }}
@@ -68,10 +68,10 @@ export function Header() {
               <li>
                 <Link
                   href="/#reviews"
-                  className="transition-colors duration-300 relative pb-1 group opacity-95 hover:opacity-100"
+                  className="transition-opacity duration-300 relative pb-1 group hover:opacity-90"
                   style={{ color: HEADER_FG }}
                 >
-                  <span className="relative z-10 whitespace-nowrap">Отзывы</span>
+                  <span className="relative z-10 whitespace-nowrap text-inherit">Отзывы</span>
                   <div
                     className="absolute bottom-0 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-300"
                     style={{ backgroundColor: HEADER_FG }}
