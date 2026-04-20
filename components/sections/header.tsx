@@ -1,59 +1,98 @@
 import { Container } from "@/components/ui/container";
 import Link from "next/link";
 
+/** Цвета из правок: хедер #69695C, логотип и текст навигации #EEEAE4 */
+const HEADER_BG = "#69695C";
+const HEADER_FG = "#EEEAE4";
+
 export function Header() {
   return (
-    <header className="fixed top-0 left-0 w-full z-50 border-b border-[#e5e0db] bg-[#e8e8e8]/65 backdrop-blur-md supports-[backdrop-filter]:bg-[#e8e8e8]/60 shadow-md shadow-[#bea69229]">
+    <header
+      className="fixed top-0 left-0 w-full z-50 border-b border-[#69695C]/90 backdrop-blur-md shadow-md"
+      style={{ backgroundColor: HEADER_BG }}
+    >
       <Container>
         <div className="relative flex items-center justify-between py-2 md:py-7">
-          {/* Декоративная линия слева */}
-          <div className="absolute left-0 bottom-0 top-0 w-px bg-gradient-to-b from-[#bea692] via-transparent to-[#bea692] opacity-30 hidden lg:block" />
-          
-          <Link href="/" className="inline-flex items-center -my-2 md:-my-7 py-2 md:py-7 px-3 md:px-4 text-xl md:text-2xl font-heading font-bold tracking-tight text-[#7b6f6f] hover:opacity-90 transition-opacity">
-            Anna Turbina Tours
+          <div
+            className="absolute left-0 bottom-0 top-0 w-px opacity-40 hidden lg:block"
+            style={{
+              background: `linear-gradient(to bottom, ${HEADER_FG}, transparent, ${HEADER_FG})`,
+            }}
+          />
+
+          <Link
+            href="/"
+            className="font-logo inline-flex items-center -my-2 md:-my-7 py-2 md:py-7 px-3 md:px-4 text-2xl md:text-3xl tracking-tight hover:opacity-90 transition-opacity"
+            style={{ color: HEADER_FG }}
+            aria-label="ONÁ — на главную"
+          >
+            ONÁ
           </Link>
-          
+
           <nav>
             <ul className="flex items-center gap-8 md:gap-12 text-sm md:text-base">
               <li>
-                <Link 
-                  href="/#tours" 
-                  className="text-muted-foreground hover:text-foreground transition-colors duration-300 relative pb-1 group"
+                <Link
+                  href="/#tours"
+                  className="transition-colors duration-300 relative pb-1 group opacity-95 hover:opacity-100"
+                  style={{ color: HEADER_FG }}
                 >
                   <span className="relative z-10 whitespace-nowrap">Туры</span>
-                  <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#bea692] group-hover:w-full transition-all duration-300" />
-                  <div className="absolute -left-1 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-[#bea692] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div
+                    className="absolute bottom-0 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-300"
+                    style={{ backgroundColor: HEADER_FG }}
+                  />
+                  <div
+                    className="absolute -left-1 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    style={{ backgroundColor: HEADER_FG }}
+                  />
                 </Link>
               </li>
               <li>
-                <Link 
-                  href="/#about" 
-                  className="text-muted-foreground hover:text-foreground transition-colors duration-300 relative pb-1 group"
+                <Link
+                  href="/#about"
+                  className="transition-colors duration-300 relative pb-1 group opacity-95 hover:opacity-100"
+                  style={{ color: HEADER_FG }}
                 >
                   <span className="relative z-10 whitespace-nowrap">Обо мне</span>
-                  <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#bea692] group-hover:w-full transition-all duration-300" />
-                  <div className="absolute -left-1 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-[#bea692] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div
+                    className="absolute bottom-0 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-300"
+                    style={{ backgroundColor: HEADER_FG }}
+                  />
+                  <div
+                    className="absolute -left-1 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    style={{ backgroundColor: HEADER_FG }}
+                  />
                 </Link>
               </li>
               <li>
-                <Link 
-                  href="/#reviews" 
-                  className="text-muted-foreground hover:text-foreground transition-colors duration-300 relative pb-1 group"
+                <Link
+                  href="/#reviews"
+                  className="transition-colors duration-300 relative pb-1 group opacity-95 hover:opacity-100"
+                  style={{ color: HEADER_FG }}
                 >
                   <span className="relative z-10 whitespace-nowrap">Отзывы</span>
-                  <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#bea692] group-hover:w-full transition-all duration-300" />
-                  <div className="absolute -left-1 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-[#bea692] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div
+                    className="absolute bottom-0 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-300"
+                    style={{ backgroundColor: HEADER_FG }}
+                  />
+                  <div
+                    className="absolute -left-1 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    style={{ backgroundColor: HEADER_FG }}
+                  />
                 </Link>
               </li>
             </ul>
           </nav>
-          
-          {/* Декоративная линия справа */}
-          <div className="absolute right-0 bottom-0 top-0 w-px bg-gradient-to-b from-[#bea692] via-transparent to-[#bea692] opacity-30 hidden lg:block" />
+
+          <div
+            className="absolute right-0 bottom-0 top-0 w-px opacity-40 hidden lg:block"
+            style={{
+              background: `linear-gradient(to bottom, ${HEADER_FG}, transparent, ${HEADER_FG})`,
+            }}
+          />
         </div>
       </Container>
     </header>
   );
 }
-
-

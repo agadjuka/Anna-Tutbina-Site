@@ -30,9 +30,9 @@ export function RecommendedFlightsSection({ flights }: RecommendedFlightsSection
           {flights.image && (
             <div className="relative group w-full">
               {/* Декоративные элементы */}
-              <div className="absolute -inset-2 bg-gradient-to-br from-[#bea692]/10 via-[#e5e0db]/20 to-transparent rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="absolute -inset-2 bg-gradient-to-br from-primary/10 via-muted/20 to-transparent rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               
-              <div className="relative rounded-2xl shadow-card border border-[#e5e0db] group-hover:border-[#bea692]/30 transition-all duration-500 w-full">
+              <div className="relative rounded-2xl shadow-card border border-border group-hover:border-primary/30 transition-all duration-500 w-full">
                 {flights.image?.asset && (
                   <img
                     src={urlFor(flights.image).width(4000).auto("format").quality(95).url()}
@@ -43,7 +43,7 @@ export function RecommendedFlightsSection({ flights }: RecommendedFlightsSection
                 )}
                 
                 {/* Легкий overlay при hover */}
-                <div className="absolute inset-0 bg-[#bea692]/0 group-hover:bg-[#bea692]/5 transition-colors duration-500 pointer-events-none rounded-2xl" />
+                <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/5 transition-colors duration-500 pointer-events-none rounded-2xl" />
               </div>
             </div>
           )}

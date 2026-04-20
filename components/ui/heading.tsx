@@ -10,15 +10,15 @@ export function Heading({ as = "h1", children, className, ...props }: HeadingPro
   const Component = as;
 
   const headingStyles = {
-    h1: "text-4xl md:text-6xl lg:text-7xl font-bold leading-[1.1] mb-6",
-    h2: "text-3xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6",
-    h3: "text-2xl md:text-4xl font-semibold leading-tight mb-4",
-    h4: "text-xl md:text-3xl font-semibold leading-tight mb-3",
+    h1: "text-4xl md:text-6xl lg:text-7xl font-normal leading-[1.1] mb-6",
+    h2: "text-3xl md:text-5xl lg:text-6xl font-normal leading-tight mb-6",
+    h3: "text-2xl md:text-4xl font-normal leading-tight mb-4",
+    h4: "text-xl md:text-3xl font-normal leading-tight mb-3",
   };
 
   return (
     <Component
-      className={cn("font-heading text-foreground", headingStyles[as], className)}
+      className={cn("font-heading text-[#69695C]", headingStyles[as], className)}
       {...props}
     >
       {children}

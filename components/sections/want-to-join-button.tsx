@@ -20,9 +20,9 @@ export function WantToJoinButton() {
             aria-label="Telegram"
             title="Telegram"
             className={
-              "h-14 w-14 md:h-16 md:w-16 p-3 shrink-0 flex items-center justify-center rounded-full bg-[#e5e0db] text-muted-foreground transition-all overflow-visible shadow-lg" +
+              "h-14 w-14 md:h-16 md:w-16 p-3 shrink-0 flex items-center justify-center rounded-full bg-muted text-muted-foreground transition-all overflow-visible shadow-lg" +
               (open
-                ? " opacity-100 translate-y-0 scale-100 duration-300 hover:text-[#0088cc] hover:bg-[#e5e0db] hover:scale-110 hover:shadow-xl"
+                ? " opacity-100 translate-y-0 scale-100 duration-300 hover:text-[#0088cc] hover:bg-muted hover:scale-110 hover:shadow-xl"
                 : " opacity-0 translate-y-4 pointer-events-none duration-200 scale-90")
             }
             style={{ transitionProperty: "opacity, transform, background-color, color" }}
@@ -37,9 +37,9 @@ export function WantToJoinButton() {
             aria-label="WhatsApp"
             title="WhatsApp"
             className={
-              "h-14 w-14 md:h-16 md:w-16 p-3 shrink-0 flex items-center justify-center rounded-full bg-[#e5e0db] text-muted-foreground transition-all overflow-visible shadow-lg" +
+              "h-14 w-14 md:h-16 md:w-16 p-3 shrink-0 flex items-center justify-center rounded-full bg-muted text-muted-foreground transition-all overflow-visible shadow-lg" +
               (open
-                ? " opacity-100 translate-y-0 scale-100 duration-500 hover:text-[#25D366] hover:bg-[#e5e0db] hover:scale-110 hover:shadow-xl"
+                ? " opacity-100 translate-y-0 scale-100 duration-500 hover:text-[#25D366] hover:bg-muted hover:scale-110 hover:shadow-xl"
                 : " opacity-0 translate-y-4 pointer-events-none duration-200 scale-90")
             }
             style={{ transitionProperty: "opacity, transform, background-color, color" }}
@@ -55,7 +55,7 @@ export function WantToJoinButton() {
           title="Хочу с Вами!"
           aria-pressed={open}
           onClick={() => setOpen((v) => !v)}
-          className="relative inline-flex items-center justify-center gap-2 px-10 py-5 md:px-12 md:py-6 text-lg md:text-xl font-medium text-white rounded-full bg-gradient-to-r from-[#bea692] via-[#c8b39e] to-[#bea692] shadow-2xl hover:shadow-[#bea692]/40 transition-all duration-500 focus:outline-none focus:ring-4 focus:ring-[#bea692]/30 overflow-hidden group"
+          className="relative inline-flex items-center justify-center gap-2 px-10 py-5 md:px-12 md:py-6 text-lg md:text-xl font-medium text-white rounded-full bg-gradient-to-r from-primary via-primary-dark to-primary shadow-2xl hover:shadow-primary/25 transition-all duration-500 focus:outline-none focus:ring-4 focus:ring-primary/30 overflow-hidden group"
           style={{
             backgroundSize: "200% 100%",
             animation: open ? "none" : "gradient-shift 3s ease-in-out infinite, pulse-glow 2s ease-in-out infinite",
@@ -65,7 +65,7 @@ export function WantToJoinButton() {
           <span
             className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"
             style={{
-              background: "linear-gradient(90deg, #bea692 0%, #d4c4b0 50%, #bea692 100%)",
+              background: "linear-gradient(90deg, #5a5a4e 0%, #8a8a7c 50%, #5a5a4e 100%)",
               backgroundSize: "200% 100%",
               animation: "gradient-shift 3s ease-in-out infinite",
             }}
@@ -129,10 +129,10 @@ export function WantToJoinButton() {
 
         @keyframes pulse-glow {
           0%, 100% {
-            box-shadow: 0 0 20px rgba(190, 166, 146, 0.4), 0 0 40px rgba(190, 166, 146, 0.2);
+            box-shadow: 0 0 20px rgba(105, 105, 92, 0.35), 0 0 40px rgba(105, 105, 92, 0.18);
           }
           50% {
-            box-shadow: 0 0 30px rgba(190, 166, 146, 0.6), 0 0 60px rgba(190, 166, 146, 0.3);
+            box-shadow: 0 0 30px rgba(105, 105, 92, 0.5), 0 0 60px rgba(105, 105, 92, 0.25);
           }
         }
 

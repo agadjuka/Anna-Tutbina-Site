@@ -24,18 +24,18 @@ interface ReviewsEmblaProps {
   fullLayout?: "home" | "tour";
 }
 
-/** Как в ProgramDaysCarousel: круглые кнопки с обводкой #bea692 */
+/** Как в ProgramDaysCarousel: круглые кнопки с обводкой primary */
 const programArrowClass = cn(
   "flex items-center justify-center rounded-full",
-  "border-2 border-[#bea692] bg-transparent shadow-md backdrop-blur-sm",
+  "border-2 border-primary bg-transparent shadow-md backdrop-blur-sm",
   "transition-all duration-200",
   "disabled:opacity-30 disabled:cursor-not-allowed"
 );
 
 const programArrowHover =
-  "hover:bg-[#bea692]/10 hover:shadow-xl hover:scale-110 disabled:hover:scale-100";
+  "hover:bg-primary/10 hover:shadow-xl hover:scale-110 disabled:hover:scale-100";
 const programArrowActive =
-  "active:bg-[#bea692]/15 active:shadow-xl active:scale-110 disabled:active:scale-100";
+  "active:bg-primary/15 active:shadow-xl active:scale-110 disabled:active:scale-100";
 
 function ArrowIconLeft({ className }: { className?: string }) {
   return (
@@ -45,7 +45,7 @@ function ArrowIconLeft({ className }: { className?: string }) {
       viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={cn("text-[#bea692]", className)}
+      className={cn("text-primary", className)}
       aria-hidden
     >
       <path
@@ -67,7 +67,7 @@ function ArrowIconRight({ className }: { className?: string }) {
       viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={cn("text-[#bea692]", className)}
+      className={cn("text-primary", className)}
       aria-hidden
     >
       <path
@@ -216,7 +216,7 @@ export function ReviewsEmbla({
   const dotsClass = (active: boolean) =>
     cn(
       "h-2 w-2 rounded-full transition-all duration-300",
-      active ? "w-8 bg-[#bea692]" : "bg-[#e5e0db] hover:bg-[#bea692]/50"
+      active ? "w-8 bg-primary" : "bg-muted hover:bg-primary/50"
     );
 
   const dotsRow = !single && (
@@ -255,10 +255,10 @@ export function ReviewsEmbla({
                 aria-label={`Отзыв ${i + 1} из ${reviews.length}`}
                 onClick={() => scrollTo(i)}
                 className={cn(
-                  "h-2 rounded-full transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#bea692]/35",
+                  "h-2 rounded-full transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35",
                   i === selected
-                    ? "w-7 bg-[#bea692]"
-                    : "w-2 bg-[#e5e0db] hover:bg-[#bea692]/45"
+                    ? "w-7 bg-primary"
+                    : "w-2 bg-muted hover:bg-primary/45"
                 )}
               />
             ))}

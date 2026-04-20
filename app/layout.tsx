@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { headingFont, bodyFont } from "@/lib/fonts";
+import { headingFont, bodyFont, logoFont } from "@/lib/fonts";
 import { Footer } from "@/components/sections/footer";
 import { Header } from "@/components/sections/header";
 import { FloatingContacts } from "@/components/ui/floating-contacts";
 
 export const metadata: Metadata = {
   title: {
-    template: "%s | Anna Turbina Tours",
-    default: "Anna Turbina Tours",
+    template: "%s | ONÁ",
+    default: "ONÁ",
   },
   description: "Авторские женские туры и ретриты с Анной Турбиной",
 };
@@ -19,10 +19,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ru">
-      <body
-        className={`pt-16 ${headingFont.variable} ${bodyFont.variable} antialiased`}
-      >
+    <html
+      lang="ru"
+      className={`${headingFont.variable} ${bodyFont.variable} ${logoFont.variable}`}
+    >
+      <body className="pt-16 antialiased">
         <Header />
         {children}
         <FloatingContacts />

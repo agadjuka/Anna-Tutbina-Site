@@ -15,7 +15,7 @@ export function PortableTextContent({ value, className, smallFont, style }: Port
   const textComponents: Partial<PortableTextReactComponents> = {
     marks: {
       strong: (props) => (
-        <strong style={{ fontFamily: 'var(--font-tt-drugs), system-ui, arial, sans-serif', fontWeight: 700, fontSize: 'inherit', lineHeight: 'inherit' }}>
+        <strong style={{ fontFamily: 'var(--font-body), system-ui, arial, sans-serif', fontWeight: 700, fontSize: 'inherit', lineHeight: 'inherit' }}>
           {props.children}
         </strong>
       ),

@@ -25,7 +25,7 @@ export default async function CustomTourPage() {
       <main className="min-h-screen bg-background py-16 md:py-24">
         <Container>
           <div className="max-w-4xl mx-auto space-y-6">
-            <span className="text-sm md:text-base uppercase tracking-wider text-[#bea692] font-medium block">
+            <span className="text-sm md:text-base uppercase tracking-wider text-primary font-medium block">
               Индивидуальный тур
             </span>
             <Heading as="h1" className="mb-0">Индивидуальный тур</Heading>
@@ -41,7 +41,7 @@ export default async function CustomTourPage() {
       <Container>
         <div className="max-w-4xl mx-auto space-y-12 md:space-y-16">
           <div className="space-y-6">
-            <span className="text-sm md:text-base uppercase tracking-wider text-[#bea692] font-medium block">
+            <span className="text-sm md:text-base uppercase tracking-wider text-primary font-medium block">
               Персональный маршрут
             </span>
             <Heading as="h1" className="mb-0">{data.title}</Heading>

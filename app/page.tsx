@@ -66,8 +66,8 @@ export default async function HomePage() {
       )}
       <section id="tours" className="relative py-10 md:py-12 lg:py-16 bg-background overflow-hidden">
         {/* Декоративные элементы фона */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[#bea692]/3 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#e5e0db]/5 rounded-full blur-3xl" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-primary/3 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-muted/5 rounded-full blur-3xl" />
         
         <Container>
           <div className="relative space-y-6 md:space-y-8">

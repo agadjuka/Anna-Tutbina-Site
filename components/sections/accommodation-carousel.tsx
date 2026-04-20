@@ -127,7 +127,7 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
                             <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-foreground leading-tight tracking-tight">
                               {location.locationName}
                             </h3>
-                            <div className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-[#bea692] via-[#bea692]/60 to-transparent rounded-full"></div>
+                            <div className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-primary via-primary/60 to-transparent rounded-full"></div>
                           </div>
                         </div>
                       )}
@@ -208,7 +208,7 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
                       {location.locationDescription && (
                         <div className="relative">
                           {/* Декоративная линия слева */}
-                          <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[#bea692] via-[#bea692]/60 to-transparent rounded-full"></div>
+                          <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary via-primary/60 to-transparent rounded-full"></div>
                           
                           {/* Текстовое содержимое */}
                           <div className="pl-6 md:pl-8 pt-4 pb-4 md:pt-5 md:pb-5">
@@ -240,7 +240,7 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
                 "absolute top-1/2 -translate-y-1/2 z-10 pointer-events-auto",
                 "w-12 h-12 md:w-14 md:h-14 rounded-full",
                 "flex items-center justify-center",
-                "bg-white/95 backdrop-blur-sm border-2 border-[#bea692]",
+                "bg-white/95 backdrop-blur-sm border-2 border-primary",
                 "transition-all duration-200",
                 "hover:bg-white hover:shadow-xl hover:scale-110",
                 "disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:scale-100",
@@ -254,7 +254,7 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                className="text-[#bea692]"
+                className="text-primary"
               >
                 <path
                   d="M15 18L9 12L15 6"
@@ -273,7 +273,7 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
                 "absolute top-1/2 -translate-y-1/2 z-10 pointer-events-auto",
                 "w-12 h-12 md:w-14 md:h-14 rounded-full",
                 "flex items-center justify-center",
-                "bg-white/95 backdrop-blur-sm border-2 border-[#bea692]",
+                "bg-white/95 backdrop-blur-sm border-2 border-primary",
                 "transition-all duration-200",
                 "hover:bg-white hover:shadow-xl hover:scale-110",
                 "disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:scale-100",
@@ -287,7 +287,7 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                className="text-[#bea692]"
+                className="text-primary"
               >
                 <path
                   d="M9 18L15 12L9 6"
@@ -314,7 +314,7 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
                 "absolute left-0 top-1/2 -translate-y-1/2",
                 "w-12 h-12 rounded-full",
                 "flex items-center justify-center",
-                "bg-white/95 backdrop-blur-sm border-2 border-[#bea692]",
+                "bg-white/95 backdrop-blur-sm border-2 border-primary",
                 "transition-all duration-200",
                 "active:bg-white active:shadow-xl active:scale-110",
                 "disabled:opacity-30 disabled:cursor-not-allowed disabled:active:scale-100"
@@ -327,7 +327,7 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                className="text-[#bea692]"
+                className="text-primary"
               >
                 <path
                   d="M15 18L9 12L15 6"
@@ -347,8 +347,8 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
                   className={cn(
                     "w-2 h-2 rounded-full transition-all duration-300",
                     selectedIndex === idx
-                      ? "bg-[#bea692] w-8"
-                      : "bg-[#e5e0db] active:bg-[#bea692]/50"
+                      ? "bg-primary w-8"
+                      : "bg-muted active:bg-primary/50"
                   )}
                   aria-label={`Перейти к локации ${idx + 1}`}
                 />
@@ -362,7 +362,7 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
                 "absolute right-0 top-1/2 -translate-y-1/2",
                 "w-12 h-12 rounded-full",
                 "flex items-center justify-center",
-                "bg-white/95 backdrop-blur-sm border-2 border-[#bea692]",
+                "bg-white/95 backdrop-blur-sm border-2 border-primary",
                 "transition-all duration-200",
                 "active:bg-white active:shadow-xl active:scale-110",
                 "disabled:opacity-30 disabled:cursor-not-allowed disabled:active:scale-100"
@@ -375,7 +375,7 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                className="text-[#bea692]"
+                className="text-primary"
               >
                 <path
                   d="M9 18L15 12L9 6"
@@ -397,8 +397,8 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
                 className={cn(
                   "w-2 h-2 rounded-full transition-all duration-300",
                   selectedIndex === idx
-                    ? "bg-[#bea692] w-8"
-                    : "bg-[#e5e0db] hover:bg-[#bea692]/50"
+                    ? "bg-primary w-8"
+                    : "bg-muted hover:bg-primary/50"
                 )}
                 aria-label={`Перейти к локации ${idx + 1}`}
               />

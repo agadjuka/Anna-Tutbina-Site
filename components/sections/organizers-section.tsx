@@ -55,21 +55,21 @@ export function OrganizersSection({ organizers }: OrganizersSectionProps) {
                   "group relative",
                   "flex flex-col md:flex-row items-center md:items-start",
                   "gap-6 md:gap-8 lg:gap-12",
-                  index < organizers.length - 1 && "pb-12 md:pb-16 border-b border-[#e5e0db]"
+                  index < organizers.length - 1 && "pb-12 md:pb-16 border-b border-border"
                 )}
               >
                 {/* Фото организатора */}
                 {organizer.photo && (
                   <div className="relative flex-shrink-0">
                     {/* Декоративные элементы вокруг фото */}
-                    <div className="absolute -inset-6 bg-gradient-to-br from-[#bea692]/10 via-[#e5e0db]/20 to-transparent rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                    <div className="absolute -inset-6 bg-gradient-to-br from-primary/10 via-muted/20 to-transparent rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                     <div className="absolute -inset-3 bg-white/60 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                     
                     {/* Обертка для фото */}
                     <div className="relative transform group-hover:scale-[1.02] transition-transform duration-500">
                       <div className={cn(
                         "relative overflow-hidden rounded-full",
-                        "ring-2 ring-[#e5e0db] group-hover:ring-[#bea692]/40",
+                        "ring-2 ring-border group-hover:ring-primary/40",
                         "transition-all duration-500 shadow-lg",
                         isSingle 
                           ? "w-32 h-32 md:w-36 md:h-36 lg:w-40 lg:h-40"
@@ -87,7 +87,7 @@ export function OrganizersSection({ organizers }: OrganizersSectionProps) {
                       </div>
                       
                       {/* Декоративная точка при hover */}
-                      <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-[#bea692] rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 shadow-lg transform group-hover:scale-110" />
+                      <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-primary rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 shadow-lg transform group-hover:scale-110" />
                     </div>
                   </div>
                 )}
@@ -103,7 +103,7 @@ export function OrganizersSection({ organizers }: OrganizersSectionProps) {
                       {/* Декоративная линия под именем */}
                       <div className={cn(
                         "h-px bg-gradient-to-r transition-all duration-500",
-                        "from-transparent via-[#bea692]/50 to-transparent",
+                        "from-transparent via-primary/50 to-transparent",
                         isSingle ? "w-20 md:w-24" : "w-16 md:w-20",
                         "opacity-60 group-hover:opacity-100"
                       )} />

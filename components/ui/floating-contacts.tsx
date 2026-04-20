@@ -24,9 +24,9 @@ export function FloatingContacts() {
             aria-label="Telegram"
             title="Telegram"
             className={
-              "h-10 w-10 md:h-11 md:w-11 p-1.5 shrink-0 flex items-center justify-center rounded-md bg-[#e5e0db] text-muted-foreground transition-all overflow-visible" +
+              "h-10 w-10 md:h-11 md:w-11 p-1.5 shrink-0 flex items-center justify-center rounded-md bg-muted text-muted-foreground transition-all overflow-visible" +
               (open
-                ? " opacity-100 translate-y-0 duration-300 hover:text-[#bea692] hover:bg-[#e5e0db] scale-100"
+                ? " opacity-100 translate-y-0 duration-300 hover:text-primary hover:bg-muted scale-100"
                 : " opacity-0 translate-y-2 pointer-events-none duration-200 scale-95")
             }
             style={{ transitionProperty: "opacity, transform, background-color, color" }}
@@ -40,9 +40,9 @@ export function FloatingContacts() {
             aria-label="WhatsApp"
             title="WhatsApp"
             className={
-              "h-10 w-10 md:h-11 md:w-11 p-1.5 shrink-0 flex items-center justify-center rounded-md bg-[#e5e0db] text-muted-foreground transition-all overflow-visible" +
+              "h-10 w-10 md:h-11 md:w-11 p-1.5 shrink-0 flex items-center justify-center rounded-md bg-muted text-muted-foreground transition-all overflow-visible" +
               (open
-                ? " opacity-100 translate-y-0 duration-500 hover:text-[#25D366] hover:bg-[#e5e0db] scale-100"
+                ? " opacity-100 translate-y-0 duration-500 hover:text-[#25D366] hover:bg-muted scale-100"
                 : " opacity-0 translate-y-2 pointer-events-none duration-200 scale-95")
             }
             style={{ transitionProperty: "opacity, transform, background-color, color" }}
@@ -58,7 +58,7 @@ export function FloatingContacts() {
           aria-pressed={open}
           onClick={() => setOpen((v) => !v)}
           className={
-            "relative inline-flex h-14 w-14 md:h-16 md:w-16 items-center justify-center rounded-full bg-[#bea692] text-white shadow-card-elevated transition-transform duration-300 focus:outline-none focus:ring-2 focus:ring-[#bea692] focus:ring-offset-2 hover:shadow-card-hover" +
+            "relative inline-flex h-14 w-14 md:h-16 md:w-16 items-center justify-center rounded-full bg-primary text-white shadow-card-elevated transition-transform duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 hover:shadow-card-hover" +
             (open ? " rotate-12" : " rotate-0")
           }
         >

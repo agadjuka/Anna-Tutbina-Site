@@ -18,7 +18,7 @@ interface FaqSectionProps {
 
 function PlusIconAnimated({ open }: { open: boolean }) {
   // уменьшенный размер
-  const color = '#bea692';
+  const color = "#69695c";
   const thickness = 1; // px
   const length = 14; // уменьшенная длина линии
   const size = 18; // сам контейнер меньше
@@ -89,11 +89,11 @@ export function FaqSection({items}: FaqSectionProps) {
         {items.map((item, idx) => {
           const isOpen = openIndex === idx;
           return (
-            <div key={item._id} className="border-b border-[#e5e0db] last:border-b-0">
+            <div key={item._id} className="border-b border-border last:border-b-0">
               <button
                 className={cn(
                   "w-full flex justify-between items-center py-5 text-lg md:text-xl text-left transition-colors",
-                  isOpen ? "text-[#bea692]" : "text-white/90"
+                  isOpen ? "text-primary" : "text-foreground"
                 )}
                 onClick={() => setOpenIndex(isOpen ? null : idx)}
                 aria-expanded={isOpen}

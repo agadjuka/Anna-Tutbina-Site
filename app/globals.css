@@ -1,24 +1,23 @@
 @import "tailwindcss";
 
 @theme {
-  /* Кастомные шрифты */
-  --font-sans: var(--font-body), sans-serif;
-  --font-heading: var(--font-heading), serif;
+  /* Шрифты задаёт next/font на <html> через --font-body / --font-heading / --font-logo.
+     Не дублировать их здесь как var(--font-heading) — это ломало каскад (циклическая ссылка). */
 
-  /* Пастельная коричневая палитра */
-  --color-background: #f9f9f9;
-  --color-foreground: #1a1a1a;
-  --color-primary: #bea692;
-  --color-primary-light: #d4c4b5;
-  --color-primary-dark: #a68f7a;
-  --color-muted: #e5e0db;
-  --color-muted-foreground: #6b6661;
-  --color-accent: #bea692;
+  /* Палитра: бежевый фон #EEEAE4, акцент #69695C, текст #1E1E1C */
+  --color-background: #eeeae4;
+  --color-foreground: #1e1e1c;
+  --color-primary: #69695c;
+  --color-primary-light: #7d7d6f;
+  --color-primary-dark: #5a5a4e;
+  --color-muted: #ded9d0;
+  --color-muted-foreground: #5c5c58;
+  --color-accent: #69695c;
   --color-card: #ffffff;
-  --color-border: #e5e0db;
-  --color-border-light: #f5f3f0;
-  --color-text-muted: #6b6661;
-  --color-text-light: #8a8681;
+  --color-border: #d4cfc4;
+  --color-border-light: #ebe6df;
+  --color-text-muted: #5c5c58;
+  --color-text-light: #6a6a65;
 }
 
 @layer base {
@@ -26,12 +25,17 @@
     @apply transition-colors duration-200;
   }
 
+  html {
+    background-color: #eeeae4;
+  }
+
   body {
     font-family: var(--font-body), system-ui, arial, sans-serif;
     font-weight: 500;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    @apply bg-background text-foreground;
+    background-color: #eeeae4;
+    color: #1e1e1c;
   }
 
   h1,
@@ -40,8 +44,8 @@
   h4,
   h5,
   h6 {
-    font-family: var(--font-heading), serif;
-    @apply text-foreground;
+    font-family: var(--font-heading), "Cormorant Garamond", "Times New Roman", serif;
+    color: #69695c;
     @apply tracking-tight;
   }
 }
@@ -50,64 +54,68 @@
   .font-heading {
     font-family: var(--font-heading), serif;
   }
-  
+
+  .font-logo {
+    font-family: var(--font-logo), serif;
+  }
+
   .font-sans {
     font-family: var(--font-body), system-ui, arial, sans-serif;
   }
-  
+
   .text-balance {
     text-wrap: balance;
   }
-  
+
   .shadow-card {
-    box-shadow: 0 2px 12px rgba(107, 102, 97, 0.08), 0 1px 3px rgba(107, 102, 97, 0.05);
+    box-shadow: 0 2px 12px rgba(105, 105, 92, 0.08), 0 1px 3px rgba(105, 105, 92, 0.05);
   }
-  
+
   .shadow-card-hover {
-    box-shadow: 0 8px 24px rgba(107, 102, 97, 0.12), 0 4px 8px rgba(107, 102, 97, 0.08);
+    box-shadow: 0 8px 24px rgba(105, 105, 92, 0.12), 0 4px 8px rgba(105, 105, 92, 0.08);
   }
-  
+
   .shadow-card-elevated {
-    box-shadow: 0 20px 60px rgba(107, 102, 97, 0.15), 0 8px 16px rgba(107, 102, 97, 0.1);
+    box-shadow: 0 20px 60px rgba(105, 105, 92, 0.15), 0 8px 16px rgba(105, 105, 92, 0.1);
   }
-  
+
   .gradient-overlay {
-    background: linear-gradient(180deg, rgba(249, 249, 249, 0) 0%, rgba(249, 249, 249, 0.95) 100%);
+    background: linear-gradient(180deg, rgba(238, 234, 228, 0) 0%, rgba(238, 234, 228, 0.95) 100%);
   }
-  
+
   .text-gradient {
-    background: linear-gradient(135deg, #1a1a1a 0%, #6b6661 100%);
+    background: linear-gradient(135deg, #1e1e1c 0%, #69695c 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
   }
-  
+
   .text-gradient-accent {
-    background: linear-gradient(135deg, #bea692 0%, #a68f7a 100%);
+    background: linear-gradient(135deg, #69695c 0%, #5a5a4e 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
   }
-  
+
   .decorative-bg {
-    background-image: 
-      radial-gradient(circle at 20% 50%, rgba(190, 166, 146, 0.05) 0%, transparent 50%),
-      radial-gradient(circle at 80% 80%, rgba(190, 166, 146, 0.03) 0%, transparent 50%);
+    background-image:
+      radial-gradient(circle at 20% 50%, rgba(105, 105, 92, 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(105, 105, 92, 0.03) 0%, transparent 50%);
   }
-  
+
   .rotate-3d {
     transform-style: preserve-3d;
     perspective: 1000px;
   }
-  
+
   .asymmetric-clip {
     clip-path: polygon(0 0, 100% 0, 95% 100%, 5% 100%);
   }
-  
+
   .asymmetric-clip-reverse {
     clip-path: polygon(5% 0, 100% 0, 100% 100%, 0 100%);
   }
-  
+
   .text-justify-smooth p {
     text-align: justify;
     text-justify: inter-word;
@@ -116,9 +124,9 @@
     -ms-hyphens: auto;
     word-spacing: 0.05em;
   }
-  
-  /* Применяем основной шрифт ко всем текстовым элементам по умолчанию */
-  p, 
+
+  /* Основной текст — #1E1E1C */
+  p,
   span:not([class*="heading"]):not([class*="font-heading"]):not(.text-white),
   .prose p,
   .prose span:not(.text-white),
@@ -127,55 +135,51 @@
   .prose a {
     font-family: var(--font-body), system-ui, arial, sans-serif;
     font-weight: 500;
-    font-size: 1rem; /* 16px - исходный размер */
-    color: #2a2a2a;
+    font-size: 1rem;
+    color: #1e1e1c;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
-  
-  /* Жирный текст использует TT Drugs */
+
   .prose strong,
   strong:not([class*="heading"]):not([class*="font-heading"]) {
-    font-family: var(--font-tt-drugs), system-ui, arial, sans-serif;
+    font-family: var(--font-body), system-ui, arial, sans-serif;
     font-weight: 700;
     font-size: inherit;
     color: inherit;
   }
-  
+
   /* Исключаем белый текст из глобальных стилей */
   .text-white,
   span.text-white,
   .text-white span {
     color: #ffffff !important;
   }
-  
+
   @media (min-width: 768px) {
-    p, 
+    p,
     .prose p,
     .prose span,
     .prose li {
-      font-size: 1.1875rem; /* 19px - на 1 пункт больше исходного 18px */
+      font-size: 1.1875rem;
     }
   }
-  
-  /* Затемняем muted текст */
+
   .text-muted-foreground {
-    color: #4a4a4a !important;
+    color: #5c5c58 !important;
   }
-  
-  /* Скрытие скроллбара для карусели */
+
   .scrollbar-hide {
-    -ms-overflow-style: none; /* IE и Edge */
-    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
-  
+
   .scrollbar-hide::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
+    display: none;
   }
 }
 
-/* Минимальный оверлей для лайтбокса: блюр + затемнение с задержкой,
-   чтобы совпасть с отрисовкой blur в браузере */
+/* Минимальный оверлей для лайтбокса */
 .lightbox-backdrop {
   position: fixed;
   inset: 0;
@@ -183,23 +187,34 @@
   backdrop-filter: blur(24px) saturate(120%);
   -webkit-backdrop-filter: blur(24px) saturate(120%);
   opacity: 0;
-  pointer-events: none; /* клики проходят в лайтбокс */
-  z-index: 999; /* ниже внутренних кнопок лайтбокса */
-  animation: lbOpacityIn 280ms ease 160ms forwards; /* задержка ≈ задержке блюра */
+  pointer-events: none;
+  z-index: 999;
+  animation: lbOpacityIn 280ms ease 160ms forwards;
 }
 
 @keyframes lbOpacityIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* Универсальный адаптив */
 @layer base {
-  html, body, #__next, main {
+  html,
+  body,
+  #__next,
+  main {
     max-width: 100vw;
     overflow-x: hidden;
   }
-  img, video, input, textarea, button {
+  img,
+  video,
+  input,
+  textarea,
+  button {
     max-width: 100%;
     height: auto;
     box-sizing: border-box;
@@ -215,26 +230,34 @@
 }
 
 @media (max-width: 600px) {
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-size: 5vw;
     word-break: break-word;
     white-space: normal;
   }
-  .p-6, .md\:p-8, .px-8, .md\:px-12 {
+  .p-6,
+  .md\:p-8,
+  .px-8,
+  .md\:px-12 {
     padding: 1rem !important;
   }
-  .gap-2, .md\:gap-3 {
+  .gap-2,
+  .md\:gap-3 {
     gap: 0.25rem !important;
   }
 }
 
 .faq-answer-custom {
-  font-size: 0.4375rem !important; /* 7px */
+  font-size: 0.4375rem !important;
   line-height: 1.6 !important;
   font-weight: 400 !important;
 }
 
-/* Отступ для якорных ссылок при прокрутке */
 section[id] {
   scroll-margin-top: 140px;
 }

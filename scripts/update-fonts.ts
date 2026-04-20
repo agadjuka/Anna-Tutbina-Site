@@ -9,7 +9,22 @@ import { join } from "path";
 const fontsDir = join(process.cwd(), "public", "fonts");
 const headingsDir = join(fontsDir, "headings");
 const bodyDir = join(fontsDir, "body");
+const logoDir = join(fontsDir, "logo");
 const outputFile = join(process.cwd(), "lib", "fonts.ts");
+
+function getFallback(folder: string): string {
+  if (folder === "headings")
+    return '["Cormorant Garamond", "Times New Roman", "serif"]';
+  if (folder === "logo") return '["Georgia", "serif"]';
+  return '["system-ui", "arial"]';
+}
+
+/** Для заголовков используем только Cormorant, если он есть в папке (иначе первый файл). */
+function pickHeadingFonts(files: string[]): string[] {
+  const cormorant = files.find((f) => /cormorant/i.test(f));
+  if (cormorant) return [cormorant];
+  return files.length ? [files[0]] : [];
+}
 
 function findFonts(dir: string): string[] {
   try {
@@ -49,7 +64,7 @@ function generateFontCode(fontFiles: string[], folder: string, varName: string):
   src: "../public/fonts/${folder}/${file}",
   variable: "${varName}",
   display: "swap",
-  fallback: ${folder === "headings" ? '["serif"]' : '["system-ui", "arial"]'},
+  fallback: ${getFallback(folder)},
   weight: "${weight}",
 })`;
   }
@@ -72,16 +87,27 @@ ${srcArray}
   ],
   variable: "${varName}",
   display: "swap",
-  fallback: ${folder === "headings" ? '["serif"]' : '["system-ui", "arial"]'},
+  fallback: ${getFallback(folder)},
 })`;
 }
 
 function generateFontsFile() {
-  const headingFonts = findFonts(headingsDir);
+  const headingFonts = pickHeadingFonts(findFonts(headingsDir));
   const bodyFonts = findFonts(bodyDir);
+  const logoFonts = findFonts(logoDir);
 
   const headingCode = generateFontCode(headingFonts, "headings", "--font-heading");
   const bodyCode = generateFontCode(bodyFonts, "body", "--font-body");
+  const logoCode =
+    logoFonts.length > 0
+      ? generateFontCode(logoFonts, "logo", "--font-logo")
+      : `localFont({
+  src: "../public/fonts/logo/LaLuxes-regular.otf",
+  variable: "--font-logo",
+  display: "swap",
+  fallback: ["Georgia", "serif"],
+  weight: "400",
+})`;
 
   const content = `import localFont from "next/font/local";
 
@@ -93,12 +119,18 @@ export const headingFont = ${headingCode};
 
 // Шрифт для основного текста из public/fonts/body/
 export const bodyFont = ${bodyCode};
+
+// Логотип из public/fonts/logo/
+export const logoFont = ${logoCode};
 `;
 
   writeFileSync(outputFile, content, "utf-8");
   console.log("✅ Файл lib/fonts.ts успешно обновлен!");
-  console.log(`   Заголовки: ${headingFonts.length > 0 ? headingFonts.join(", ") : "не найдено"}`);
+  console.log(
+    `   Заголовки: ${headingFonts.length > 0 ? headingFonts.join(", ") : "не найдено"}`
+  );
   console.log(`   Основной текст: ${bodyFonts.length > 0 ? bodyFonts.join(", ") : "не найдено"}`);
+  console.log(`   Логотип: ${logoFonts.length > 0 ? logoFonts.join(", ") : "не найдено"}`);
 }
 
 generateFontsFile();

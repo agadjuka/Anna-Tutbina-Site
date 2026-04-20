@@ -49,12 +49,12 @@ export function AboutSection({ image, bio }: AboutSectionProps) {
             {/* Блок изображения (на мобильных сверху) */}
             <div className="relative md:col-start-2">
               {/* Декоративные элементы вокруг изображения */}
-              <div className="absolute -top-6 -right-6 w-24 h-24 border-2 border-[#bea692]/20 rounded-full hidden md:block" />
-              <div className="absolute -bottom-8 -left-8 w-32 h-32 border border-[#e5e0db] rounded-full hidden lg:block" />
+              <div className="absolute -top-6 -right-6 w-24 h-24 border-2 border-primary/20 rounded-full hidden md:block" />
+              <div className="absolute -bottom-8 -left-8 w-32 h-32 border border-border rounded-full hidden lg:block" />
               
               <div className="relative">
                 {/* Градиентный фон */}
-                <div className="absolute -inset-8 bg-gradient-to-br from-[#bea692]/10 via-[#e5e0db]/20 to-transparent rounded-3xl blur-2xl" />
+                <div className="absolute -inset-8 bg-gradient-to-br from-primary/10 via-muted/20 to-transparent rounded-3xl blur-2xl" />
                 
                 {/* Основное изображение с асимметричным смещением */}
                 <div className="relative transform rotate-[-1deg] md:rotate-1 hover:rotate-0 transition-transform duration-700">
@@ -71,7 +71,7 @@ export function AboutSection({ image, bio }: AboutSectionProps) {
                 </div>
                 
                 {/* Декоративный элемент сверху */}
-                <div className="absolute -top-4 -left-4 w-16 h-16 bg-[#bea692]/10 rounded-full blur-md hidden md:block" />
+                <div className="absolute -top-4 -left-4 w-16 h-16 bg-primary/10 rounded-full blur-md hidden md:block" />
               </div>
             </div>
           </div>

@@ -20,12 +20,12 @@ export function ReviewsSection({ reviews }: ReviewsSectionProps) {
 
   return (
     <section className="relative bg-background pt-4 pb-6 md:pt-6 md:pb-8">
-      <div className="absolute top-1/4 right-0 h-64 w-64 rounded-full bg-[#bea692]/5 blur-3xl" />
-      <div className="absolute bottom-1/4 left-0 h-80 w-80 rounded-full bg-[#e5e0db]/5 blur-3xl" />
+      <div className="absolute top-1/4 right-0 h-64 w-64 rounded-full bg-primary/5 blur-3xl" />
+      <div className="absolute bottom-1/4 left-0 h-80 w-80 rounded-full bg-muted/5 blur-3xl" />
 
       <ReviewsExpandProvider>
         <div className="relative">
-          <div className="absolute bottom-0 top-0 left-0 hidden w-px bg-gradient-to-b from-transparent via-[#bea692]/30 to-transparent lg:block" />
+          <div className="absolute bottom-0 top-0 left-0 hidden w-px bg-gradient-to-b from-transparent via-primary/30 to-transparent lg:block" />
 
           <div className="relative mb-3 md:mb-4">
             <SectionHeading as="h2">Что говорят наши участницы</SectionHeading>

@@ -23,7 +23,7 @@ function normalizeColumns(raw: PricingDetailsSanity): { title: string; text: str
 function SinglePricingCard({ title, text }: { title: string; text: string }) {
   return (
     <div className="flex min-h-0 flex-col overflow-hidden rounded-2xl border border-border/80 bg-card shadow-card">
-      <div className="flex min-h-[3.5rem] items-center justify-center bg-[#bea692] px-4 py-3 text-center md:px-5 md:py-4">
+      <div className="flex min-h-[3.5rem] items-center justify-center bg-primary px-4 py-3 text-center md:px-5 md:py-4">
         <p className="font-heading text-sm md:text-base font-medium uppercase tracking-[0.12em] text-white text-balance">
           {title || "\u00a0"}
         </p>
@@ -50,7 +50,7 @@ function PricingHeadersThenBodies({
       {columns.map((col, i) => (
         <div
           key={`h-${i}-${col.title}`}
-          className="flex min-h-0 items-center justify-center bg-[#bea692] px-4 py-3 text-center md:px-5 md:py-4 rounded-t-2xl border border-border/80 border-b-0"
+          className="flex min-h-0 items-center justify-center bg-primary px-4 py-3 text-center md:px-5 md:py-4 rounded-t-2xl border border-border/80 border-b-0"
         >
           <p className="font-heading text-sm md:text-base font-medium uppercase tracking-[0.12em] text-white text-balance">
             {col.title || "\u00a0"}

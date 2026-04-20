@@ -36,7 +36,7 @@ export function IncludedNotIncludedSection({
     listItem: {
       bullet: (props) => (
         <li className="flex items-start gap-3 md:gap-4 text-base md:text-lg leading-relaxed text-muted-foreground">
-          <span className="text-[#bea692] font-medium shrink-0 mt-0.5">—</span>
+          <span className="text-primary font-medium shrink-0 mt-0.5">—</span>
           <span className="flex-1">{props.children}</span>
         </li>
       ),
@@ -56,7 +56,7 @@ export function IncludedNotIncludedSection({
           {/* Что включено */}
           {included && (
             <div className="space-y-4 md:space-y-5">
-              <h3 className="text-base md:text-lg uppercase tracking-[0.15em] font-medium text-[#bea692] mb-4 md:mb-6">
+              <h3 className="text-base md:text-lg uppercase tracking-[0.15em] font-medium text-primary mb-4 md:mb-6">
                 Что включено
               </h3>
               <div>
@@ -71,7 +71,7 @@ export function IncludedNotIncludedSection({
           {/* Что не включено */}
           {notIncluded && (
             <div className="space-y-4 md:space-y-5">
-              <h3 className="text-base md:text-lg uppercase tracking-[0.15em] font-medium text-[#bea692] mb-4 md:mb-6">
+              <h3 className="text-base md:text-lg uppercase tracking-[0.15em] font-medium text-primary mb-4 md:mb-6">
                 Не входит в стоимость
               </h3>
               <div>

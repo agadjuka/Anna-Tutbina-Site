@@ -13,13 +13,10 @@ export function SectionHeading({
   as: Component = "h2",
   variant = "default"
 }: SectionHeadingProps) {
-  const textColor = variant === "light" 
-    ? "text-white/90" 
-    : "text-[#bea692]";
-  
-  const lineColor = variant === "light"
-    ? "bg-white/30"
-    : "bg-[#bea692]";
+  const textColor =
+    variant === "light" ? "text-white/90" : "text-[#69695C]";
+
+  const lineColor = variant === "light" ? "bg-white/30" : "bg-[#69695C]";
 
   return (
     <div className={cn("w-full flex justify-center", className)}>
@@ -35,7 +32,7 @@ export function SectionHeading({
           className={cn(
             // Мобильные: меньше межбуквенный интервал, переносы строк и длинных слов
             // Десктоп: поведение без изменений
-            "font-heading text-base md:text-lg uppercase tracking-[0.14em] md:tracking-[0.2em] font-medium text-center md:text-left leading-tight md:leading-normal break-normal whitespace-normal hyphens-none md:whitespace-nowrap",
+            "font-heading font-normal text-base md:text-lg uppercase tracking-[0.14em] md:tracking-[0.2em] text-center md:text-left leading-tight md:leading-normal break-normal whitespace-normal hyphens-none md:whitespace-nowrap",
             textColor
           )}
         >

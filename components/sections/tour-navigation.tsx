@@ -56,11 +56,11 @@ export function TourNavigation({ sections }: TourNavigationProps) {
                 "text-[11px]",
                 "font-normal tracking-normal",
                 "text-muted-foreground",
-                "hover:text-[#bea692]",
+                "hover:text-primary",
                 "transition-colors duration-300 ease-out",
                 "whitespace-nowrap",
-                "border-b border-[#e5e0db]/40",
-                "hover:border-[#bea692]/50",
+                "border-b border-border/40",
+                "hover:border-primary/50",
                 "focus:outline-none"
               )}
               aria-label={`Перейти к разделу ${section.label}`}
@@ -82,11 +82,11 @@ export function TourNavigation({ sections }: TourNavigationProps) {
                   "text-[11px]",
                   "font-normal tracking-normal",
                   "text-muted-foreground",
-                  "hover:text-[#bea692]",
+                  "hover:text-primary",
                   "transition-colors duration-300 ease-out",
                   "whitespace-nowrap",
-                  "border-b border-[#e5e0db]/40",
-                  "hover:border-[#bea692]/50",
+                  "border-b border-border/40",
+                  "hover:border-primary/50",
                   "focus:outline-none"
                 )}
                 aria-label={`Перейти к разделу ${section.label}`}
@@ -110,11 +110,11 @@ export function TourNavigation({ sections }: TourNavigationProps) {
               "text-xs",
               "font-normal tracking-normal",
               "text-muted-foreground",
-              "hover:text-[#bea692]",
+              "hover:text-primary",
               "transition-colors duration-300 ease-out",
               "whitespace-nowrap",
-              "border-b border-[#e5e0db]/40",
-              "hover:border-[#bea692]/50",
+              "border-b border-border/40",
+              "hover:border-primary/50",
               "focus:outline-none"
             )}
             aria-label={`Перейти к разделу ${section.label}`}

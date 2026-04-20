@@ -15,13 +15,13 @@ const baseClasses =
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary:
-    "bg-[#bea692] text-white hover:bg-[#a68f7a] hover:shadow-lg hover:shadow-[#bea692]/25 focus:ring-[#bea692] ring-offset-background",
+    "bg-primary text-white hover:bg-primary-dark hover:shadow-lg hover:shadow-primary/25 focus:ring-primary ring-offset-background",
   secondary:
-    "bg-white text-foreground hover:bg-[#e5e0db] border border-[#e5e0db] focus:ring-[#bea692] ring-offset-background shadow-sm",
-  ghost: 
-    "bg-transparent text-muted-foreground hover:text-foreground hover:bg-[#e5e0db]/50 focus:ring-[#bea692] ring-offset-background",
+    "bg-background text-primary border border-primary/35 hover:bg-muted hover:border-primary/50 focus:ring-primary ring-offset-background shadow-sm",
+  ghost:
+    "bg-transparent text-muted-foreground hover:text-foreground hover:bg-muted/50 focus:ring-primary ring-offset-background",
   outline:
-    "bg-transparent text-[#bea692] border-2 border-[#bea692] hover:bg-[#bea692] hover:text-white focus:ring-[#bea692] ring-offset-background",
+    "bg-transparent text-primary border-2 border-primary hover:bg-primary hover:text-background focus:ring-primary ring-offset-background",
 };
 
 export function Button({
@@ -35,11 +35,7 @@ export function Button({
   const classes = cn(baseClasses, variantClasses[variant], className);
 
   if (asChild) {
-    return (
-      <div className={classes}>
-        {children}
-      </div>
-    );
+    return <div className={classes}>{children}</div>;
   }
 
   if (href) {
@@ -56,5 +52,3 @@ export function Button({
     </button>
   );
 }
-
-

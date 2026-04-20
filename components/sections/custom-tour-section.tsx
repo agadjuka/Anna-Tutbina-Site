@@ -12,8 +12,8 @@ export function CustomTourSection({ title, mainImage }: CustomTourSectionProps) 
   return (
     <section className="relative w-full overflow-hidden bg-background">
       {/* Декоративные элементы фона */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-[#bea692]/3 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#e5e0db]/5 rounded-full blur-3xl" />
+      <div className="absolute top-0 right-0 w-96 h-96 bg-primary/3 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 left-0 w-80 h-80 bg-muted/5 rounded-full blur-3xl" />
       
       <Container>
         <div className="relative flex flex-col items-center justify-center text-center py-12 md:py-16 lg:py-20 gap-6">

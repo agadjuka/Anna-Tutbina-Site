@@ -123,7 +123,7 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
             <header className="space-y-6">
               <div className="w-full flex justify-center">
                 <div className="max-w-4xl w-full">
-                  <div className="flex flex-wrap items-center gap-6 pt-6 border-t border-[#e5e0db]">
+                  <div className="flex flex-wrap items-center gap-6 pt-6 border-t border-border">
                     {tour.dates && (
                       <div className="flex items-center gap-2">
                         <span className="text-sm md:text-base uppercase tracking-wider text-muted-foreground font-medium">Даты:</span>
@@ -132,7 +132,7 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
                     )}
                     {tour.price && (
                       <div className="flex items-center gap-2 ml-auto">
-                        <span className="text-2xl md:text-3xl font-bold text-[#bea692]">
+                        <span className="text-2xl md:text-3xl font-bold text-primary">
                           от {tour.price.value} {tour.price.currency}
                         </span>
                       </div>
