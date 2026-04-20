@@ -30,8 +30,11 @@ export function CustomTourSection({ title, mainImage }: CustomTourSectionProps) 
           </div>
           
           <div className="mt-4">
-            <Button asChild variant="secondary" className="relative overflow-hidden">
-              <Link href="/custom-tour" className="relative z-10">
+            <Button asChild variant="primary" className="relative overflow-hidden shadow-md">
+              <Link
+                href="/custom-tour"
+                className="relative z-10 inline-flex items-center justify-center text-inherit"
+              >
                 Узнать подробнее
               </Link>
             </Button>
