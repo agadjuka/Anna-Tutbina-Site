@@ -11,10 +11,6 @@ interface CustomTourSectionProps {
 export function CustomTourSection({ title, mainImage }: CustomTourSectionProps) {
   return (
     <section className="relative w-full overflow-hidden bg-background">
-      {/* Декоративные элементы фона */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-primary/3 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 left-0 w-80 h-80 bg-muted/5 rounded-full blur-3xl" />
-      
       <Container>
         <div className="relative flex flex-col items-center justify-center text-center pt-10 md:pt-14 lg:pt-16 pb-5 md:pb-6 lg:pb-8 gap-5 md:gap-6">
           <div className="space-y-4 w-full">
