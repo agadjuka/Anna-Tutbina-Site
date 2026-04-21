@@ -13,12 +13,7 @@ export function Header() {
     >
       <Container>
         <div className="relative flex items-center justify-between py-2 md:py-7">
-          <div
-            className="absolute left-0 bottom-0 top-0 w-px opacity-40 hidden lg:block"
-            style={{
-              background: `linear-gradient(to bottom, ${HEADER_FG}, transparent, ${HEADER_FG})`,
-            }}
-          />
+
 
           <Link
             href="/"
@@ -85,12 +80,7 @@ export function Header() {
             </ul>
           </nav>
 
-          <div
-            className="absolute right-0 bottom-0 top-0 w-px opacity-40 hidden lg:block"
-            style={{
-              background: `linear-gradient(to bottom, ${HEADER_FG}, transparent, ${HEADER_FG})`,
-            }}
-          />
+
         </div>
       </Container>
     </header>
