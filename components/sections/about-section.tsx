@@ -53,13 +53,9 @@ export function AboutSection({ image, bio }: AboutSectionProps) {
               <div className="absolute -bottom-8 -left-8 w-32 h-32 border border-border rounded-full hidden lg:block" />
               
               <div className="relative">
-                {/* Градиентный фон */}
-                <div className="absolute -inset-8 bg-gradient-to-br from-primary/10 via-muted/20 to-transparent rounded-3xl blur-2xl" />
-                
                 {/* Основное изображение */}
-                <div className="relative transform transition-all duration-500 hover:-translate-y-1 hover:scale-[1.02] hover:shadow-lg">
-                  <div className="absolute -inset-3 bg-white/80 rounded-2xl blur-xl" />
-                  <div className="relative overflow-hidden rounded-2xl shadow-card-elevated w-full max-w-none md:max-w-[400px] mx-auto">
+                <div className="relative transform transition-all duration-500 hover:-translate-y-1 hover:scale-[1.02] rounded-2xl">
+                  <div className="relative overflow-hidden rounded-2xl w-full max-w-none md:max-w-[400px] mx-auto">
                     <SanityImage
                       image={image}
                       alt="Анна Турбина"
@@ -69,9 +65,6 @@ export function AboutSection({ image, bio }: AboutSectionProps) {
                     />
                   </div>
                 </div>
-                
-                {/* Декоративный элемент сверху */}
-                <div className="absolute -top-4 -left-4 w-16 h-16 bg-primary/10 rounded-full blur-md hidden md:block" />
               </div>
             </div>
           </div>
