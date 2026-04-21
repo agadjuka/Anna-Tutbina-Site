@@ -23,7 +23,7 @@ export default function RootLayout({
       lang="ru"
       className={`${headingFont.variable} ${bodyFont.variable} ${logoFont.variable} ${logoSubtitleFont.variable}`}
     >
-      <body className="pt-16 antialiased">
+      <body className="antialiased">
         <Header />
         {children}
         <FloatingContacts />

@@ -1,14 +1,42 @@
+"use client";
+
 import { Container } from "@/components/ui/container";
 import Link from "next/link";
+import { useEffect, useRef } from "react";
 
 /** Цвета из правок: хедер #69695C, логотип и текст навигации #EEEAE4 */
 const HEADER_BG = "#69695C";
 const HEADER_FG = "#EEEAE4";
 
 export function Header() {
+  const headerRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const header = headerRef.current;
+    if (!header) return;
+
+    const updateHeight = () => {
+      document.documentElement.style.setProperty(
+        "--header-height",
+        `${header.offsetHeight}px`
+      );
+    };
+
+    updateHeight();
+
+    const observer = new ResizeObserver(() => {
+      updateHeight();
+    });
+
+    observer.observe(header);
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <header
-      className="fixed top-0 left-0 w-full z-50 border-b border-[#69695C]/90 backdrop-blur-md shadow-md"
+      ref={headerRef}
+      className="sticky top-0 left-0 w-full z-50 border-b border-[#69695C]/90 backdrop-blur-md shadow-md"
       style={{ backgroundColor: HEADER_BG }}
     >
       <Container>
@@ -30,14 +58,14 @@ export function Header() {
           </Link>
 
           <nav>
-            <ul className="flex items-center gap-8 md:gap-12 text-lg md:text-xl">
+            <ul className="flex items-center gap-8 md:gap-12 text-base md:text-xl">
               <li>
                 <Link
                   href="/#tours"
                   className="transition-opacity duration-300 relative pb-1 group hover:opacity-90"
                   style={{ color: HEADER_FG }}
                 >
-                  <span className="relative z-10 whitespace-nowrap text-inherit !text-lg md:!text-xl">Туры</span>
+                  <span className="relative z-10 whitespace-nowrap text-inherit !text-base md:!text-xl">Туры</span>
                   <div
                     className="absolute bottom-0 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-300"
                     style={{ backgroundColor: HEADER_FG }}
@@ -54,7 +82,7 @@ export function Header() {
                   className="transition-opacity duration-300 relative pb-1 group hover:opacity-90"
                   style={{ color: HEADER_FG }}
                 >
-                  <span className="relative z-10 whitespace-nowrap text-inherit !text-lg md:!text-xl">Обо мне</span>
+                  <span className="relative z-10 whitespace-nowrap text-inherit !text-base md:!text-xl">Обо мне</span>
                   <div
                     className="absolute bottom-0 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-300"
                     style={{ backgroundColor: HEADER_FG }}
@@ -71,7 +99,7 @@ export function Header() {
                   className="transition-opacity duration-300 relative pb-1 group hover:opacity-90"
                   style={{ color: HEADER_FG }}
                 >
-                  <span className="relative z-10 whitespace-nowrap text-inherit !text-lg md:!text-xl">Отзывы</span>
+                  <span className="relative z-10 whitespace-nowrap text-inherit !text-base md:!text-xl">Отзывы</span>
                   <div
                     className="absolute bottom-0 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-300"
                     style={{ backgroundColor: HEADER_FG }}
@@ -85,12 +113,7 @@ export function Header() {
             </ul>
           </nav>
 
-          <div
-            className="absolute right-0 bottom-0 top-0 w-px opacity-40 hidden lg:block"
-            style={{
-              background: `linear-gradient(to bottom, ${HEADER_FG}, transparent, ${HEADER_FG})`,
-            }}
-          />
+
         </div>
       </Container>
     </header>

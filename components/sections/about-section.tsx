@@ -56,8 +56,8 @@ export function AboutSection({ image, bio }: AboutSectionProps) {
                 {/* Градиентный фон */}
                 <div className="absolute -inset-8 bg-gradient-to-br from-primary/10 via-muted/20 to-transparent rounded-3xl blur-2xl" />
                 
-                {/* Основное изображение с асимметричным смещением */}
-                <div className="relative transform rotate-[-1deg] md:rotate-1 hover:rotate-0 transition-transform duration-700">
+                {/* Основное изображение */}
+                <div className="relative transform transition-all duration-500 hover:-translate-y-1 hover:scale-[1.02] hover:shadow-lg">
                   <div className="absolute -inset-3 bg-white/80 rounded-2xl blur-xl" />
                   <div className="relative overflow-hidden rounded-2xl shadow-card-elevated w-full max-w-none md:max-w-[400px] mx-auto">
                     <SanityImage
