@@ -98,14 +98,28 @@ function generateFontsFile() {
 
   const headingCode = generateFontCode(headingFonts, "headings", "--font-heading");
   const bodyCode = generateFontCode(bodyFonts, "body", "--font-body");
+  const mainLogoFonts = logoFonts.filter(f => !f.toLowerCase().includes('script') && !f.toLowerCase().includes('theartist'));
+  const subtitleLogoFonts = logoFonts.filter(f => f.toLowerCase().includes('script') || f.toLowerCase().includes('theartist'));
+
   const logoCode =
-    logoFonts.length > 0
-      ? generateFontCode(logoFonts, "logo", "--font-logo")
+    mainLogoFonts.length > 0
+      ? generateFontCode(mainLogoFonts, "logo", "--font-logo")
       : `localFont({
   src: "../public/fonts/logo/LaLuxes-regular.otf",
   variable: "--font-logo",
   display: "swap",
   fallback: ["Georgia", "serif"],
+  weight: "400",
+})`;
+
+  const subtitleLogoCode =
+    subtitleLogoFonts.length > 0
+      ? generateFontCode(subtitleLogoFonts, "logo", "--font-logo-subtitle")
+      : `localFont({
+  src: "../public/fonts/logo/MADE TheArtist Script PERSONAL USE.otf",
+  variable: "--font-logo-subtitle",
+  display: "swap",
+  fallback: ["cursive"],
   weight: "400",
 })`;
 
@@ -122,6 +136,9 @@ export const bodyFont = ${bodyCode};
 
 // Логотип из public/fonts/logo/
 export const logoFont = ${logoCode};
+
+// Шрифт для подзаголовка логотипа
+export const logoSubtitleFont = ${subtitleLogoCode};
 `;
 
   writeFileSync(outputFile, content, "utf-8");

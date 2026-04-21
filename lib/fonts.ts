@@ -30,10 +30,11 @@ export const logoFont = localFont({
   weight: "400",
 });
 
+// Шрифт для подзаголовка логотипа
 export const logoSubtitleFont = localFont({
   src: "../public/fonts/logo/MADE TheArtist Script PERSONAL USE.otf",
   variable: "--font-logo-subtitle",
   display: "swap",
-  fallback: ["cursive"],
+  fallback: ["Georgia", "serif"],
   weight: "400",
 });
