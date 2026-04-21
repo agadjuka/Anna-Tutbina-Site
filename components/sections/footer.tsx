@@ -9,8 +9,13 @@ export function Footer() {
       <Container>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-8 py-6 md:py-8">
           <div className="space-y-2">
-            <div className="font-logo text-base md:text-2xl tracking-tight text-primary">
-              ONÁ
+            <div className="flex flex-col items-start text-primary">
+              <span className="font-logo text-3xl md:text-4xl tracking-tight leading-none">
+                ONÁ
+              </span>
+              <span className="font-logo-subtitle text-[18px] md:text-[22px] tracking-wide -mt-1 md:-mt-2 opacity-90">
+                woman space & travel
+              </span>
             </div>
             <p className="text-[12.5px] md:text-sm text-muted-foreground leading-snug max-w-sm">
               Эксклюзивные маршруты и персональные путешествия для женщин

@@ -59,6 +59,10 @@
     font-family: var(--font-logo), serif;
   }
 
+  .font-logo-subtitle {
+    font-family: var(--font-logo-subtitle), cursive;
+  }
+
   .font-sans {
     font-family: var(--font-body), system-ui, arial, sans-serif;
   }
@@ -127,7 +131,7 @@
 
   /* Основной текст — #1E1E1C */
   p,
-  span:not([class*="heading"]):not([class*="font-heading"]):not(.text-white),
+  span:not([class*="heading"]):not([class*="font-heading"]):not([class*="font-logo"]):not(.text-white),
   .prose p,
   .prose span:not(.text-white),
   .prose li,

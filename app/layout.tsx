@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { headingFont, bodyFont, logoFont } from "@/lib/fonts";
+import { headingFont, bodyFont, logoFont, logoSubtitleFont } from "@/lib/fonts";
 import { Footer } from "@/components/sections/footer";
 import { Header } from "@/components/sections/header";
 import { FloatingContacts } from "@/components/ui/floating-contacts";
@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <html
       lang="ru"
-      className={`${headingFont.variable} ${bodyFont.variable} ${logoFont.variable}`}
+      className={`${headingFont.variable} ${bodyFont.variable} ${logoFont.variable} ${logoSubtitleFont.variable}`}
     >
       <body className="pt-16 antialiased">
         <Header />

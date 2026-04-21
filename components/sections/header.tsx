@@ -12,16 +12,21 @@ export function Header() {
       style={{ backgroundColor: HEADER_BG }}
     >
       <Container>
-        <div className="relative flex items-center justify-between py-2 md:py-7">
-
+        <div className="relative flex items-center justify-between py-2 md:py-4">
+          {/* Левая полоска удалена по запросу пользователя */}
 
           <Link
             href="/"
-            className="font-logo inline-flex items-center -my-2 md:-my-7 py-2 md:py-7 px-3 md:px-4 text-2xl md:text-3xl tracking-tight hover:opacity-90 transition-opacity"
+            className="flex flex-col items-start justify-center -my-2 md:-my-4 py-2 md:py-4 px-3 md:px-4 hover:opacity-90 transition-opacity"
             style={{ color: HEADER_FG }}
             aria-label="ONÁ — на главную"
           >
-            ONÁ
+            <span className="font-logo text-4xl md:text-5xl tracking-tight leading-none">
+              ONÁ
+            </span>
+            <span className="font-logo-subtitle text-[18px] md:text-[26px] tracking-wide -mt-2 md:-mt-3 opacity-95">
+              woman space & travel
+            </span>
           </Link>
 
           <nav>
@@ -80,7 +85,12 @@ export function Header() {
             </ul>
           </nav>
 
-
+          <div
+            className="absolute right-0 bottom-0 top-0 w-px opacity-40 hidden lg:block"
+            style={{
+              background: `linear-gradient(to bottom, ${HEADER_FG}, transparent, ${HEADER_FG})`,
+            }}
+          />
         </div>
       </Container>
     </header>

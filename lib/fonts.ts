@@ -29,3 +29,11 @@ export const logoFont = localFont({
   fallback: ["Georgia", "serif"],
   weight: "400",
 });
+
+export const logoSubtitleFont = localFont({
+  src: "../public/fonts/logo/MADE TheArtist Script PERSONAL USE.otf",
+  variable: "--font-logo-subtitle",
+  display: "swap",
+  fallback: ["cursive"],
+  weight: "400",
+});
