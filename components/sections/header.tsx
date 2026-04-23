@@ -8,6 +8,9 @@ import { useEffect, useRef } from "react";
 const HEADER_BG = "#69695C";
 const HEADER_FG = "#EEEAE4";
 
+/** Временная настройка для скрытия навигации: туры, обо мне, отзывы */
+const HIDE_NAVIGATION = true;
+
 export function Header() {
   const headerRef = useRef<HTMLElement>(null);
 
@@ -57,61 +60,63 @@ export function Header() {
             </span>
           </Link>
 
-          <nav>
-            <ul className="flex items-center gap-8 md:gap-12 text-base md:text-xl">
-              <li>
-                <Link
-                  href="/#tours"
-                  className="transition-opacity duration-300 relative pb-1 group hover:opacity-90"
-                  style={{ color: HEADER_FG }}
-                >
-                  <span className="relative z-10 whitespace-nowrap text-inherit !text-base md:!text-xl">Туры</span>
-                  <div
-                    className="absolute bottom-0 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-300"
-                    style={{ backgroundColor: HEADER_FG }}
-                  />
-                  <div
-                    className="absolute -left-3 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                    style={{ backgroundColor: HEADER_FG }}
-                  />
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/#about"
-                  className="transition-opacity duration-300 relative pb-1 group hover:opacity-90"
-                  style={{ color: HEADER_FG }}
-                >
-                  <span className="relative z-10 whitespace-nowrap text-inherit !text-base md:!text-xl">Обо мне</span>
-                  <div
-                    className="absolute bottom-0 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-300"
-                    style={{ backgroundColor: HEADER_FG }}
-                  />
-                  <div
-                    className="absolute -left-3 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                    style={{ backgroundColor: HEADER_FG }}
-                  />
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/#reviews"
-                  className="transition-opacity duration-300 relative pb-1 group hover:opacity-90"
-                  style={{ color: HEADER_FG }}
-                >
-                  <span className="relative z-10 whitespace-nowrap text-inherit !text-base md:!text-xl">Отзывы</span>
-                  <div
-                    className="absolute bottom-0 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-300"
-                    style={{ backgroundColor: HEADER_FG }}
-                  />
-                  <div
-                    className="absolute -left-3 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                    style={{ backgroundColor: HEADER_FG }}
-                  />
-                </Link>
-              </li>
-            </ul>
-          </nav>
+          {!HIDE_NAVIGATION && (
+            <nav>
+              <ul className="flex items-center gap-8 md:gap-12 text-base md:text-xl">
+                <li>
+                  <Link
+                    href="/#tours"
+                    className="transition-opacity duration-300 relative pb-1 group hover:opacity-90"
+                    style={{ color: HEADER_FG }}
+                  >
+                    <span className="relative z-10 whitespace-nowrap text-inherit !text-base md:!text-xl">Туры</span>
+                    <div
+                      className="absolute bottom-0 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-300"
+                      style={{ backgroundColor: HEADER_FG }}
+                    />
+                    <div
+                      className="absolute -left-3 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                      style={{ backgroundColor: HEADER_FG }}
+                    />
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/#about"
+                    className="transition-opacity duration-300 relative pb-1 group hover:opacity-90"
+                    style={{ color: HEADER_FG }}
+                  >
+                    <span className="relative z-10 whitespace-nowrap text-inherit !text-base md:!text-xl">Обо мне</span>
+                    <div
+                      className="absolute bottom-0 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-300"
+                      style={{ backgroundColor: HEADER_FG }}
+                    />
+                    <div
+                      className="absolute -left-3 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                      style={{ backgroundColor: HEADER_FG }}
+                    />
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/#reviews"
+                    className="transition-opacity duration-300 relative pb-1 group hover:opacity-90"
+                    style={{ color: HEADER_FG }}
+                  >
+                    <span className="relative z-10 whitespace-nowrap text-inherit !text-base md:!text-xl">Отзывы</span>
+                    <div
+                      className="absolute bottom-0 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-300"
+                      style={{ backgroundColor: HEADER_FG }}
+                    />
+                    <div
+                      className="absolute -left-3 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                      style={{ backgroundColor: HEADER_FG }}
+                    />
+                  </Link>
+                </li>
+              </ul>
+            </nav>
+          )}
 
 
         </div>
