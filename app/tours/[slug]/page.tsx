@@ -66,10 +66,17 @@ export async function generateMetadata({ params }: { params: Promise<{ slug?: st
       description,
       url: `/tours/${slug}`,
       type: "article",
+      images: [
+        {
+          url: "/Logo/web-app-manifest-512x512.png",
+          type: "image/png",
+        },
+      ],
     },
     twitter: {
       title: tour.name,
       description,
+      images: ["/Logo/web-app-manifest-512x512.png"],
     },
   };
 }

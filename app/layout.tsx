@@ -18,12 +18,12 @@ export const metadata: Metadata = {
   manifest: "/Logo/site.webmanifest",
   icons: {
     icon: [
-      { url: "/Logo/favicon.ico", type: "image/x-icon" },
-      { url: "/Logo/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico", type: "image/x-icon" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
       { url: "/Logo/favicon-96x96.png", sizes: "96x96", type: "image/png" },
     ],
-    shortcut: ["/Logo/favicon.ico"],
-    apple: [{ url: "/Logo/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+    shortcut: ["/favicon.ico"],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
   },
   openGraph: {
     type: "website",
