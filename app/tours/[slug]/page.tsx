@@ -68,7 +68,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug?: st
       type: "article",
       images: [
         {
-          url: "/Logo/web-app-manifest-512x512.png",
+          url: "https://www.ona-womantravel.com/Logo/web-app-manifest-512x512.png",
           type: "image/png",
         },
       ],
@@ -76,7 +76,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug?: st
     twitter: {
       title: tour.name,
       description,
-      images: ["/Logo/web-app-manifest-512x512.png"],
+      images: ["https://www.ona-womantravel.com/Logo/web-app-manifest-512x512.png"],
     },
   };
 }

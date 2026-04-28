@@ -18,11 +18,10 @@ export const metadata: Metadata = {
   manifest: "/Logo/site.webmanifest",
   icons: {
     icon: [
-      { url: "/favicon.ico", type: "image/x-icon" },
-      { url: "/favicon.svg", type: "image/svg+xml" },
       { url: "/Logo/favicon-96x96.png", sizes: "96x96", type: "image/png" },
+      { url: "/favicon.ico", type: "image/x-icon" },
     ],
-    shortcut: ["/favicon.ico"],
+    shortcut: ["/Logo/favicon-96x96.png"],
     apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
   },
   openGraph: {
@@ -34,7 +33,7 @@ export const metadata: Metadata = {
     description: "Авторские женские туры и ретриты с Анной Турбиной",
     images: [
       {
-        url: "/Logo/web-app-manifest-512x512.png",
+        url: "https://www.ona-womantravel.com/Logo/web-app-manifest-512x512.png",
         type: "image/png",
       },
     ],
@@ -43,7 +42,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "ONÁ",
     description: "Авторские женские туры и ретриты с Анной Турбиной",
-    images: ["/Logo/web-app-manifest-512x512.png"],
+    images: ["https://www.ona-womantravel.com/Logo/web-app-manifest-512x512.png"],
   },
   appleWebApp: {
     capable: true,
