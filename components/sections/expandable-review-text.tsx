@@ -24,6 +24,7 @@ const EASE_EXPAND = "cubic-bezier(0.16, 1, 0.3, 1)";
 /** Спокойное подтягивание без рывка */
 const EASE_COLLAPSE = "cubic-bezier(0.4, 0, 0.2, 1)";
 const EASE_OPACITY = "cubic-bezier(0.33, 1, 0.68, 1)";
+const COLLAPSED_LINES = 4;
 
 interface ExpandableReviewTextProps {
   text: string;
@@ -32,23 +33,33 @@ interface ExpandableReviewTextProps {
 export function ExpandableReviewText({ text }: ExpandableReviewTextProps) {
   const { allExpanded, expandAll } = useReviewsExpand();
 
-  const [canExpand, setCanExpand] = useState<boolean | null>(null);
-  const [localExpanded, setLocalExpanded] = useState(allExpanded);
+  const [canExpand, setCanExpand] = useState(false);
+  const [collapsedHeight, setCollapsedHeight] = useState(0);
+  const [expandedHeight, setExpandedHeight] = useState(0);
+  const [contentHeight, setContentHeight] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   const wrapRef = useRef<HTMLDivElement>(null);
   const pRef = useRef<HTMLParagraphElement>(null);
-  const collapsedTextHRef = useRef(0);
-  const prevCtxExpanded = useRef(allExpanded);
-  const timersRef = useRef<number[]>([]);
-
-  const expanded = localExpanded;
+  const finishTimerRef = useRef<number | null>(null);
 
   const measure = useCallback(() => {
     const el = pRef.current;
     if (!el) return;
-    if (expanded) return;
-    setCanExpand(el.scrollHeight > el.clientHeight + 1);
-  }, [expanded]);
+
+    const computed = window.getComputedStyle(el);
+    const lineHeight = Number.parseFloat(computed.lineHeight || "0");
+    if (!Number.isFinite(lineHeight) || lineHeight <= 0) return;
+
+    const collapsed = Math.max(1, Math.round(lineHeight * COLLAPSED_LINES));
+    const expanded = Math.max(1, Math.round(el.scrollHeight));
+    const expandable = expanded > collapsed + 1;
+
+    setCollapsedHeight(collapsed);
+    setExpandedHeight(expanded);
+    setCanExpand(expandable);
+    setContentHeight(expandable ? (allExpanded ? expanded : collapsed) : expanded);
+  }, [allExpanded]);
 
   useLayoutEffect(() => {
     measure();
@@ -61,184 +72,74 @@ export function ExpandableReviewText({ text }: ExpandableReviewTextProps) {
       ro.disconnect();
       window.removeEventListener("resize", measure);
     };
-  }, [measure, text, expanded]);
+  }, [measure, text]);
 
   useLayoutEffect(() => {
-    const p = pRef.current;
-    if (p && !localExpanded && canExpand === true) {
-      collapsedTextHRef.current = Math.round(p.getBoundingClientRect().height);
+    if (finishTimerRef.current) {
+      window.clearTimeout(finishTimerRef.current);
+      finishTimerRef.current = null;
     }
-  }, [localExpanded, canExpand, text]);
 
-  useLayoutEffect(() => {
-    const clearTimers = () => {
-      timersRef.current.forEach((id) => window.clearTimeout(id));
-      timersRef.current = [];
-    };
-
-    const cleanupStyles = (el: HTMLElement) => {
-      el.style.height = "";
-      el.style.overflow = "";
-      el.style.transition = "";
-      el.style.opacity = "";
-      el.style.willChange = "";
-    };
-
-    const animateExpand = () => {
-      const p = pRef.current;
-      if (!p) return;
-
-      clearTimers();
-      const from = Math.round(p.getBoundingClientRect().height);
-
-      p.style.height = `${from}px`;
-      p.style.overflow = "hidden";
-      p.style.willChange = "height, opacity";
-      p.style.opacity = "0.94";
-
-      setLocalExpanded(true);
-
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          const el = pRef.current;
-          if (!el) return;
-
-          const to = Math.max(1, Math.round(el.scrollHeight));
-          const opacityMs = Math.round(ANIM_EXPAND_MS * 0.85);
-
-          if (Math.abs(to - from) <= 1) {
-            cleanupStyles(el);
-            return;
-          }
-
-          el.style.transition = `height ${ANIM_EXPAND_MS}ms ${EASE_EXPAND}, opacity ${opacityMs}ms ${EASE_OPACITY}`;
-          el.style.height = `${to}px`;
-          el.style.opacity = "1";
-
-          let done = false;
-          const finish = (e?: TransitionEvent) => {
-            if (e && (e.target !== el || e.propertyName !== "height")) return;
-            if (done) return;
-            done = true;
-            el.removeEventListener("transitionend", finish);
-            clearTimers();
-            cleanupStyles(el);
-          };
-
-          el.addEventListener("transitionend", finish);
-          timersRef.current.push(
-            window.setTimeout(() => finish(), ANIM_EXPAND_MS + 120)
-          );
-        });
-      });
-    };
-
-    const animateCollapse = () => {
-      const p = pRef.current;
-      if (!p) return;
-
-      clearTimers();
-      const from = Math.round(p.getBoundingClientRect().height);
-      const to = Math.max(1, collapsedTextHRef.current || Math.round(from * 0.33));
-      const opacityMs = Math.round(ANIM_COLLAPSE_MS * 0.75);
-
-      p.style.height = `${from}px`;
-      p.style.overflow = "hidden";
-      p.style.willChange = "height, opacity";
-      p.style.opacity = "1";
-
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          const el = pRef.current;
-          if (!el) return;
-
-          if (Math.abs(to - from) <= 1) {
-            setLocalExpanded(false);
-            requestAnimationFrame(() => cleanupStyles(el));
-            return;
-          }
-
-          el.style.transition = `height ${ANIM_COLLAPSE_MS}ms ${EASE_COLLAPSE}, opacity ${opacityMs}ms ${EASE_COLLAPSE}`;
-          el.style.height = `${to}px`;
-          el.style.opacity = "0.92";
-
-          let done = false;
-          const finish = (e?: TransitionEvent) => {
-            if (e && (e.target !== el || e.propertyName !== "height")) return;
-            if (done) return;
-            done = true;
-            el.removeEventListener("transitionend", finish);
-            clearTimers();
-            setLocalExpanded(false);
-            requestAnimationFrame(() => cleanupStyles(el));
-          };
-
-          el.addEventListener("transitionend", finish);
-          timersRef.current.push(
-            window.setTimeout(() => finish(), ANIM_COLLAPSE_MS + 120)
-          );
-        });
-      });
-    };
-
-    if (canExpand !== true) {
-      clearTimers();
-      setLocalExpanded(allExpanded);
-      prevCtxExpanded.current = allExpanded;
+    if (!canExpand) {
+      setIsAnimating(false);
+      setContentHeight(expandedHeight);
       return;
     }
 
-    const prev = prevCtxExpanded.current;
-    const rising = allExpanded && !prev;
-    const falling = !allExpanded && prev;
+    const target = allExpanded ? expandedHeight : collapsedHeight;
+    setIsAnimating(true);
+    setContentHeight(target);
 
-    if (!rising && !falling) {
-      prevCtxExpanded.current = allExpanded;
-      return;
-    }
+    const duration = allExpanded ? ANIM_EXPAND_MS : ANIM_COLLAPSE_MS;
+    finishTimerRef.current = window.setTimeout(() => {
+      setIsAnimating(false);
+      finishTimerRef.current = null;
+    }, duration + 80);
+  }, [allExpanded, canExpand, collapsedHeight, expandedHeight]);
 
-    const p = pRef.current;
-    if (!p) {
-      prevCtxExpanded.current = allExpanded;
-      return;
-    }
-
-    if (rising) {
-      prevCtxExpanded.current = allExpanded;
-      animateExpand();
-      return;
-    }
-
-    if (falling) {
-      prevCtxExpanded.current = allExpanded;
-      animateCollapse();
-    }
-  }, [allExpanded, canExpand]);
-
-  useEffect(() => () => {
-    timersRef.current.forEach((id) => window.clearTimeout(id));
+  useEffect(() => {
+    return () => {
+      if (finishTimerRef.current) {
+        window.clearTimeout(finishTimerRef.current);
+      }
+    };
   }, []);
+
+  const expanded = canExpand ? allExpanded : true;
 
   return (
     <div className="flex min-h-0 min-w-0 flex-1 flex-col">
       <div
         ref={wrapRef}
         className={cn(
-          "relative min-w-0",
-          canExpand === true && !expanded && "pb-1"
+          "relative min-w-0 overflow-hidden",
+          canExpand && !expanded && "pb-1"
         )}
+        style={{
+          height: canExpand ? `${contentHeight}px` : undefined,
+          transition: canExpand
+            ? `height ${allExpanded ? ANIM_EXPAND_MS : ANIM_COLLAPSE_MS}ms ${allExpanded ? EASE_EXPAND : EASE_COLLAPSE}`
+            : undefined,
+          willChange: isAnimating ? "height" : undefined,
+        }}
       >
         <Paragraph
           ref={pRef}
           className={cn(
-            "mb-0 text-sm md:text-base italic leading-[1.8] text-muted-foreground",
-            reviewCardTextWrapClass,
-            !expanded && "line-clamp-4"
+            "mb-0 text-sm md:text-base italic leading-[1.8] text-muted-foreground transition-opacity",
+            reviewCardTextWrapClass
           )}
+          style={{
+            opacity: canExpand ? (expanded ? 1 : 0.98) : 1,
+            transitionDuration: `${Math.round(
+              (allExpanded ? ANIM_EXPAND_MS : ANIM_COLLAPSE_MS) * 0.82
+            )}ms`,
+            transitionTimingFunction: EASE_OPACITY,
+          }}
         >
           {text}
         </Paragraph>
-        {canExpand === true && (
+        {canExpand && (
           <div
             className={cn(
               "pointer-events-none absolute bottom-0 left-0 right-0 h-14 bg-gradient-to-t from-white via-white/90 to-transparent transition-opacity duration-300 ease-out",
@@ -249,7 +150,7 @@ export function ExpandableReviewText({ text }: ExpandableReviewTextProps) {
         )}
       </div>
 
-      {canExpand === true && (
+      {canExpand && (
         <div
           className={cn(
             "flex w-full min-w-0 shrink-0 justify-center overflow-hidden transition-all duration-300 ease-out",
