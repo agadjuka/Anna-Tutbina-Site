@@ -37,7 +37,7 @@ export function ExpandableReviewText({ text }: ExpandableReviewTextProps) {
 
   const wrapRef = useRef<HTMLDivElement>(null);
   const pRef = useRef<HTMLParagraphElement>(null);
-  const collapsedHRef = useRef(0);
+  const collapsedTextHRef = useRef(0);
   const prevCtxExpanded = useRef(allExpanded);
   const timersRef = useRef<number[]>([]);
 
@@ -64,9 +64,9 @@ export function ExpandableReviewText({ text }: ExpandableReviewTextProps) {
   }, [measure, text, expanded]);
 
   useLayoutEffect(() => {
-    const wrap = wrapRef.current;
-    if (wrap && !localExpanded && canExpand === true) {
-      collapsedHRef.current = wrap.scrollHeight;
+    const p = pRef.current;
+    if (p && !localExpanded && canExpand === true) {
+      collapsedTextHRef.current = Math.round(p.getBoundingClientRect().height);
     }
   }, [localExpanded, canExpand, text]);
 
@@ -84,24 +84,19 @@ export function ExpandableReviewText({ text }: ExpandableReviewTextProps) {
       el.style.willChange = "";
     };
 
-    const animateParagraphHeight = (
-      toExpanded: boolean,
-      durationMs: number,
-      easing: string
-    ) => {
+    const animateExpand = () => {
       const p = pRef.current;
       if (!p) return;
 
       clearTimers();
       const from = Math.round(p.getBoundingClientRect().height);
-      const targetOpacity = toExpanded ? "1" : "0.92";
 
       p.style.height = `${from}px`;
       p.style.overflow = "hidden";
       p.style.willChange = "height, opacity";
-      p.style.opacity = toExpanded ? "0.94" : "1";
+      p.style.opacity = "0.94";
 
-      setLocalExpanded(toExpanded);
+      setLocalExpanded(true);
 
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
@@ -109,16 +104,16 @@ export function ExpandableReviewText({ text }: ExpandableReviewTextProps) {
           if (!el) return;
 
           const to = Math.max(1, Math.round(el.scrollHeight));
-          const opacityMs = Math.round(durationMs * (toExpanded ? 0.85 : 0.75));
+          const opacityMs = Math.round(ANIM_EXPAND_MS * 0.85);
 
           if (Math.abs(to - from) <= 1) {
             cleanupStyles(el);
             return;
           }
 
-          el.style.transition = `height ${durationMs}ms ${easing}, opacity ${opacityMs}ms ${toExpanded ? EASE_OPACITY : easing}`;
+          el.style.transition = `height ${ANIM_EXPAND_MS}ms ${EASE_EXPAND}, opacity ${opacityMs}ms ${EASE_OPACITY}`;
           el.style.height = `${to}px`;
-          el.style.opacity = targetOpacity;
+          el.style.opacity = "1";
 
           let done = false;
           const finish = (e?: TransitionEvent) => {
@@ -131,7 +126,57 @@ export function ExpandableReviewText({ text }: ExpandableReviewTextProps) {
           };
 
           el.addEventListener("transitionend", finish);
-          timersRef.current.push(window.setTimeout(() => finish(), durationMs + 120));
+          timersRef.current.push(
+            window.setTimeout(() => finish(), ANIM_EXPAND_MS + 120)
+          );
+        });
+      });
+    };
+
+    const animateCollapse = () => {
+      const p = pRef.current;
+      if (!p) return;
+
+      clearTimers();
+      const from = Math.round(p.getBoundingClientRect().height);
+      const to = Math.max(1, collapsedTextHRef.current || Math.round(from * 0.33));
+      const opacityMs = Math.round(ANIM_COLLAPSE_MS * 0.75);
+
+      p.style.height = `${from}px`;
+      p.style.overflow = "hidden";
+      p.style.willChange = "height, opacity";
+      p.style.opacity = "1";
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          const el = pRef.current;
+          if (!el) return;
+
+          if (Math.abs(to - from) <= 1) {
+            setLocalExpanded(false);
+            requestAnimationFrame(() => cleanupStyles(el));
+            return;
+          }
+
+          el.style.transition = `height ${ANIM_COLLAPSE_MS}ms ${EASE_COLLAPSE}, opacity ${opacityMs}ms ${EASE_COLLAPSE}`;
+          el.style.height = `${to}px`;
+          el.style.opacity = "0.92";
+
+          let done = false;
+          const finish = (e?: TransitionEvent) => {
+            if (e && (e.target !== el || e.propertyName !== "height")) return;
+            if (done) return;
+            done = true;
+            el.removeEventListener("transitionend", finish);
+            clearTimers();
+            setLocalExpanded(false);
+            requestAnimationFrame(() => cleanupStyles(el));
+          };
+
+          el.addEventListener("transitionend", finish);
+          timersRef.current.push(
+            window.setTimeout(() => finish(), ANIM_COLLAPSE_MS + 120)
+          );
         });
       });
     };
@@ -160,13 +205,13 @@ export function ExpandableReviewText({ text }: ExpandableReviewTextProps) {
 
     if (rising) {
       prevCtxExpanded.current = allExpanded;
-      animateParagraphHeight(true, ANIM_EXPAND_MS, EASE_EXPAND);
+      animateExpand();
       return;
     }
 
     if (falling) {
       prevCtxExpanded.current = allExpanded;
-      animateParagraphHeight(false, ANIM_COLLAPSE_MS, EASE_COLLAPSE);
+      animateCollapse();
     }
   }, [allExpanded, canExpand]);
 
@@ -193,20 +238,30 @@ export function ExpandableReviewText({ text }: ExpandableReviewTextProps) {
         >
           {text}
         </Paragraph>
-        {canExpand === true && !expanded && (
+        {canExpand === true && (
           <div
-            className="pointer-events-none absolute bottom-0 left-0 right-0 h-14 bg-gradient-to-t from-white via-white/90 to-transparent motion-safe:transition-opacity motion-safe:duration-500 motion-safe:ease-out"
+            className={cn(
+              "pointer-events-none absolute bottom-0 left-0 right-0 h-14 bg-gradient-to-t from-white via-white/90 to-transparent transition-opacity duration-300 ease-out",
+              expanded ? "opacity-0" : "opacity-100"
+            )}
             aria-hidden
           />
         )}
       </div>
 
-      {canExpand === true && !expanded && (
-        <div className="mt-3 flex w-full min-w-0 shrink-0 justify-center">
+      {canExpand === true && (
+        <div
+          className={cn(
+            "flex w-full min-w-0 shrink-0 justify-center overflow-hidden transition-all duration-300 ease-out",
+            expanded
+              ? "mt-0 max-h-0 -translate-y-1 opacity-0 pointer-events-none"
+              : "mt-3 max-h-16 translate-y-0 opacity-100"
+          )}
+        >
           <button
             type="button"
             onClick={expandAll}
-            aria-expanded={false}
+            aria-expanded={expanded}
             className={reviewActionButtonClass}
           >
             <FitOneLineActionLabel>Читать дальше</FitOneLineActionLabel>
