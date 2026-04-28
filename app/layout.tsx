@@ -6,31 +6,44 @@ import { Header } from "@/components/sections/header";
 import { FloatingContacts } from "@/components/ui/floating-contacts";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.ona-womantravel.com"),
   title: {
     template: "%s | ONÁ",
     default: "ONÁ",
   },
   description: "Авторские женские туры и ретриты с Анной Турбиной",
+  alternates: {
+    canonical: "/",
+  },
   manifest: "/Logo/site.webmanifest",
   icons: {
-    icon: [{ url: "/Logo/favicon.svg", type: "image/svg+xml" }],
-    shortcut: ["/Logo/favicon.svg"],
-    apple: ["/Logo/favicon.svg"],
+    icon: [
+      { url: "/Logo/favicon.ico", type: "image/x-icon" },
+      { url: "/Logo/favicon.svg", type: "image/svg+xml" },
+      { url: "/Logo/favicon-96x96.png", sizes: "96x96", type: "image/png" },
+    ],
+    shortcut: ["/Logo/favicon.ico"],
+    apple: [{ url: "/Logo/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
   },
   openGraph: {
     type: "website",
     locale: "ru_RU",
     siteName: "ONÁ",
+    url: "/",
+    title: "ONÁ",
+    description: "Авторские женские туры и ретриты с Анной Турбиной",
     images: [
       {
-        url: "/Logo/favicon.svg",
-        type: "image/svg+xml",
+        url: "/Logo/web-app-manifest-512x512.png",
+        type: "image/png",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    images: ["/Logo/favicon.svg"],
+    title: "ONÁ",
+    description: "Авторские женские туры и ретриты с Анной Турбиной",
+    images: ["/Logo/web-app-manifest-512x512.png"],
   },
   appleWebApp: {
     capable: true,

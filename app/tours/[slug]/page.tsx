@@ -30,6 +30,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug?: st
     return {
       title: "Тур не найден",
       description: "Запрашиваемый тур не найден",
+      robots: {
+        index: false,
+        follow: false,
+      },
     };
   }
 
@@ -42,12 +46,31 @@ export async function generateMetadata({ params }: { params: Promise<{ slug?: st
     return {
       title: "Тур не найден",
       description: "Запрашиваемый тур не найден",
+      robots: {
+        index: false,
+        follow: false,
+      },
     };
   }
 
+  const description = tour.shortDescription || `Подробная информация о туре ${tour.name}`;
+
   return {
     title: tour.name,
-    description: tour.shortDescription || `Подробная информация о туре ${tour.name}`,
+    description,
+    alternates: {
+      canonical: `/tours/${slug}`,
+    },
+    openGraph: {
+      title: tour.name,
+      description,
+      url: `/tours/${slug}`,
+      type: "article",
+    },
+    twitter: {
+      title: tour.name,
+      description,
+    },
   };
 }
 

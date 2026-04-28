@@ -19,6 +19,9 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Главная",
   description: "Авторские женские туры и ретриты с Анной Турбиной. Изучайте мир вместе с нами.",
+  alternates: {
+    canonical: "/",
+  },
 };
 
 type SanitySlug = { current: string };

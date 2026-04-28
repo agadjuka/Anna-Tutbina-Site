@@ -9,6 +9,9 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Индивидуальный тур",
   description: "Создайте свой уникальный тур с Анной Турбиной. Индивидуальные программы и маршруты.",
+  alternates: {
+    canonical: "/custom-tour",
+  },
 };
 
 interface CustomTourDoc {

@@ -173,3 +173,10 @@ export const faqQuery = groq`
     answer
   }
 `;
+
+export const toursSlugsQuery = groq`
+  *[_type == "tour" && (${GROQ_TOUR_VISIBLE_ON_SITE})]{
+    "slug": slug.current,
+    _updatedAt
+  }
+`;
