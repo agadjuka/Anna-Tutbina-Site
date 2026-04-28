@@ -25,25 +25,12 @@ const EASE_EXPAND = "cubic-bezier(0.16, 1, 0.3, 1)";
 const EASE_COLLAPSE = "cubic-bezier(0.4, 0, 0.2, 1)";
 const EASE_OPACITY = "cubic-bezier(0.33, 1, 0.68, 1)";
 
-function usePrefersReducedMotion(): boolean {
-  const [reduced, setReduced] = useState(false);
-  useEffect(() => {
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReduced(mq.matches);
-    const fn = () => setReduced(mq.matches);
-    mq.addEventListener("change", fn);
-    return () => mq.removeEventListener("change", fn);
-  }, []);
-  return reduced;
-}
-
 interface ExpandableReviewTextProps {
   text: string;
 }
 
 export function ExpandableReviewText({ text }: ExpandableReviewTextProps) {
   const { allExpanded, expandAll } = useReviewsExpand();
-  const reducedMotion = usePrefersReducedMotion();
 
   const [canExpand, setCanExpand] = useState<boolean | null>(null);
   const [localExpanded, setLocalExpanded] = useState(allExpanded);
@@ -89,12 +76,65 @@ export function ExpandableReviewText({ text }: ExpandableReviewTextProps) {
       timersRef.current = [];
     };
 
-    if (reducedMotion) {
+    const cleanupStyles = (el: HTMLElement) => {
+      el.style.height = "";
+      el.style.overflow = "";
+      el.style.transition = "";
+      el.style.opacity = "";
+      el.style.willChange = "";
+    };
+
+    const animateParagraphHeight = (
+      toExpanded: boolean,
+      durationMs: number,
+      easing: string
+    ) => {
+      const p = pRef.current;
+      if (!p) return;
+
       clearTimers();
-      setLocalExpanded(allExpanded);
-      prevCtxExpanded.current = allExpanded;
-      return;
-    }
+      const from = Math.round(p.getBoundingClientRect().height);
+      const targetOpacity = toExpanded ? "1" : "0.92";
+
+      p.style.height = `${from}px`;
+      p.style.overflow = "hidden";
+      p.style.willChange = "height, opacity";
+      p.style.opacity = toExpanded ? "0.94" : "1";
+
+      setLocalExpanded(toExpanded);
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          const el = pRef.current;
+          if (!el) return;
+
+          const to = Math.max(1, Math.round(el.scrollHeight));
+          const opacityMs = Math.round(durationMs * (toExpanded ? 0.85 : 0.75));
+
+          if (Math.abs(to - from) <= 1) {
+            cleanupStyles(el);
+            return;
+          }
+
+          el.style.transition = `height ${durationMs}ms ${easing}, opacity ${opacityMs}ms ${toExpanded ? EASE_OPACITY : easing}`;
+          el.style.height = `${to}px`;
+          el.style.opacity = targetOpacity;
+
+          let done = false;
+          const finish = (e?: TransitionEvent) => {
+            if (e && (e.target !== el || e.propertyName !== "height")) return;
+            if (done) return;
+            done = true;
+            el.removeEventListener("transitionend", finish);
+            clearTimers();
+            cleanupStyles(el);
+          };
+
+          el.addEventListener("transitionend", finish);
+          timersRef.current.push(window.setTimeout(() => finish(), durationMs + 120));
+        });
+      });
+    };
 
     if (canExpand !== true) {
       clearTimers();
@@ -112,94 +152,23 @@ export function ExpandableReviewText({ text }: ExpandableReviewTextProps) {
       return;
     }
 
-    const wrap = wrapRef.current;
     const p = pRef.current;
-    if (!wrap || !p) {
+    if (!p) {
       prevCtxExpanded.current = allExpanded;
       return;
     }
 
     if (rising) {
-      clearTimers();
       prevCtxExpanded.current = allExpanded;
-      const from = collapsedHRef.current || wrap.scrollHeight;
-      wrap.style.overflow = "hidden";
-      wrap.style.maxHeight = `${from}px`;
-      wrap.style.willChange = "max-height, opacity";
-      wrap.style.opacity = "0.94";
-      setLocalExpanded(true);
-
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          const w = wrapRef.current;
-          if (!w) return;
-          const to = Math.max(w.scrollHeight, from);
-          const opacityMs = Math.round(ANIM_EXPAND_MS * 0.85);
-          w.style.transition = `max-height ${ANIM_EXPAND_MS}ms ${EASE_EXPAND}, opacity ${opacityMs}ms ${EASE_OPACITY}`;
-          w.style.maxHeight = `${to}px`;
-          w.style.opacity = "1";
-
-          let done = false;
-          const finish = (e?: TransitionEvent) => {
-            if (e && (e.target !== w || e.propertyName !== "max-height")) return;
-            if (done) return;
-            done = true;
-            w.removeEventListener("transitionend", finish);
-            clearTimers();
-            w.style.maxHeight = "";
-            w.style.overflow = "";
-            w.style.transition = "";
-            w.style.opacity = "";
-            w.style.willChange = "";
-          };
-          w.addEventListener("transitionend", finish);
-          timersRef.current.push(
-            window.setTimeout(() => finish(), ANIM_EXPAND_MS + 100)
-          );
-        });
-      });
+      animateParagraphHeight(true, ANIM_EXPAND_MS, EASE_EXPAND);
       return;
     }
 
     if (falling) {
-      clearTimers();
       prevCtxExpanded.current = allExpanded;
-      const from = wrap.scrollHeight;
-      wrap.style.overflow = "hidden";
-      wrap.style.maxHeight = `${from}px`;
-      wrap.style.willChange = "max-height, opacity";
-      wrap.style.opacity = "1";
-
-      requestAnimationFrame(() => {
-        const w = wrapRef.current;
-        if (!w) return;
-        const to = collapsedHRef.current || Math.round(from * 0.28);
-        const opacityMs = Math.round(ANIM_COLLAPSE_MS * 0.75);
-        w.style.transition = `max-height ${ANIM_COLLAPSE_MS}ms ${EASE_COLLAPSE}, opacity ${opacityMs}ms ${EASE_COLLAPSE}`;
-        w.style.maxHeight = `${to}px`;
-        w.style.opacity = "0.92";
-
-        let done = false;
-        const finish = (e?: TransitionEvent) => {
-          if (e && (e.target !== w || e.propertyName !== "max-height")) return;
-          if (done) return;
-          done = true;
-          w.removeEventListener("transitionend", finish);
-          clearTimers();
-          setLocalExpanded(false);
-          w.style.maxHeight = "";
-          w.style.overflow = "";
-          w.style.transition = "";
-          w.style.opacity = "";
-          w.style.willChange = "";
-        };
-        w.addEventListener("transitionend", finish);
-        timersRef.current.push(
-          window.setTimeout(() => finish(), ANIM_COLLAPSE_MS + 100)
-        );
-      });
+      animateParagraphHeight(false, ANIM_COLLAPSE_MS, EASE_COLLAPSE);
     }
-  }, [allExpanded, canExpand, reducedMotion]);
+  }, [allExpanded, canExpand]);
 
   useEffect(() => () => {
     timersRef.current.forEach((id) => window.clearTimeout(id));
