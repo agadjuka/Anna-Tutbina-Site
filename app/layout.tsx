@@ -11,6 +11,32 @@ export const metadata: Metadata = {
     default: "ONÁ",
   },
   description: "Авторские женские туры и ретриты с Анной Турбиной",
+  manifest: "/Logo/site.webmanifest",
+  icons: {
+    icon: [{ url: "/Logo/favicon.svg", type: "image/svg+xml" }],
+    shortcut: ["/Logo/favicon.svg"],
+    apple: ["/Logo/favicon.svg"],
+  },
+  openGraph: {
+    type: "website",
+    locale: "ru_RU",
+    siteName: "ONÁ",
+    images: [
+      {
+        url: "/Logo/favicon.svg",
+        type: "image/svg+xml",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/Logo/favicon.svg"],
+  },
+  appleWebApp: {
+    capable: true,
+    title: "ONÁ",
+    statusBarStyle: "default",
+  },
 };
 
 export default function RootLayout({

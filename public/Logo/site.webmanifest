@@ -1,0 +1,19 @@
+{
+  "name": "ONÁ",
+  "short_name": "ONÁ",
+  "description": "Авторские женские туры и ретриты с Анной Турбиной",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/Logo/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "display": "standalone"
+}
