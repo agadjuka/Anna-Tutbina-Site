@@ -28,7 +28,8 @@ export function TourCardWrapper({ tour, className, isActive = false }: TourCardW
       const width = containerRef.current.offsetWidth;
       // Базовый размер шрифта пропорционален ширине карточки
       // Для карточки шириной 400px -> 16px, для 300px -> 12px и т.д.
-      const baseSize = (width / 400) * 16;
+      // Округляем до ближайшего целого или 0.5 для стабильности
+      const baseSize = Math.round((width / 400) * 16 * 2) / 2;
       // Ограничиваем диапазон от 10px до 20px для предотвращения экстремальных значений
       const clampedSize = Math.max(10, Math.min(20, baseSize));
       setFontSize(clampedSize);

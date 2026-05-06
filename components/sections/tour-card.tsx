@@ -38,9 +38,9 @@ export function TourCard({ tour, className, isActive = false }: TourCardProps) {
     <Link
       href={`/tours/${tour.slug.current}`}
       className={cn(
-        "group relative block overflow-hidden rounded-2xl transition-all duration-700 ease-out",
-        "hover:scale-[1.02] md:hover:-translate-y-1 hover:shadow-2xl",
-        isActive && "scale-[1.02] md:-translate-y-1 shadow-2xl",
+        "group relative block overflow-hidden rounded-2xl transition-all duration-500 ease-out transform-gpu will-change-transform",
+        "md:hover:-translate-y-1 hover:shadow-2xl",
+        isActive && "md:-translate-y-1 shadow-2xl",
         className
       )}
     >
@@ -51,8 +51,8 @@ export function TourCard({ tour, className, isActive = false }: TourCardProps) {
           image={tour.cardImage ?? tour.mainImage}
           className={cn(
             "absolute inset-0 h-full w-full object-cover rounded-2xl transition-transform duration-700 ease-out",
-            "group-hover:scale-105",
-            isActive && "scale-105"
+            "group-hover:scale-110",
+            isActive && "scale-110"
           )}
           fill
           alt={tour.name}
@@ -60,24 +60,24 @@ export function TourCard({ tour, className, isActive = false }: TourCardProps) {
 
         {/* Overlay - легкое затемнение по умолчанию, сильное при hover или активном состоянии */}
         <div className={cn(
-          "absolute inset-0 rounded-2xl z-10 transition-all duration-700 ease-out",
-          "bg-black/20 group-hover:bg-black/75",
-          isActive && "bg-black/75"
+          "absolute inset-0 rounded-2xl z-10 transition-colors duration-500 ease-out",
+          "bg-black/30 group-hover:bg-black/70",
+          isActive && "bg-black/70"
         )} />
 
         {/* Светлая граница/подсветка по краям */}
         <div className={cn(
-          "absolute inset-0 rounded-2xl border pointer-events-none z-20 transition-opacity duration-700 ease-out",
-          "border-white/30 group-hover:border-white/40",
+          "absolute inset-0 rounded-2xl border pointer-events-none z-20 transition-opacity duration-500 ease-out",
+          "border-white/20 group-hover:border-white/40",
           isActive && "border-white/40"
         )} />
 
         {/* Весь контент поверх изображения - используем em для пропорционального масштабирования */}
-        <div className="absolute inset-0 flex flex-col justify-between z-20" style={{
+        <div className="absolute inset-0 flex flex-col justify-start z-20 antialiased" style={{
           padding: '1.25em 1.75em'
         } as React.CSSProperties}>
           {/* Верхняя часть: название, даты, цена */}
-          <div className="flex flex-col" style={{
+          <div className="flex flex-col min-h-0" style={{
             gap: '0.375em'
           } as React.CSSProperties}>
             {/* Название тура */}
@@ -90,7 +90,7 @@ export function TourCard({ tour, className, isActive = false }: TourCardProps) {
 
             {/* Даты */}
             {tour.dates && (
-              <p className="uppercase tracking-wider font-medium text-white" style={{
+              <p className="uppercase tracking-wider font-medium text-white/90" style={{
                 fontSize: '0.875em',
                 lineHeight: '1.4'
               } as React.CSSProperties}>
@@ -110,41 +110,45 @@ export function TourCard({ tour, className, isActive = false }: TourCardProps) {
             )}
 
             {/* Описание - появляется только при hover или активном состоянии */}
-            <div className={cn(
-              "overflow-hidden",
-              "group-hover:mt-0 group-hover:-mt-1",
-              isActive && "mt-0 -mt-1"
-            )} style={{
-              marginTop: '0.75em'
-            } as React.CSSProperties}>
-              <p className={cn(
-                "leading-snug text-white text-justify translate-y-4 transition-all duration-700 ease-[cubic-bezier(0.4,0,0.2,1)] break-words",
-                "opacity-0 max-h-0 group-hover:opacity-100 group-hover:max-h-[500px] group-hover:translate-y-0",
-                isActive && "opacity-100 max-h-[500px] translate-y-0"
-              )} style={{
-                fontSize: '1em',
-                lineHeight: '1.5'
-              } as React.CSSProperties}>
-                {tour.shortDescription}
-              </p>
+            <div 
+              className={cn(
+                "grid transition-[grid-template-rows] duration-500 ease-in-out",
+                (isActive) ? "grid-rows-[1fr]" : "grid-rows-[0fr] group-hover:grid-rows-[1fr]"
+              )}
+            >
+              <div className="overflow-hidden">
+                {/* Отступ вынесен внутрь, чтобы не дергался основной макет */}
+                <div className="pt-3">
+                  <p className={cn(
+                    "leading-snug text-white/90 transition-opacity duration-500 ease-in-out break-words transform-gpu",
+                    "opacity-0 group-hover:opacity-100",
+                    isActive && "opacity-100"
+                  )} style={{
+                    fontSize: '1em',
+                    lineHeight: '1.5'
+                  } as React.CSSProperties}>
+                    {tour.shortDescription}
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
 
           {/* Нижняя часть: кнопка "Подробнее" */}
-          <div className="flex items-center font-medium uppercase tracking-wide text-white" style={{
+          <div className="mt-auto flex items-center font-medium uppercase tracking-wide text-white" style={{
             gap: '0.5em',
             fontSize: '0.875em'
           } as React.CSSProperties}>
             <span className={cn(
-              "text-white transition-all duration-700 ease-out",
+              "text-white transition-opacity duration-500 ease-out",
               "group-hover:opacity-90",
               isActive && "opacity-90"
-            )} style={{ color: '#ffffff' }}>Подробнее</span>
+            )}>Подробнее</span>
             <span className={cn(
-              "text-white transition-transform duration-700 ease-out inline-block",
+              "text-white transition-transform duration-500 ease-out inline-block",
               "group-hover:translate-x-2",
               isActive && "translate-x-2"
-            )} style={{ color: '#ffffff' }}>
+            )}>
               →
             </span>
           </div>
