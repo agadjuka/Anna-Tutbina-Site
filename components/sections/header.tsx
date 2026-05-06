@@ -9,7 +9,7 @@ const HEADER_BG = "#69695C";
 const HEADER_FG = "#EEEAE4";
 
 /** Временная настройка для скрытия навигации: туры, обо мне, отзывы */
-const HIDE_NAVIGATION = true;
+const HIDE_NAVIGATION = false;
 
 export function Header() {
   const headerRef = useRef<HTMLElement>(null);
