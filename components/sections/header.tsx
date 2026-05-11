@@ -2,6 +2,7 @@
 
 import { Container } from "@/components/ui/container";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
 
 /** Цвета из правок: хедер #69695C, логотип и текст навигации #EEEAE4 */
@@ -9,10 +10,14 @@ const HEADER_BG = "#69695C";
 const HEADER_FG = "#EEEAE4";
 
 /** Временная настройка для скрытия навигации: туры, обо мне, отзывы */
-const HIDE_NAVIGATION = false;
+const HIDE_NAVIGATION = true;
 
 export function Header() {
   const headerRef = useRef<HTMLElement>(null);
+  const pathname = usePathname();
+
+  // Показываем навигацию, если мы в режиме админа (путь начинается с /admin/)
+  const showNavigation = !HIDE_NAVIGATION || pathname?.startsWith('/admin/') || pathname === '/admin';
 
   useEffect(() => {
     const header = headerRef.current;
@@ -59,8 +64,8 @@ export function Header() {
               woman space & travel
             </span>
           </Link>
-
-          {!HIDE_NAVIGATION && (
+          
+          {showNavigation && (
             <nav>
               <ul className="flex items-center gap-8 md:gap-12 text-base md:text-xl">
                 <li>

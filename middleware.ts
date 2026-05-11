@@ -4,6 +4,13 @@ import type { NextRequest } from 'next/server';
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // Разрешаем любой путь, если в нем есть /admin/
+  // Это позволяет обходить ограничения, просто добавив префикс в URL
+  if (pathname.startsWith('/admin/') || pathname === '/admin') {
+    const targetPath = pathname.replace('/admin', '') || '/';
+    return NextResponse.rewrite(new URL(targetPath, request.url));
+  }
+
   // Если это не наша разрешенная страница, перенаправляем на неё
   if (pathname !== '/tours/kas') {
     return NextResponse.redirect(new URL('/tours/kas', request.url));

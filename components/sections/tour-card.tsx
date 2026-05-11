@@ -73,8 +73,9 @@ export function TourCard({ tour, className, isActive = false }: TourCardProps) {
         )} />
 
         {/* Весь контент поверх изображения - используем em для пропорционального масштабирования */}
-        <div className="absolute inset-0 flex flex-col justify-start z-20 antialiased" style={{
-          padding: '1.25em 1.75em'
+        <div className="absolute inset-0 flex flex-col justify-start z-20 antialiased backface-hidden" style={{
+          padding: '1.25em 1.75em',
+          transform: 'translateZ(0)'
         } as React.CSSProperties}>
           {/* Верхняя часть: название, даты, цена */}
           <div className="flex flex-col min-h-0" style={{
@@ -120,12 +121,14 @@ export function TourCard({ tour, className, isActive = false }: TourCardProps) {
                 {/* Отступ вынесен внутрь, чтобы не дергался основной макет */}
                 <div className="pt-3">
                   <p className={cn(
-                    "leading-snug text-white/90 transition-opacity duration-500 ease-in-out break-words transform-gpu",
-                    "opacity-0 group-hover:opacity-100",
+                    "leading-snug text-white/90 transition-opacity duration-500 ease-in-out break-words",
+                    "opacity-0 group-hover:opacity-100 backface-hidden",
                     isActive && "opacity-100"
                   )} style={{
                     fontSize: '1em',
-                    lineHeight: '1.5'
+                    lineHeight: '1.5',
+                    WebkitFontSmoothing: 'antialiased',
+                    transform: 'translateZ(0)'
                   } as React.CSSProperties}>
                     {tour.shortDescription}
                   </p>
@@ -135,9 +138,11 @@ export function TourCard({ tour, className, isActive = false }: TourCardProps) {
           </div>
 
           {/* Нижняя часть: кнопка "Подробнее" */}
-          <div className="mt-auto flex items-center font-medium uppercase tracking-wide text-white" style={{
+          <div className="mt-auto flex items-center font-medium uppercase tracking-wide text-white backface-hidden" style={{
             gap: '0.5em',
-            fontSize: '0.875em'
+            fontSize: '0.875em',
+            WebkitFontSmoothing: 'antialiased',
+            transform: 'translateZ(0)'
           } as React.CSSProperties}>
             <span className={cn(
               "text-white transition-opacity duration-500 ease-out",
