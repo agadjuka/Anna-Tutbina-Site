@@ -11,9 +11,11 @@ export function middleware(request: NextRequest) {
     return NextResponse.rewrite(new URL(targetPath, request.url));
   }
 
-  // Если это не наша разрешенная страница, перенаправляем на неё
-  if (pathname !== '/tours/kas') {
-    return NextResponse.redirect(new URL('/tours/kas', request.url));
+  const allowedPaths = ['/tours/kas', '/tours/bali-padelcamp'];
+  const defaultRedirect = '/tours/kas';
+
+  if (!allowedPaths.includes(pathname)) {
+    return NextResponse.redirect(new URL(defaultRedirect, request.url));
   }
 
   return NextResponse.next();
