@@ -4,6 +4,8 @@
 - `/tours/kas` — основная, на неё перенаправляются все остальные пути
 - `/tours/bali-padelcamp` — [KAŞ | BE WOMAN](https://www.ona-womantravel.com/tours/bali-padelcamp)
 - `/tours/bali-padelsurfcamp`
+- `/tours/bali`
+- `/tours/capetown`
 
 Список разрешённых путей задаётся в `middleware.ts` (массив `allowedPaths`).
 

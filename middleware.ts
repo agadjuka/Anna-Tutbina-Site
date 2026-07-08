@@ -11,7 +11,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.rewrite(new URL(targetPath, request.url));
   }
 
-  const allowedPaths = ['/tours/kas', '/tours/bali-padelcamp', '/tours/bali-padelsurfcamp'];
+  const allowedPaths = ['/tours/kas', '/tours/bali-padelcamp', '/tours/bali-padelsurfcamp', '/tours/bali', '/tours/capetown'];
   const defaultRedirect = '/tours/kas';
 
   if (!allowedPaths.includes(pathname)) {
