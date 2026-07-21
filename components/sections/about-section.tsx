@@ -1,5 +1,4 @@
 import { Container } from "@/components/ui/container";
-import { Heading } from "@/components/ui/heading";
 import { PortableTextContent } from "@/components/ui/portable-text";
 import { SanityImage } from "@/components/ui/sanity-image";
 import { DecorativeBlur, DecorativeLine, DecorativeDot } from "@/components/ui/decorative-elements";
@@ -12,7 +11,7 @@ interface AboutSectionProps {
 
 export function AboutSection({ image, bio }: AboutSectionProps) {
   return (
-    <section className="relative py-6 md:py-8 lg:py-10 bg-background overflow-hidden">
+    <section className="relative overflow-hidden bg-background py-10 md:py-12 lg:py-16">
       {/* Декоративные элементы фона */}
       <DecorativeBlur className="top-20 left-10 w-96 h-96" />
       <DecorativeBlur className="bottom-20 right-10 w-80 h-80" />
@@ -38,9 +37,9 @@ export function AboutSection({ image, bio }: AboutSectionProps) {
             <div className="space-y-4 relative z-10 mt-6 md:mt-0 md:col-start-1">
               <div className="relative pt-2">
                 <div className="prose max-w-none mx-auto text-justify-smooth">
-                  <PortableTextContent 
-                    value={bio} 
-                    className="text-xs md:text-sm leading-[1.5] text-muted-foreground" 
+                  <PortableTextContent
+                    value={bio}
+                    className="text-sm leading-relaxed text-muted-foreground md:text-base md:leading-[1.65]"
                   />
                 </div>
               </div>

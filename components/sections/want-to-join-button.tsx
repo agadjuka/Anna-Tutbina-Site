@@ -22,7 +22,7 @@ export function WantToJoinButton() {
             className={
               "h-14 w-14 md:h-16 md:w-16 p-3 shrink-0 flex items-center justify-center rounded-full bg-muted text-muted-foreground transition-all overflow-visible shadow-lg" +
               (open
-                ? " opacity-100 translate-y-0 scale-100 duration-300 hover:text-[#0088cc] hover:bg-muted hover:scale-110 hover:shadow-xl"
+                ? " opacity-100 translate-y-0 scale-100 duration-300 hover:text-primary hover:bg-muted hover:scale-110 hover:shadow-xl"
                 : " opacity-0 translate-y-4 pointer-events-none duration-200 scale-90")
             }
             style={{ transitionProperty: "opacity, transform, background-color, color" }}
@@ -55,7 +55,7 @@ export function WantToJoinButton() {
           title="Хочу с Вами!"
           aria-pressed={open}
           onClick={() => setOpen((v) => !v)}
-          className="relative inline-flex items-center justify-center gap-2 px-10 py-5 md:px-12 md:py-6 text-lg md:text-xl font-medium text-white rounded-full bg-gradient-to-r from-primary via-primary-dark to-primary shadow-2xl hover:shadow-primary/25 transition-all duration-500 focus:outline-none focus:ring-4 focus:ring-primary/30 overflow-hidden group"
+          className="relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full bg-gradient-to-r from-primary via-primary-dark to-primary px-10 py-5 text-lg font-medium text-white shadow-2xl transition-all duration-500 hover:shadow-primary/25 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background group md:px-12 md:py-6 md:text-xl"
           style={{
             backgroundSize: "200% 100%",
             animation: open ? "none" : "gradient-shift 3s ease-in-out infinite, pulse-glow 2s ease-in-out infinite",
@@ -65,7 +65,7 @@ export function WantToJoinButton() {
           <span
             className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"
             style={{
-              background: "linear-gradient(90deg, #5a5a4e 0%, #8a8a7c 50%, #5a5a4e 100%)",
+              background: "linear-gradient(90deg, var(--color-primary-dark) 0%, var(--color-primary-light) 50%, var(--color-primary-dark) 100%)",
               backgroundSize: "200% 100%",
               animation: "gradient-shift 3s ease-in-out infinite",
             }}

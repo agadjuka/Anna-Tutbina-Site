@@ -14,9 +14,9 @@ export function SectionHeading({
   variant = "default"
 }: SectionHeadingProps) {
   const textColor =
-    variant === "light" ? "text-white/90" : "text-[#69695C]";
+    variant === "light" ? "text-white/90" : "text-primary";
 
-  const lineColor = variant === "light" ? "bg-white/30" : "bg-[#69695C]";
+  const lineColor = variant === "light" ? "bg-white/30" : "bg-primary";
 
   return (
     <div className={cn("w-full flex justify-center", className)}>

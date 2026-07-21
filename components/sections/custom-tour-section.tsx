@@ -12,7 +12,7 @@ export function CustomTourSection({ title, mainImage }: CustomTourSectionProps) 
   return (
     <section className="relative w-full overflow-hidden bg-background">
       <Container>
-        <div className="relative flex flex-col items-center justify-center text-center pt-10 md:pt-14 lg:pt-16 pb-5 md:pb-6 lg:pb-8 gap-5 md:gap-6">
+        <div className="relative flex flex-col items-center justify-center gap-5 py-10 text-center md:gap-6 md:py-12 lg:py-16">
           <div className="space-y-4 w-full">
             <SectionHeading as="h2" className="mb-4">
               {title || "Индивидуальный тур"}

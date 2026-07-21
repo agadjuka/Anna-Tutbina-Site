@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { MessageSquareText, Send } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
 import Link from "next/link";
@@ -58,7 +57,7 @@ export function FloatingContacts() {
           aria-pressed={open}
           onClick={() => setOpen((v) => !v)}
           className={
-            "relative inline-flex h-14 w-14 md:h-16 md:w-16 items-center justify-center rounded-full bg-primary text-white shadow-card-elevated transition-transform duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 hover:shadow-card-hover" +
+            "relative inline-flex h-14 w-14 items-center justify-center rounded-full bg-primary text-white shadow-card-elevated transition-transform duration-300 hover:shadow-card-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background md:h-16 md:w-16" +
             (open ? " rotate-12" : " rotate-0")
           }
         >

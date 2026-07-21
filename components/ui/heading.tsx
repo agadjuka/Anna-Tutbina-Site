@@ -18,7 +18,7 @@ export function Heading({ as = "h1", children, className, ...props }: HeadingPro
 
   return (
     <Component
-      className={cn("font-heading text-[#69695C]", headingStyles[as], className)}
+      className={cn("font-heading text-primary", headingStyles[as], className)}
       {...props}
     >
       {children}

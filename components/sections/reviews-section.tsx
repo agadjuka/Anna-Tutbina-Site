@@ -19,7 +19,7 @@ export function ReviewsSection({ reviews }: ReviewsSectionProps) {
   const equalWidthRow = shuffledReviews.length > 0 && shuffledReviews.length < 4;
 
   return (
-    <section className="relative bg-background pt-4 pb-6 md:pt-6 md:pb-8">
+    <section className="relative bg-background py-10 md:py-12 lg:py-16">
       <div className="absolute top-1/4 right-0 h-64 w-64 rounded-full bg-primary/5 blur-3xl" />
       <div className="absolute bottom-1/4 left-0 h-80 w-80 rounded-full bg-muted/5 blur-3xl" />
 
@@ -27,7 +27,7 @@ export function ReviewsSection({ reviews }: ReviewsSectionProps) {
         <div className="relative">
           <div className="absolute bottom-0 top-0 left-0 hidden w-px bg-gradient-to-b from-transparent via-primary/30 to-transparent lg:block" />
 
-          <div className="relative mb-3 md:mb-4">
+          <div className="relative mb-6 md:mb-8">
             <SectionHeading as="h2">Что говорят наши участницы</SectionHeading>
           </div>
 

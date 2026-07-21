@@ -26,7 +26,7 @@
   }
 
   html {
-    background-color: #eeeae4;
+    @apply bg-background;
   }
 
   body {
@@ -34,8 +34,7 @@
     font-weight: 500;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: #eeeae4;
-    color: #1e1e1c;
+    @apply bg-background text-foreground;
   }
 
   h1,
@@ -45,8 +44,12 @@
   h5,
   h6 {
     font-family: var(--font-heading), "Cormorant Garamond", "Times New Roman", serif;
-    color: #69695c;
-    @apply tracking-tight;
+    @apply text-primary tracking-tight;
+  }
+
+  strong:not([class*="heading"]):not([class*="font-heading"]) {
+    font-family: var(--font-body), system-ui, arial, sans-serif;
+    font-weight: 700;
   }
 }
 
@@ -129,53 +132,24 @@
     word-spacing: 0.05em;
   }
 
-  /* Основной текст — #1E1E1C */
-  p,
-  span:not([class*="heading"]):not([class*="font-heading"]):not([class*="font-logo"]):not(.text-white),
+  /* Проза: семейство body без форса размера/цвета — ими управляет Tailwind */
   .prose p,
-  .prose span:not(.text-white),
   .prose li,
   .prose em,
   .prose a {
     font-family: var(--font-body), system-ui, arial, sans-serif;
-    font-weight: 500;
-    font-size: 1rem;
-    color: #1e1e1c;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
   }
 
-  .prose strong,
-  strong:not([class*="heading"]):not([class*="font-heading"]) {
+  .prose strong {
     font-family: var(--font-body), system-ui, arial, sans-serif;
     font-weight: 700;
     font-size: inherit;
     color: inherit;
   }
 
-  /* Хедер: глобальное правило для span (цвет #1E1E1C) не должно трогать пункты меню и логотип */
+  /* Хедер: пункты меню и логотип не должны наследовать чужой цвет span */
   header a span {
-    color: inherit !important;
-  }
-
-  /* Исключаем белый текст из глобальных стилей */
-  .text-white,
-  span.text-white,
-  .text-white span {
-    color: #ffffff !important;
-  }
-
-  @media (min-width: 768px) {
-    p,
-    .prose p,
-    .prose span,
-    .prose li {
-      font-size: 1.1875rem;
-    }
-  }
-
-  .text-muted-foreground {
-    color: #5c5c58 !important;
+    color: inherit;
   }
 
   .scrollbar-hide {
@@ -238,33 +212,17 @@
   }
 }
 
-@media (max-width: 600px) {
+/* Мобильные заголовки: переносы без ломки Tailwind-шкалы (без 5vw / !important) */
+@media (max-width: 767px) {
   h1,
   h2,
   h3,
   h4,
   h5,
   h6 {
-    font-size: 5vw;
     word-break: break-word;
-    white-space: normal;
+    overflow-wrap: anywhere;
   }
-  .p-6,
-  .md\:p-8,
-  .px-8,
-  .md\:px-12 {
-    padding: 1rem !important;
-  }
-  .gap-2,
-  .md\:gap-3 {
-    gap: 0.25rem !important;
-  }
-}
-
-.faq-answer-custom {
-  font-size: 0.4375rem !important;
-  line-height: 1.6 !important;
-  font-weight: 400 !important;
 }
 
 [id] {

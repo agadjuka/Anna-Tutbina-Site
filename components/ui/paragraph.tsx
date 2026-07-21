@@ -10,7 +10,10 @@ export const Paragraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
     return (
       <p
         ref={ref}
-        className={cn("text-base md:text-xl leading-relaxed font-sans text-muted-foreground", className)}
+        className={cn(
+          "font-sans text-base leading-relaxed text-foreground md:text-xl",
+          className
+        )}
         {...props}
       >
         {children}

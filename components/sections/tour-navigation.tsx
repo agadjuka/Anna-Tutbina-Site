@@ -61,7 +61,7 @@ export function TourNavigation({ sections }: TourNavigationProps) {
                 "whitespace-nowrap",
                 "border-b border-border/40",
                 "hover:border-primary/50",
-                "focus:outline-none"
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               )}
               aria-label={`Перейти к разделу ${section.label}`}
             >
@@ -87,7 +87,7 @@ export function TourNavigation({ sections }: TourNavigationProps) {
                   "whitespace-nowrap",
                   "border-b border-border/40",
                   "hover:border-primary/50",
-                  "focus:outline-none"
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                 )}
                 aria-label={`Перейти к разделу ${section.label}`}
               >
@@ -115,7 +115,7 @@ export function TourNavigation({ sections }: TourNavigationProps) {
               "whitespace-nowrap",
               "border-b border-border/40",
               "hover:border-primary/50",
-              "focus:outline-none"
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             )}
             aria-label={`Перейти к разделу ${section.label}`}
           >

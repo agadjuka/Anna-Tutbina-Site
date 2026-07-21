@@ -1,10 +1,10 @@
 "use client";
 
-import {useState, useRef, useLayoutEffect} from "react";
-import {SectionHeading} from "@/components/ui/section-heading";
-import {Container} from "@/components/ui/container";
-import {PortableTextContent} from "@/components/ui/portable-text";
-import {cn} from "@/lib/utils";
+import { useState, useRef, useLayoutEffect } from "react";
+import { SectionHeading } from "@/components/ui/section-heading";
+import { Container } from "@/components/ui/container";
+import { PortableTextContent } from "@/components/ui/portable-text";
+import { cn } from "@/lib/utils";
 
 interface FaqItem {
   _id: string;
@@ -17,53 +17,31 @@ interface FaqSectionProps {
 }
 
 function PlusIconAnimated({ open }: { open: boolean }) {
-  // уменьшенный размер
-  const color = "#69695c";
-  const thickness = 1; // px
-  const length = 14; // уменьшенная длина линии
-  const size = 18; // сам контейнер меньше
+  const thickness = 1;
+  const length = 14;
+  const size = 18;
   return (
     <span
       className={cn(
-        "relative block transition-transform duration-300",
+        "relative block text-primary transition-transform duration-300",
         open ? "rotate-45" : "rotate-0"
       )}
-      style={{ width: size, height: size, display: 'inline-block' }}
+      style={{ width: size, height: size, display: "inline-block" }}
       aria-hidden="true"
     >
       <span
-        style={{
-          position: 'absolute',
-          left: '50%',
-          top: '50%',
-          width: length,
-          height: thickness,
-          backgroundColor: color,
-          borderRadius: 1,
-          transform: 'translate(-50%, -50%)',
-          transition: 'background-color 0.2s',
-          pointerEvents: 'none',
-        }}
+        className="absolute left-1/2 top-1/2 h-px w-3.5 -translate-x-1/2 -translate-y-1/2 rounded-sm bg-current"
+        style={{ width: length, height: thickness }}
       />
       <span
-        style={{
-          position: 'absolute',
-          left: '50%',
-          top: '50%',
-          width: thickness,
-          height: length,
-          backgroundColor: color,
-          borderRadius: 1,
-          transform: 'translate(-50%, -50%)',
-          transition: 'background-color 0.2s',
-          pointerEvents: 'none',
-        }}
+        className="absolute left-1/2 top-1/2 w-px -translate-x-1/2 -translate-y-1/2 rounded-sm bg-current"
+        style={{ width: thickness, height: length }}
       />
     </span>
   );
 }
 
-export function FaqSection({items}: FaqSectionProps) {
+export function FaqSection({ items }: FaqSectionProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const contentRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [heights, setHeights] = useState<number[]>([]);
@@ -80,49 +58,53 @@ export function FaqSection({items}: FaqSectionProps) {
 
   if (!items?.length) return null;
   return (
-    <section className="relative w-full bg-background pt-6 md:pt-8 lg:pt-10 pb-8 md:pb-12 lg:pb-16">
+    <section className="relative w-full bg-background py-10 md:py-12 lg:py-16">
       <Container>
         <div className="mb-8">
           <SectionHeading as="h2">FAQ</SectionHeading>
         </div>
-        <div className="max-w-3xl mx-auto">
-        {items.map((item, idx) => {
-          const isOpen = openIndex === idx;
-          return (
-            <div key={item._id} className="border-b border-border last:border-b-0">
-              <button
-                className={cn(
-                  "w-full flex justify-between items-center py-5 text-lg md:text-xl text-left transition-colors",
-                  isOpen ? "text-primary" : "text-foreground"
-                )}
-                onClick={() => setOpenIndex(isOpen ? null : idx)}
-                aria-expanded={isOpen}
-                aria-controls={`faq-content-${idx}`}
-                style={{ outline: "none" }}
-              >
-                <span style={{ fontSize: '1.125rem', lineHeight: 1.3, fontWeight: 500 }}>{item.question}</span>
-                <PlusIconAnimated open={isOpen} />
-              </button>
-              <div
-                id={`faq-content-${idx}`}
-                ref={el => { contentRefs.current[idx] = el }}
-                style={{
-                  height: isOpen ? heights[idx] : 0,
-                  opacity: isOpen ? 1 : 0,
-                  overflow: 'hidden',
-                  transition: 'height 0.4s cubic-bezier(.5,.1,.11,1), opacity 0.3s',
-                  willChange: 'height,opacity',
-                  pointerEvents: isOpen ? 'auto' : 'none',
-                }}
-                aria-hidden={!isOpen}
-              >
-                <div style={{padding: isOpen ? '0 4px' : '0 4px' }}>
-                  <PortableTextContent value={item.answer} style={{ fontSize: '16px', lineHeight: 1.6, fontWeight: 400 }} smallFont={true} />
+        <div className="mx-auto max-w-3xl">
+          {items.map((item, idx) => {
+            const isOpen = openIndex === idx;
+            return (
+              <div key={item._id} className="border-b border-border last:border-b-0">
+                <button
+                  className={cn(
+                    "flex w-full items-center justify-between py-5 text-left text-lg transition-colors md:text-xl",
+                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+                    isOpen ? "text-primary" : "text-foreground"
+                  )}
+                  onClick={() => setOpenIndex(isOpen ? null : idx)}
+                  aria-expanded={isOpen}
+                  aria-controls={`faq-content-${idx}`}
+                >
+                  <span className="pr-4 font-medium leading-snug">{item.question}</span>
+                  <PlusIconAnimated open={isOpen} />
+                </button>
+                <div
+                  id={`faq-content-${idx}`}
+                  ref={(el) => {
+                    contentRefs.current[idx] = el;
+                  }}
+                  className="overflow-hidden transition-[height,opacity] duration-300 ease-out"
+                  style={{
+                    height: isOpen ? heights[idx] : 0,
+                    opacity: isOpen ? 1 : 0,
+                    pointerEvents: isOpen ? "auto" : "none",
+                  }}
+                  aria-hidden={!isOpen}
+                >
+                  <div className="px-1 pb-5">
+                    <PortableTextContent
+                      value={item.answer}
+                      smallFont
+                      className="leading-relaxed text-muted-foreground"
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
         </div>
       </Container>
     </section>

@@ -28,10 +28,10 @@ export function DecorativeDot({ className }: { className?: string }) {
 export function DecorativeBlur({ className }: { className?: string }) {
   return (
     <div
-      className={cn("absolute rounded-full blur-3xl opacity-20", className)}
-      style={{
-        background: "radial-gradient(circle, #69695c 0%, transparent 70%)",
-      }}
+      className={cn(
+        "absolute rounded-full bg-primary blur-3xl opacity-20",
+        className
+      )}
     />
   );
 }
