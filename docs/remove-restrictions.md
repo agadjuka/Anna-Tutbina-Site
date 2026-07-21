@@ -6,6 +6,7 @@
 - `/tours/bali-padelsurfcamp`
 - `/tours/bali`
 - `/tours/capetown`
+- `/tours/capetown2`
 
 Список разрешённых путей задаётся в `middleware.ts` (массив `allowedPaths`).
 
