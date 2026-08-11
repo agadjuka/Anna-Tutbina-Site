@@ -5,7 +5,7 @@ import { FaWhatsapp } from "react-icons/fa";
 
 export function Footer() {
   return (
-    <footer className="border-t border-border bg-background">
+    <footer id="contacts" className="border-t border-border bg-background">
       <Container>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-8 py-6 md:py-8">
           <div className="space-y-2">

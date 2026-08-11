@@ -23,6 +23,7 @@ export const toursQuery = groq`
     },
     shortDescription,
     dates,
+    year,
     price
   }
 `;
@@ -129,10 +130,65 @@ export const tourMetadataQuery = groq`
 `;
 
 
-export const aboutQuery = groq`
-  *[_type == "about"][0]{
-    "image": images[0],
-    bio
+/** Раскрытие ассета изображения — метаданные нужны для корректных пропорций. */
+const IMAGE_PROJECTION = `
+  ...,
+  asset->{
+    _id,
+    metadata{dimensions{width,height,aspectRatio}}
+  }
+`;
+
+/** Синглтон «Главная страница»: контент главной, которого нет в других типах. */
+export const homePageQuery = groq`
+  *[_type == "homePage"][0]{
+    hero{
+      eyebrow,
+      heading,
+      subheading,
+      subheadingAccent,
+      photos[]{${IMAGE_PROJECTION}}
+    },
+    about{
+      eyebrow,
+      heading,
+      body,
+      photos[]{${IMAGE_PROJECTION}}
+    },
+    calendar{eyebrow, heading},
+    values{
+      eyebrow,
+      heading,
+      backgroundImage{${IMAGE_PROJECTION}},
+      items[]{title, text}
+    },
+    guests{
+      eyebrow,
+      heading,
+      headingAccent,
+      items,
+      body,
+      photos[]{${IMAGE_PROJECTION}}
+    },
+    founders{
+      eyebrow,
+      heading,
+      body,
+      photo{${IMAGE_PROJECTION}},
+      links[]{label, url}
+    },
+    testimonials{eyebrow, heading},
+    faq{eyebrow, heading}
+  }
+`;
+
+/** Синглтон «Настройки сайта»: футер и контакты, общие для всех страниц. */
+export const siteSettingsQuery = groq`
+  *[_type == "siteSettings"][0]{
+    slogan,
+    contactLinks[]{label, url},
+    communityLinks[]{label, url},
+    footerNote
   }
 `;
 
@@ -160,9 +216,12 @@ export const toursWithReviewsQuery = groq`
 
 export const customTourQuery = groq`
   *[_type == "customTour"][0]{
+    eyebrow,
     title,
     mainImage,
-    description
+    images[]{${IMAGE_PROJECTION}},
+    description,
+    tags
   }
 `;
 

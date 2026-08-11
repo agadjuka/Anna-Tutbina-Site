@@ -1,19 +1,41 @@
 "use client";
 
-import { Container } from "@/components/ui/container";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Menu, X } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 /** Временная настройка для скрытия навигации: туры, обо мне, отзывы */
 const HIDE_NAVIGATION = true;
 
+/**
+ * Пункты меню по макету (Figma, нода 5:307). Верхний регистр задаётся стилями,
+ * поэтому подписи храним так, как их пишет заказчик.
+ *
+ * `#values` появится вместе с блоком «Почему нас выбирают» — до этого якорь пустой.
+ */
+const NAV_ITEMS = [
+  { label: "о проекте", href: "/#about" },
+  { label: "календарь", href: "/#tours" },
+  { label: "отзывы", href: "/#reviews" },
+  { label: "наши ценности", href: "/#values" },
+  { label: "FAQ", href: "/#faq" },
+  { label: "контакты", href: "/#contacts" },
+] as const;
+
+/** Общая типографика пунктов меню: 12px, uppercase, трекинг 1.56px из макета. */
+const NAV_LINK_TYPO =
+  "text-xs font-medium uppercase leading-[21px] tracking-[0.13em] text-background";
+
 export function Header() {
   const headerRef = useRef<HTMLElement>(null);
   const pathname = usePathname();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   // Показываем навигацию, если мы в режиме админа (путь начинается с /admin/)
-  const showNavigation = !HIDE_NAVIGATION || pathname?.startsWith('/admin/') || pathname === '/admin';
+  const showNavigation =
+    !HIDE_NAVIGATION || pathname?.startsWith("/admin/") || pathname === "/admin";
 
   useEffect(() => {
     const header = headerRef.current;
@@ -37,64 +59,101 @@ export function Header() {
     return () => observer.disconnect();
   }, []);
 
+  // Мобильное меню закрывается по Escape
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMenuOpen(false);
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [menuOpen]);
+
+  const closeMenu = () => setMenuOpen(false);
+
   return (
     <header
       ref={headerRef}
-      className="sticky top-0 left-0 z-50 w-full border-b border-primary/90 bg-primary text-background shadow-md backdrop-blur-md"
+      className="sticky top-0 left-0 z-50 w-full bg-primary/[0.86] text-background backdrop-blur-md"
     >
-      <Container>
-        <div className="relative flex items-center justify-between py-2 md:py-4">
-          <Link
-            href="/"
-            className="flex flex-col items-start justify-center -my-2 px-3 py-2 text-background transition-opacity hover:opacity-90 md:-my-4 md:px-4 md:py-4"
-            aria-label="ONÁ — на главную"
-          >
-            <span className="font-logo text-4xl leading-none tracking-tight md:text-5xl">
-              ONÁ
-            </span>
-            <span className="font-logo-subtitle -mt-2 text-[18px] tracking-wide opacity-95 md:-mt-3 md:text-[26px]">
-              woman space & travel
-            </span>
-          </Link>
-          
-          {showNavigation && (
-            <nav>
-              <ul className="flex items-center gap-8 text-base md:gap-12 md:text-xl">
-                <li>
-                  <Link
-                    href="/#tours"
-                    className="group relative pb-1 text-background transition-opacity duration-300 hover:opacity-90"
-                  >
-                    <span className="relative z-10 whitespace-nowrap text-inherit !text-base md:!text-xl">Туры</span>
-                    <div className="absolute bottom-0 left-0 h-0.5 w-0 bg-background transition-all duration-300 group-hover:w-full" />
-                    <div className="absolute -left-3 top-1/2 h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-background opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/#about"
-                    className="group relative pb-1 text-background transition-opacity duration-300 hover:opacity-90"
-                  >
-                    <span className="relative z-10 whitespace-nowrap text-inherit !text-base md:!text-xl">Обо мне</span>
-                    <div className="absolute bottom-0 left-0 h-0.5 w-0 bg-background transition-all duration-300 group-hover:w-full" />
-                    <div className="absolute -left-3 top-1/2 h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-background opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/#reviews"
-                    className="group relative pb-1 text-background transition-opacity duration-300 hover:opacity-90"
-                  >
-                    <span className="relative z-10 whitespace-nowrap text-inherit !text-base md:!text-xl">Отзывы</span>
-                    <div className="absolute bottom-0 left-0 h-0.5 w-0 bg-background transition-all duration-300 group-hover:w-full" />
-                    <div className="absolute -left-3 top-1/2 h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-background opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                  </Link>
-                </li>
+      {/* Шапка шире контентного контейнера: в макете логотип и меню прижаты к краям (~128px при 1920) */}
+      <div className="relative flex h-16 w-full items-center justify-between px-4 md:h-[72px] md:px-8 lg:h-[86px] lg:px-16 xl:px-32">
+        <Link
+          href="/"
+          onClick={closeMenu}
+          className="flex flex-col items-start justify-center text-background transition-opacity hover:opacity-90"
+          aria-label="ONÁ — на главную"
+        >
+          <span className="font-logo text-[30px] leading-none tracking-tight md:text-[34px] lg:text-[38px]">
+            ONÁ
+          </span>
+          <span className="font-logo-subtitle -mt-1.5 text-[13px] tracking-wide opacity-95 md:-mt-2 md:text-[15px] lg:text-[17px]">
+            woman space &amp; travel
+          </span>
+        </Link>
+
+        {showNavigation && (
+          <>
+            <nav className="hidden lg:block" aria-label="Основная навигация">
+              <ul className="flex items-center gap-8 xl:gap-9">
+                {NAV_ITEMS.map((item) => (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      className={cn(
+                        "group relative block py-1 transition-opacity duration-300 hover:opacity-80",
+                        NAV_LINK_TYPO
+                      )}
+                    >
+                      <span className="whitespace-nowrap text-inherit">{item.label}</span>
+                      <span className="absolute -bottom-0.5 left-0 h-px w-0 bg-background transition-all duration-300 group-hover:w-full" />
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </nav>
+
+            <button
+              type="button"
+              onClick={() => setMenuOpen((open) => !open)}
+              className="-mr-2 flex h-10 w-10 items-center justify-center text-background lg:hidden"
+              aria-expanded={menuOpen}
+              aria-controls="mobile-nav"
+              aria-label={menuOpen ? "Закрыть меню" : "Открыть меню"}
+            >
+              {menuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </button>
+          </>
+        )}
+      </div>
+
+      {/* Панель мобильного меню — absolute, чтобы не менять высоту шапки и не ломать --header-height */}
+      {showNavigation && (
+        <nav
+          id="mobile-nav"
+          aria-label="Мобильная навигация"
+          className={cn(
+            "absolute left-0 top-full w-full overflow-hidden bg-primary/[0.96] backdrop-blur-md transition-all duration-300 lg:hidden",
+            menuOpen ? "max-h-96 opacity-100" : "pointer-events-none max-h-0 opacity-0"
           )}
-        </div>
-      </Container>
+        >
+          <ul className="flex flex-col px-4 pb-5 pt-1 md:px-8">
+            {NAV_ITEMS.map((item) => (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  onClick={closeMenu}
+                  className={cn("block py-2.5", NAV_LINK_TYPO)}
+                >
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )}
     </header>
   );
 }

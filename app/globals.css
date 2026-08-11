@@ -18,6 +18,8 @@
   --color-border-light: #ebe6df;
   --color-text-muted: #5c5c58;
   --color-text-light: #6a6a65;
+  /* Текст на заливке primary в макете редизайна — теплее чистого белого */
+  --color-on-primary: #fafaf8;
 }
 
 @layer base {
@@ -159,6 +161,63 @@
 
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
+  }
+}
+
+/* --- Анимация первого экрана (блок HERO) ---------------------------------
+   Текст и фото коллажа проявляются со сдвигом по задержке, затем фото
+   бесконечно «дышат». Вход и покачивание разнесены по двум элементам:
+   внешний отвечает за появление, внутренний — за плавание. */
+
+@keyframes heroFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroPhotoIn {
+  from {
+    opacity: 0;
+    transform: translateY(28px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes heroPhotoFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.hero-fade-up {
+  animation: heroFadeUp 900ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+.hero-photo-in {
+  animation: heroPhotoIn 1100ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+.hero-photo-float {
+  animation: heroPhotoFloat var(--hero-float-duration, 9s) ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-fade-up,
+  .hero-photo-in,
+  .hero-photo-float {
+    animation: none;
   }
 }
 

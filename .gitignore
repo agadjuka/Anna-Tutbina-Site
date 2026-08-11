@@ -48,6 +48,10 @@ sanity/.sanity/
 # === Local raw assets (keep out of git) ===
 Фото/
 Шрифты/
+Gilroy-Light_0.ttf
+
+# === Claude Code local settings (personal, not shared) ===
+.claude/settings.local.json
 
 # Optional: lock files are intentionally NOT ignored to ensure reproducible installs
 # package-lock.json

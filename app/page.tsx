@@ -3,9 +3,9 @@ import { Container } from "@/components/ui/container";
 import { TourCardWrapper } from "@/components/sections/tour-card-wrapper";
 import { ToursEmbla } from "@/components/sections/tours-embla";
 import { sanityClient } from "@/lib/sanity.client";
-import { toursQuery, aboutQuery, toursWithReviewsQuery, customTourQuery, faqQuery } from "@/lib/sanity.queries";
+import { toursQuery, toursWithReviewsQuery, customTourQuery, faqQuery, homePageQuery } from "@/lib/sanity.queries";
 import { isTourVisibleOnSite } from "@/lib/tour-visibility";
-import { AboutSection } from "@/components/sections/about-section";
+import { HeroSection } from "@/components/sections/hero-section";
 import { ReviewsSection } from "@/components/sections/reviews-section";
 import { CustomTourSection } from "@/components/sections/custom-tour-section";
 import { SectionHeading } from "@/components/ui/section-heading";
@@ -43,15 +43,23 @@ interface TourItem {
 
 type TourItemFromSanity = TourItem & { hideFromSite?: boolean | null };
 
+interface HeroContent {
+  eyebrow?: string;
+  heading?: string;
+  subheading?: string;
+  subheadingAccent?: string;
+  photos?: any[];
+}
+
 export default async function HomePage() {
   noStore();
 
-  const [toursRaw, about, toursForReviews, customTour, faqItems] = await Promise.all([
+  const [toursRaw, toursForReviews, customTour, faqItems, homePage] = await Promise.all([
     sanityClient.fetch<TourItemFromSanity[]>(toursQuery),
-    sanityClient.fetch<{ image: any; bio: any }>(aboutQuery),
     sanityClient.fetch<{ _id: string; reviews?: TourReviewRaw[] }[]>(toursWithReviewsQuery),
     sanityClient.fetch<{ title: string; mainImage: any } | null>(customTourQuery),
     sanityClient.fetch(faqQuery),
+    sanityClient.fetch<{ hero?: HeroContent } | null>(homePageQuery),
   ]);
 
   const tours: TourItem[] = toursRaw
@@ -62,11 +70,7 @@ export default async function HomePage() {
 
   return (
     <main className="min-h-screen">
-      {about && (
-        <section id="about" className="bg-background">
-          <AboutSection image={about.image} bio={about.bio} />
-        </section>
-      )}
+      {homePage?.hero && <HeroSection hero={homePage.hero} />}
       <section id="tours" className="relative py-10 md:py-12 lg:py-16 bg-background overflow-hidden">
         {/* Декоративные элементы фона */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-primary/3 rounded-full blur-3xl" />

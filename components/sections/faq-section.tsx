@@ -58,7 +58,7 @@ export function FaqSection({ items }: FaqSectionProps) {
 
   if (!items?.length) return null;
   return (
-    <section className="relative w-full bg-background py-10 md:py-12 lg:py-16">
+    <section id="faq" className="relative w-full bg-background py-10 md:py-12 lg:py-16">
       <Container>
         <div className="mb-8">
           <SectionHeading as="h2">FAQ</SectionHeading>

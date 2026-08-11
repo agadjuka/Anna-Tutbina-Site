@@ -1,0 +1,207 @@
+import Link from "next/link";
+import { SanityImage } from "@/components/ui/sanity-image";
+import { cn } from "@/lib/utils";
+
+interface HeroContent {
+  eyebrow?: string;
+  heading?: string;
+  subheading?: string;
+  subheadingAccent?: string;
+  photos?: any[];
+}
+
+interface HeroSectionProps {
+  hero?: HeroContent | null;
+}
+
+/**
+ * Раскладка коллажа из макета (Figma 5:5) в процентах от кадра 1920×590.
+ * Порядок слотов = порядок фотографий в Sanity.
+ * `float` — длительность покачивания, разная, чтобы фото не двигались синхронно.
+ */
+const PHOTO_SLOTS = [
+  { left: "4.22%", top: "41.86%", width: "11.04%", height: "44.07%", opacity: 0.95, float: "9s" },
+  { left: "12.55%", top: "22.88%", width: "8.33%", height: "27.8%", opacity: 1, float: "11s" },
+  { left: "17.5%", top: "46.44%", width: "9.38%", height: "36.95%", opacity: 0.91, float: "10s" },
+  { left: "73.75%", top: "43.56%", width: "11.15%", height: "35.42%", opacity: 0.9, float: "12s" },
+  { left: "83.91%", top: "24.07%", width: "11.88%", height: "57.97%", opacity: 0.95, float: "8.5s" },
+] as const;
+
+/**
+ * Мобильная раскладка коллажа — в макете Figma её нет (там только десктоп 1920,
+ * см. docs/redesign/backlog.md п.4). Первая версия (4 угла) не устроила заказчика:
+ * попросил повторить десктопную композицию — 3 фото «склеены» слева, 2 справа
+ * (см. `PHOTO_SLOTS` выше), без обрезки/зума. Здесь тот же приём: пропорции
+ * ширина/высота каждого слота **точно те же**, что в `PHOTO_SLOTS` (вычислены из
+ * тех же исходных %), только сам размер отмасштабирован под мобильный экран —
+ * `object-cover` поэтому кадрирует картинку так же, просто в другом масштабе.
+ * Кластеры чуть заходят за край секции (обрезаются `overflow-hidden` на `<section>`)
+ * и приглушены (`opacity`) — лежат за текстом (см. `z-0` vs `z-10` у текстового блока),
+ * не мешают чтению. Позиция — % от высоты контейнера (высота на мобильном не
+ * фиксирована, зависит от текста), размер — vw (масштаб от ширины экрана).
+ */
+const MOBILE_PHOTO_SLOTS = [
+  // левый кластер — 3 фото внахлёст, порядок = порядок отрисовки (последний поверх)
+  { top: "34%", left: "-7vw", width: "34vw", height: "41.7vw", opacity: 0.4, float: "10s" },
+  { top: "4%", left: "10vw", width: "25.6vw", height: "26.3vw", opacity: 0.42, float: "12s" },
+  { top: "56%", left: "15vw", width: "29vw", height: "35vw", opacity: 0.42, float: "11s" },
+  // правый кластер — 2 фото внахлёст
+  { top: "32%", right: "-6vw", width: "34.3vw", height: "33.5vw", opacity: 0.4, float: "9s" },
+  { top: "3%", right: "9vw", width: "36.6vw", height: "54.9vw", opacity: 0.4, float: "13s" },
+] as const;
+
+/** Кнопки первого экрана. Ведут на секции календаря и ценностей. */
+const CTA_PRIMARY = { label: "Смотреть календарь", href: "/#tours" };
+const CTA_SECONDARY = { label: "Наши ценности", href: "/#values" };
+
+/**
+ * На мобильном чуть компактнее макетного `h-14`, но не миниатюрные — первая версия
+ * (`h-10`, `text-[11px]`) заказчик попросил укрупнить 2026-08-11. От `sm` — уже
+ * ровно макетный размер. `whitespace-nowrap` + горизонтальный `flex` в родителе —
+ * кнопки не переносятся в столбец даже на мобильном.
+ */
+const CTA_BASE =
+  "inline-flex h-12 items-center justify-center whitespace-nowrap rounded-full px-4 text-[12px] font-medium tracking-[0.01em] transition-colors duration-300 sm:h-14 sm:px-8 sm:text-sm sm:font-semibold sm:tracking-[0.03em]";
+
+export function HeroSection({ hero }: HeroSectionProps) {
+  const photos = (hero?.photos ?? []).slice(0, PHOTO_SLOTS.length);
+  const mobilePhotos = (hero?.photos ?? []).slice(0, MOBILE_PHOTO_SLOTS.length);
+
+  return (
+    <section id="hero" className="relative w-full overflow-hidden bg-background">
+      <div className="relative mx-auto w-full lg:aspect-[1920/590]">
+        {mobilePhotos.length > 0 && (
+          <div className="pointer-events-none absolute inset-0 z-0 lg:hidden" aria-hidden="true">
+            {mobilePhotos.map((photo, index) => {
+              const slot = MOBILE_PHOTO_SLOTS[index];
+
+              return (
+                <div
+                  key={photo?._key ?? index}
+                  className="hero-photo-in absolute overflow-hidden rounded-2xl"
+                  style={{
+                    top: slot.top,
+                    left: "left" in slot ? slot.left : undefined,
+                    right: "right" in slot ? slot.right : undefined,
+                    width: slot.width,
+                    height: slot.height,
+                    animationDelay: `${200 + index * 120}ms`,
+                  }}
+                >
+                  <div
+                    className="hero-photo-float relative h-full w-full blur-[1px]"
+                    style={
+                      {
+                        opacity: slot.opacity,
+                        "--hero-float-duration": slot.float,
+                        animationDelay: `${index * 700}ms`,
+                      } as React.CSSProperties
+                    }
+                  >
+                    <SanityImage image={photo} fill className="object-cover" />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {/* Коллаж по макету 1920 — только от lg, ниже вместо него мобильный слой выше */}
+        {photos.length > 0 && (
+          <div className="pointer-events-none absolute inset-0 z-0 hidden lg:block" aria-hidden="true">
+            {photos.map((photo, index) => {
+              const slot = PHOTO_SLOTS[index];
+
+              return (
+                <div
+                  key={photo?._key ?? index}
+                  className="hero-photo-in absolute"
+                  style={{
+                    left: slot.left,
+                    top: slot.top,
+                    width: slot.width,
+                    height: slot.height,
+                    animationDelay: `${200 + index * 120}ms`,
+                  }}
+                >
+                  <div
+                    className="hero-photo-float relative h-full w-full"
+                    style={
+                      {
+                        opacity: slot.opacity,
+                        "--hero-float-duration": slot.float,
+                        animationDelay: `${index * 700}ms`,
+                      } as React.CSSProperties
+                    }
+                  >
+                    <SanityImage image={photo} fill className="object-cover" />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {/*
+          Отступы/шрифты на lg заданы в vw (X px / 1920 * 100), а не в px из макета:
+          контейнер держит высоту через aspect-ratio и линейно скейлится с шириной экрана,
+          поэтому vw-эквиваленты остаются пропорциональны макету на любой lg-ширине
+          (баг из backlog.md п.1.5 — на 1366/1440px текст с кнопками вылезал за контейнер).
+        */}
+        <div className="relative z-10 flex flex-col items-center justify-center px-4 py-16 text-center md:py-20 lg:absolute lg:inset-0 lg:justify-start lg:py-0 lg:pt-[4.2708vw]">
+          {hero?.eyebrow && (
+            <p className="hero-fade-up max-w-[694px] text-[12px] font-medium uppercase leading-[1.35] tracking-[0.18em] text-primary md:text-[15px] lg:max-w-none lg:whitespace-nowrap">
+              {hero.eyebrow}
+            </p>
+          )}
+
+          {hero?.heading && (
+            <h1
+              className="hero-fade-up mt-6 max-w-[885px] font-heading text-[38px] leading-[0.95] text-primary md:mt-8 md:text-[52px] lg:mt-[4.7917vw] lg:text-[3.125vw] lg:leading-[0.85]"
+              style={{ animationDelay: "120ms" }}
+            >
+              {hero.heading}
+            </h1>
+          )}
+
+          {(hero?.subheading || hero?.subheadingAccent) && (
+            <p
+              className="hero-fade-up mt-4 max-w-[674px] font-heading text-[24px] leading-[1.1] text-primary md:text-[34px] lg:mt-[0.5208vw] lg:text-[2.34375vw] lg:leading-[0.78]"
+              style={{ animationDelay: "240ms" }}
+            >
+              {hero.subheading}
+              {hero.subheading && hero.subheadingAccent ? " " : null}
+              {hero.subheadingAccent && <em className="italic">{hero.subheadingAccent}</em>}
+            </p>
+          )}
+
+          <div
+            className="hero-fade-up mt-9 flex flex-row flex-wrap items-center justify-center gap-2 sm:gap-6 lg:mt-[3.4375vw] lg:flex-nowrap lg:gap-[2.2917vw]"
+            style={{ animationDelay: "360ms" }}
+          >
+            <Link
+              href={CTA_PRIMARY.href}
+              className={cn(
+                CTA_BASE,
+                "border border-primary bg-primary text-on-primary hover:bg-primary-dark"
+              )}
+            >
+              {CTA_PRIMARY.label}
+            </Link>
+            <Link
+              href={CTA_SECONDARY.href}
+              className={cn(
+                CTA_BASE,
+                // bg-background — чтобы кнопка не «просвечивала» коллажем позади неё
+                // на мобильном, а читалась как кнопка (правка заказчика 2026-08-11)
+                "border border-primary bg-background text-primary hover:bg-primary hover:text-on-primary"
+              )}
+            >
+              {CTA_SECONDARY.label}
+            </Link>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

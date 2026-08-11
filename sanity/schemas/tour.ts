@@ -103,6 +103,15 @@ const tour = defineType({
       description: 'Например: "10-20 мая"',
     }),
     defineField({
+      name: 'year',
+      title: 'Год проведения',
+      type: 'number',
+      description:
+        'По этому полю работает переключатель годов в блоке «Ближайшие путешествия» на главной. ' +
+        'Вкладки лет собираются автоматически из туров: тур без года ни в одну вкладку не попадёт.',
+      validation: (Rule) => Rule.integer().min(2020).max(2100),
+    }),
+    defineField({
       name: 'shortDescription',
       title: 'Краткое описание для карточки',
       type: 'text',
