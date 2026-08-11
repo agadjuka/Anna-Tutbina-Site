@@ -24,7 +24,9 @@ export const toursQuery = groq`
     shortDescription,
     dates,
     year,
-    price
+    price,
+    "overlayName": pt::text(overlayName),
+    "overlayDate": pt::text(overlayDate)
   }
 `;
 

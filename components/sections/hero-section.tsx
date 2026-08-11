@@ -35,20 +35,46 @@ const PHOTO_SLOTS = [
  * ширина/высота каждого слота **точно те же**, что в `PHOTO_SLOTS` (вычислены из
  * тех же исходных %), только сам размер отмасштабирован под мобильный экран —
  * `object-cover` поэтому кадрирует картинку так же, просто в другом масштабе.
- * Кластеры чуть заходят за край секции (обрезаются `overflow-hidden` на `<section>`)
- * и приглушены (`opacity`) — лежат за текстом (см. `z-0` vs `z-10` у текстового блока),
- * не мешают чтению. Позиция — % от высоты контейнера (высота на мобильном не
- * фиксирована, зависит от текста), размер — vw (масштаб от ширины экрана).
+ * Кластеры чуть заходят за край секции (обрезаются `overflow-hidden` на `<section>`).
+ * Позиция — % от высоты контейнера (высота на мобильном не фиксирована, зависит от
+ * текста), размер — vw (масштаб от ширины экрана).
+ *
+ * Читаемость текста поверх фото решена не приглушением самих фото (первая версия
+ * растворяла их почти вусмерть и текст всё равно спорил с краями кадров), а
+ * scrim-подложкой — см. `HERO_SCRIM` ниже. Фото за счёт этого можно оставить
+ * заметными (`opacity` выше, лёгкий блюр для мягкого фона) — экран читается
+ * как «текст на плашке нашего фонового цвета, фото уходят за края».
  */
 const MOBILE_PHOTO_SLOTS = [
   // левый кластер — 3 фото внахлёст, порядок = порядок отрисовки (последний поверх)
-  { top: "34%", left: "-7vw", width: "34vw", height: "41.7vw", opacity: 0.4, float: "10s" },
-  { top: "4%", left: "10vw", width: "25.6vw", height: "26.3vw", opacity: 0.42, float: "12s" },
-  { top: "56%", left: "15vw", width: "29vw", height: "35vw", opacity: 0.42, float: "11s" },
+  { top: "34%", left: "-7vw", width: "34vw", height: "41.7vw", opacity: 0.85, float: "10s" },
+  { top: "4%", left: "10vw", width: "25.6vw", height: "26.3vw", opacity: 0.88, float: "12s" },
+  { top: "56%", left: "15vw", width: "29vw", height: "35vw", opacity: 0.88, float: "11s" },
   // правый кластер — 2 фото внахлёст
-  { top: "32%", right: "-6vw", width: "34.3vw", height: "33.5vw", opacity: 0.4, float: "9s" },
-  { top: "3%", right: "9vw", width: "36.6vw", height: "54.9vw", opacity: 0.4, float: "13s" },
+  { top: "32%", right: "-6vw", width: "34.3vw", height: "33.5vw", opacity: 0.85, float: "9s" },
+  { top: "3%", right: "9vw", width: "36.6vw", height: "54.9vw", opacity: 0.85, float: "13s" },
 ] as const;
+
+/**
+ * Scrim ("Designing Accessible Text Over Images", Smashing Magazine, 2023 —
+ * см. отчёт по блоку) — вместо тёмной плашки берём наш `--color-background`:
+ * текст всегда сидит на «родном» фоне сайта (тот же контраст текста, что и
+ * везде на сайте), к краям градиент гаснет и открывает фото-кластеры.
+ *
+ * Подбирался через побайтовую проверку пикселей скриншота (не на глаз — цвет
+ * подложки совпадает с фоном страницы, поэтому «на глаз» через сжатую превьюшку
+ * скрим и фото визуально неотличимы даже когда размер эллипса задан неверно).
+ * Первая прикидка (72%/88%) перекрывала вообще весь экран — фото не проглядывали
+ * нигде; текущие 34%/40% проверены: в центре (под текстом) — ровно `--color-background`,
+ * в зоне фото-кластеров — цвет самого фото.
+ */
+const HERO_SCRIM_STYLE = {
+  // Затухаем не в `transparent` (это rgba(0,0,0,0) — при интерполяции альфы
+  // получается тёмная кайма, цвет едет к чёрному), а в тот же `--color-background`
+  // с обнулённой альфой через relative color syntax — канал RGB не плывёт.
+  background:
+    "radial-gradient(40% 36% at 50% 47%, var(--color-background) 52%, rgb(from var(--color-background) r g b / 0) 100%)",
+};
 
 /** Кнопки первого экрана. Ведут на секции календаря и ценностей. */
 const CTA_PRIMARY = { label: "Смотреть календарь", href: "/#tours" };
@@ -69,7 +95,7 @@ export function HeroSection({ hero }: HeroSectionProps) {
 
   return (
     <section id="hero" className="relative w-full overflow-hidden bg-background">
-      <div className="relative mx-auto w-full lg:aspect-[1920/590]">
+      <div className="relative isolate mx-auto w-full lg:aspect-[1920/590]">
         {mobilePhotos.length > 0 && (
           <div className="pointer-events-none absolute inset-0 z-0 lg:hidden" aria-hidden="true">
             {mobilePhotos.map((photo, index) => {
@@ -78,7 +104,7 @@ export function HeroSection({ hero }: HeroSectionProps) {
               return (
                 <div
                   key={photo?._key ?? index}
-                  className="hero-photo-in absolute overflow-hidden rounded-2xl"
+                  className="hero-photo-in absolute overflow-hidden rounded-md"
                   style={{
                     top: slot.top,
                     left: "left" in slot ? slot.left : undefined,
@@ -89,7 +115,7 @@ export function HeroSection({ hero }: HeroSectionProps) {
                   }}
                 >
                   <div
-                    className="hero-photo-float relative h-full w-full blur-[1px]"
+                    className="hero-photo-float relative h-full w-full blur-[0.5px]"
                     style={
                       {
                         opacity: slot.opacity,
@@ -104,6 +130,14 @@ export function HeroSection({ hero }: HeroSectionProps) {
               );
             })}
           </div>
+        )}
+
+        {mobilePhotos.length > 0 && (
+          <div
+            className="pointer-events-none absolute inset-0 z-[5] lg:hidden"
+            style={HERO_SCRIM_STYLE}
+            aria-hidden="true"
+          />
         )}
 
         {/* Коллаж по макету 1920 — только от lg, ниже вместо него мобильный слой выше */}
@@ -150,7 +184,7 @@ export function HeroSection({ hero }: HeroSectionProps) {
         */}
         <div className="relative z-10 flex flex-col items-center justify-center px-4 py-16 text-center md:py-20 lg:absolute lg:inset-0 lg:justify-start lg:py-0 lg:pt-[4.2708vw]">
           {hero?.eyebrow && (
-            <p className="hero-fade-up max-w-[694px] text-[12px] font-medium uppercase leading-[1.35] tracking-[0.18em] text-primary md:text-[15px] lg:max-w-none lg:whitespace-nowrap">
+            <p className="hero-fade-up max-w-[260px] text-[12px] font-medium uppercase leading-[1.35] tracking-[0.18em] text-primary md:text-[15px] lg:max-w-none lg:whitespace-nowrap">
               {hero.eyebrow}
             </p>
           )}

@@ -1,14 +1,13 @@
 import { unstable_noStore as noStore } from "next/cache";
 import { Container } from "@/components/ui/container";
-import { TourCardWrapper } from "@/components/sections/tour-card-wrapper";
-import { ToursEmbla } from "@/components/sections/tours-embla";
 import { sanityClient } from "@/lib/sanity.client";
 import { toursQuery, toursWithReviewsQuery, customTourQuery, faqQuery, homePageQuery } from "@/lib/sanity.queries";
 import { isTourVisibleOnSite } from "@/lib/tour-visibility";
 import { HeroSection } from "@/components/sections/hero-section";
+import { AboutSection } from "@/components/sections/about-section";
+import { CalendarSection } from "@/components/sections/calendar-section";
 import { ReviewsSection } from "@/components/sections/reviews-section";
 import { CustomTourSection } from "@/components/sections/custom-tour-section";
-import { SectionHeading } from "@/components/ui/section-heading";
 import type { Metadata } from "next";
 import { FaqSection } from "@/components/sections/faq-section";
 import { flattenReviewsFromTours, type TourReviewRaw } from "@/lib/utils/reviews";
@@ -35,9 +34,13 @@ interface TourItem {
   _id: string;
   name: string;
   slug: SanitySlug;
+  cardImage?: any;
   mainImage: any;
   shortDescription: string;
   dates?: string;
+  year?: number | null;
+  overlayName?: string | null;
+  overlayDate?: string | null;
   price?: SanityPrice;
 }
 
@@ -51,6 +54,18 @@ interface HeroContent {
   photos?: any[];
 }
 
+interface AboutContent {
+  eyebrow?: string;
+  heading?: string;
+  body?: any;
+  photos?: any[];
+}
+
+interface CalendarContent {
+  eyebrow?: string;
+  heading?: string;
+}
+
 export default async function HomePage() {
   noStore();
 
@@ -59,7 +74,7 @@ export default async function HomePage() {
     sanityClient.fetch<{ _id: string; reviews?: TourReviewRaw[] }[]>(toursWithReviewsQuery),
     sanityClient.fetch<{ title: string; mainImage: any } | null>(customTourQuery),
     sanityClient.fetch(faqQuery),
-    sanityClient.fetch<{ hero?: HeroContent } | null>(homePageQuery),
+    sanityClient.fetch<{ hero?: HeroContent; about?: AboutContent; calendar?: CalendarContent } | null>(homePageQuery),
   ]);
 
   const tours: TourItem[] = toursRaw
@@ -71,38 +86,8 @@ export default async function HomePage() {
   return (
     <main className="min-h-screen">
       {homePage?.hero && <HeroSection hero={homePage.hero} />}
-      <section id="tours" className="relative py-10 md:py-12 lg:py-16 bg-background overflow-hidden">
-        {/* Декоративные элементы фона */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-primary/3 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-80 h-80 bg-muted/5 rounded-full blur-3xl" />
-        
-        <Container>
-          <div className="relative space-y-6 md:space-y-8">
-            {/* Заголовок секции */}
-            <div className="relative">
-              <SectionHeading as="h2" className="mb-4">
-                Наши туры
-              </SectionHeading>
-            </div>
-            
-            {/* Карусель для мобильных устройств (Embla) */}
-            <ToursEmbla tours={tours} />
-            
-            {/* Сетка с центрированием для десктопа, максимум 3 в ряд */}
-            <div className="hidden md:flex flex-wrap justify-center gap-6 md:gap-8 lg:gap-10">
-              {tours.map((tour) => (
-                <div
-                  key={tour._id}
-                  className="w-full sm:w-[calc(50%-1.25rem)] lg:w-[calc(33.333%-1.67rem)]"
-                  style={{ maxWidth: '400px', flexShrink: 0 }}
-                >
-                  <TourCardWrapper tour={tour} />
-                </div>
-              ))}
-            </div>
-          </div>
-        </Container>
-      </section>
+      {homePage?.about && <AboutSection about={homePage.about} />}
+      <CalendarSection calendar={homePage?.calendar} tours={tours} />
       <section id="reviews" className="relative bg-background">
         <Container>
           <ReviewsSection reviews={reviews} />
