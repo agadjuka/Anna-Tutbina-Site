@@ -29,9 +29,7 @@ const reviewItem = defineType({
       name: 'text',
       title: 'Текст отзыва',
       type: 'text',
-      options: {
-        rows: 6,
-      },
+      rows: 6,
       validation: (Rule) => Rule.required(),
     }),
   ],

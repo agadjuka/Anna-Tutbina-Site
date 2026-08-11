@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Sanity Studio — отдельный пакет со своим линтером, сборку не линтуем
+    "sanity/dist/**",
+    "sanity/node_modules/**",
   ]),
 ]);
 
