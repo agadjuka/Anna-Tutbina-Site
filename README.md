@@ -1,98 +1,123 @@
-# Anna Turbina Tours
+# ONÁ — сайт авторских женских туров
 
 Сайт авторских женских туров и ретритов с Анной Турбиной.
+Прод: https://www.ona-womantravel.com
 
-## Стек технологий
+Весь контент (тексты, фото, цены, программы туров, отзывы, FAQ) редактируется в Sanity Studio,
+в коде его нет.
 
-- **Next.js** 16.0.1 — React-фреймворк с App Router
-- **TypeScript** — типизация кода
-- **Tailwind CSS** — стилизация компонентов
-- **Sanity.io** — CMS для управления контентом
+> **Агентам и разработчикам:** начинайте с [`CLAUDE.md`](CLAUDE.md) и [`docs/`](docs/README.md) —
+> там архитектура, модель контента, дизайн-система и список известных проблем.
+> Этот README — только про установку и запуск.
 
-## Запуск проекта локально
+## Стек
 
-### Предварительные требования
+- **Next.js** 16.0.10 — App Router, Turbopack
+- **React** 19.2
+- **TypeScript** 5
+- **Tailwind CSS** 4 — конфигурация через `@theme` в `app/globals.css`, без `tailwind.config`
+- **Sanity** 4 — CMS, Studio лежит в `sanity/` отдельным npm-пакетом
 
-- Node.js 18+ 
-- npm или yarn
+## Требования
 
-### Установка
+- Node.js 20+, npm 10+
+- В `.npmrc` включён `legacy-peer-deps=true` — без него React 19 + Sanity не ставятся
+
+## Установка
 
 1. **Клонируйте репозиторий:**
    ```bash
-   git clone <repository-url>
-   cd "Anna Turbina Site"
+   git clone https://github.com/agadjuka/Anna-Tutbina-Site.git
    ```
 
-2. **Установите зависимости:**
+2. **Установите зависимости фронтенда:**
    ```bash
    npm install
    ```
 
-3. **Настройте переменные окружения:**
-   
-   Создайте файл `.env.local` в корне проекта и добавьте следующие переменные:
+3. **Настройте переменные окружения** — скопируйте `.env.example` в `.env.local` и подставьте
+   значения (ID проекта берётся в настройках Sanity: sanity.io → проект → API):
    ```env
-   NEXT_PUBLIC_SANITY_PROJECT_ID=your_project_id
+   NEXT_PUBLIC_SANITY_PROJECT_ID=
    NEXT_PUBLIC_SANITY_DATASET=production
    NEXT_PUBLIC_SANITY_API_VERSION=2024-01-01
    ```
-   
-   > **Важно:** Значение `NEXT_PUBLIC_SANITY_PROJECT_ID` необходимо получить из настроек проекта Sanity.
+   Секретных токенов в проекте нет: сайт контент только читает.
 
-4. **Запустите фронтенд:**
+4. **Запустите dev-сервер:**
    ```bash
    npm run dev
    ```
-   
-   Сайт будет доступен по адресу [http://localhost:3000](http://localhost:3000)
+   → [http://localhost:3000](http://localhost:3000)
 
-5. **Запустите Sanity Studio (опционально):**
+5. **Sanity Studio (если нужно править контент локально):**
    ```bash
+   npm --prefix sanity install
    npm run sanity:dev
    ```
-   
-   Sanity Studio будет доступен по адресу [http://localhost:3333](http://localhost:3333)
+   → [http://localhost:3333](http://localhost:3333)
 
-## Команды проекта
+## ⚠️ Сайт открыт не полностью
 
-- `npm run dev` — запуск dev-сервера Next.js
-- `npm run build` — сборка проекта для production
-- `npm run start` — запуск production-сервера
-- `npm run lint` — проверка кода линтером
-- `npm run sanity:dev` — запуск Sanity Studio в режиме разработки
-- `npm run sanity:deploy` — деплой Sanity Studio
+Сейчас действуют временные ограничения доступа: [`middleware.ts`](middleware.ts) редиректит всё,
+кроме белого списка туров, на `/tours/kas`, а навигация в шапке скрыта флагом. **Это сделано
+намеренно.** Поэтому `http://localhost:3000/` уводит на страницу тура, а не на главную.
 
-## Структура проекта
+Чтобы посмотреть сайт целиком, откройте его через служебный префикс:
+`http://localhost:3000/admin/`.
+
+Как снять ограничения — [`docs/remove-restrictions.md`](docs/remove-restrictions.md).
+
+## Команды
+
+| Команда | Что делает |
+|---|---|
+| `npm run dev` | Dev-сервер Next.js |
+| `npm run build` | Прод-сборка; хук `prebuild` сначала прогоняет `update-fonts` |
+| `npm run start` | Прод-сервер после сборки |
+| `npm run lint` | ESLint |
+| `npm run update-fonts` | Перегенерирует `lib/fonts.ts` из `public/fonts/` |
+| `npm run sanity:dev` | Sanity Studio локально |
+| `npm run sanity:deploy` | Деплой Studio |
+| `npm run reinstall` | Полная переустановка зависимостей с чисткой кэша |
+| `npx tsc --noEmit` | Проверка типов фронтенда |
+| `npx tsc --noEmit -p sanity/tsconfig.json` | Проверка типов схем Studio |
+
+**`lib/fonts.ts` — генерируемый файл.** Правки руками затираются при сборке. Чтобы поменять
+шрифты, положите файлы в `public/fonts/{headings,body,logo}/` и запустите `npm run update-fonts`.
+
+## Структура
 
 ```
-├── app/                    # Страницы Next.js (App Router)
-│   ├── layout.tsx         # Корневой layout с глобальными мета-тегами
-│   ├── page.tsx           # Главная страница
-│   ├── tours/[slug]/     # Динамические страницы туров
-│   └── custom-tour/       # Страница индивидуального тура
-├── components/            # React-компоненты
-│   ├── sections/          # Секции страниц
-│   └── ui/                # UI-компоненты
-├── lib/                   # Утилиты и конфигурация
-│   ├── sanity.client.ts   # Клиент Sanity
-│   └── sanity.queries.ts  # GROQ-запросы к Sanity
-└── sanity/                # Конфигурация Sanity Studio
-    └── schemas/           # Схемы документов Sanity
+app/                     # роуты App Router
+  layout.tsx             # шрифты, Header/Footer, глобальные meta
+  page.tsx               # главная
+  tours/[slug]/          # страницы туров
+  custom-tour/           # индивидуальный тур
+  globals.css            # Tailwind @theme: цвета, шрифты, базовые стили
+components/sections/     # секции страниц
+components/ui/           # примитивы: Container, Button, SanityImage…
+lib/
+  sanity.client.ts       # клиент Sanity
+  sanity.queries.ts      # все GROQ-запросы
+  tour-visibility.ts     # правило hideFromSite
+sanity/                  # Studio: схемы, структура, конфиг (отдельный npm-пакет)
+scripts/update-fonts.ts  # генератор lib/fonts.ts
+middleware.ts            # временные ограничения доступа + /admin-обход
+docs/                    # документация проекта
 ```
 
-## SEO-оптимизация
+## Деплой
 
-Проект использует встроенные механизмы Next.js для SEO:
-- Глобальные мета-теги настроены в `app/layout.tsx`
-- Динамические мета-теги для страниц туров генерируются через `generateMetadata`
-- Статические мета-теги для основных страниц
+Фронтенд — Vercel, деплоится автоматически по пушу в `master`; переменные окружения задаются
+в настройках проекта Vercel. Studio деплоится отдельно командой `npm run sanity:deploy`.
+
+Изменения контента в Sanity видны на сайте сразу — страницы рендерятся динамически,
+пересборка не нужна.
 
 ## Полезные ссылки
 
-- **Sanity Studio:** [ссылка после деплоя]
-- **Деплой на Vercel:** [ссылка после деплоя]
-
-## Дополнительная информация
-
-Проект полностью функционален и готов к деплою. Все мета-теги настроены для базовой SEO-оптимизации.
+- **Прод:** https://www.ona-womantravel.com
+- **Sanity Studio:** _проставить URL задеплоенной Studio_
+- **Проект на Vercel:** _проставить ссылку_
+- **Документация:** [`docs/README.md`](docs/README.md)
