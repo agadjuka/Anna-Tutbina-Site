@@ -1,5 +1,5 @@
 import { sanityClient } from "@/lib/sanity.client";
-import { tourBySlugQuery, tourMetadataQuery } from "@/lib/sanity.queries";
+import { tourBySlugQuery, tourMetadataQuery, siteSettingsQuery } from "@/lib/sanity.queries";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { Container } from "@/components/ui/container";
 import { SanityImage } from "@/components/ui/sanity-image";
@@ -137,7 +137,16 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
     notFound();
   }
 
-  const tour = await sanityClient.fetch<TourData | null>(tourBySlugQuery, { slug });
+  const [tour, siteSettings] = await Promise.all([
+    sanityClient.fetch<TourData | null>(tourBySlugQuery, { slug }),
+    sanityClient.fetch<{
+      primaryContacts?: Array<{
+        label?: string;
+        url?: string;
+        icon?: string;
+      }>;
+    } | null>(siteSettingsQuery),
+  ]);
 
   if (!tour) {
     notFound();
@@ -327,7 +336,7 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
 
         {/* Кнопка "Хочу с Вами!" — в самом низу, сразу под галереей */}
         <section className="pt-0 -mt-24 md:-mt-32 pb-0">
-          <WantToJoinButton />
+          <WantToJoinButton contacts={siteSettings?.primaryContacts ?? []} />
         </section>
         </div>
       </Container>

@@ -11,6 +11,11 @@ export function middleware(request: NextRequest) {
     return NextResponse.rewrite(new URL(targetPath, request.url));
   }
 
+  // Редирект /custom-tour на главную с якорем #collab (секция сотрудничества)
+  if (pathname === '/custom-tour') {
+    return NextResponse.redirect(new URL('/#collab', request.url));
+  }
+
   const allowedPaths = ['/tours/kas', '/tours/bali-padelcamp', '/tours/bali-padelsurfcamp', '/tours/bali', '/tours/capetown', '/tours/capetown2'];
   const defaultRedirect = '/tours/kas';
 

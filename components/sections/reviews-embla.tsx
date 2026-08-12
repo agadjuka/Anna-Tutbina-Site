@@ -167,7 +167,15 @@ export function ReviewsEmbla({
     [isFull]
   );
 
-  /** Затемнение края только если в эту сторону есть ещё контент (не закрашиваем полностью видимый крайний слайд) */
+  /**
+   * Затемнение края — только там, где за ним реально страница фона, а не соседняя
+   * карточка. На мобильном слайды всегда «подглядывают» (flex-[0_0_85%]/82% —
+   * специально оставляют край следующей карточки видимым), поэтому градиент
+   * `from-background` там ложился прямо на карточку (`bg-on-primary`, светлее
+   * фона страницы) грязным цветным пятном на её крае. На md+ (`isFull`, 4
+   * карточки ровно по ширине) подглядывания нет — там фейд честно скрывает край
+   * трека и остаётся полезной подсказкой «прокрути дальше».
+   */
   const showLeftFade = canPrev;
   const showRightFade = canNext;
 
@@ -176,8 +184,8 @@ export function ReviewsEmbla({
       {showLeftFade && (
         <div
           className={cn(
-            "pointer-events-none absolute inset-y-0 left-0 z-[1] bg-gradient-to-r from-background to-transparent",
-            isFull ? "w-8 md:w-10" : "w-8"
+            "pointer-events-none absolute inset-y-0 left-0 z-[1] hidden bg-gradient-to-r from-background to-transparent",
+            isFull ? "md:block md:w-10" : "w-8"
           )}
           aria-hidden
         />
@@ -185,8 +193,8 @@ export function ReviewsEmbla({
       {showRightFade && (
         <div
           className={cn(
-            "pointer-events-none absolute inset-y-0 right-0 z-[1] bg-gradient-to-l from-background to-transparent",
-            isFull ? "w-8 md:w-10" : "w-8"
+            "pointer-events-none absolute inset-y-0 right-0 z-[1] hidden bg-gradient-to-l from-background to-transparent",
+            isFull ? "md:block md:w-10" : "w-8"
           )}
           aria-hidden
         />
@@ -291,9 +299,11 @@ export function ReviewsEmbla({
                 className={cn(
                   programArrowClass,
                   programArrowHover,
-                  /* Фиксировано от верха полосы: при раскрытии «Читать дальше» не ездит к центру */
-                  "absolute left-2 top-16 z-20 hidden md:flex",
-                  "h-12 w-12 md:left-3 md:top-20 md:h-14 md:w-14"
+                  /* Фиксировано от верха полосы: при раскрытии «Читать дальше» не ездит к центру.
+                     Вынесено за левый край карточек (в поле Container), чтобы не перекрывать текст —
+                     на плоских карточках редизайна (без белой заливки на всю ширину) это было заметно. */
+                  "absolute -left-3 top-16 z-20 hidden md:flex",
+                  "h-12 w-12 md:-left-8 md:top-20 md:h-14 md:w-14 lg:-left-10 xl:-left-14"
                 )}
                 aria-label="Предыдущие отзывы"
               >
@@ -306,8 +316,8 @@ export function ReviewsEmbla({
                 className={cn(
                   programArrowClass,
                   programArrowHover,
-                  "absolute right-2 top-16 z-20 hidden md:flex",
-                  "h-12 w-12 md:right-3 md:top-20 md:h-14 md:w-14"
+                  "absolute -right-3 top-16 z-20 hidden md:flex",
+                  "h-12 w-12 md:-right-8 md:top-20 md:h-14 md:w-14 lg:-right-10 xl:-right-14"
                 )}
                 aria-label="Следующие отзывы"
               >

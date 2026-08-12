@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
+import { ToursEmbla } from "./tours-embla";
 import { TourCalendarCard } from "./tour-calendar-card";
 
 interface Tour {
@@ -39,17 +40,17 @@ export function YearTabs({ tours, headingSlot }: YearTabsProps) {
         {headingSlot}
 
         {years.length > 0 && (
-          <div className="flex shrink-0 gap-3">
+          <div className="flex shrink-0 gap-[30px]">
             {years.map((year) => (
               <button
                 key={year}
                 type="button"
                 onClick={() => setSelectedYear(year)}
                 className={cn(
-                  "inline-flex h-11 items-center justify-center rounded-full border px-6 text-sm font-semibold transition-colors duration-300",
+                  "inline-flex h-[52px] items-center justify-center rounded-full border px-8 text-[20px] tracking-[0.03em] transition-colors duration-300",
                   selectedYear === year
                     ? "border-primary bg-primary text-on-primary"
-                    : "border-border text-primary hover:bg-primary/5"
+                    : "border-subtle-border text-subtle hover:bg-primary/5"
                 )}
               >
                 {year}
@@ -59,10 +60,33 @@ export function YearTabs({ tours, headingSlot }: YearTabsProps) {
         )}
       </div>
 
-      <div className="mt-10 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:mt-12 lg:grid-cols-3 lg:gap-[120px]">
-        {visibleTours.map((tour) => (
-          <TourCalendarCard key={tour._id} tour={tour} />
-        ))}
+      {/*
+        <lg — карусель (см. ToursEmbla), упор на мобильную версию, как просил
+        заказчик. lg+ — карточки одного размера в ряду (равная высота через
+        `items-stretch`), а если туров больше трёх — они переносятся на новую
+        строку и центрируются, а не улетают в горизонтальный скролл: `flex-wrap`
+        + `justify-center` центрирует остаток и неполной последней строки сам,
+        в отличие от CSS Grid, где неполная строка осталась бы прижатой к левому краю.
+      */}
+      <div className="mt-10 lg:mt-12">
+        <div className="lg:hidden">
+          <ToursEmbla tours={visibleTours} />
+        </div>
+        <div className="hidden lg:flex lg:flex-wrap lg:items-stretch lg:justify-center lg:gap-x-10 lg:gap-y-16">
+          {/*
+            Ширина карточки — доля контейнера, а не фикс. px: `(100% - 2 зазора) / 3`
+            гарантирует ровно 3 в ряд на любой ширине контейнера. С фиксированными
+            px-ширинами третья карточка не помещалась и переносилась вниз, хотя место
+            под неё было. Четвёртая и далее переносятся на новую строку и центрируются
+            (`justify-center`) — в отличие от CSS Grid, где неполная строка прижалась
+            бы к левому краю.
+          */}
+          {visibleTours.map((tour) => (
+            <div key={tour._id} className="lg:w-[calc((100%-5rem)/3)]">
+              <TourCalendarCard tour={tour} />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

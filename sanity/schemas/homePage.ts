@@ -147,9 +147,16 @@ const homePage = defineType({
         }),
         defineField({
           name: 'backgroundImage',
-          title: 'Фоновое фото',
+          title: 'Фоновое фото (левая половина)',
           type: 'image',
           options: {hotspot: true},
+        }),
+        defineField({
+          name: 'backgroundImageRight',
+          title: 'Фоновое фото (правая половина)',
+          type: 'image',
+          options: {hotspot: true},
+          description: 'В макете фон секции — два разных фото по половинам, не одно на всю ширину.',
         }),
         defineField({
           name: 'items',
@@ -257,6 +264,30 @@ const homePage = defineType({
             },
           ],
         }),
+        defineField({
+          name: 'founderOne',
+          title: 'Создатель 1',
+          type: 'object',
+          fields: [
+            {name: 'photo', title: 'Фотография', type: 'image', options: {hotspot: true}},
+            {name: 'name', title: 'Имя', type: 'string'},
+            {name: 'role', title: 'Роль', type: 'string', initialValue: 'основатель'},
+            {name: 'description', title: 'Описание', type: 'text', rows: 4},
+          ],
+          preview: {select: {title: 'name', subtitle: 'role', media: 'photo'}},
+        }),
+        defineField({
+          name: 'founderTwo',
+          title: 'Создатель 2',
+          type: 'object',
+          fields: [
+            {name: 'photo', title: 'Фотография', type: 'image', options: {hotspot: true}},
+            {name: 'name', title: 'Имя', type: 'string'},
+            {name: 'role', title: 'Роль', type: 'string', initialValue: 'основатель'},
+            {name: 'description', title: 'Описание', type: 'text', rows: 4},
+          ],
+          preview: {select: {title: 'name', subtitle: 'role', media: 'photo'}},
+        }),
       ],
     }),
 
@@ -274,7 +305,7 @@ const homePage = defineType({
           name: 'heading',
           title: 'Заголовок',
           type: 'string',
-          initialValue: 'Голоса ONÁ',
+          initialValue: 'Что говорят наши участницы',
         }),
       ],
     }),

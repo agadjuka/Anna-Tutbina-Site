@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef, useLayoutEffect } from "react";
-import { SectionHeading } from "@/components/ui/section-heading";
 import { Container } from "@/components/ui/container";
 import { PortableTextContent } from "@/components/ui/portable-text";
 import { cn } from "@/lib/utils";
@@ -12,8 +11,14 @@ interface FaqItem {
   answer: any;
 }
 
+interface FaqContent {
+  eyebrow?: string;
+  heading?: string;
+}
+
 interface FaqSectionProps {
   items: FaqItem[];
+  faq?: FaqContent | null;
 }
 
 function PlusIconAnimated({ open }: { open: boolean }) {
@@ -41,7 +46,7 @@ function PlusIconAnimated({ open }: { open: boolean }) {
   );
 }
 
-export function FaqSection({ items }: FaqSectionProps) {
+export function FaqSection({ items, faq }: FaqSectionProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const contentRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [heights, setHeights] = useState<number[]>([]);
@@ -58,10 +63,15 @@ export function FaqSection({ items }: FaqSectionProps) {
 
   if (!items?.length) return null;
   return (
-    <section id="faq" className="relative w-full bg-background py-10 md:py-12 lg:py-16">
+    <section id="faq" className="relative w-full bg-background py-16 lg:py-24">
       <Container>
-        <div className="mb-8">
-          <SectionHeading as="h2">FAQ</SectionHeading>
+        <div className="mb-10 text-center lg:mb-14">
+          <p className="text-[13px] font-medium uppercase tracking-[0.18em] text-subtle sm:text-[15px]">
+            {faq?.eyebrow || "Частые вопросы"}
+          </p>
+          <h2 className="mt-3 font-heading text-[32px] leading-tight text-foreground sm:text-[40px] lg:text-[clamp(40px,2.6vw,50px)]">
+            {faq?.heading || "Вопросы и ответы"}
+          </h2>
         </div>
         <div className="mx-auto max-w-3xl">
           {items.map((item, idx) => {

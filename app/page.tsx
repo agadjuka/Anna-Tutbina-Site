@@ -1,13 +1,15 @@
 import { unstable_noStore as noStore } from "next/cache";
-import { Container } from "@/components/ui/container";
 import { sanityClient } from "@/lib/sanity.client";
-import { toursQuery, toursWithReviewsQuery, customTourQuery, faqQuery, homePageQuery } from "@/lib/sanity.queries";
+import { toursQuery, toursWithReviewsQuery, customTourQuery, faqQuery, homePageQuery, siteSettingsQuery } from "@/lib/sanity.queries";
 import { isTourVisibleOnSite } from "@/lib/tour-visibility";
 import { HeroSection } from "@/components/sections/hero-section";
 import { AboutSection } from "@/components/sections/about-section";
 import { CalendarSection } from "@/components/sections/calendar-section";
+import { ValuesSection } from "@/components/sections/values-section";
+import { GuestsSection } from "@/components/sections/guests-section";
+import { FoundersSection } from "@/components/sections/founders-section";
 import { ReviewsSection } from "@/components/sections/reviews-section";
-import { CustomTourSection } from "@/components/sections/custom-tour-section";
+import { CollabSection } from "@/components/sections/collab-section";
 import type { Metadata } from "next";
 import { FaqSection } from "@/components/sections/faq-section";
 import { flattenReviewsFromTours, type TourReviewRaw } from "@/lib/utils/reviews";
@@ -66,15 +68,88 @@ interface CalendarContent {
   heading?: string;
 }
 
+interface ValuesItem {
+  title?: string;
+  text?: string;
+}
+
+interface ValuesContent {
+  eyebrow?: string;
+  heading?: string;
+  backgroundImage?: any;
+  backgroundImageRight?: any;
+  items?: ValuesItem[];
+}
+
+interface GuestsContent {
+  eyebrow?: string;
+  heading?: string;
+  headingAccent?: string;
+  items?: string[];
+  body?: any;
+  photos?: any[];
+}
+
+interface FoundersLink {
+  label?: string;
+  url?: string;
+}
+
+interface FounderPerson {
+  photo?: any;
+  name?: string;
+  role?: string;
+  description?: string;
+}
+
+interface FoundersContent {
+  eyebrow?: string;
+  heading?: string;
+  body?: any;
+  photo?: any;
+  links?: FoundersLink[];
+  founderOne?: FounderPerson;
+  founderTwo?: FounderPerson;
+}
+
+interface FaqHeadingContent {
+  eyebrow?: string;
+  heading?: string;
+}
+
+interface CollabContent {
+  eyebrow?: string;
+  homeHeading?: string;
+  homeHeadingAccent?: string;
+  homeDescription?: any;
+  images?: any[];
+  tags?: string[];
+}
+
 export default async function HomePage() {
   noStore();
 
-  const [toursRaw, toursForReviews, customTour, faqItems, homePage] = await Promise.all([
+  const [toursRaw, toursForReviews, customTour, faqItems, homePage, siteSettings] = await Promise.all([
     sanityClient.fetch<TourItemFromSanity[]>(toursQuery),
     sanityClient.fetch<{ _id: string; reviews?: TourReviewRaw[] }[]>(toursWithReviewsQuery),
-    sanityClient.fetch<{ title: string; mainImage: any } | null>(customTourQuery),
+    sanityClient.fetch<CollabContent | null>(customTourQuery),
     sanityClient.fetch(faqQuery),
-    sanityClient.fetch<{ hero?: HeroContent; about?: AboutContent; calendar?: CalendarContent } | null>(homePageQuery),
+    sanityClient.fetch<{
+      hero?: HeroContent;
+      about?: AboutContent;
+      calendar?: CalendarContent;
+      values?: ValuesContent;
+      guests?: GuestsContent;
+      founders?: FoundersContent;
+      faq?: FaqHeadingContent;
+    } | null>(homePageQuery),
+    sanityClient.fetch<{
+      primaryContacts?: Array<{
+        label?: string;
+        url?: string;
+        icon?: string;
+      }>;
+    } | null>(siteSettingsQuery),
   ]);
 
   const tours: TourItem[] = toursRaw
@@ -88,17 +163,14 @@ export default async function HomePage() {
       {homePage?.hero && <HeroSection hero={homePage.hero} />}
       {homePage?.about && <AboutSection about={homePage.about} />}
       <CalendarSection calendar={homePage?.calendar} tours={tours} />
-      <section id="reviews" className="relative bg-background">
-        <Container>
-          <ReviewsSection reviews={reviews} />
-        </Container>
-      </section>
-      {customTour && (
-        <CustomTourSection title={customTour.title} mainImage={customTour.mainImage} />
-      )}
+      <ValuesSection values={homePage?.values} />
+      <GuestsSection guests={homePage?.guests} />
+      <FoundersSection founders={homePage?.founders} />
+      <ReviewsSection reviews={reviews} />
+      <CollabSection collab={customTour} primaryContacts={siteSettings?.primaryContacts ?? []} />
 
       {/* FAQ ниже Заказать индивидуальный тур */}
-      <FaqSection items={faqItems} />
+      <FaqSection items={faqItems} faq={homePage?.faq} />
     </main>
   );
 }

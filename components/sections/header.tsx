@@ -1,9 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Menu, X } from "lucide-react";
+import { SmartLink } from "@/components/ui/smart-link";
 import { cn } from "@/lib/utils";
 
 /** Временная настройка для скрытия навигации: туры, обо мне, отзывы */
@@ -80,7 +80,7 @@ export function Header() {
     >
       {/* Шапка шире контентного контейнера: в макете логотип и меню прижаты к краям (~128px при 1920) */}
       <div className="relative flex h-16 w-full items-center justify-between px-4 md:h-[72px] md:px-8 lg:h-[86px] lg:px-16 xl:px-32">
-        <Link
+        <SmartLink
           href="/"
           onClick={closeMenu}
           className="flex flex-col items-start justify-center text-background transition-opacity hover:opacity-90"
@@ -92,7 +92,7 @@ export function Header() {
           <span className="font-logo-subtitle -mt-1.5 text-[13px] tracking-wide opacity-95 md:-mt-2 md:text-[15px] lg:text-[17px]">
             woman space &amp; travel
           </span>
-        </Link>
+        </SmartLink>
 
         {showNavigation && (
           <>
@@ -100,7 +100,7 @@ export function Header() {
               <ul className="flex items-center gap-8 xl:gap-9">
                 {NAV_ITEMS.map((item) => (
                   <li key={item.href}>
-                    <Link
+                    <SmartLink
                       href={item.href}
                       className={cn(
                         "group relative block py-1 transition-opacity duration-300 hover:opacity-80",
@@ -109,7 +109,7 @@ export function Header() {
                     >
                       <span className="whitespace-nowrap text-inherit">{item.label}</span>
                       <span className="absolute -bottom-0.5 left-0 h-px w-0 bg-background transition-all duration-300 group-hover:w-full" />
-                    </Link>
+                    </SmartLink>
                   </li>
                 ))}
               </ul>
@@ -142,13 +142,13 @@ export function Header() {
           <ul className="flex flex-col px-4 pb-5 pt-1 md:px-8">
             {NAV_ITEMS.map((item) => (
               <li key={item.href}>
-                <Link
+                <SmartLink
                   href={item.href}
                   onClick={closeMenu}
                   className={cn("block py-2.5", NAV_LINK_TYPO)}
                 >
                   {item.label}
-                </Link>
+                </SmartLink>
               </li>
             ))}
           </ul>

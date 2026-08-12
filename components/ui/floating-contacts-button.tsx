@@ -1,0 +1,104 @@
+"use client";
+
+import { useState } from "react";
+import { MessageSquareText, Send } from "lucide-react";
+import { FaWhatsapp } from "react-icons/fa";
+import Link from "next/link";
+
+interface ContactItem {
+  label?: string;
+  url?: string;
+  icon?: string;
+}
+
+interface FloatingContactsButtonProps {
+  contacts: ContactItem[];
+}
+
+const ICON_MAP = {
+  telegram: Send,
+  whatsapp: FaWhatsapp,
+} as const;
+
+export function FloatingContactsButton({ contacts }: FloatingContactsButtonProps) {
+  const [open, setOpen] = useState(false);
+
+  if (!contacts || contacts.length === 0) {
+    return null;
+  }
+
+  return (
+    <div
+      className="fixed z-[60] right-4 md:right-8 transform-gpu will-change-[transform]"
+      style={{ bottom: "max(6rem, calc(10svh + env(safe-area-inset-bottom, 0px)))" }}
+    >
+      <div className="relative flex flex-col items-end gap-3">
+        {/* Дочерние кнопки-иконки в стиле футера */}
+        <div className="flex flex-col items-end gap-2">
+          {contacts.map((contact, index) => {
+            if (!contact.url || !contact.label) return null;
+
+            const IconComponent = contact.icon ? ICON_MAP[contact.icon as keyof typeof ICON_MAP] : null;
+            const isWhatsApp = contact.icon === 'whatsapp';
+
+            return (
+              <Link
+                key={index}
+                href={contact.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={contact.label}
+                title={contact.label}
+                className={
+                  "h-10 w-10 md:h-11 md:w-11 p-1.5 shrink-0 flex items-center justify-center rounded-md bg-muted text-muted-foreground transition-all overflow-visible" +
+                  (open
+                    ? ` opacity-100 translate-y-0 duration-${isWhatsApp ? '500' : '300'} hover:text-${isWhatsApp ? '[#25D366]' : 'primary'} hover:bg-muted scale-100`
+                    : " opacity-0 translate-y-2 pointer-events-none duration-200 scale-95")
+                }
+                style={{ transitionProperty: "opacity, transform, background-color, color" }}
+              >
+                {IconComponent && <IconComponent className="h-4 w-4" />}
+              </Link>
+            );
+          })}
+        </div>
+
+        {/* Главная плавающая кнопка: иконка чата с мягкой пульсацией */}
+        <button
+          aria-label="Связаться"
+          title="Связаться"
+          aria-pressed={open}
+          onClick={() => setOpen((v) => !v)}
+          className={
+            "relative inline-flex h-14 w-14 items-center justify-center rounded-full bg-primary text-white shadow-card-elevated transition-transform duration-300 hover:shadow-card-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background md:h-16 md:w-16" +
+            (open ? " rotate-12" : " rotate-0")
+          }
+        >
+          {/* Базовое периметр-кольцо (всегда видно) */}
+          <span className="pointer-events-none absolute inset-0 rounded-full border border-white/35 opacity-60" aria-hidden />
+          <span className="pointer-events-none absolute inset-1 rounded-full border border-white/20 opacity-60" aria-hidden />
+
+          {/* Иконка: чёткая смена между чат и крестик */}
+          <span className="relative inline-flex items-center justify-center">
+            {/* Иконка чата (закрыто) */}
+            <span className={"absolute transition-all duration-200 " + (open ? "opacity-0 scale-75 rotate-6" : "opacity-100 scale-100 rotate-0")}>
+              <MessageSquareText className="h-6 w-6 md:h-7 md:w-7" />
+            </span>
+            {/* Иконка закрытия (открыто) */}
+            <span className={"absolute transition-all duration-200 " + (open ? "opacity-100 scale-100 rotate-0" : "opacity-0 scale-75 -rotate-6")}>
+              {/* рисуем крест двумя полосками для согласованности стиля */}
+              <span className="relative block h-6 w-6 md:h-7 md:w-7">
+                <span className="absolute left-1/2 top-1/2 h-[2px] w-5 md:w-6 -translate-x-1/2 -translate-y-1/2 rotate-45 bg-white" />
+                <span className="absolute left-1/2 top-1/2 h-[2px] w-5 md:w-6 -translate-x-1/2 -translate-y-1/2 -rotate-45 bg-white" />
+              </span>
+            </span>
+            {/* Контейнер для выравнивания размеров */}
+            <span className="opacity-0">
+              <MessageSquareText className="h-6 w-6 md:h-7 md:w-7" />
+            </span>
+          </span>
+        </button>
+      </div>
+    </div>
+  );
+}

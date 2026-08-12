@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { SmartLink } from "@/components/ui/smart-link";
 import { SanityImage } from "@/components/ui/sanity-image";
 
 interface TourCalendarCardProps {
@@ -14,28 +14,47 @@ interface TourCalendarCardProps {
   };
 }
 
+/* Портретная пропорция фото — по просьбе заказчика карточка стала вертикальной,
+   как в прежней карусели: фото занимает бóльшую долю карточки, текстовая панель
+   снизу — меньшую. В макете Figma здесь было 4:3, но заказчик явно попросил выше. */
+const IMAGE_ASPECT_RATIO = 3 / 4;
+
 export function TourCalendarCard({ tour }: TourCalendarCardProps) {
   const image = tour.cardImage?.asset ? tour.cardImage : tour.mainImage;
-  const title = tour.overlayName?.trim() || tour.name;
+  const caption = tour.overlayName?.trim();
   const dates = tour.overlayDate?.trim() || tour.dates;
 
   return (
-    <Link
+    <SmartLink
       href={`/tours/${tour.slug.current}`}
-      className="group block overflow-hidden rounded-2xl transition-shadow duration-300 hover:shadow-lg"
+      className="group flex h-full flex-col overflow-hidden rounded-[26px] bg-primary transition-shadow duration-300 hover:shadow-lg"
     >
-      <div className="relative aspect-[6/5] w-full overflow-hidden">
+      <div className="relative aspect-[3/4] w-full shrink-0 overflow-hidden rounded-[26px]">
         <SanityImage
           image={image}
           fill
+          aspectRatio={IMAGE_ASPECT_RATIO}
           alt={tour.name}
           className="object-cover transition-transform duration-500 group-hover:scale-105"
         />
+        {caption && (
+          <p className="pointer-events-none absolute inset-x-0 bottom-4 text-center text-[10px] font-medium uppercase tracking-[1.4px] text-on-primary/80">
+            {caption}
+          </p>
+        )}
       </div>
-      <div className="bg-primary px-6 py-5">
-        <p className="font-heading text-[26px] leading-tight text-on-primary">{title}</p>
-        {dates && <p className="mt-2 text-[14px] text-on-primary/70">{dates}</p>}
+      {/* Панель с подписями компактнее исходной (фото занимает бóльшую долю карточки),
+          но не «впритык»: высота подобрана примерно в полтора раза больше первого
+          варианта — по правке заказчика. */}
+      <div className="flex flex-1 flex-col px-5 pb-9 pt-7">
+        {caption && (
+          <p className="text-[17px] font-medium uppercase tracking-[1.3px] text-background">
+            {caption}
+          </p>
+        )}
+        <p className="mt-1 font-heading text-[30px] leading-[1.15] text-background">{tour.name}</p>
+        {dates && <p className="mt-auto pt-2 text-[18px] font-medium text-background">{dates}</p>}
       </div>
-    </Link>
+    </SmartLink>
   );
 }

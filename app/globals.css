@@ -20,6 +20,13 @@
   --color-text-light: #6a6a65;
   /* Текст на заливке primary в макете редизайна — теплее чистого белого */
   --color-on-primary: #fafaf8;
+  /* CALENDAR (блок 3 редизайна): приглушённый текст эйбрау и неактивных вкладок года —
+     цвета вне основной палитры, сняты через get_design_context с ноды 5:155/5:156/5:160 */
+  --color-subtle: #9a9a8a;
+  --color-subtle-border: #c8c0b3;
+  /* VALUES (блок 4 редизайна): текст абзаца в светлых карточках — темнее text-muted,
+     светлее foreground, вне палитры. Снято с ноды 50:67. */
+  --color-text-deep: #4a4a3f;
 }
 
 @layer base {
@@ -218,6 +225,120 @@
   .hero-photo-in,
   .hero-photo-float {
     animation: none;
+  }
+}
+
+/* --- Сравнительная страница /animated-preview (backlog п.11) ---------------
+   Лёгкий слой микро-интеракций поверх обычных секций главной: подъём и тень
+   на кнопках/карточках при наведении, плавный скролл к якорям. Область
+   действия — только `.animated-preview` (обёртка страницы), обычная главная
+   не затронута ни одним селектором. */
+.animated-preview {
+  scroll-behavior: smooth;
+}
+
+.animated-preview a,
+.animated-preview button {
+  transition:
+    transform 320ms cubic-bezier(0.22, 0.61, 0.36, 1),
+    box-shadow 320ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.animated-preview a:hover,
+.animated-preview button:hover {
+  transform: translateY(-2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animated-preview {
+    scroll-behavior: auto;
+  }
+
+  .animated-preview a:hover,
+  .animated-preview button:hover {
+    transform: none;
+  }
+}
+
+/* --- Анимация футера: дыхательный цикл «вдох · пауза · выдох» -------------
+   Три слова показываются по очереди (каждое — треть цикла, с плавным
+   кроссфейдом), центральное кольцо синхронно чуть «дышит» — расширяется на
+   вдохе, держит паузу, сжимается на выдохе. Один keyframe на слово +
+   отрицательный animation-delay для сдвига фазы — не нужно три раздельных
+   набора процентов. */
+
+@keyframes footerBreatheWord {
+  0% {
+    opacity: 0;
+  }
+  6% {
+    opacity: 1;
+  }
+  27% {
+    opacity: 1;
+  }
+  33%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes footerBreatheScale {
+  0% {
+    transform: scale(0.94);
+  }
+  33% {
+    transform: scale(1.06);
+  }
+  66% {
+    transform: scale(1.06);
+  }
+  100% {
+    transform: scale(0.94);
+  }
+}
+
+.footer-breathe-word {
+  animation: footerBreatheWord 9s ease-in-out infinite;
+}
+
+.footer-breathe-circle {
+  animation: footerBreatheScale 9s ease-in-out infinite;
+}
+
+/* Волны, расходящиеся от центрального круга наружу — тот же дыхательный ритм,
+   три кольца по кругу со сдвигом фазы вместо одного, чтобы волна выглядела
+   непрерывной, а не одним «пинг»-импульсом. */
+/* Старт ровно со scale(1) — то есть от края самого круга: при старте с меньшего
+   масштаба волна зарождалась ВНУТРИ непрозрачного центрального круга и первую
+   половину пути была не видна вообще. */
+@keyframes footerRippleWave {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(2.15);
+    opacity: 0;
+  }
+}
+
+.footer-breathe-ripple {
+  animation: footerRippleWave 6s ease-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footer-breathe-word,
+  .footer-breathe-circle,
+  .footer-breathe-ripple {
+    animation: none;
+  }
+  .footer-breathe-ripple {
+    display: none;
+  }
+  /* Без анимации показываем только первое слово статично, а не все три внахлёст */
+  .footer-breathe-word:not(:first-child) {
+    display: none;
   }
 }
 

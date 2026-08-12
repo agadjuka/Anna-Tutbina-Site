@@ -29,12 +29,12 @@ export function CalendarSection({ calendar, tours }: CalendarSectionProps) {
   const headingSlot = (
     <div className="text-center lg:text-left">
       {calendar?.eyebrow && (
-        <p className="text-[13px] font-medium uppercase tracking-[0.18em] text-primary">
+        <p className="text-[15px] font-medium uppercase tracking-[0.18em] text-subtle">
           {calendar.eyebrow}
         </p>
       )}
       {calendar?.heading && (
-        <h2 className="mt-3 font-heading text-[32px] uppercase leading-tight text-primary sm:text-[40px] lg:text-[3vw]">
+        <h2 className="mt-3 font-heading text-[32px] uppercase leading-tight text-primary sm:text-[40px] lg:text-[clamp(40px,3vw,58px)]">
           {calendar.heading}
         </h2>
       )}

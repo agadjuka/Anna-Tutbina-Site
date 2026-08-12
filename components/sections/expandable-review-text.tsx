@@ -142,7 +142,7 @@ export function ExpandableReviewText({ text }: ExpandableReviewTextProps) {
         {canExpand && (
           <div
             className={cn(
-              "pointer-events-none absolute bottom-0 left-0 right-0 h-14 bg-gradient-to-t from-white via-white/90 to-transparent transition-opacity duration-300 ease-out",
+              "pointer-events-none absolute bottom-0 left-0 right-0 h-14 bg-gradient-to-t from-on-primary via-on-primary/90 to-transparent transition-opacity duration-300 ease-out",
               expanded ? "opacity-0" : "opacity-100"
             )}
             aria-hidden

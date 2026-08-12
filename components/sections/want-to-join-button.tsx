@@ -5,48 +5,60 @@ import Link from "next/link";
 import { Send, Heart } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
 
-export function WantToJoinButton() {
+interface ContactItem {
+  label?: string;
+  url?: string;
+  icon?: string;
+}
+
+interface WantToJoinButtonProps {
+  contacts: ContactItem[];
+}
+
+const ICON_MAP = {
+  telegram: Send,
+  whatsapp: FaWhatsapp,
+} as const;
+
+export function WantToJoinButton({ contacts }: WantToJoinButtonProps) {
   const [open, setOpen] = useState(false);
+
+  if (!contacts || contacts.length === 0) {
+    return null;
+  }
 
   return (
     <div className="flex flex-col items-center justify-center pt-8 md:pt-10 pb-0 gap-6">
       <div className="relative flex flex-col items-center gap-4">
-        {/* Иконки Telegram и WhatsApp */}
+        {/* Иконки контактов */}
         <div className="flex items-center gap-4">
-          <Link
-            href="https://t.me/Anna_Turbina"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Telegram"
-            title="Telegram"
-            className={
-              "h-14 w-14 md:h-16 md:w-16 p-3 shrink-0 flex items-center justify-center rounded-full bg-muted text-muted-foreground transition-all overflow-visible shadow-lg" +
-              (open
-                ? " opacity-100 translate-y-0 scale-100 duration-300 hover:text-primary hover:bg-muted hover:scale-110 hover:shadow-xl"
-                : " opacity-0 translate-y-4 pointer-events-none duration-200 scale-90")
-            }
-            style={{ transitionProperty: "opacity, transform, background-color, color" }}
-            onClick={() => setOpen(false)}
-          >
-            <Send className="h-7 w-7 md:h-8 md:w-8" />
-          </Link>
-          <Link
-            href="https://wa.me/79539527212"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="WhatsApp"
-            title="WhatsApp"
-            className={
-              "h-14 w-14 md:h-16 md:w-16 p-3 shrink-0 flex items-center justify-center rounded-full bg-muted text-muted-foreground transition-all overflow-visible shadow-lg" +
-              (open
-                ? " opacity-100 translate-y-0 scale-100 duration-500 hover:text-[#25D366] hover:bg-muted hover:scale-110 hover:shadow-xl"
-                : " opacity-0 translate-y-4 pointer-events-none duration-200 scale-90")
-            }
-            style={{ transitionProperty: "opacity, transform, background-color, color" }}
-            onClick={() => setOpen(false)}
-          >
-            <FaWhatsapp className="h-7 w-7 md:h-8 md:w-8" />
-          </Link>
+          {contacts.map((contact, index) => {
+            if (!contact.url || !contact.label) return null;
+
+            const IconComponent = contact.icon ? ICON_MAP[contact.icon as keyof typeof ICON_MAP] : null;
+            const isWhatsApp = contact.icon === 'whatsapp';
+
+            return (
+              <Link
+                key={index}
+                href={contact.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={contact.label}
+                title={contact.label}
+                className={
+                  "h-14 w-14 md:h-16 md:w-16 p-3 shrink-0 flex items-center justify-center rounded-full bg-muted text-muted-foreground transition-all overflow-visible shadow-lg" +
+                  (open
+                    ? ` opacity-100 translate-y-0 scale-100 duration-${isWhatsApp ? '500' : '300'} hover:text-${isWhatsApp ? '[#25D366]' : 'primary'} hover:bg-muted hover:scale-110 hover:shadow-xl`
+                    : " opacity-0 translate-y-4 pointer-events-none duration-200 scale-90")
+                }
+                style={{ transitionProperty: "opacity, transform, background-color, color" }}
+                onClick={() => setOpen(false)}
+              >
+                {IconComponent && <IconComponent className="h-7 w-7 md:h-8 md:w-8" />}
+              </Link>
+            );
+          })}
         </div>
 
         {/* Главная кнопка "Хочу с Вами!" */}
@@ -159,4 +171,3 @@ export function WantToJoinButton() {
     </div>
   );
 }
-

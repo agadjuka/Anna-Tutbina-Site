@@ -77,8 +77,12 @@ const HERO_SCRIM_STYLE = {
 };
 
 /** Кнопки первого экрана. Ведут на секции календаря и ценностей. */
-const CTA_PRIMARY = { label: "Смотреть календарь", href: "/#tours" };
-const CTA_SECONDARY = { label: "Наши ценности", href: "/#values" };
+/* Якоря без ведущего слэша — они указывают на секции этой же страницы, поэтому
+   одинаково работают и на `/`, и через обходной `/admin` (см. middleware.ts),
+   и на тестовых страницах-копиях. С `/#values` браузер уходил на `/`, попадал
+   под редирект middleware и ссылка «вела в никуда». */
+const CTA_PRIMARY = { label: "Смотреть календарь", href: "#tours" };
+const CTA_SECONDARY = { label: "Наши ценности", href: "#values" };
 
 /**
  * На мобильном чуть компактнее макетного `h-14`, но не миниатюрные — первая версия
@@ -95,7 +99,7 @@ export function HeroSection({ hero }: HeroSectionProps) {
 
   return (
     <section id="hero" className="relative w-full overflow-hidden bg-background">
-      <div className="relative isolate mx-auto w-full lg:aspect-[1920/590]">
+      <div className="relative isolate mx-auto w-full lg:aspect-[1920/590] lg:max-w-[1920px]">
         {mobilePhotos.length > 0 && (
           <div className="pointer-events-none absolute inset-0 z-0 lg:hidden" aria-hidden="true">
             {mobilePhotos.map((photo, index) => {
@@ -181,8 +185,18 @@ export function HeroSection({ hero }: HeroSectionProps) {
           контейнер держит высоту через aspect-ratio и линейно скейлится с шириной экрана,
           поэтому vw-эквиваленты остаются пропорциональны макету на любой lg-ширине
           (баг из backlog.md п.1.5 — на 1366/1440px текст с кнопками вылезал за контейнер).
+          2026-08-11: обёрнуто в clamp(min, Xvw, X%×19.2px) — сам HERO ничем не ограничен
+          по ширине (не в Container), поэтому без верхней границы vw рос до абсурда на
+          широких мониторах (см. backlog.md п.0). Верхняя граница = значение при 1920px
+          (макет), нижняя — прежний md-тир, чтобы не было провала на переходе в lg.
+          Этого одного было недостаточно: фото коллажа позиционируются в % от
+          aspect-ratio-контейнера ниже, а не в vw — контейнер сам по себе продолжал
+          расти в ширину/высоту без ограничения, из-за чего после клампа текста фото
+          и текст разъезжались по вертикали (текст «замер», фото — нет). Добавлен
+          `lg:max-w-[1920px]` на сам контейнер — теперь оба ограничены одной и той же
+          точкой (1920px), дальше блок просто центрируется, не растёт.
         */}
-        <div className="relative z-10 flex flex-col items-center justify-center px-4 py-16 text-center md:py-20 lg:absolute lg:inset-0 lg:justify-start lg:py-0 lg:pt-[4.2708vw]">
+        <div className="relative z-10 flex flex-col items-center justify-center px-4 py-16 text-center md:py-20 lg:absolute lg:inset-0 lg:justify-start lg:py-0 lg:pt-[clamp(40px,4.2708vw,82px)]">
           {hero?.eyebrow && (
             <p className="hero-fade-up max-w-[260px] text-[12px] font-medium uppercase leading-[1.35] tracking-[0.18em] text-primary md:text-[15px] lg:max-w-none lg:whitespace-nowrap">
               {hero.eyebrow}
@@ -191,7 +205,7 @@ export function HeroSection({ hero }: HeroSectionProps) {
 
           {hero?.heading && (
             <h1
-              className="hero-fade-up mt-6 max-w-[885px] font-heading text-[38px] leading-[0.95] text-primary md:mt-8 md:text-[52px] lg:mt-[4.7917vw] lg:text-[3.125vw] lg:leading-[0.85]"
+              className="hero-fade-up mt-6 max-w-[885px] font-heading text-[38px] leading-[0.95] text-primary md:mt-8 md:text-[52px] lg:mt-[clamp(32px,4.7917vw,92px)] lg:text-[clamp(52px,3.125vw,60px)] lg:leading-[0.85]"
               style={{ animationDelay: "120ms" }}
             >
               {hero.heading}
@@ -200,7 +214,7 @@ export function HeroSection({ hero }: HeroSectionProps) {
 
           {(hero?.subheading || hero?.subheadingAccent) && (
             <p
-              className="hero-fade-up mt-4 max-w-[674px] font-heading text-[24px] leading-[1.1] text-primary md:text-[34px] lg:mt-[0.5208vw] lg:text-[2.34375vw] lg:leading-[0.78]"
+              className="hero-fade-up mt-4 max-w-[674px] font-heading text-[24px] leading-[1.1] text-primary md:text-[34px] lg:mt-[clamp(0px,0.5208vw,10px)] lg:text-[clamp(34px,2.34375vw,45px)] lg:leading-[0.78]"
               style={{ animationDelay: "240ms" }}
             >
               {hero.subheading}
@@ -210,7 +224,7 @@ export function HeroSection({ hero }: HeroSectionProps) {
           )}
 
           <div
-            className="hero-fade-up mt-9 flex flex-row flex-wrap items-center justify-center gap-2 sm:gap-6 lg:mt-[3.4375vw] lg:flex-nowrap lg:gap-[2.2917vw]"
+            className="hero-fade-up mt-9 flex flex-row flex-wrap items-center justify-center gap-2 sm:gap-6 lg:mt-[clamp(36px,3.4375vw,66px)] lg:flex-nowrap lg:gap-[clamp(24px,2.2917vw,44px)]"
             style={{ animationDelay: "360ms" }}
           >
             <Link

@@ -162,6 +162,7 @@ export const homePageQuery = groq`
       eyebrow,
       heading,
       backgroundImage{${IMAGE_PROJECTION}},
+      backgroundImageRight{${IMAGE_PROJECTION}},
       items[]{title, text}
     },
     guests{
@@ -177,7 +178,9 @@ export const homePageQuery = groq`
       heading,
       body,
       photo{${IMAGE_PROJECTION}},
-      links[]{label, url}
+      links[]{label, url},
+      founderOne{photo{${IMAGE_PROJECTION}}, name, role, description},
+      founderTwo{photo{${IMAGE_PROJECTION}}, name, role, description}
     },
     testimonials{eyebrow, heading},
     faq{eyebrow, heading}
@@ -190,6 +193,7 @@ export const siteSettingsQuery = groq`
     slogan,
     contactLinks[]{label, url},
     communityLinks[]{label, url},
+    primaryContacts[]{label, url, icon},
     footerNote
   }
 `;
@@ -220,9 +224,12 @@ export const customTourQuery = groq`
   *[_type == "customTour"][0]{
     eyebrow,
     title,
+    homeHeading,
+    homeHeadingAccent,
     mainImage,
     images[]{${IMAGE_PROJECTION}},
     description,
+    homeDescription,
     tags
   }
 `;

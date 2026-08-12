@@ -1,9 +1,9 @@
+import { Container } from "@/components/ui/container";
 import { ReviewCard } from "@/components/sections/review-card";
 import { ReviewsGridRowAlign } from "@/components/sections/reviews-grid-row-align";
 import { ReviewsCollapseBar } from "@/components/sections/reviews-collapse-bar";
 import { ReviewsExpandProvider } from "@/components/sections/reviews-expand-context";
 import { ReviewsEmbla } from "@/components/sections/reviews-embla";
-import { SectionHeading } from "@/components/ui/section-heading";
 import { shuffleReviews, type ReviewItem } from "@/lib/utils/reviews";
 
 interface ReviewsSectionProps {
@@ -19,16 +19,17 @@ export function ReviewsSection({ reviews }: ReviewsSectionProps) {
   const equalWidthRow = shuffledReviews.length > 0 && shuffledReviews.length < 4;
 
   return (
-    <section className="relative bg-background py-10 md:py-12 lg:py-16">
-      <div className="absolute top-1/4 right-0 h-64 w-64 rounded-full bg-primary/5 blur-3xl" />
-      <div className="absolute bottom-1/4 left-0 h-80 w-80 rounded-full bg-muted/5 blur-3xl" />
-
+    <section id="reviews" className="relative bg-background py-16 lg:py-24">
+      <Container>
       <ReviewsExpandProvider>
         <div className="relative">
-          <div className="absolute bottom-0 top-0 left-0 hidden w-px bg-gradient-to-b from-transparent via-primary/30 to-transparent lg:block" />
-
-          <div className="relative mb-6 md:mb-8">
-            <SectionHeading as="h2">Что говорят наши участницы</SectionHeading>
+          <div className="mb-10 text-center lg:mb-14">
+            <p className="text-[13px] font-medium uppercase tracking-[0.18em] text-subtle sm:text-[15px]">
+              Отзывы
+            </p>
+            <h2 className="mt-3 font-heading text-[32px] leading-tight text-foreground sm:text-[40px] lg:text-[clamp(40px,2.6vw,50px)]">
+              Что говорят наши участницы
+            </h2>
           </div>
 
           {useFullCarousel ? (
@@ -65,6 +66,7 @@ export function ReviewsSection({ reviews }: ReviewsSectionProps) {
           <ReviewsCollapseBar />
         </div>
       </ReviewsExpandProvider>
+      </Container>
     </section>
   );
 }
