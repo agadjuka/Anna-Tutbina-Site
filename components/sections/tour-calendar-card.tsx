@@ -46,19 +46,20 @@ export function TourCalendarCard({ tour }: TourCalendarCardProps) {
     >
       <div className="relative aspect-[4/5] w-full shrink-0 overflow-hidden rounded-[26px]">
         {/* Мобильная карусель — карточка почти во всю ширину, на десктопе три в ряд. */}
-        {/* Значения зума и длительности намеренно совпадают с общим правилом
-            анимированных версий (`.v6-scene .overflow-hidden:hover > img`,
-            globals.css): оба правила накрывают эту же картинку, и раньше они
-            расходились (1.05/500ms против 1.06/800ms) — при переводе курсора
-            с фото на текстовую панель карточки выигрывало то одно, то другое,
-            и фото каждый раз дёргалось на лишний кадр. */}
+        {/* Значения зума и длительности здесь — единственный источник правды
+            для этой картинки на v5/v6: там их дублирует и явно перебивает
+            (за счёт специфичности) правило `[data-no-lift] .overflow-hidden`
+            в globals.css — держите оба места в синхроне при следующей правке.
+            Зум уменьшен (1.06→1.03) и удлинён (800→1100ms) по просьбе
+            заказчика — «плавнее и меньше зум», прежнее значение читалось
+            резким рывком, особенно на трёх карточках подряд в ряд. */}
         <SanityImage
           image={image}
           fill
           aspectRatio={IMAGE_ASPECT_RATIO}
           sizes="(max-width: 1023px) 85vw, 32vw"
           alt={tour.name}
-          className="object-cover transition-transform duration-[800ms] ease-[cubic-bezier(0.22,0.61,0.36,1)] group-hover:scale-[1.06]"
+          className="object-cover transition-transform duration-[1100ms] ease-[cubic-bezier(0.22,0.61,0.36,1)] group-hover:scale-[1.03]"
         />
         {caption && (
           <p className="pointer-events-none absolute inset-x-0 bottom-4 text-center text-[10px] font-medium uppercase tracking-[1.4px] text-on-primary/80">

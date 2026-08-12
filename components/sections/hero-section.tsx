@@ -128,7 +128,17 @@ export function HeroSection({ hero }: HeroSectionProps) {
                       } as React.CSSProperties
                     }
                   >
-                    <SanityImage image={photo} fill className="object-cover" />
+                    {/* Слоты коллажа — 8–12% ширины на десктопе, ~25–37vw на
+                        мобильном (см. PHOTO_SLOTS/MOBILE_PHOTO_SLOTS выше).
+                        Без `sizes` next/image считает картинку во всю ширину
+                        окна и тянет самый крупный вариант из srcset для
+                        каждого из пяти фото сразу на первом экране. */}
+                    <SanityImage
+                      image={photo}
+                      fill
+                      sizes="(max-width: 1023px) 40vw, 15vw"
+                      className="object-cover"
+                    />
                   </div>
                 </div>
               );
@@ -172,7 +182,17 @@ export function HeroSection({ hero }: HeroSectionProps) {
                       } as React.CSSProperties
                     }
                   >
-                    <SanityImage image={photo} fill className="object-cover" />
+                    {/* Слоты коллажа — 8–12% ширины на десктопе, ~25–37vw на
+                        мобильном (см. PHOTO_SLOTS/MOBILE_PHOTO_SLOTS выше).
+                        Без `sizes` next/image считает картинку во всю ширину
+                        окна и тянет самый крупный вариант из srcset для
+                        каждого из пяти фото сразу на первом экране. */}
+                    <SanityImage
+                      image={photo}
+                      fill
+                      sizes="(max-width: 1023px) 40vw, 15vw"
+                      className="object-cover"
+                    />
                   </div>
                 </div>
               );

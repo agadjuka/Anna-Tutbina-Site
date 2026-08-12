@@ -51,25 +51,58 @@ function FooterLinkItem({ link }: { link: FooterLink }) {
 
 /** Декоративные концентрические кольца с циклом «вдох · пауза · выдох» (`5:14`–`5:19`).
  * Только десктоп — на мобильном места под чисто декоративный элемент нет, тот же
- * принцип, что и с коллажем GUESTS/фото-кластерами HERO (см. docs/redesign). */
+ * принцип, что и с коллажем GUESTS/фото-кластерами HERO (см. docs/redesign).
+ *
+ * Кольца-«вода»: контур колец пропущен через SVG-фильтр (feTurbulence +
+ * feDisplacementMap) — в покое лёгкое переливание (SMIL `<animate>` зациклен
+ * прямо в фильтре, без JS), при наведении на блок CSS переключает фильтр на
+ * более сильный/быстрый вариант — рябь читается как «потревоженная вода».
+ * Центральный круг и слова — вне фильтра, текст должен читаться чётко.
+ * Эффект общий для всех версий сайта (компонент не привязан к v1/v2/v3…). */
 function BreathingCircles() {
   return (
     <div
-      className="relative hidden h-[240px] w-[240px] shrink-0 items-center justify-center lg:flex xl:h-[300px] xl:w-[300px]"
+      className="footer-water-wrap relative hidden h-[190px] w-[190px] shrink-0 items-center justify-center lg:flex xl:h-[240px] xl:w-[240px]"
       aria-hidden="true"
     >
+      <svg width="0" height="0" aria-hidden="true">
+        <defs>
+          {/* v2 фильтра: прошлая версия (baseFrequency/scale слишком высокие) на тонких
+              обводках колец давала не рябь, а рваные зигзаги — параметры уменьшены
+              на порядок и добавлено лёгкое размытие после смещения, чтобы контур
+              оставался мягким, "нежным", а не ломаным. */}
+          <filter id="onaWaterIdle" x="-40%" y="-40%" width="180%" height="180%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.006 0.009" numOctaves="1" seed="7" result="n">
+              <animate attributeName="baseFrequency" dur="22s" values="0.005 0.008;0.008 0.011;0.005 0.008" repeatCount="indefinite" />
+            </feTurbulence>
+            <feDisplacementMap in="SourceGraphic" in2="n" scale="2.2" xChannelSelector="R" yChannelSelector="G" result="d" />
+            <feGaussianBlur in="d" stdDeviation="0.35" />
+          </filter>
+          <filter id="onaWaterActive" x="-50%" y="-50%" width="200%" height="200%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.012 0.017" numOctaves="2" seed="7" result="n2">
+              <animate attributeName="baseFrequency" dur="3.2s" values="0.01 0.015;0.017 0.023;0.01 0.015" repeatCount="indefinite" />
+            </feTurbulence>
+            <feDisplacementMap in="SourceGraphic" in2="n2" scale="6.5" xChannelSelector="R" yChannelSelector="G" result="d2" />
+            <feGaussianBlur in="d2" stdDeviation="0.3" />
+          </filter>
+        </defs>
+      </svg>
+
       {/* Волны — расходятся от края центрального круга наружу, зациклены со сдвигом фазы.
           Цвет — светлый `background`, а не `primary`: футер залит `primary-dark`, и кольца
           цветом `primary` на нём практически не читались (разница ~15 единиц яркости). */}
-      {[0, 1, 2].map((i) => (
-        <div
-          key={i}
-          className="footer-breathe-ripple absolute inset-[25%] rounded-full border border-background/45"
-          style={{ animationDelay: `${i * 2}s` }}
-        />
-      ))}
-      <div className="absolute inset-0 rounded-full border border-background/20" />
-      <div className="absolute inset-[13%] rounded-full border border-background/30" />
+      <div className="footer-water-target absolute inset-0">
+        {[0, 1, 2].map((i) => (
+          <div
+            key={i}
+            className="footer-breathe-ripple absolute inset-[25%] rounded-full border-[1.5px] border-background/45"
+            style={{ animationDelay: `${i * 2}s` }}
+          />
+        ))}
+        <div className="absolute inset-0 rounded-full border-[1.5px] border-background/20" />
+        <div className="absolute inset-[13%] rounded-full border-[1.5px] border-background/30" />
+      </div>
+
       <div className="footer-breathe-circle absolute inset-[25%] rounded-full border border-primary bg-background opacity-90" />
       <div className="relative flex h-[50%] w-[50%] items-center justify-center">
         {BREATH_WORDS.map(({ word, size }, i) => (
@@ -96,7 +129,12 @@ export async function Footer() {
   return (
     <footer id="contacts" className="relative w-full overflow-hidden bg-primary-dark">
       <Container>
-        <div className="grid grid-cols-1 gap-x-10 gap-y-12 py-14 sm:grid-cols-2 lg:grid-cols-[minmax(0,280px)_1fr_1fr_auto] lg:items-start lg:gap-x-16 lg:py-20">
+        {/* `lg:items-center`, а не `items-start`: круги-«вода» намного выше
+            остальных колонок (логотип, «Связаться», «Сообщество»), и при
+            выравнивании по верху те повисали у самого верха высокого ряда с
+            большим пустым пространством под ними — визуально несбалансированно.
+            По центру ряда все четыре колонки читаются как единая строка. */}
+        <div className="grid grid-cols-1 gap-x-10 gap-y-12 py-14 sm:grid-cols-2 lg:grid-cols-[minmax(0,280px)_1fr_1fr_auto] lg:items-center lg:gap-x-16 lg:py-20">
           <div className="sm:col-span-2 lg:col-span-1">
             <span className="font-logo text-[32px] leading-none text-background">ONÁ</span>
             {settings?.slogan && (

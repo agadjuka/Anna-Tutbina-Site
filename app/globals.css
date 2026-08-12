@@ -664,6 +664,17 @@ html[data-force-motion="true"] .footer-breathe-ripple {
   transform: scale(1.06);
 }
 
+/* Карточки тура (`[data-no-lift]`) — тот же более плавный и менее заметный
+   зум, что и в v6 (см. идентичное правило там, значения держим в паре). */
+.v5-scene [data-no-lift] .overflow-hidden > img,
+.v5-scene [data-no-lift] .overflow-hidden span > img {
+  transition: transform 1100ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.v5-scene [data-no-lift] .overflow-hidden:hover > img,
+.v5-scene [data-no-lift] .overflow-hidden:hover span > img {
+  transform: scale(1.03);
+}
+
 /* Поштучное появление внутри секций при доскролливании — тот же приём, что
    у карточек VALUES в v2, применён к списку GUESTS и диптиху FOUNDERS.
    `[data-revealed="true"]` ставит сам `<Reveal>`. */
@@ -711,6 +722,10 @@ html[data-force-motion="true"] .v5-scene button:not([data-no-lift]):hover {
 html[data-force-motion="true"] .v5-scene .overflow-hidden:hover > img,
 html[data-force-motion="true"] .v5-scene .overflow-hidden:hover span > img {
   transform: scale(1.06) !important;
+}
+html[data-force-motion="true"] .v5-scene [data-no-lift] .overflow-hidden:hover > img,
+html[data-force-motion="true"] .v5-scene [data-no-lift] .overflow-hidden:hover span > img {
+  transform: scale(1.03) !important;
 }
 
 /* --- Версия 6: кинематографичный скролл (см. docs/VERSIONS.md) -------------
@@ -849,6 +864,23 @@ html[data-force-motion="true"] .v5-scene .overflow-hidden:hover span > img {
   }
 }
 
+/* Карточки тура (`[data-no-lift]`, tour-calendar-card.tsx) управляют зумом
+   своего фото сами через `:hover` (ниже) — фото внутри них надо полностью
+   исключить из общей анимации появления `v6ImageIn`/`v6ImageFadeIn` выше.
+
+   Причина — не «два похожих эффекта», а прямой конфликт за `transform`:
+   пока CSS-АНИМАЦИЯ идёт, она безусловно побеждает любой transition и
+   любой `:hover` на том же свойстве (это в спеке, а не баг браузера). Эти
+   карточки — самый верх страницы, попадают в кадр почти сразу при загрузке,
+   и наведение курсора часто приходится ровно на те же 1.1с (0.6с на
+   мобильном), пока играет анимация появления. Результат на глаз: hover
+   будто не работает, а через секунду фото само дёргается — это и есть
+   «вторая анимация», которую видно при наведении. `!important` не нужен —
+   селектор с `[data-no-lift]` специфичнее селекторов выше и побеждает сам. */
+.v6-scene .v6-cine[data-revealed="true"] [data-no-lift] img {
+  animation: none;
+}
+
 /* Ссылки и кнопки по всему сайту чуть приподнимаются при наведении. */
 .v6-scene a,
 .v6-scene button {
@@ -863,8 +895,12 @@ html[data-force-motion="true"] .v5-scene .overflow-hidden:hover span > img {
   transform: translateY(-2px);
 }
 
-/* Лёгкий zoom фото при наведении на обрезающий контейнер — поверх v6ImageIn
-   (разные свойства transition/animation не конфликтуют). */
+/* Лёгкий zoom фото при наведении на обрезающий контейнер. Это ЖЕ свойство
+   (`transform`) занято анимацией появления `v6ImageIn`/`v6ImageFadeIn` выше —
+   для карточек тура конфликт снят явным `animation: none` на их фото
+   (`[data-no-lift] img`, см. правило перед `.v6-scene a, .v6-scene button`
+   выше). На прочих фото, где сработавшая анимация уже была `backwards` и
+   давно доиграла к моменту наведения, конфликта на практике не возникает. */
 .v6-scene .overflow-hidden > img,
 .v6-scene .overflow-hidden span > img {
   transition: transform 800ms cubic-bezier(0.22, 0.61, 0.36, 1);
@@ -872,6 +908,21 @@ html[data-force-motion="true"] .v5-scene .overflow-hidden:hover span > img {
 .v6-scene .overflow-hidden:hover > img,
 .v6-scene .overflow-hidden:hover span > img {
   transform: scale(1.06);
+}
+
+/* Карточки тура (`[data-no-lift]`) просили сделать плавнее и с меньшим зумом,
+   чем у остальных фото сайта — 1.03/1100ms вместо общих 1.06/800ms (значения
+   держим в паре с Tailwind-классами на самой картинке в tour-calendar-card.tsx,
+   которые остаются источником правды для v1–v4, там этого правила нет).
+   Специфичность `[data-no-lift]` добавляет один атрибутный селектор к
+   правилам выше — этого достаточно, чтобы переопределить их без `!important`. */
+.v6-scene [data-no-lift] .overflow-hidden > img,
+.v6-scene [data-no-lift] .overflow-hidden span > img {
+  transition: transform 1100ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.v6-scene [data-no-lift] .overflow-hidden:hover > img,
+.v6-scene [data-no-lift] .overflow-hidden:hover span > img {
+  transform: scale(1.03);
 }
 
 /* `prefers-reduced-motion` соблюдается как везде в проекте, НО с исключением
