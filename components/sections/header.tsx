@@ -32,10 +32,39 @@ export function Header() {
   const headerRef = useRef<HTMLElement>(null);
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   // Показываем навигацию, если мы в режиме админа (путь начинается с /admin/)
   const showNavigation =
     !HIDE_NAVIGATION || pathname?.startsWith("/admin/") || pathname === "/admin";
+
+  useEffect(() => {
+    /* Порог — не 0, а треть экрана: иначе шапка мигала бы от каждого микро-скролла
+       у самого верха. Появляется примерно когда HERO начал уходить из кадра.
+
+       `last` — чтобы не дёргать setState на каждом событии скролла: обработчик
+       срабатывает десятки раз в секунду, а меняется значение дважды за страницу. */
+    let last = false;
+    const onScroll = () => {
+      const next = window.scrollY > window.innerHeight * 0.3;
+      if (next === last) return;
+      last = next;
+      setScrolled(next);
+    };
+
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  /* Прятать ли шапку — решает CSS по `:has([data-hero-fullscreen])` (см.
+     globals.css). Здесь только факт: страница прокручена или открыто меню.
+     На страницах без полноэкранного HERO атрибут ни на что не влияет.
+
+     Раньше наличие HERO определял сам React (`document.querySelector` в
+     эффекте) — из-за этого на первый кадр шапка всегда была видима и уезжала
+     уже после гидратации, что и давало мигание и полосу сверху. */
+  const shown = scrolled || menuOpen;
 
   useEffect(() => {
     const header = headerRef.current;
@@ -76,7 +105,12 @@ export function Header() {
   return (
     <header
       ref={headerRef}
-      className="sticky top-0 left-0 z-50 w-full bg-primary/[0.86] text-background backdrop-blur-md"
+      data-site-header=""
+      data-shown={shown ? "true" : "false"}
+      className={cn(
+        "sticky top-0 left-0 z-50 w-full bg-primary/[0.86] text-background backdrop-blur-md",
+        "transition-[opacity,transform] duration-500 ease-out motion-reduce:transition-none"
+      )}
     >
       {/* Шапка шире контентного контейнера: в макете логотип и меню прижаты к краям (~128px при 1920) */}
       <div className="relative flex h-16 w-full items-center justify-between px-4 md:h-[72px] md:px-8 lg:h-[86px] lg:px-16 xl:px-32">

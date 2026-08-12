@@ -14,6 +14,16 @@ interface SanityImageProps {
    * несовпадение с формой контейнера даёт двойной, непредсказуемый кроп
    * (Sanity режет по hotspot под 3:4, потом браузер поверх режет под реальную рамку). */
   aspectRatio?: number;
+  /** Ширина картинки на экране для `fill` — атрибут `sizes` у next/image.
+   *
+   * Без него next/image считает, что картинка занимает всю ширину окна (`100vw`),
+   * и браузер тянет самый крупный вариант из srcset — на ретине это 3840px
+   * вместо реальных 300–700. Каждый такой кадр надо скачать и РАСКОДИРОВАТЬ в
+   * главном потоке: именно на этом прокрутка «залипала» в момент, когда секция
+   * входит в кадр. Поэтому там, где раскладка известна, размер надо передавать. */
+  sizes?: string;
+  /** Первый экран: грузить сразу, а не лениво (LCP-кадры HERO). */
+  priority?: boolean;
 }
 
 export function SanityImage({
@@ -24,6 +34,8 @@ export function SanityImage({
   alt = "",
   fill = false,
   aspectRatio,
+  sizes,
+  priority = false,
 }: SanityImageProps) {
   if (!image?.asset) {
     return (
@@ -56,6 +68,10 @@ export function SanityImage({
           src={imageUrl}
           alt={alt}
           fill
+          /* `100vw` — прежнее поведение по умолчанию (next/image подставлял его
+             молча). Здесь оно хотя бы явное, а вызывающий код может сузить. */
+          sizes={sizes ?? "100vw"}
+          priority={priority}
           className={className}
           style={{ objectFit: "cover" }}
         />
@@ -68,6 +84,8 @@ export function SanityImage({
         alt={alt}
         width={width}
         height={height}
+        sizes={sizes}
+        priority={priority}
         className={className}
       />
     );

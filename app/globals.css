@@ -34,6 +34,30 @@
     @apply transition-colors duration-200;
   }
 
+  /* Высота шапки — значения по умолчанию на CSS, а не только из JS.
+     `header.tsx` уточняет `--header-height` через ResizeObserver, но до
+     гидратации переменной не существовало вообще, и всё, что на неё
+     опирается (полноэкранный HERO подтягивается под шапку на
+     `calc(-1 * var(--header-height))`), брало фолбэк 64px при реальной
+     шапке 86px — сверху оставалась светлая полоса в 22px, видимая до
+     загрузки JS. Значения совпадают с классами шапки: `h-16` / `md:h-[72px]`
+     / `lg:h-[86px]`. */
+  :root {
+    --header-height: 64px;
+  }
+
+  @media (min-width: 768px) {
+    :root {
+      --header-height: 72px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    :root {
+      --header-height: 86px;
+    }
+  }
+
   html {
     @apply bg-background;
   }
@@ -59,6 +83,38 @@
   strong:not([class*="heading"]):not([class*="font-heading"]) {
     font-family: var(--font-body), system-ui, arial, sans-serif;
     font-weight: 700;
+  }
+}
+
+/* --- Шапка поверх полноэкранного HERO -------------------------------------
+   Пока страница не проскроллена, шапка над полноэкранным HERO спрятана.
+   Раньше это решалось React-состоянием (`overHero` в `header.tsx`), и в этом
+   была вторая половина бага «полоска сверху»: на сервере и на первый кадр
+   React ещё не знает, есть ли на странице полноэкранный HERO — шапка успевала
+   отрисоваться видимой и через момент уезжала вверх. Отсюда «иногда сначала
+   проявляется хедер, потом исчезает».
+
+   Теперь состояние «страница с полноэкранным HERO» определяет сам CSS через
+   `:has()` — оно верно уже в первом кадре, до всякой гидратации. JS остался
+   только за фактом прокрутки: `header.tsx` ставит `data-shown="true"`.
+
+   Правила вне `@layer` — так они перекрывают Tailwind-утилиты на самой шапке
+   без `!important` (тот же приём, что у `.v6-cine` ниже). На страницах без
+   `data-hero-fullscreen` селектор не совпадает вообще, и шапка ведёт себя
+   как обычно — это важно, иначе на страницах туров сверху висела бы пустота. */
+body:has([data-hero-fullscreen="all"]) [data-site-header][data-shown="false"] {
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* v3: там полноэкранный HERO только на мобильном, десктоп — обычный баннер.
+   Брейкпоинт тот же, что `lg:hidden` внутри самого HERO. */
+@media (max-width: 1023.98px) {
+  body:has([data-hero-fullscreen="mobile"]) [data-site-header][data-shown="false"] {
+    transform: translateY(-100%);
+    opacity: 0;
+    pointer-events: none;
   }
 }
 
@@ -228,14 +284,125 @@
   }
 }
 
-/* --- Сравнительная страница /animated-preview (backlog п.11) ---------------
-   Лёгкий слой микро-интеракций поверх обычных секций главной: подъём и тень
-   на кнопках/карточках при наведении, плавный скролл к якорям. Область
-   действия — только `.animated-preview` (обёртка страницы), обычная главная
-   не затронута ни одним селектором. */
+/* --- Версия 3: мобильный HERO на весь экран (`hero-section-fullscreen.tsx`) --
+   Ken Burns-зум фото и «сигнальная» полоска-приглашение проскроллить. На v1/v2
+   и боевую главную не влияет — эти классы там не используются. */
+@keyframes heroKenburns {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.08);
+  }
+}
+
+/* Ken Burns — ТОЛЬКО на десктопе. Пять крупных фото с бесконечным
+   масштабированием на телефоне — это пять больших композиторских слоёв,
+   которые пересчитываются каждый кадр: скролл первого экрана заметно
+   дёргался именно на мобильном. Статичный коллаж там выглядит так же, а
+   листается плавно. `will-change` — тоже только там, где анимация реально
+   идёт: на неанимируемом элементе он лишь зря держит слой в памяти. */
+@media (min-width: 1024px) {
+  .hero-kenburns {
+    animation: heroKenburns 9s ease-in-out infinite alternate both;
+    will-change: transform;
+    backface-visibility: hidden;
+  }
+}
+
+@keyframes heroScrollCue {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translateY(10px);
+    opacity: 1;
+  }
+}
+
+/* Заметнее прежнего: было 1×28px и амплитуда 6px — на весь экран почти
+   терялось. Сделано толще, длиннее, движение крупнее и контрастнее (0.35→1
+   вместо 0.5→1). */
+.hero-scroll-cue {
+  width: 2px;
+  height: 40px;
+  background: var(--color-background);
+  opacity: 0.7;
+  animation: heroScrollCue 1.8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-kenburns,
+  .hero-scroll-cue {
+    animation: none;
+  }
+}
+
+/* Принудительное включение на /versions/* (см. force-motion.tsx) — здесь не
+   было override'а, поэтому Ken Burns и маркер прокрутки не показывались на
+   странице сравнения версий заказчику при включённой системной настройке
+   «уменьшить анимацию», хотя должны (та же логика, что у волн в футере,
+   см. блок `html[data-force-motion="true"] .footer-breathe-circle` выше). */
+/* Только с `min-width`, как и само правило выше: на мобильном Ken Burns
+   выключен ради плавности скролла, и форсировать его тут не нужно. */
+@media (min-width: 1024px) {
+  html[data-force-motion="true"] .hero-kenburns {
+    animation: heroKenburns 9s ease-in-out infinite alternate both !important;
+  }
+}
+html[data-force-motion="true"] .hero-scroll-cue {
+  animation: heroScrollCue 1.8s ease-in-out infinite !important;
+}
+
+/* --- Версия 2 главной: «лёгкие анимации» (см. docs/VERSIONS.md) -------------
+   Слой микро-интеракций поверх обычных секций главной: подъём кнопок/карточек
+   при наведении, плавный скролл к якорям, поштучное появление карточек внутри
+   секций. Область действия — только обёртка `.animated-preview`, базовая
+   версия 1 не затронута ни одним селектором. */
 .animated-preview {
   scroll-behavior: smooth;
 }
+
+/* Карточки «Наших ценностей» появляются по очереди, а не всей сеткой разом.
+   Запускается по `data-revealed` от обёртки `Reveal` — то есть в момент, когда
+   секция реально доскроллена, а не при загрузке страницы. */
+@keyframes valuesCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Отдельное имя, а не переопределение `valuesCardIn` внутри media-запроса:
+   такое переопределение не срабатывает предсказуемо (проверено — карточки
+   продолжали двигаться), а подмена `animation-name` работает однозначно. */
+@keyframes valuesCardFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* `backwards`, а не `both` — см. пояснение у `v6StaggerIn` ниже: доигравшая
+   анимация с `forwards` навсегда забирает себе `transform` и ломает hover. */
+.animated-preview [data-revealed="true"] #values .grid > * {
+  animation: valuesCardIn 650ms cubic-bezier(0.22, 0.61, 0.36, 1) backwards;
+}
+
+.animated-preview [data-revealed="true"] #values .grid > *:nth-child(1) { animation-delay: 40ms; }
+.animated-preview [data-revealed="true"] #values .grid > *:nth-child(2) { animation-delay: 120ms; }
+.animated-preview [data-revealed="true"] #values .grid > *:nth-child(3) { animation-delay: 200ms; }
+.animated-preview [data-revealed="true"] #values .grid > *:nth-child(4) { animation-delay: 280ms; }
+.animated-preview [data-revealed="true"] #values .grid > *:nth-child(5) { animation-delay: 360ms; }
+.animated-preview [data-revealed="true"] #values .grid > *:nth-child(6) { animation-delay: 440ms; }
 
 .animated-preview a,
 .animated-preview button {
@@ -244,8 +411,9 @@
     box-shadow 320ms cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
-.animated-preview a:hover,
-.animated-preview button:hover {
+/* `[data-no-lift]` — см. пояснение у того же правила v6 ниже. */
+.animated-preview a:not([data-no-lift]):hover,
+.animated-preview button:not([data-no-lift]):hover {
   transform: translateY(-2px);
 }
 
@@ -258,6 +426,19 @@
   .animated-preview button:hover {
     transform: none;
   }
+
+  /* Карточки всё так же появляются по очереди, но без сдвига и масштаба —
+     только прозрачностью (см. тот же принцип в reveal.tsx). */
+  html:not([data-force-motion="true"]) .animated-preview [data-revealed="true"] #values .grid > * {
+    animation-name: valuesCardFadeIn;
+  }
+}
+
+/* Принудительное включение на /versions/* (см. force-motion.tsx) — та же логика,
+   что и для футера выше: полное движение, а не урезанная под reduced-motion версия. */
+html[data-force-motion="true"] .animated-preview a:not([data-no-lift]):hover,
+html[data-force-motion="true"] .animated-preview button:not([data-no-lift]):hover {
+  transform: translateY(-2px) !important;
 }
 
 /* --- Анимация футера: дыхательный цикл «вдох · пауза · выдох» -------------
@@ -327,19 +508,31 @@
   animation: footerRippleWave 6s ease-out infinite;
 }
 
+/* При системной настройке «уменьшить анимацию» убираем именно ДВИЖЕНИЕ
+   (масштабирование круга и расходящиеся волны) — оно и вызывает дискомфорт,
+   ради чего настройка и существует. А смену слов «вдох · пауза · выдох»
+   оставляем: это чистое перетекание прозрачности, без перемещения — не
+   вестибулярный раздражитель. Иначе блок выглядит полностью мёртвым, и
+   пользователь с этой настройкой не понимает, что тут вообще что-то задумано. */
 @media (prefers-reduced-motion: reduce) {
-  .footer-breathe-word,
-  .footer-breathe-circle,
-  .footer-breathe-ripple {
+  .footer-breathe-circle {
     animation: none;
   }
   .footer-breathe-ripple {
+    animation: none;
     display: none;
   }
-  /* Без анимации показываем только первое слово статично, а не все три внахлёст */
-  .footer-breathe-word:not(:first-child) {
-    display: none;
-  }
+}
+
+/* Принудительное включение на страницах /versions/* — см. force-motion.tsx.
+   `!important` не по умолчанию, а потому что иначе исход зависит от порядка
+   правил и по сути непредсказуем; так — включено гарантированно. */
+html[data-force-motion="true"] .footer-breathe-circle {
+  animation: footerBreatheScale 9s ease-in-out infinite !important;
+}
+html[data-force-motion="true"] .footer-breathe-ripple {
+  animation: footerRippleWave 6s ease-out infinite !important;
+  display: block !important;
 }
 
 /* Минимальный оверлей для лайтбокса */
@@ -368,10 +561,30 @@
 @layer base {
   html,
   body,
-  #__next,
   main {
     max-width: 100vw;
-    overflow-x: hidden;
+    /* `clip`, а НЕ `hidden`. При `overflow-x: hidden` браузер обязан посчитать
+       `overflow-y` равным `auto` (спека CSS Overflow: `visible` рядом с
+       не-`visible` становится `auto`) — и <body>, и <main> превращаются в
+       собственные скролл-контейнеры. Отсюда росли ОБЕ главные проблемы главной:
+
+       1. Полноэкранный HERO подтянут вверх под шапку отрицательным `margin-top`
+          (см. `hero-section-fullscreen-v4.tsx`). Скролл-контейнер обрезает всё,
+          что вылезло за его ВЕРХНИЙ край, — HERO срезался ровно на высоту
+          шапки, а на её месте оставалась светлая полоса фона. Никакая правка
+          `--header-height` это вылечить не могла: значение было верным,
+          обрезал контейнер.
+       2. Вложенные скролл-контейнеры (viewport → body → main) заставляют
+          браузер на каждом касании решать, кто из них прокручивается, и
+          «сцеплять» прокрутку между ними. На телефоне это и ощущается как
+          залипание — палец ведёт, а страница ждёт. Заодно `position: sticky`
+          у шапки считался относительно body, а не окна.
+
+       `overflow-x: clip` режет только по горизонтали (ради чего правило и
+       написано), не создаёт скролл-контейнер и вертикаль не трогает.
+
+       `#__next` из списка убран — это узел Pages Router, в App Router его нет. */
+    overflow-x: clip;
   }
   img,
   video,
@@ -412,5 +625,298 @@
 @media (max-width: 768px) {
   [id] {
     scroll-margin-top: calc(var(--header-height, 80px) + 16px);
+  }
+}
+
+/* --- Версия 5: анимации по всему сайту (см. docs/VERSIONS.md) --------------
+   Тот же принцип, что и `.animated-preview` у v2: слой поверх переиспользуемых
+   секций, ограниченный классом `.v5-scene` (обёртка в `home-v5.tsx`).
+   v1/v2/v3/v4 не затронуты ни одним селектором. */
+
+.v5-scene {
+  scroll-behavior: smooth;
+}
+
+/* Ссылки и кнопки по всему сайту чуть приподнимаются при наведении — тот же
+   приём, что в v2, применён шире (весь v5, не только values). */
+.v5-scene a,
+.v5-scene button {
+  transition:
+    transform 320ms cubic-bezier(0.22, 0.61, 0.36, 1),
+    box-shadow 320ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+/* `[data-no-lift]` — см. пояснение у того же правила v6 ниже. */
+.v5-scene a:not([data-no-lift]):hover,
+.v5-scene button:not([data-no-lift]):hover {
+  transform: translateY(-2px);
+}
+
+/* Лёгкий zoom любой фотографии при наведении на её обрезающий контейнер —
+   покрывает ABOUT/GUESTS/FOUNDERS/COLLAB (используют overflow-hidden на
+   контейнере фото). CALENDAR уже имеет собственный zoom (group-hover), здесь
+   просто не конфликтует — значения близкие. */
+.v5-scene .overflow-hidden > img,
+.v5-scene .overflow-hidden span > img {
+  transition: transform 800ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.v5-scene .overflow-hidden:hover > img,
+.v5-scene .overflow-hidden:hover span > img {
+  transform: scale(1.06);
+}
+
+/* Поштучное появление внутри секций при доскролливании — тот же приём, что
+   у карточек VALUES в v2, применён к списку GUESTS и диптиху FOUNDERS.
+   `[data-revealed="true"]` ставит сам `<Reveal>`. */
+/* `backwards` — та же причина, что у v2 выше и v6 ниже. */
+.v5-scene [data-revealed="true"] #guests ul > li {
+  animation: valuesCardIn 600ms cubic-bezier(0.22, 0.61, 0.36, 1) backwards;
+}
+.v5-scene [data-revealed="true"] #guests ul > li:nth-child(1) { animation-delay: 60ms; }
+.v5-scene [data-revealed="true"] #guests ul > li:nth-child(2) { animation-delay: 150ms; }
+.v5-scene [data-revealed="true"] #guests ul > li:nth-child(3) { animation-delay: 240ms; }
+.v5-scene [data-revealed="true"] #guests ul > li:nth-child(4) { animation-delay: 330ms; }
+.v5-scene [data-revealed="true"] #guests ul > li:nth-child(5) { animation-delay: 420ms; }
+
+.v5-scene [data-revealed="true"] #founders .grid > * {
+  animation: valuesCardIn 650ms cubic-bezier(0.22, 0.61, 0.36, 1) backwards;
+}
+.v5-scene [data-revealed="true"] #founders .grid > *:nth-child(1) { animation-delay: 60ms; }
+.v5-scene [data-revealed="true"] #founders .grid > *:nth-child(2) { animation-delay: 220ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .v5-scene {
+    scroll-behavior: auto;
+  }
+  .v5-scene a:hover,
+  .v5-scene button:hover {
+    transform: none;
+  }
+  .v5-scene .overflow-hidden:hover > img,
+  .v5-scene .overflow-hidden:hover span > img {
+    transform: none;
+  }
+  html:not([data-force-motion="true"]) .v5-scene [data-revealed="true"] #guests ul > li,
+  html:not([data-force-motion="true"]) .v5-scene [data-revealed="true"] #founders .grid > * {
+    animation-name: valuesCardFadeIn;
+  }
+}
+
+/* Принудительное включение hover-эффектов v5 на /versions/* (см. force-motion.tsx) —
+   та же логика, что у v2/футера/hero выше: полноценный эффект на странице сравнения,
+   а не урезанная под reduced-motion версия. */
+html[data-force-motion="true"] .v5-scene a:not([data-no-lift]):hover,
+html[data-force-motion="true"] .v5-scene button:not([data-no-lift]):hover {
+  transform: translateY(-2px) !important;
+}
+html[data-force-motion="true"] .v5-scene .overflow-hidden:hover > img,
+html[data-force-motion="true"] .v5-scene .overflow-hidden:hover span > img {
+  transform: scale(1.06) !important;
+}
+
+/* --- Версия 6: кинематографичный скролл (см. docs/VERSIONS.md) -------------
+   Всё ограничено `.v6-scene` (обёртка в home-v6.tsx) — v1–v5 и боевая
+   главная не затронуты ни одним селектором.
+
+   Идея взята из папки `версия 6/` в корне проекта (готовый пакет от заказчика):
+   вместо fade+сдвиг на 10px (как в v2/v5, читается слабо) — выразительный
+   wipe секции (подъём + масштаб + расфокусировка, "expo-out", 1.1s), у
+   заголовков — "шторка" (clip-path), у списков/сеток внутри секции — волна
+   появления по очереди. Так пролистывание ощущается как смена кадров. */
+
+.v6-scene {
+  scroll-behavior: smooth;
+}
+
+/* Reveal ставит свои translate/opacity через Tailwind-утилиты — здесь тот же
+   набор свойств переопределяется классом `.v6-cine`, который каскадно идёт
+   после Tailwind-слоя утилит (Tailwind v4 кладёт их в @layer, обычные правила
+   в глобальном CSS его перекрывают без !important). */
+/* БЕЗ `filter: blur()` — намеренно. Размытие целой секции во весь экран
+   пересчитывается на каждом кадре и не уходит на GPU-композитинг: скролл
+   ощутимо дёргался, особенно на мобильном. `transform`/`opacity` дают тот же
+   «кинематографичный» эффект и композитятся без перерисовки слоя. */
+.v6-scene .v6-cine {
+  transition:
+    opacity 1100ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 1100ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+.v6-scene .v6-cine[data-revealed="false"] {
+  opacity: 0 !important;
+  transform: translateY(64px) scale(0.965) !important;
+}
+/* `transform: none`, а не `translateY(0) scale(1)`. Визуально это одно и то же,
+   но любой ненулевой `transform` (даже единичный) держит секцию отдельным
+   композиторским слоем НАВСЕГДА, а секции здесь высотой в несколько экранов.
+   С `none` слой отпускается сразу после анимации, и дальше страница листается
+   как обычная разметка. */
+.v6-scene .v6-cine[data-revealed="true"] {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* На мобильном — облегчённый вариант того же эффекта: без `scale` и с меньшим
+   сдвигом. Масштабирование блока высотой в несколько экранов заставляет
+   браузер заново растрировать огромный слой, и на телефоне это главный
+   источник рывков при переходе с HERO на следующий блок. Смысл эффекта
+   (блок «наплывает» снизу) сохраняется, цена — в разы меньше. */
+@media (max-width: 1023.98px) {
+  .v6-scene .v6-cine {
+    transition:
+      opacity 700ms cubic-bezier(0.16, 1, 0.3, 1),
+      transform 700ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+  .v6-scene .v6-cine[data-revealed="false"] {
+    transform: translateY(28px) !important;
+  }
+  .v6-scene .v6-cine[data-revealed="true"] {
+    transform: none !important;
+  }
+}
+
+/* Заголовки секций — "шторка": текст открывается сверху вниз через clip-path. */
+.v6-scene .v6-cine h2 {
+  clip-path: inset(0 0 100% 0);
+  opacity: 0;
+  transition: clip-path 950ms cubic-bezier(0.16, 1, 0.3, 1) 150ms, opacity 500ms ease-out 150ms;
+}
+.v6-scene .v6-cine[data-revealed="true"] h2 {
+  clip-path: inset(0 0 0% 0);
+  opacity: 1;
+}
+
+/* Карточки/пункты внутри секции — волна появления по очереди. */
+@keyframes v6StaggerIn {
+  from { opacity: 0; transform: translateY(30px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+/* `backwards`, а НЕ `both` — принципиально (то же и у `v6ImageIn` ниже).
+   `both` = `forwards` + `backwards`: доигравшая анимация НАВСЕГДА оставляет за
+   собой `transform` элемента. А в каскаде анимация сильнее обычных объявлений,
+   но слабее идущего перехода — и получается вот что при наведении на карточку
+   тура: `transform` из :hover плавно доезжает за свои 320/800 мс, переход
+   заканчивается, управление возвращается к залипшей анимации, и карточка
+   МГНОВЕННО прыгает обратно. Именно это читается как «дёрганая анимация».
+   `backwards` держит только стартовый кадр во время задержки, а после
+   завершения отпускает элемент — hover снова работает как обычный переход. */
+.v6-scene .v6-cine[data-revealed="true"] [class*="grid"] > *,
+.v6-scene .v6-cine[data-revealed="true"] ul > li {
+  animation: v6StaggerIn 750ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+.v6-scene .v6-cine[data-revealed="true"] [class*="grid"] > *:nth-child(1),
+.v6-scene .v6-cine[data-revealed="true"] ul > li:nth-child(1) { animation-delay: 80ms; }
+.v6-scene .v6-cine[data-revealed="true"] [class*="grid"] > *:nth-child(2),
+.v6-scene .v6-cine[data-revealed="true"] ul > li:nth-child(2) { animation-delay: 160ms; }
+.v6-scene .v6-cine[data-revealed="true"] [class*="grid"] > *:nth-child(3),
+.v6-scene .v6-cine[data-revealed="true"] ul > li:nth-child(3) { animation-delay: 240ms; }
+.v6-scene .v6-cine[data-revealed="true"] [class*="grid"] > *:nth-child(4),
+.v6-scene .v6-cine[data-revealed="true"] ul > li:nth-child(4) { animation-delay: 320ms; }
+.v6-scene .v6-cine[data-revealed="true"] [class*="grid"] > *:nth-child(5),
+.v6-scene .v6-cine[data-revealed="true"] ul > li:nth-child(5) { animation-delay: 400ms; }
+.v6-scene .v6-cine[data-revealed="true"] [class*="grid"] > *:nth-child(6),
+.v6-scene .v6-cine[data-revealed="true"] ul > li:nth-child(6) { animation-delay: 480ms; }
+
+/* Фото внутри секций — лёгкое "проявление" при входе в кадр поверх общего
+   wipe, отдельно от hover-zoom ниже. Тоже без `blur` — фото крупные, размытие
+   каждого кадра было вторым источником рывков при скролле. */
+@keyframes v6ImageIn {
+  from { opacity: 0; transform: scale(1.06); }
+  to { opacity: 1; transform: scale(1); }
+}
+/* `backwards`, а не `both` — см. подробное пояснение у `v6StaggerIn` выше:
+   с `both` доигравшая анимация перехватывала `transform` обратно, и zoom фото
+   при наведении в конце перехода отскакивал рывком. */
+.v6-scene .v6-cine[data-revealed="true"] img {
+  animation: v6ImageIn 1000ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  animation-delay: 100ms;
+}
+
+/* На мобильном фото проявляются только прозрачностью, без `scale`. Масштаб
+   заставляет браузер заново растрировать каждое фото секции, и делает это
+   ровно в тот момент, когда секция въезжает в кадр и её картинки ещё
+   декодируются — это и был третий слагаемый «залипания» при переходе с
+   первого экрана на второй (первые два — вложенные скролл-контейнеры и
+   3840px-варианты картинок, см. выше). Тот же приём уже применён к Ken Burns
+   в HERO: движение остаётся десктопу, мобильному — плавность. */
+@keyframes v6ImageFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (max-width: 1023.98px) {
+  .v6-scene .v6-cine[data-revealed="true"] img {
+    animation-name: v6ImageFadeIn;
+    animation-duration: 600ms;
+  }
+}
+
+/* Ссылки и кнопки по всему сайту чуть приподнимаются при наведении. */
+.v6-scene a,
+.v6-scene button {
+  transition: transform 320ms cubic-bezier(0.22, 0.61, 0.36, 1), box-shadow 320ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+/* `[data-no-lift]` — опт-аут для элементов со своим, более выразительным
+   hover'ом. Нужен карточкам тура: подъём карточки на 2px уводит её нижнюю
+   кромку из-под курсора, наведение сбрасывается, карточка падает обратно и
+   тут же ловит курсор снова — получается мигание (см. tour-calendar-card.tsx). */
+.v6-scene a:not([data-no-lift]):hover,
+.v6-scene button:not([data-no-lift]):hover {
+  transform: translateY(-2px);
+}
+
+/* Лёгкий zoom фото при наведении на обрезающий контейнер — поверх v6ImageIn
+   (разные свойства transition/animation не конфликтуют). */
+.v6-scene .overflow-hidden > img,
+.v6-scene .overflow-hidden span > img {
+  transition: transform 800ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.v6-scene .overflow-hidden:hover > img,
+.v6-scene .overflow-hidden:hover span > img {
+  transform: scale(1.06);
+}
+
+/* `prefers-reduced-motion` соблюдается как везде в проекте, НО с исключением
+   на /versions/* через `data-force-motion` (см. force-motion.tsx) — этот же
+   класс граблей уже дважды наступал в проекте (волны в футере, Ken Burns) —
+   заказчик с включённой системной настройкой не видел анимаций на странице
+   сравнения версий, хотя они реализованы и работают. */
+@media (prefers-reduced-motion: reduce) {
+  html:not([data-force-motion="true"]) .v6-scene {
+    scroll-behavior: auto;
+  }
+  html:not([data-force-motion="true"]) .v6-scene .v6-cine,
+  html:not([data-force-motion="true"]) .v6-scene .v6-cine h2,
+  html:not([data-force-motion="true"]) .v6-scene .v6-cine[data-revealed="true"] [class*="grid"] > *,
+  html:not([data-force-motion="true"]) .v6-scene .v6-cine[data-revealed="true"] ul > li,
+  html:not([data-force-motion="true"]) .v6-scene .v6-cine[data-revealed="true"] img {
+    animation: none !important;
+    filter: none !important;
+    transform: none !important;
+    clip-path: none !important;
+    transition: opacity 500ms ease-out !important;
+  }
+  html:not([data-force-motion="true"]) .v6-scene a:hover,
+  html:not([data-force-motion="true"]) .v6-scene button:hover {
+    transform: none;
+  }
+  html:not([data-force-motion="true"]) .v6-scene .overflow-hidden:hover > img,
+  html:not([data-force-motion="true"]) .v6-scene .overflow-hidden:hover span > img {
+    transform: none;
+  }
+}
+
+/* --- Футер: кольца-«вода» (общий для ВСЕХ версий, футер не привязан к версии —
+   см. docs/VERSIONS.md "Что общего у всех версий"). В покое — лёгкое переливание
+   (SVG feTurbulence, зациклено через SMIL <animate>, без JS). При наведении на
+   блок колец — фильтр переключается на более сильный/быстрый, рябь читается как
+   «потревоженная вода». */
+.footer-water-target {
+  filter: url(#onaWaterIdle);
+}
+.footer-water-wrap:hover .footer-water-target {
+  filter: url(#onaWaterActive);
+}
+@media (prefers-reduced-motion: reduce) {
+  .footer-water-target {
+    filter: none;
   }
 }

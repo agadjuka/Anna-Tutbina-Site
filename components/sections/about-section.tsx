@@ -27,7 +27,13 @@ export function AboutSection({ about }: AboutSectionProps) {
       <div className="flex flex-col lg:mx-auto lg:aspect-[1921/922] lg:max-w-[1921px] lg:flex-row">
         <div className="relative h-[70vh] max-h-[520px] w-full sm:h-[80vh] sm:max-h-[640px] lg:h-auto lg:max-h-none lg:w-[45%]">
           {mainPhoto ? (
-            <SanityImage image={mainPhoto} fill className="object-cover" alt="" />
+            <SanityImage
+              image={mainPhoto}
+              fill
+              sizes="(max-width: 1023px) 100vw, 45vw"
+              className="object-cover"
+              alt=""
+            />
           ) : (
             <div className="absolute inset-0 bg-primary-dark" />
           )}
@@ -40,7 +46,14 @@ export function AboutSection({ about }: AboutSectionProps) {
               className="pointer-events-none absolute -right-1/4 -top-1/4 h-[140%] w-[90%] overflow-hidden rounded-[10%] opacity-[0.12] sm:opacity-[0.15]"
               aria-hidden="true"
             >
-              <SanityImage image={decorPhoto} fill className="object-cover" alt="" />
+              {/* Декор с opacity 0.12 — крупный вариант тут не нужен вовсе. */}
+              <SanityImage
+                image={decorPhoto}
+                fill
+                sizes="(max-width: 1023px) 90vw, 45vw"
+                className="object-cover"
+                alt=""
+              />
             </div>
           )}
 
