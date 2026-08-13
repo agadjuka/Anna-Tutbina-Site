@@ -95,7 +95,13 @@ export function FoundersSection({ founders }: FoundersSectionProps) {
   return (
     <section id="founders" className="relative w-full overflow-hidden bg-primary">
       <div className="flex flex-col lg:mx-auto lg:aspect-[1920/828] lg:max-w-[1920px] lg:flex-row">
-        <div className="relative h-[60vh] max-h-[440px] w-full sm:h-[70vh] sm:max-h-[560px] lg:h-auto lg:max-h-none lg:w-[52.4%]">
+        {/* `data-static-photo` — см. пояснение в globals.css у правила
+            `[data-static-photo] img`: фото приглушено постоянным `opacity-60`,
+            общая v6-анимация появления фото с этим не совместима. */}
+        <div
+          className="relative h-[60vh] max-h-[440px] w-full sm:h-[70vh] sm:max-h-[560px] lg:h-auto lg:max-h-none lg:w-[52.4%]"
+          data-static-photo=""
+        >
           {founders.photo?.asset ? (
             <SanityImage
               image={founders.photo}

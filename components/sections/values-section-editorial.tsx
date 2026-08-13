@@ -37,8 +37,13 @@ export function ValuesSectionEditorial({ values }: ValuesSectionEditorialProps) 
 
   return (
     <section id="values" className="relative overflow-hidden bg-primary py-16 lg:py-24">
+      {/* `data-static-photo` — эти фото приглушены постоянным `opacity-45` на
+          самой картинке; в v6 общая анимация появления фото (`v6ImageIn`,
+          globals.css) без этого атрибута анимирует opacity к 1 и в конце
+          резко «роняет» его обратно до 0.45 без перехода. См. пояснение
+          в globals.css рядом с правилом `[data-static-photo] img`. */}
       {values?.backgroundImage?.asset && (
-        <div className="absolute inset-y-0 left-0 w-1/2">
+        <div className="absolute inset-y-0 left-0 w-1/2" data-static-photo="">
           <SanityImage
             image={values.backgroundImage}
             fill
@@ -49,7 +54,7 @@ export function ValuesSectionEditorial({ values }: ValuesSectionEditorialProps) 
         </div>
       )}
       {values?.backgroundImageRight?.asset && (
-        <div className="absolute inset-y-0 right-0 w-1/2">
+        <div className="absolute inset-y-0 right-0 w-1/2" data-static-photo="">
           <SanityImage
             image={values.backgroundImageRight}
             fill

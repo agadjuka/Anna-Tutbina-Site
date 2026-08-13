@@ -77,7 +77,13 @@ export function CollabSection({ collab, primaryContacts = [] }: CollabSectionPro
           </div>
         </div>
 
-        <div className="relative order-1 h-[55vh] max-h-[420px] w-full sm:h-[65vh] sm:max-h-[520px] lg:order-2 lg:h-full lg:max-h-none lg:w-[49.6%]">
+        {/* `data-static-photo` — см. пояснение в globals.css у правила
+            `[data-static-photo] img`: фото приглушено постоянным `opacity-55`,
+            общая v6-анимация появления фото с этим не совместима. */}
+        <div
+          className="relative order-1 h-[55vh] max-h-[420px] w-full sm:h-[65vh] sm:max-h-[520px] lg:order-2 lg:h-full lg:max-h-none lg:w-[49.6%]"
+          data-static-photo=""
+        >
           {photo?.asset ? (
             <SanityImage
               image={photo}
