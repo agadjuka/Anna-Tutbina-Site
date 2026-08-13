@@ -19,8 +19,16 @@ interface ValuesSectionProps {
 }
 
 /** В макете фон секции — два разных фото по половинам (ноды 26:38 слева и «IMG_0766 3»
- * справа, ~968 из 1921px каждое), не одно растянутое на всю ширину. */
-const BACKGROUND_ASPECT_RATIO = 968 / 996;
+ * справа, ~968 из 1921px каждое), не одно растянутое на всю ширину.
+ *
+ * ⚠️ Раньше здесь был единый `BACKGROUND_ASPECT_RATIO = 968/996` (≈0.97, почти квадрат)
+ * для обоих фото — из-за этого Sanity заранее обрезала оба портретных фото (0.75 и 0.82)
+ * под почти квадратную форму, а `object-cover` в браузере обрезал результат ЕЩЁ РАЗ под
+ * реальный контейнер (высота которого зависит от контента и на десктопе выходит ближе
+ * к ~0.68 — уже, а не почти квадрат). Двойная обрезка обрезала девушкам лица — с этим
+ * багом уже разбирались в CALENDAR (см. `docs/redesign/blocks.md`, блок 3). Фикс тот же:
+ * просить Sanity отдать фото БЕЗ навязанного кропа (родная пропорция), обрезку до формы
+ * контейнера делает только `object-cover`, один раз. */
 
 export function ValuesSection({ values }: ValuesSectionProps) {
   const items = values?.items ?? [];
@@ -33,7 +41,7 @@ export function ValuesSection({ values }: ValuesSectionProps) {
           <SanityImage
             image={values.backgroundImage}
             fill
-            aspectRatio={BACKGROUND_ASPECT_RATIO}
+            aspectRatio={474 / 632}
             alt=""
             className="object-cover opacity-45"
           />
@@ -44,7 +52,7 @@ export function ValuesSection({ values }: ValuesSectionProps) {
           <SanityImage
             image={values.backgroundImageRight}
             fill
-            aspectRatio={BACKGROUND_ASPECT_RATIO}
+            aspectRatio={984 / 1200}
             alt=""
             className="object-cover opacity-45"
           />

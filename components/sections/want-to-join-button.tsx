@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Send, Heart } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
+import { cn } from "@/lib/utils";
 
 interface ContactItem {
   label?: string;
@@ -36,8 +37,10 @@ export function WantToJoinButton({ contacts }: WantToJoinButtonProps) {
             if (!contact.url || !contact.label) return null;
 
             const IconComponent = contact.icon ? ICON_MAP[contact.icon as keyof typeof ICON_MAP] : null;
-            const isWhatsApp = contact.icon === 'whatsapp';
+            const isWhatsApp = contact.icon === "whatsapp";
 
+            /* Полные строки классов — см. пояснение в floating-contacts-button.tsx,
+               тот же баг с интерполяцией был и здесь. */
             return (
               <Link
                 key={index}
@@ -46,12 +49,14 @@ export function WantToJoinButton({ contacts }: WantToJoinButtonProps) {
                 rel="noopener noreferrer"
                 aria-label={contact.label}
                 title={contact.label}
-                className={
-                  "h-14 w-14 md:h-16 md:w-16 p-3 shrink-0 flex items-center justify-center rounded-full bg-muted text-muted-foreground transition-all overflow-visible shadow-lg" +
-                  (open
-                    ? ` opacity-100 translate-y-0 scale-100 duration-${isWhatsApp ? '500' : '300'} hover:text-${isWhatsApp ? '[#25D366]' : 'primary'} hover:bg-muted hover:scale-110 hover:shadow-xl`
-                    : " opacity-0 translate-y-4 pointer-events-none duration-200 scale-90")
-                }
+                className={cn(
+                  "h-14 w-14 md:h-16 md:w-16 p-3 shrink-0 flex items-center justify-center rounded-full bg-muted text-muted-foreground transition-all overflow-visible shadow-lg",
+                  open
+                    ? isWhatsApp
+                      ? "opacity-100 translate-y-0 scale-100 duration-500 hover:text-[#25D366] hover:bg-muted hover:scale-110 hover:shadow-xl"
+                      : "opacity-100 translate-y-0 scale-100 duration-300 hover:text-primary hover:bg-muted hover:scale-110 hover:shadow-xl"
+                    : "opacity-0 translate-y-4 pointer-events-none duration-200 scale-90"
+                )}
                 style={{ transitionProperty: "opacity, transform, background-color, color" }}
                 onClick={() => setOpen(false)}
               >

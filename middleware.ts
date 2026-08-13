@@ -11,9 +11,23 @@ export function middleware(request: NextRequest) {
     return NextResponse.rewrite(new URL(targetPath, request.url));
   }
 
-  // Редирект /custom-tour на главную с якорем #collab (секция сотрудничества)
+  // ⚠️ Якорь `#collab` тут ни на что не влияет: фрагмент URL не уходит на сервер,
+  // поэтому со стороны middleware следующий запрос — просто `/`, и он попадает под
+  // общее ограничение ниже (не входит в allowedPaths) → редиректит в /tours/kas,
+  // а не на секцию сотрудничества. Оставлено как есть: реальный сценарий, который
+  // это должно было чинить, уже решён в другом месте — кнопка «Обсудить идею»
+  // в COLLAB больше не ведёт на /custom-tour вообще, а раскрывает контакты на месте
+  // (см. `collab-section.tsx` / `contact-cta.tsx`), так что публично на этот путь
+  // никто не попадает. Актуально только в обход `/admin/custom-tour`.
   if (pathname === '/custom-tour') {
     return NextResponse.redirect(new URL('/#collab', request.url));
+  }
+
+  // Страница сравнения версий главной и сами версии — открыты без /admin,
+  // потому что ссылку на них заказчик отправляет своему клиенту (см. docs/VERSIONS.md).
+  // На них стоит `robots: noindex`, в поиск не попадут.
+  if (pathname === '/versions' || pathname.startsWith('/versions/')) {
+    return NextResponse.next();
   }
 
   const allowedPaths = ['/tours/kas', '/tours/bali-padelcamp', '/tours/bali-padelsurfcamp', '/tours/bali', '/tours/capetown', '/tours/capetown2'];

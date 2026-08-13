@@ -4,6 +4,7 @@ import { useState } from "react";
 import { MessageSquareText, Send } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 interface ContactItem {
   label?: string;
@@ -39,8 +40,12 @@ export function FloatingContactsButton({ contacts }: FloatingContactsButtonProps
             if (!contact.url || !contact.label) return null;
 
             const IconComponent = contact.icon ? ICON_MAP[contact.icon as keyof typeof ICON_MAP] : null;
-            const isWhatsApp = contact.icon === 'whatsapp';
+            const isWhatsApp = contact.icon === "whatsapp";
 
+            /* Полные строки классов, не собранные через `${}` — Tailwind ищет классы
+               статическим сканированием исходников, интерполированный фрагмент вроде
+               `hover:text-${isWhatsApp ? '[#25D366]' : 'primary'}` не находится вообще,
+               и hover-цвет/длительность просто не попадают в CSS. */
             return (
               <Link
                 key={index}
@@ -49,12 +54,14 @@ export function FloatingContactsButton({ contacts }: FloatingContactsButtonProps
                 rel="noopener noreferrer"
                 aria-label={contact.label}
                 title={contact.label}
-                className={
-                  "h-10 w-10 md:h-11 md:w-11 p-1.5 shrink-0 flex items-center justify-center rounded-md bg-muted text-muted-foreground transition-all overflow-visible" +
-                  (open
-                    ? ` opacity-100 translate-y-0 duration-${isWhatsApp ? '500' : '300'} hover:text-${isWhatsApp ? '[#25D366]' : 'primary'} hover:bg-muted scale-100`
-                    : " opacity-0 translate-y-2 pointer-events-none duration-200 scale-95")
-                }
+                className={cn(
+                  "h-10 w-10 md:h-11 md:w-11 p-1.5 shrink-0 flex items-center justify-center rounded-md bg-muted text-muted-foreground transition-all overflow-visible",
+                  open
+                    ? isWhatsApp
+                      ? "opacity-100 translate-y-0 duration-500 hover:text-[#25D366] hover:bg-muted scale-100"
+                      : "opacity-100 translate-y-0 duration-300 hover:text-primary hover:bg-muted scale-100"
+                    : "opacity-0 translate-y-2 pointer-events-none duration-200 scale-95"
+                )}
                 style={{ transitionProperty: "opacity, transform, background-color, color" }}
               >
                 {IconComponent && <IconComponent className="h-4 w-4" />}

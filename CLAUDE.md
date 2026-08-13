@@ -92,6 +92,7 @@ docs/                    # документация проекта
 | Файл | О чём |
 |---|---|
 | [`docs/redesign/README.md`](docs/redesign/README.md) | **Редизайн главной по макету Figma — активная задача.** Правила, процесс, реестр блоков |
+| [`docs/VERSIONS.md`](docs/VERSIONS.md) | Несколько версий главной для показа заказчику: хаб `/versions`, как добавить новую версию |
 | [`docs/architecture.md`](docs/architecture.md) | Роутинг, рендеринг, поток данных, middleware, SEO, карта компонентов |
 | [`docs/content-model.md`](docs/content-model.md) | Схемы Sanity ↔ GROQ ↔ компоненты, как добавить поле |
 | [`docs/design-system.md`](docs/design-system.md) | Цвета, шрифты, типографика, UI-примитивы |
