@@ -19,11 +19,17 @@ API-роутов нет, форм с отправкой данных нет — 
 
 | Роут | Файл | Рендеринг | Данные |
 |---|---|---|---|
-| `/` | `app/page.tsx` | `force-dynamic` + `noStore()` | `toursQuery`, `aboutQuery`, `toursWithReviewsQuery`, `customTourQuery`, `faqQuery` (параллельно, `Promise.all`) |
+| `/` | `app/page.tsx` | `force-dynamic` + `noStore()` | `getHomeData()` — один общий загрузчик (`lib/home-data.ts`), внутри `Promise.all` по `toursQuery`, `toursWithReviewsQuery`, `customTourQuery`, `faqQuery`, `homePageQuery`, `siteSettingsQuery`. Вёрстка вынесена в `HomeV1` (см. ниже) |
+| `/versions` | `app/versions/page.tsx` | статический | — (список берётся из `lib/versions.ts`) |
+| `/versions/[id]` | `app/versions/[id]/page.tsx` | `force-dynamic` + `noStore()` | тот же `getHomeData()` |
 | `/tours/[slug]` | `app/tours/[slug]/page.tsx` | `force-dynamic`, `revalidate = 0` | `tourBySlugQuery`; метаданные — `tourMetadataQuery` |
-| `/custom-tour` | `app/custom-tour/page.tsx` | статический | `customTourQuery` |
+| `/custom-tour` | `app/custom-tour/page.tsx` | статический | `customTourQuery` — **публично недоступен**, middleware редиректит на `/#collab` |
 | `/robots.txt` | `app/robots.ts` | статический | — |
 | `/sitemap.xml` | `app/sitemap.ts` | статический | `toursSlugsQuery` |
+
+Главная и все её варианты используют **один загрузчик данных и одни и те же секции** —
+`app/page.tsx` рендерит `HomeV1`, тот же компонент показывается как «Версия 1» на `/versions`.
+Как устроены версии и как добавить новую — [VERSIONS.md](VERSIONS.md).
 
 Кэш выключен намеренно: правки в Studio должны появляться на сайте сразу, без пересборки.
 Плата за это — запрос в Sanity на каждый заход. Если понадобится скорость, правильный шаг —
@@ -39,15 +45,22 @@ API-роутов нет, форм с отправкой данных нет — 
 
 1. Путь начинается с `/admin` → `rewrite` на путь без префикса. Это «служебный вход»: полный
    сайт со всей навигацией без снятия ограничений для посетителей.
-2. Иначе путь должен быть в `allowedPaths` (сейчас шесть страниц туров), любой другой —
+2. `/custom-tour` → `redirect` на `/#collab`.
+3. `/versions` и `/versions/*` → пропускаются **без ограничений и без префикса `/admin`**:
+   ссылку на сравнение версий заказчик отправляет своему клиенту. У этих страниц стоит
+   `robots: noindex`.
+4. Иначе путь должен быть в `allowedPaths` (сейчас шесть страниц туров), любой другой —
    `redirect` на `/tours/kas`.
 
 Следствия, о которых надо помнить:
 
-- **`/` и `/custom-tour` посетителю недоступны**, хотя перечислены в `sitemap.xml`
-  и указаны как canonical.
+- **`/` и `/custom-tour` посетителю недоступны**, хотя `/` перечислена в `sitemap.xml`
+  и указана как canonical.
 - Несуществующий тур даёт редирект, а не 404.
 - `/admin` не защищён паролем — это обфускация, а не авторизация.
+- `/tours/kas` — цель редиректа по умолчанию, то есть **точка входа для всего сайта**.
+  Если этот тур скрыт или снят с публикации в Sanity, случайный посетитель домена
+  получает 404 (такое уже случалось — см. [known-issues.md](known-issues.md)).
 
 Как снимать ограничения — [remove-restrictions.md](remove-restrictions.md).
 Открытые вопросы по этому блоку — в [known-issues.md](known-issues.md).
@@ -95,8 +108,18 @@ API-роутов нет, форм с отправкой данных нет — 
 
 **Общие**
 - `header` (client) — sticky-шапка, логотип, навигация (скрыта флагом), пишет реальную высоту
-  в CSS-переменную `--header-height` (её использует `scroll-margin-top` в `globals.css`).
-- `footer`, `floating-contacts` (client) — плавающая кнопка связи.
+  в CSS-переменную `--header-height` (её использует `scroll-margin-top` в `globals.css`
+  и подтяжка полноэкранного HERO). Показ/скрытие поверх полноэкранного HERO решает CSS
+  (`body:has([data-hero-fullscreen])` + `data-shown`), не React — подробности
+  в [design-system.md](design-system.md).
+- `footer`, `floating-contacts` (client) — плавающая кнопка связи. Контакты приходят
+  из Sanity (`siteSettingsQuery` → `primaryContacts`), в коде не захардкожены.
+
+### Версии главной (`components/versions/`)
+
+`home-v1`…`home-v6` — раскладки главной, переиспользующие те же секции; `registry.tsx`
+связывает id с компонентом, `version-badge` — плашка возврата к списку, `force-motion` —
+принудительное включение анимаций на `/versions/*`. См. [VERSIONS.md](VERSIONS.md).
 
 ### Примитивы (`components/ui/`)
 
@@ -110,6 +133,17 @@ API-роутов нет, форм с отправкой данных нет — 
 `auto("format")`, `quality(90)`. Домен `cdn.sanity.io` разрешён в `next.config.ts`
 через `images.remotePatterns`. Все GROQ-запросы подтягивают `asset->metadata.dimensions`,
 чтобы знать пропорции без лишнего запроса.
+
+⚠️ **В режиме `fill` обязательно передавать `sizes`.** Без него `next/image` считает, что
+картинка занимает всю ширину окна, и браузер тянет самый крупный вариант из srcset (до 3840px)
+— при том что исходник из Sanity и так обрезан до 1200px, то есть это чистый апскейл. Каждый
+такой кадр надо скачать и раскодировать в главном потоке: на этом заметно «залипала» прокрутка
+в момент, когда секция въезжает в кадр. Значение — реальная ширина картинки на экране,
+например `sizes="(max-width: 1023px) 100vw, 45vw"`.
+
+Пропс `aspectRatio` просит Sanity отдать фото под форму контейнера. Если его не передать,
+Sanity кропает по фиксированному портретному 1200×1600, а браузер поверх режет ещё раз под
+реальную рамку — двойная обрезка, от которой уже дважды «срезало лица» (CALENDAR, VALUES).
 
 ## Шрифты
 
