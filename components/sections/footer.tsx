@@ -20,6 +20,9 @@ interface SiteSettings {
 
 /** Три слова дыхательного цикла из макета (`5:17`/`5:18`/`5:19`) — в Figma это
  * кадры прототипа (opacity 0), на сайте — бесконечный CSS-цикл, см. globals.css. */
+/* Кегль в px — как в макете при 1920. Сам круг масштабируется
+ * (`min(17.7vw,340px)`), поэтому слова внутри тоже переводятся в пропорцию
+ * при рендере ниже — иначе на узком экране они торчали из круга. */
 const BREATH_WORDS: { word: string; size: number }[] = [
   { word: "вдох", size: 17 },
   { word: "пауза", size: 23 },
@@ -29,7 +32,8 @@ const BREATH_WORDS: { word: string; size: number }[] = [
 function FooterLinkItem({ link }: { link: FooterLink }) {
   if (!link.label) return null;
 
-  const className = "text-[14.5px] text-background transition-opacity duration-300 hover:opacity-70";
+  const className =
+    "text-[14.5px] text-background transition-opacity duration-300 hover:opacity-70 lg:text-[clamp(11px,0.755vw,14.5px)]";
 
   if (!link.url) {
     // Пункт заведён (например, ждёт реальной ссылки от заказчика) — показываем как текст, не как мёртвую ссылку.
@@ -109,7 +113,7 @@ function BreathingCircles() {
           <span
             key={word}
             className="footer-breathe-word absolute font-heading italic leading-none text-text-deep"
-            style={{ fontSize: size, animationDelay: `${-i * 3}s` }}
+            style={{ fontSize: `min(${((size / 1920) * 100).toFixed(3)}vw, ${size}px)`, animationDelay: `${-i * 3}s` }}
           >
             {word}
           </span>
@@ -151,9 +155,9 @@ export async function Footer() {
             выравнивание всего ряда, а выигрыш чисто декоративный. */}
         <div className="grid grid-cols-1 gap-x-10 gap-y-12 py-14 sm:grid-cols-2 lg:grid-cols-[min(21.9vw,420px)_min(18.6vw,358px)_1fr] lg:items-start lg:gap-x-0 lg:pb-[min(4.06vw,78px)] lg:pt-[min(7.7vw,148px)]">
           <div className="sm:col-span-2 lg:col-span-1">
-            <span className="font-logo text-[32px] leading-none text-background">ONÁ</span>
+            <span className="font-logo text-[32px] leading-none text-background lg:text-[min(1.67vw,32px)]">ONÁ</span>
             {settings?.slogan && (
-              <p className="mt-4 max-w-[300px] font-heading text-[16.5px] italic leading-[1.55] text-subtle-border">
+              <p className="mt-4 max-w-[300px] font-heading text-[16.5px] italic leading-[1.55] text-subtle-border lg:mt-[min(0.83vw,16px)] lg:max-w-[min(15.63vw,300px)] lg:text-[clamp(11px,0.86vw,16.5px)]">
                 {settings.slogan}
               </p>
             )}
@@ -161,8 +165,8 @@ export async function Footer() {
 
           {contactLinks.length > 0 && (
             <div>
-              <p className="text-[11px] font-medium uppercase tracking-[0.15em] text-subtle">Связаться</p>
-              <div className="mt-5 flex flex-col gap-3">
+              <p className="text-[11px] font-medium uppercase tracking-[0.15em] text-subtle lg:text-[clamp(9px,0.573vw,11px)]">Связаться</p>
+              <div className="mt-5 flex flex-col gap-3 lg:mt-[min(1.04vw,20px)] lg:gap-[min(0.63vw,12px)]">
                 {contactLinks.map((link, i) => (
                   <FooterLinkItem key={i} link={link} />
                 ))}
@@ -172,8 +176,8 @@ export async function Footer() {
 
           {communityLinks.length > 0 && (
             <div>
-              <p className="text-[11px] font-medium uppercase tracking-[0.15em] text-subtle">Сообщество</p>
-              <div className="mt-5 flex flex-col gap-3">
+              <p className="text-[11px] font-medium uppercase tracking-[0.15em] text-subtle lg:text-[clamp(9px,0.573vw,11px)]">Сообщество</p>
+              <div className="mt-5 flex flex-col gap-3 lg:mt-[min(1.04vw,20px)] lg:gap-[min(0.63vw,12px)]">
                 {communityLinks.map((link, i) => (
                   <FooterLinkItem key={i} link={link} />
                 ))}
@@ -186,19 +190,24 @@ export async function Footer() {
 
       <div className="border-t border-background/15">
         <Container className="lg:max-w-[min(56.9vw,1092px)] lg:px-0">
-          <div className="grid grid-cols-1 items-center gap-3 py-6 text-center text-[11px] uppercase tracking-[0.06em] text-subtle sm:grid-cols-3 sm:gap-4 sm:text-left lg:pb-[min(2.1vw,40px)] lg:pt-[min(1.3vw,25px)]">
-            <span className="sm:col-start-1 sm:justify-self-start">© ONÁ · {new Date().getFullYear()}</span>
+          {/* От `sm` — не сетка, а `flex justify-between`. При равных третях
+              (`grid-cols-3`) центральная подпись разработчика шире остальных
+              и отбирала место у правой заметки: та переносилась на две строки,
+              и ряд читался косо. Колонки по содержимому раздвигаются по краям
+              полосы, и переносить нечего — проверено вплоть до 1024. */}
+          <div className="grid grid-cols-1 items-center gap-3 py-6 text-center text-[11px] uppercase tracking-[0.06em] text-subtle sm:flex sm:items-center sm:justify-between sm:gap-4 sm:text-left lg:pb-[min(2.1vw,40px)] lg:pt-[min(1.3vw,25px)] lg:text-[clamp(9px,0.573vw,11px)]">
+            <span className="shrink-0">© ONÁ · {new Date().getFullYear()}</span>
             {/* Такой же яркий и кликабельный, как ссылки «Связаться» выше — не мелкая бледная подпись */}
             <Link
               href="https://t.me/markov1u"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[14.5px] font-normal normal-case tracking-normal text-background transition-opacity duration-300 hover:opacity-70 sm:col-start-2 sm:justify-self-center"
+              className="shrink-0 text-[14.5px] font-normal normal-case tracking-normal text-background transition-opacity duration-300 hover:opacity-70 lg:text-[clamp(11px,0.755vw,14.5px)]"
             >
               Разработка сайта · @markov1u
             </Link>
             {settings?.footerNote && (
-              <span className="sm:col-start-3 sm:justify-self-end">{settings.footerNote}</span>
+              <span className="shrink-0 sm:text-right">{settings.footerNote}</span>
             )}
           </div>
         </Container>
