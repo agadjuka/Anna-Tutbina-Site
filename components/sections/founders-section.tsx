@@ -69,16 +69,16 @@ function FounderCard({ person }: { person?: FounderPerson }) {
       </div>
 
       <figcaption className="mt-6 lg:mt-[min(1.15vw,22px)]">
-        <p className="font-heading text-[24px] italic leading-tight text-background sm:text-[26px] lg:text-[clamp(26px,1.82vw,35px)] lg:leading-[min(2.28vw,43.75px)]">
+        <p className="font-heading text-[24px] italic leading-tight text-background sm:text-[26px] lg:text-[min(1.82vw,35px)] lg:leading-[min(2.28vw,43.75px)]">
           {person.name}
         </p>
         {person.role && (
-          <p className="mt-2 text-[11px] font-medium uppercase tracking-[0.18em] text-subtle sm:text-[11.5px] lg:mt-[min(1.04vw,20px)] lg:text-[13px]">
+          <p className="mt-2 text-[11px] font-medium uppercase tracking-[0.18em] text-subtle sm:text-[11.5px] lg:mt-[min(1.04vw,20px)] lg:text-[clamp(12px,0.68vw,13px)]">
             {person.role}
           </p>
         )}
         {person.description && (
-          <p className="mx-auto mt-4 max-w-[320px] text-[14.5px] font-light leading-[1.6] text-background/90 lg:mx-0 lg:mt-[min(1.3vw,25px)] lg:max-w-[min(24.7vw,475px)] lg:text-[17px] lg:leading-[1.65]">
+          <p className="mx-auto mt-4 max-w-[320px] text-[14.5px] font-light leading-[1.6] text-background/90 lg:mx-0 lg:mt-[min(1.3vw,25px)] lg:max-w-[min(24.7vw,475px)] lg:text-[clamp(12px,0.885vw,17px)] lg:leading-[1.65]">
             {person.description}
           </p>
         )}
@@ -129,7 +129,7 @@ export function FoundersSection({ founders }: FoundersSectionProps) {
             )}
 
             {founders.heading && (
-              <h2 className="mt-4 text-center font-heading text-[34px] uppercase leading-[0.95] text-background lg:mt-[min(1.46vw,28px)] lg:text-left lg:text-[clamp(44px,2.76vw,53px)] lg:leading-[min(2.6vw,50px)]">
+              <h2 className="mt-4 text-center font-heading text-[34px] uppercase leading-[0.95] text-background lg:mt-[min(1.46vw,28px)] lg:text-left lg:text-[min(2.76vw,53px)] lg:leading-[min(2.6vw,50px)]">
                 {founders.heading}
               </h2>
             )}
@@ -137,7 +137,7 @@ export function FoundersSection({ founders }: FoundersSectionProps) {
             {founders.body && (
               <PortableTextContent
                 value={founders.body}
-                className="mt-6 space-y-4 text-center text-[16px] leading-[1.5] text-background sm:text-[18px] lg:mt-[min(3.54vw,68px)] lg:max-w-[min(25.5vw,489px)] lg:space-y-[min(1.82vw,35px)] lg:text-left lg:text-[clamp(18px,1.41vw,27px)] lg:leading-[min(1.82vw,35px)]"
+                className="mt-6 space-y-4 text-center text-[16px] leading-[1.5] text-background sm:text-[18px] lg:mt-[min(3.54vw,68px)] lg:max-w-[min(25.5vw,489px)] lg:space-y-[min(1.82vw,35px)] lg:text-left lg:text-[clamp(12px,1.41vw,27px)] lg:leading-[min(1.82vw,35px)]"
               />
             )}
 

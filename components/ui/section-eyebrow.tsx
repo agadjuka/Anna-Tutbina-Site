@@ -28,7 +28,11 @@ interface SectionEyebrowProps {
  */
 export function SectionEyebrow({ children, className }: SectionEyebrowProps) {
   return (
-    <p className={cn("text-[13px] font-medium uppercase tracking-[0.18em] sm:text-[15px]", className)}>
+    /* От `lg` кегль пропорционален ширине окна (15px на 1920, формула
+       15/1920 = 0.78vw) с полом читаемости 12px — часть общего закона
+       масштабирования главной (2026-08-21): при сужении окна ужимается
+       ВСЁ, включая надзаголовки, а не только заголовки рядом с ними. */
+    <p className={cn("text-[13px] font-medium uppercase tracking-[0.18em] sm:text-[15px] lg:text-[clamp(12px,0.78vw,15px)]", className)}>
       {children}
     </p>
   );

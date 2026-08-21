@@ -102,7 +102,7 @@ export function ValuesSectionEditorial({ values }: ValuesSectionEditorialProps) 
             </SectionEyebrow>
           )}
           {values?.heading && (
-            <h2 className="mt-3 font-heading text-[32px] uppercase leading-tight text-background sm:text-[40px] lg:mt-[min(2.13vw,41px)] lg:text-[clamp(40px,2.81vw,54px)] lg:leading-[min(2.6vw,50px)]">
+            <h2 className="mt-3 font-heading text-[32px] uppercase leading-tight text-background sm:text-[33px] lg:mt-[min(2.13vw,41px)] lg:text-[min(2.81vw,54px)] lg:leading-[min(2.6vw,50px)]">
               {values.heading}
             </h2>
           )}
@@ -169,18 +169,18 @@ export function ValuesSectionEditorial({ values }: ValuesSectionEditorialProps) 
                   primary-кружок 48px со светлой цифрой — правка заказчика
                   2026-08-20: «прозрачный кружок и в мобильной, и в десктопной».
                   С 2026-08-21 уменьшен вместе со всей карточкой: 40px / 14px. */}
-              <div className="mx-auto flex size-10 shrink-0 items-center justify-center rounded-full border border-primary">
-                <span className="font-heading text-[14px] italic leading-[25px] text-primary">
+              <div className="mx-auto flex size-10 shrink-0 items-center justify-center rounded-full border border-primary lg:size-[min(2.08vw,40px)]">
+                <span className="font-heading text-[14px] italic leading-[25px] text-primary lg:text-[clamp(12px,0.73vw,14px)] lg:leading-[min(1.3vw,25px)]">
                   {String(index + 1).padStart(2, "0")}
                 </span>
               </div>
               {item.title && (
-                <p className="mt-4 font-heading text-[22px] leading-normal text-foreground lg:mt-[9px] lg:text-[clamp(18px,1.17vw,22.5px)] lg:leading-[1.47]">
+                <p className="mt-4 font-heading text-[22px] leading-normal text-foreground lg:mt-[9px] lg:text-[clamp(12px,1.17vw,22.5px)] lg:leading-[1.47]">
                   {item.title}
                 </p>
               )}
               {item.text && (
-                <p className="mt-3 text-[15px] font-light leading-[1.35] text-text-deep lg:mt-[min(1.17vw,22.5px)] lg:px-0 lg:text-[clamp(13px,0.8vw,15.3px)] lg:leading-[1.29]">
+                <p className="mt-3 text-[15px] font-light leading-[1.35] text-text-deep lg:mt-[min(1.17vw,22.5px)] lg:px-0 lg:text-[clamp(12px,0.8vw,15.3px)] lg:leading-[1.29]">
                   {item.text}
                 </p>
               )}

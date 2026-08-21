@@ -76,18 +76,18 @@ export function FaqSection({ items, faq }: FaqSectionProps) {
           <SectionEyebrow className="text-subtle">
             {faq?.eyebrow || "Частые вопросы"}
           </SectionEyebrow>
-          <h2 className="mt-3 font-heading text-[32px] leading-tight text-foreground sm:text-[40px] lg:mt-[min(1.77vw,34px)] lg:text-[clamp(40px,2.6vw,50px)] lg:leading-[min(3.07vw,59px)]">
+          <h2 className="mt-3 font-heading text-[32px] leading-tight text-foreground sm:text-[33px] lg:mt-[min(1.77vw,34px)] lg:text-[min(2.6vw,50px)] lg:leading-[min(3.07vw,59px)]">
             {faq?.heading || "FAQ"}
           </h2>
         </div>
-        <div className="mx-auto max-w-3xl space-y-2 lg:max-w-[min(41.7vw,800px)] lg:space-y-[13px]">
+        <div className="mx-auto max-w-3xl space-y-2 lg:max-w-[min(41.7vw,800px)] lg:space-y-[min(0.68vw,13px)]">
           {items.map((item, idx) => {
             const isOpen = openIndex === idx;
             return (
-              <div key={item._id} className="rounded-[18px] bg-on-primary px-4 lg:px-[26px]">
+              <div key={item._id} className="rounded-[18px] bg-on-primary px-4 lg:px-[min(1.35vw,26px)]">
                 <button
                   className={cn(
-                    "flex w-full items-center justify-between py-5 text-left text-lg transition-colors md:text-xl lg:min-h-[83px] lg:py-0 lg:text-[18px]",
+                    "flex w-full items-center justify-between py-5 text-left text-lg transition-colors md:text-xl lg:min-h-[min(4.32vw,83px)] lg:py-0 lg:text-[clamp(12px,0.9375vw,18px)]",
                     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
                     isOpen ? "text-primary" : "text-foreground"
                   )}
@@ -100,7 +100,7 @@ export function FaqSection({ items, faq }: FaqSectionProps) {
                       генерирует для рукописных утилит), `lg:font-heading` молча не
                       работает. В макете вопрос и так набран Cormorant на всех
                       экранах. */}
-                  <span className="pr-4 font-heading font-normal leading-snug lg:leading-[31.5px]">
+                  <span className="pr-4 font-heading font-normal leading-snug lg:leading-[min(1.64vw,31.5px)]">
                     {item.question}
                   </span>
                   <PlusIconAnimated open={isOpen} />
@@ -118,7 +118,7 @@ export function FaqSection({ items, faq }: FaqSectionProps) {
                   }}
                   aria-hidden={!isOpen}
                 >
-                  <div className="px-1 pb-5 lg:px-0 lg:pb-[26px]">
+                  <div className="px-1 pb-5 lg:px-0 lg:pb-[min(1.35vw,26px)]">
                     <PortableTextContent
                       value={item.answer}
                       smallFont

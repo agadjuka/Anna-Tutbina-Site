@@ -99,17 +99,35 @@ export function TourCalendarCard({ tour, variant = "desktop" }: TourCalendarCard
             название 35px/42 (Cormorant), даты 20px/22.75 полужирные.
             Вертикаль: фото заканчивается на 251.73, надзаголовок с 275,
             название с 301, даты с 349, низ карточки 400.13. */}
-        <div className="flex flex-1 flex-col px-5 pb-5 pt-4 lg:min-h-[min(7.7vw,148px)] lg:px-[26px] lg:pb-[28px] lg:pt-[23px]">
+        {/* Кегли и поля панели МАСШТАБИРУЮТСЯ вместе с карточкой (правка
+            заказчика 2026-08-21: «текст не влазит и переносится на вторую
+            строку»). Раньше здесь стояли фиксированные 17/35/20px и поля 26px:
+            при 1920 карточка 336px и всё помещалось, но к 1024 она ужимается до
+            179px, а текст оставался прежним — надзаголовок и даты уезжали на
+            две строки, причём у разных туров по-разному, и строки в соседних
+            карточках переставали совпадать по высоте.
+
+            Значения `vw` подобраны так, чтобы на 1920 давать РОВНО прежние
+            цифры из макета (17 / 35 / 20px, поля 26/23/28), а ниже ужиматься
+            пропорционально ширине карточки. Трекинг и интерлиньяж переведены
+            в `em`, иначе они не следовали бы за кеглем. */}
+        <div className="flex flex-1 flex-col px-5 pb-5 pt-4 lg:min-h-[min(7.7vw,148px)] lg:px-[min(1.35vw,26px)] lg:pb-[min(1.46vw,28px)] lg:pt-[min(1.2vw,23px)]">
           {kicker && (
-            <p className="text-[12px] font-medium uppercase tracking-[1.3px] text-background lg:text-[17px] lg:leading-[18.38px] lg:tracking-[1.47px]">
+            /* Ровно ОДНА строка (`min-h` = один интерлиньяж). Кегль и трекинг
+               подобраны так, что самое длинное из нынешних названий —
+               «THE SACRED JOURNEY» — помещается в строку с запасом на всех
+               ширинах от 1024px. Благодаря `min-h` строка занимает своё место
+               даже у туров без надзаголовка, поэтому название и даты в соседних
+               карточках стоят на одном уровне. */
+            <p className="text-[12px] font-medium uppercase tracking-[0.108em] text-background lg:min-h-[1.08em] lg:text-[clamp(12px,0.885vw,17px)] lg:leading-[1.08] lg:tracking-[0.07em]">
               {kicker}
             </p>
           )}
-          <p className="mt-1 font-heading text-[27px] leading-[1.15] text-background lg:mt-[8px] lg:text-[35px] lg:leading-[42px]">
+          <p className="mt-1 font-heading text-[27px] leading-[1.15] text-background lg:mt-[min(0.42vw,8px)] lg:text-[min(1.82vw,35px)] lg:leading-[1.2]">
             {headline}
           </p>
           {dates && (
-            <p className="mt-auto pt-2 text-[16px] font-medium text-background lg:pt-[6px] lg:text-[20px] lg:leading-[22.75px]">
+            <p className="mt-auto pt-2 text-[16px] font-medium text-background lg:pt-[min(0.31vw,6px)] lg:text-[clamp(12px,1.04vw,20px)] lg:leading-[1.14]">
               {dates}
             </p>
           )}

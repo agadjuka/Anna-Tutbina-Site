@@ -109,7 +109,7 @@ export function AboutSection({ about }: AboutSectionProps) {
               /* `max-w` держит разбивку макета «ИСКУССТВО / ПУТЕШЕСТВОВАТЬ /
                  КРАСИВО»: он уже, чем «ПУТЕШЕСТВОВАТЬ КРАСИВО» одной строкой,
                  но шире самого длинного слова. */
-              <h2 className="mt-4 font-heading text-[34px] uppercase leading-[0.95] text-on-primary sm:text-[44px] lg:mt-[min(3.1vw,60px)] lg:max-w-[min(41.7vw,800px)] lg:text-[clamp(44px,4.17vw,80px)] lg:leading-[0.8125]">
+              <h2 className="mt-4 font-heading text-[34px] uppercase leading-[0.95] text-on-primary sm:text-[44px] lg:mt-[min(3.1vw,60px)] lg:max-w-[min(41.7vw,800px)] lg:text-[min(4.17vw,80px)] lg:leading-[0.8125]">
                 {about.heading}
               </h2>
             )}
@@ -117,7 +117,7 @@ export function AboutSection({ about }: AboutSectionProps) {
             {about.body && (
               <PortableTextContent
                 value={about.body}
-                className="mt-6 space-y-5 text-[16px] leading-[1.5] text-on-primary/90 sm:text-[18px] lg:mt-[min(2.5vw,48px)] lg:max-w-[min(29.2vw,560px)] lg:space-y-[min(2.24vw,43px)] lg:text-[clamp(18px,1.4vw,27px)] lg:leading-[1.296]"
+                className="mt-6 space-y-5 text-[16px] leading-[1.5] text-on-primary/90 sm:text-[18px] lg:mt-[min(2.5vw,48px)] lg:max-w-[min(29.2vw,560px)] lg:space-y-[min(2.24vw,43px)] lg:text-[clamp(12px,1.4vw,27px)] lg:leading-[1.296]"
               />
             )}
 

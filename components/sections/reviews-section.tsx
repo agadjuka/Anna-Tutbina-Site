@@ -31,7 +31,7 @@ export function ReviewsSection({ reviews }: ReviewsSectionProps) {
             <SectionEyebrow className="text-subtle">
               Отзывы
             </SectionEyebrow>
-            <h2 className="mt-3 font-heading text-[32px] uppercase leading-tight text-foreground sm:text-[40px] lg:mt-[min(1.35vw,26px)] lg:text-[clamp(40px,2.6vw,50px)] lg:leading-[min(3.07vw,59px)]">
+            <h2 className="mt-3 font-heading text-[32px] uppercase leading-tight text-foreground sm:text-[33px] lg:mt-[min(1.35vw,26px)] lg:text-[min(2.6vw,50px)] lg:leading-[min(3.07vw,59px)]">
               Что говорят наши участницы
             </h2>
           </div>

@@ -81,7 +81,7 @@ export function GuestsSection({ guests }: GuestsSectionProps) {
         <div className="mt-10 flex flex-col gap-12 lg:mt-[min(1.46vw,28px)] lg:flex-row lg:items-stretch lg:gap-[3%]">
           <div className="lg:w-[46.6%]">
             {(guests.heading || guests.headingAccent) && (
-              <h2 className="font-heading text-[32px] leading-tight text-foreground sm:text-[40px] lg:text-[clamp(40px,2.76vw,53px)] lg:leading-[min(3.07vw,59px)]">
+              <h2 className="font-heading text-[32px] leading-tight text-foreground sm:text-[33px] lg:text-[min(2.76vw,53px)] lg:leading-[min(3.07vw,59px)]">
                 {guests.heading}{" "}
                 {guests.headingAccent && (
                   <span className="italic text-primary">{guests.headingAccent}</span>
@@ -93,10 +93,10 @@ export function GuestsSection({ guests }: GuestsSectionProps) {
               <ul className="mt-8 space-y-5 lg:mt-[min(1.98vw,38px)] lg:space-y-[min(2.57vw,49px)]">
                 {items.map((item, index) => (
                   <li key={index} className="flex items-baseline gap-4 lg:items-center lg:gap-[min(1.86vw,36px)]">
-                    <span aria-hidden="true" className="text-[16px] leading-[26px] text-primary lg:text-[clamp(16px,1vw,19px)] lg:leading-[26.25px]">
+                    <span aria-hidden="true" className="text-[16px] leading-[26px] text-primary lg:text-[clamp(12px,1vw,19px)] lg:leading-[26.25px]">
                       ✦
                     </span>
-                    <span className="text-[17px] leading-snug text-foreground sm:text-[20px] lg:text-[clamp(20px,1.3vw,25px)] lg:leading-[min(1.37vw,26.25px)]">
+                    <span className="text-[17px] leading-snug text-foreground sm:text-[20px] lg:text-[clamp(12px,1.3vw,25px)] lg:leading-[min(1.37vw,26.25px)]">
                       {item}
                     </span>
                   </li>
@@ -107,7 +107,7 @@ export function GuestsSection({ guests }: GuestsSectionProps) {
             {guests.body && (
               <PortableTextContent
                 value={guests.body}
-                className="mt-10 space-y-5 text-[17px] leading-[1.45] text-foreground sm:text-[20px] lg:mt-[min(3.44vw,66px)] lg:space-y-[min(2.45vw,47px)] lg:text-[clamp(20px,1.3vw,25px)] lg:leading-[min(1.82vw,35px)] [&_em]:font-heading [&_em]:font-light [&_em]:italic [&_em]:text-[1.25em] lg:[&_em]:text-[1.8em] [&_em]:leading-[1]"
+                className="mt-10 space-y-5 text-[17px] leading-[1.45] text-foreground sm:text-[20px] lg:mt-[min(3.44vw,66px)] lg:space-y-[min(2.45vw,47px)] lg:text-[clamp(12px,1.3vw,25px)] lg:leading-[min(1.82vw,35px)] [&_em]:font-heading [&_em]:font-light [&_em]:italic [&_em]:text-[1.25em] lg:[&_em]:text-[1.8em] [&_em]:leading-[1]"
               />
             )}
           </div>

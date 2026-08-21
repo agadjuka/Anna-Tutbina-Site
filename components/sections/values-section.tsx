@@ -68,7 +68,7 @@ export function ValuesSection({ values }: ValuesSectionProps) {
             </SectionEyebrow>
           )}
           {values?.heading && (
-            <h2 className="mt-3 font-heading text-[32px] uppercase leading-tight text-background sm:text-[40px] lg:text-[clamp(40px,2.8vw,54px)]">
+            <h2 className="mt-3 font-heading text-[32px] uppercase leading-tight text-background sm:text-[33px] lg:text-[min(2.8vw,54px)]">
               {values.heading}
             </h2>
           )}

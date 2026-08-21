@@ -84,7 +84,7 @@ export function CollabSection({ collab, primaryContacts = [], decorPhoto }: Coll
             )}
 
             {(collab.homeHeading || collab.homeHeadingAccent) && (
-              <h2 className="mt-4 font-heading text-[34px] uppercase leading-[0.95] text-background lg:mt-0 lg:text-[clamp(44px,2.6vw,50px)] lg:leading-[min(3.07vw,59px)]">
+              <h2 className="mt-4 font-heading text-[34px] uppercase leading-[0.95] text-background lg:mt-0 lg:text-[min(2.6vw,50px)] lg:leading-[min(3.07vw,59px)]">
                 {collab.homeHeading}{" "}
                 {collab.homeHeadingAccent && (
                   <em className="font-heading italic">{collab.homeHeadingAccent}</em>
@@ -95,7 +95,7 @@ export function CollabSection({ collab, primaryContacts = [], decorPhoto }: Coll
             {collab.homeDescription && (
               <PortableTextContent
                 value={collab.homeDescription}
-                className="mt-6 space-y-4 text-[16px] leading-[1.5] text-background sm:text-[18px] lg:mt-[min(1.88vw,36px)] lg:max-w-[min(26.6vw,510px)] lg:space-y-[min(1.77vw,34px)] lg:text-[clamp(18px,1.41vw,27px)] lg:leading-[min(1.82vw,35px)]"
+                className="mt-6 space-y-4 text-[16px] leading-[1.5] text-background sm:text-[18px] lg:mt-[min(1.88vw,36px)] lg:max-w-[min(26.6vw,510px)] lg:space-y-[min(1.77vw,34px)] lg:text-[clamp(12px,1.41vw,27px)] lg:leading-[min(1.82vw,35px)]"
               />
             )}
 

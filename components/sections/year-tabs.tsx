@@ -41,15 +41,21 @@ export function YearTabs({ tours, headingSlot }: YearTabsProps) {
       <div className="flex flex-col items-center gap-6 lg:flex-row lg:items-end lg:justify-between">
         {headingSlot}
 
+        {/* На lg размеры таблеток пропорциональны экрану (макетные 125×52,
+            кегль 20, зазор 30 — на 1920). Пока они были фиксированными, ряд
+            съедал 270px на любой ширине: заголовку CALENDAR на 1024–1366
+            не хватало места, и он переносился на вторую строку. Теперь
+            таблетки ужимаются вместе со всем блоком — заголовок остаётся
+            на своём месте в одну строку без спецслучаев. */}
         {years.length > 0 && (
-          <div className="flex shrink-0 gap-[30px]">
+          <div className="flex shrink-0 gap-[30px] lg:gap-[min(1.56vw,30px)]">
             {years.map((year) => (
               <button
                 key={year}
                 type="button"
                 onClick={() => setSelectedYear(year)}
                 className={cn(
-                  "inline-flex h-[52px] items-center justify-center rounded-full border px-8 text-[20px] tracking-[0.03em] transition-colors duration-300 lg:w-[125px] lg:px-0",
+                  "inline-flex h-[52px] items-center justify-center rounded-full border px-8 text-[20px] tracking-[0.03em] transition-colors duration-300 lg:h-[min(2.71vw,52px)] lg:w-[min(6.51vw,125px)] lg:px-0 lg:text-[clamp(12px,1.04vw,20px)]",
                   selectedYear === year
                     ? "border-primary bg-primary text-on-primary"
                     : "border-subtle-border text-subtle hover:bg-primary/5"
