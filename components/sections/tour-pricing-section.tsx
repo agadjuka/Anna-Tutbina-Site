@@ -4,6 +4,8 @@ import {
   isLegacyPricingPortableText,
   type PricingDetailsSanity,
 } from "@/lib/utils/tour-pricing";
+import { cn } from "@/lib/utils";
+import { TOUR_BLOCK_WIDTH } from "@/lib/tour-layout";
 
 type TourPricingSectionProps = {
   pricingDetails: unknown;
@@ -94,13 +96,13 @@ export function TourPricingSection({ pricingDetails }: TourPricingSectionProps) 
   const mainText = typeof p.mainText === "string" ? p.mainText.trim() : "";
   const n = columns.length;
 
-  /* Вся ширина родителя max-w-4xl — как блок основного текста; grid-cols-* даёт равные колонки */
+  /* Вся ширина родителя — grid-cols-* даёт равные колонки */
   const splitGridTwo = "grid w-full min-w-0 grid-cols-2 gap-x-4 gap-y-0 md:gap-x-6";
   const splitGridThree = "grid w-full min-w-0 grid-cols-3 gap-x-4 gap-y-0 md:gap-x-6";
 
   return (
     <div className="w-full flex justify-center">
-      <div className="max-w-4xl w-full space-y-8 md:space-y-10">
+      <div className={cn("w-full space-y-8 md:space-y-10", TOUR_BLOCK_WIDTH)}>
         {n > 0 && (
           <div className="w-full">
             {n === 1 ? (

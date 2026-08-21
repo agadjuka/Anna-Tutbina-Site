@@ -14,6 +14,15 @@ const tour = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'place',
+      title: 'Место',
+      description:
+        'Город или страна — вторая строка на карточке в календаре, крупным шрифтом ' +
+        '(в макете это «Кейптаун», «Бали»). Первой строкой над ним идёт название тура. ' +
+        'Если поле пустое, на карточке крупно показывается название тура, как раньше.',
+      type: 'string',
+    }),
+    defineField({
       name: 'slug',
       title: 'URL (slug)',
       type: 'slug',

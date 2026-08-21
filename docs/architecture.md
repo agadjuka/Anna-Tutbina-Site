@@ -19,17 +19,19 @@ API-роутов нет, форм с отправкой данных нет — 
 
 | Роут | Файл | Рендеринг | Данные |
 |---|---|---|---|
-| `/` | `app/page.tsx` | `force-dynamic` + `noStore()` | `getHomeData()` — один общий загрузчик (`lib/home-data.ts`), внутри `Promise.all` по `toursQuery`, `toursWithReviewsQuery`, `customTourQuery`, `faqQuery`, `homePageQuery`, `siteSettingsQuery`. Вёрстка вынесена в `HomeV1` (см. ниже) |
-| `/versions` | `app/versions/page.tsx` | статический | — (список берётся из `lib/versions.ts`) |
-| `/versions/[id]` | `app/versions/[id]/page.tsx` | `force-dynamic` + `noStore()` | тот же `getHomeData()` |
+| `/` | `app/page.tsx` | `force-dynamic` + `noStore()` | `getHomeData()` — один общий загрузчик (`lib/home-data.ts`), внутри `Promise.all` по `toursQuery`, `toursWithReviewsQuery`, `customTourQuery`, `faqQuery`, `homePageQuery`, `siteSettingsQuery`. Вёрстка вынесена в `HomeV6` (см. ниже) |
+| `/versions` | `app/versions/page.tsx` | статический | — (список берётся из `lib/versions.ts`). **Публично закрыт**, только через `/admin/versions` |
+| `/versions/[id]` | `app/versions/[id]/page.tsx` | `force-dynamic` + `noStore()` | тот же `getHomeData()`. Тоже только через `/admin/versions/<id>` |
 | `/tours/[slug]` | `app/tours/[slug]/page.tsx` | `force-dynamic`, `revalidate = 0` | `tourBySlugQuery`; метаданные — `tourMetadataQuery` |
 | `/custom-tour` | `app/custom-tour/page.tsx` | статический | `customTourQuery` — **публично недоступен**, middleware редиректит на `/#collab` |
 | `/robots.txt` | `app/robots.ts` | статический | — |
 | `/sitemap.xml` | `app/sitemap.ts` | статический | `toursSlugsQuery` |
 
 Главная и все её варианты используют **один загрузчик данных и одни и те же секции** —
-`app/page.tsx` рендерит `HomeV1`, тот же компонент показывается как «Версия 1» на `/versions`.
-Как устроены версии и как добавить новую — [VERSIONS.md](VERSIONS.md).
+`app/page.tsx` рендерит `HomeV6` (заказчик выбрал версию 6 — 2026-08-20), тот же компонент
+показывается как «Версия 6» на `/admin/versions`. Версии 1–5 скрыты (статус `archived`),
+план их удаления — [versions-cleanup-plan.md](versions-cleanup-plan.md).
+Как устроены версии — [VERSIONS.md](VERSIONS.md).
 
 Кэш выключен намеренно: правки в Studio должны появляться на сайте сразу, без пересборки.
 Плата за это — запрос в Sanity на каждый заход. Если понадобится скорость, правильный шаг —
@@ -46,9 +48,9 @@ API-роутов нет, форм с отправкой данных нет — 
 1. Путь начинается с `/admin` → `rewrite` на путь без префикса. Это «служебный вход»: полный
    сайт со всей навигацией без снятия ограничений для посетителей.
 2. `/custom-tour` → `redirect` на `/#collab`.
-3. `/versions` и `/versions/*` → пропускаются **без ограничений и без префикса `/admin`**:
-   ссылку на сравнение версий заказчик отправляет своему клиенту. У этих страниц стоит
-   `robots: noindex`.
+3. ~~`/versions` и `/versions/*` пропускались без префикса `/admin`~~ — исключение снято
+   2026-08-20, когда сравнение версий закончилось: теперь эти страницы попадают под общее
+   ограничение (п. 4) и открываются только через `/admin/versions`.
 4. Иначе путь должен быть в `allowedPaths` (сейчас шесть страниц туров), любой другой —
    `redirect` на `/tours/kas`.
 
@@ -117,9 +119,10 @@ API-роутов нет, форм с отправкой данных нет — 
 
 ### Версии главной (`components/versions/`)
 
-`home-v1`…`home-v6` — раскладки главной, переиспользующие те же секции; `registry.tsx`
-связывает id с компонентом, `version-badge` — плашка возврата к списку, `force-motion` —
-принудительное включение анимаций на `/versions/*`. См. [VERSIONS.md](VERSIONS.md).
+`home-v6` — **боевая главная** (её рендерит `app/page.tsx`). `home-v1`…`home-v5` — отклонённые
+варианты, оставлены для сравнения и скрыты с хаба; `registry.tsx` связывает id с компонентом,
+`version-badge` — плашка возврата к списку, `force-motion` — принудительное включение анимаций
+на `/versions/*`. См. [VERSIONS.md](VERSIONS.md) и [versions-cleanup-plan.md](versions-cleanup-plan.md).
 
 ### Примитивы (`components/ui/`)
 

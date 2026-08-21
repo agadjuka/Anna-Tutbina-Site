@@ -5,10 +5,11 @@ import type { EmblaCarouselType } from "embla-carousel";
 import { useCallback, useEffect, useState, useMemo } from "react";
 import { SanityImage } from "@/components/ui/sanity-image";
 import { PortableTextContent } from "@/components/ui/portable-text";
-import { cn } from "@/lib/utils";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 import { urlFor } from "@/lib/sanity.client";
+import { cn } from "@/lib/utils";
+import { TOUR_BLOCK_WIDTH } from "@/lib/tour-layout";
 
 interface ProgramDay {
   dayTitle?: string;
@@ -111,7 +112,7 @@ export function ProgramDaysCarousel({ days }: ProgramDaysCarouselProps) {
 
   return (
     <section className="relative">
-      <div className="max-w-4xl mx-auto">
+      <div className={cn("mx-auto", TOUR_BLOCK_WIDTH)}>
         <div className="relative">
           <div className="overflow-hidden">
             <div ref={viewportRef} className="overflow-hidden">
@@ -121,8 +122,14 @@ export function ProgramDaysCarousel({ days }: ProgramDaysCarouselProps) {
                     key={index}
                     className="min-w-0 shrink-0 w-full flex flex-col md:flex-row gap-4 md:gap-6 lg:gap-8"
                   >
-                    {/* Левая часть - фотографии в сетке 2x2 */}
-                    <div className="w-full md:w-2/5">
+                    {/* Левая часть - фотографии в сетке 2x2.
+
+                        Половина ширины, а не 2/5: после расширения блока до 1152px
+                        колонка в 2/5 давала плитки по 215px — сетка выглядела
+                        мелкой и «прилипшей» к левому краю рядом с длинной строкой
+                        текста (замечание заказчика 2026-08-21). На половине
+                        плитки вырастают до ~276px и колонки уравновешиваются. */}
+                    <div className="w-full md:w-1/2">
                       {day.dayImage && day.dayImage.length > 0 ? (
                         <div className="grid grid-cols-2 gap-2 md:gap-2.5">
                           {day.dayImage.slice(0, 4).map((img, imgIdx) => {
@@ -173,9 +180,14 @@ export function ProgramDaysCarousel({ days }: ProgramDaysCarouselProps) {
                     </div>
 
                     {/* Правая часть - текст */}
-                    <div className="w-full md:w-3/5 md:ml-6 lg:ml-8 flex flex-col justify-center space-y-3 md:space-y-4">
+                    {/* Без `md:ml-6 lg:ml-8`: внешний ряд уже задаёт `gap-6/gap-8`, и отступ
+                        удваивался — между фото и текстом зияло 64px пустоты. */}
+                    <div className="w-full md:w-1/2 flex flex-col justify-center space-y-3 md:space-y-4">
+                      {/* Cormorant обычного начертания, без `font-bold`: 700 не используется
+                          на сайте больше нигде, и жирный Cormorant рядом с тонкими
+                          заголовками главной читался инородно (задача Н9). */}
                       {day.dayTitle && (
-                        <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-foreground leading-tight">
+                        <h3 className="text-[22px] md:text-[26px] lg:text-[30px] font-normal text-foreground leading-tight">
                           {day.dayTitle}
                         </h3>
                       )}
@@ -199,7 +211,7 @@ export function ProgramDaysCarousel({ days }: ProgramDaysCarouselProps) {
       {/* Стрелки навигации - вне контентной области (только для десктопа) */}
       {days.length > 1 && (
         <div className="hidden md:flex absolute inset-0 items-center pointer-events-none">
-          <div className="max-w-4xl mx-auto w-full relative h-full">
+          <div className={cn("mx-auto w-full relative h-full", TOUR_BLOCK_WIDTH)}>
             <button
               onClick={scrollPrev}
               disabled={!canScrollPrev}

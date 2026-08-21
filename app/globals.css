@@ -70,6 +70,11 @@
     @apply bg-background text-foreground;
   }
 
+  /* Трекинг у заголовков — НОРМАЛЬНЫЙ. Раньше здесь стоял `tracking-tight`
+     (-0.025em), и на крупных заголовках это давало -1.8px на букву: текст
+     выглядел зажатым, а промежутки — неровными («буквы гуляют», замечание
+     заказчика 2026-08-20). В макете у заголовков межбуквенного интервала нет
+     вообще — проверено по узлу `18:2` через Figma MCP. */
   h1,
   h2,
   h3,
@@ -77,7 +82,7 @@
   h5,
   h6 {
     font-family: var(--font-heading), "Cormorant Garamond", "Times New Roman", serif;
-    @apply text-primary tracking-tight;
+    @apply text-primary;
   }
 
   strong:not([class*="heading"]):not([class*="font-heading"]) {
@@ -87,108 +92,127 @@
 }
 
 /* --- Шапка поверх полноэкранного HERO -------------------------------------
-   Пока страница не проскроллена, шапка над полноэкранным HERO спрятана.
-   Раньше это решалось React-состоянием (`overHero` в `header.tsx`), и в этом
-   была вторая половина бага «полоска сверху»: на сервере и на первый кадр
-   React ещё не знает, есть ли на странице полноэкранный HERO — шапка успевала
-   отрисоваться видимой и через момент уезжала вверх. Отсюда «иногда сначала
-   проявляется хедер, потом исчезает».
+   Раньше здесь пряталась шапка над полноэкранным HERO (правила
+   `body:has([data-hero-fullscreen="all"]) [data-site-header][data-shown="false"]`
+   и его мобильный близнец для версии 3): пока страница не проскроллена, шапки
+   не было видно вовсе.
 
-   Теперь состояние «страница с полноэкранным HERO» определяет сам CSS через
-   `:has()` — оно верно уже в первом кадре, до всякой гидратации. JS остался
-   только за фактом прокрутки: `header.tsx` ставит `data-shown="true"`.
+   2026-08-20 правила удалены по правкам заказчика — «на первом экране сейчас
+   отсутствует верхняя плашка с меню, необходимо добавить её и сделать сквозной»
+   (`docs/redesign/client-feedback-2026-08.md`, п. 3.1). В макете оливковая
+   плашка стоит поверх первого экрана, так что теперь шапка видна сразу.
 
-   Правила вне `@layer` — так они перекрывают Tailwind-утилиты на самой шапке
-   без `!important` (тот же приём, что у `.v6-cine` ниже). На страницах без
-   `data-hero-fullscreen` селектор не совпадает вообще, и шапка ведёт себя
-   как обычно — это важно, иначе на страницах туров сверху висела бы пустота. */
-body:has([data-hero-fullscreen="all"]) [data-site-header][data-shown="false"] {
-  transform: translateY(-100%);
-  opacity: 0;
-  pointer-events: none;
+   Атрибут `data-hero-fullscreen` на секции HERO оставлен: он ничего не прячет,
+   но по нему по-прежнему удобно отличать «полноэкранный первый экран» в стилях
+   и в отладке. Сам HERO поднят под шапку отрицательным `margin-top`
+   (`hero-section-fullscreen-v4.tsx`), поэтому плашка ложится поверх коллажа,
+   а не сдвигает его вниз — первый экран остаётся ровно во всю высоту окна.
+
+   `data-shown` шапка по-прежнему выставляет (см. `header.tsx`) — на случай,
+   если понадобится вернуть подобное поведение точечно. */
+
+/* --- Утилиты проекта -------------------------------------------------------
+   Объявлены через `@utility`, а НЕ через `@layer utilities { .foo { … } }`.
+
+   Почему это важно (наступали трижды). В Tailwind v4 обычный класс внутри
+   `@layer utilities` — просто CSS-правило: сборщик не знает, что это утилита,
+   и не умеет строить для неё варианты. Из-за этого `lg:font-heading`,
+   `[&_em]:font-heading` и `hover:shadow-card-hover` не выдавали НИКАКОГО
+   правила и молча не работали — класс в разметке есть, а стиля нет:
+
+   - `guests-section.tsx` — акцент «Наши участницы» должен был быть Cormorant
+     45px курсивом, как в макете, а оставался телесным шрифтом того же кегля,
+     то есть заметно крупнее и тяжелее (замечание заказчика 2026-08-21);
+   - `faq-section.tsx` — вариант `lg:` пришлось просто убрать;
+   - `floating-contacts-button.tsx` — тень при наведении не появлялась.
+
+   `@utility` регистрирует утилиту по-настоящему: варианты (`lg:`, `hover:`,
+   `[&_em]:`, …) для неё генерируются. Специфичность та же (0,1,0), на уже
+   написанные классы без вариантов переход не влияет. */
+
+@utility font-heading {
+  font-family: var(--font-heading), serif;
 }
 
-/* v3: там полноэкранный HERO только на мобильном, десктоп — обычный баннер.
-   Брейкпоинт тот же, что `lg:hidden` внутри самого HERO. */
-@media (max-width: 1023.98px) {
-  body:has([data-hero-fullscreen="mobile"]) [data-site-header][data-shown="false"] {
-    transform: translateY(-100%);
-    opacity: 0;
-    pointer-events: none;
-  }
+@utility font-logo {
+  font-family: var(--font-logo), serif;
 }
 
+@utility font-logo-subtitle {
+  font-family: var(--font-logo-subtitle), cursive;
+}
+
+/* `font-sans` — НАМЕРЕННО не `@utility`, в отличие от соседей выше.
+   Это имя занято самим Tailwind (утилита из темы, стек `ui-sans-serif, …`).
+   Пока правило лежит в `@layer utilities`, оно попадает в слой ПОСЛЕ
+   сгенерированных утилит и при равной специфичности побеждает — так телесный
+   шрифт проекта и подставлялся все это время. Объявленное через `@utility`,
+   оно, наоборот, встаёт в общую сортировку утилит и проигрывает теме: текст
+   отзывов разом уехал на системный `ui-sans-serif` (замечание заказчика
+   2026-08-21, «в тексте отзыва шрифт изменился»). Вариантов
+   (`hover:font-sans` и подобных) у этого класса в проекте нет, поэтому
+   регистрировать его утилитой и не требуется. */
 @layer utilities {
-  .font-heading {
-    font-family: var(--font-heading), serif;
-  }
-
-  .font-logo {
-    font-family: var(--font-logo), serif;
-  }
-
-  .font-logo-subtitle {
-    font-family: var(--font-logo-subtitle), cursive;
-  }
-
   .font-sans {
     font-family: var(--font-body), system-ui, arial, sans-serif;
   }
+}
 
-  .text-balance {
-    text-wrap: balance;
-  }
+@utility text-balance {
+  text-wrap: balance;
+}
 
-  .shadow-card {
-    box-shadow: 0 2px 12px rgba(105, 105, 92, 0.08), 0 1px 3px rgba(105, 105, 92, 0.05);
-  }
+@utility shadow-card {
+  box-shadow: 0 2px 12px rgba(105, 105, 92, 0.08), 0 1px 3px rgba(105, 105, 92, 0.05);
+}
 
-  .shadow-card-hover {
-    box-shadow: 0 8px 24px rgba(105, 105, 92, 0.12), 0 4px 8px rgba(105, 105, 92, 0.08);
-  }
+@utility shadow-card-hover {
+  box-shadow: 0 8px 24px rgba(105, 105, 92, 0.12), 0 4px 8px rgba(105, 105, 92, 0.08);
+}
 
-  .shadow-card-elevated {
-    box-shadow: 0 20px 60px rgba(105, 105, 92, 0.15), 0 8px 16px rgba(105, 105, 92, 0.1);
-  }
+@utility shadow-card-elevated {
+  box-shadow: 0 20px 60px rgba(105, 105, 92, 0.15), 0 8px 16px rgba(105, 105, 92, 0.1);
+}
 
-  .gradient-overlay {
-    background: linear-gradient(180deg, rgba(238, 234, 228, 0) 0%, rgba(238, 234, 228, 0.95) 100%);
-  }
+@utility gradient-overlay {
+  background: linear-gradient(180deg, rgba(238, 234, 228, 0) 0%, rgba(238, 234, 228, 0.95) 100%);
+}
 
-  .text-gradient {
-    background: linear-gradient(135deg, #1e1e1c 0%, #69695c 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
+@utility text-gradient {
+  background: linear-gradient(135deg, #1e1e1c 0%, #69695c 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 
-  .text-gradient-accent {
-    background: linear-gradient(135deg, #69695c 0%, #5a5a4e 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
+@utility text-gradient-accent {
+  background: linear-gradient(135deg, #69695c 0%, #5a5a4e 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 
-  .decorative-bg {
-    background-image:
-      radial-gradient(circle at 20% 50%, rgba(105, 105, 92, 0.05) 0%, transparent 50%),
-      radial-gradient(circle at 80% 80%, rgba(105, 105, 92, 0.03) 0%, transparent 50%);
-  }
+@utility decorative-bg {
+  background-image:
+    radial-gradient(circle at 20% 50%, rgba(105, 105, 92, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(105, 105, 92, 0.03) 0%, transparent 50%);
+}
 
-  .rotate-3d {
-    transform-style: preserve-3d;
-    perspective: 1000px;
-  }
+@utility rotate-3d {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
 
-  .asymmetric-clip {
-    clip-path: polygon(0 0, 100% 0, 95% 100%, 5% 100%);
-  }
+@utility asymmetric-clip {
+  clip-path: polygon(0 0, 100% 0, 95% 100%, 5% 100%);
+}
 
-  .asymmetric-clip-reverse {
-    clip-path: polygon(5% 0, 100% 0, 100% 100%, 0 100%);
-  }
+@utility asymmetric-clip-reverse {
+  clip-path: polygon(5% 0, 100% 0, 100% 100%, 0 100%);
+}
 
-  .text-justify-smooth p {
+@utility text-justify-smooth {
+  & p {
     text-align: justify;
     text-justify: inter-word;
     hyphens: auto;
@@ -196,7 +220,20 @@ body:has([data-hero-fullscreen="all"]) [data-site-header][data-shown="false"] {
     -ms-hyphens: auto;
     word-spacing: 0.05em;
   }
+}
 
+@utility scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Ниже — не утилиты, а правила по селекторам: их варианты никому не нужны,
+   и `@utility` для них не подходит (имя утилиты = один класс). */
+@layer utilities {
   /* Проза: семейство body без форса размера/цвета — ими управляет Tailwind */
   .prose p,
   .prose li,
@@ -215,15 +252,6 @@ body:has([data-hero-fullscreen="all"]) [data-site-header][data-shown="false"] {
   /* Хедер: пункты меню и логотип не должны наследовать чужой цвет span */
   header a span {
     color: inherit;
-  }
-
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
   }
 }
 
@@ -664,16 +692,8 @@ html[data-force-motion="true"] .footer-breathe-ripple {
   transform: scale(1.06);
 }
 
-/* Карточки тура (`[data-no-lift]`) — тот же более плавный и менее заметный
-   зум, что и в v6 (см. идентичное правило там, значения держим в паре). */
-.v5-scene [data-no-lift] .overflow-hidden > img,
-.v5-scene [data-no-lift] .overflow-hidden span > img {
-  transition: transform 1100ms cubic-bezier(0.22, 0.61, 0.36, 1);
-}
-.v5-scene [data-no-lift] .overflow-hidden:hover > img,
-.v5-scene [data-no-lift] .overflow-hidden:hover span > img {
-  transform: scale(1.03);
-}
+/* Карточки тура здесь больше НЕ описываются: у них свой блок «Карточка тура»
+   в конце файла, единый для всех версий и для боевой главной. */
 
 /* Поштучное появление внутри секций при доскролливании — тот же приём, что
    у карточек VALUES в v2, применён к списку GUESTS и диптиху FOUNDERS.
@@ -719,15 +739,12 @@ html[data-force-motion="true"] .v5-scene a:not([data-no-lift]):hover,
 html[data-force-motion="true"] .v5-scene button:not([data-no-lift]):hover {
   transform: translateY(-2px) !important;
 }
-html[data-force-motion="true"] .v5-scene .overflow-hidden:hover > img,
-html[data-force-motion="true"] .v5-scene .overflow-hidden:hover span > img {
+/* `:not(.tour-card__photo)` — у карточек тура свой блок в конце файла, а здесь
+   стоит `!important`, который иначе перебил бы его на /versions. */
+html[data-force-motion="true"] .v5-scene .overflow-hidden:hover > img:not(.tour-card__photo),
+html[data-force-motion="true"] .v5-scene .overflow-hidden:hover span > img:not(.tour-card__photo) {
   transform: scale(1.06) !important;
 }
-html[data-force-motion="true"] .v5-scene [data-no-lift] .overflow-hidden:hover > img,
-html[data-force-motion="true"] .v5-scene [data-no-lift] .overflow-hidden:hover span > img {
-  transform: scale(1.03) !important;
-}
-
 /* --- Версия 6: кинематографичный скролл (см. docs/VERSIONS.md) -------------
    Всё ограничено `.v6-scene` (обёртка в home-v6.tsx) — v1–v5 и боевая
    главная не затронуты ни одним селектором.
@@ -928,20 +945,8 @@ html[data-force-motion="true"] .v5-scene [data-no-lift] .overflow-hidden:hover s
   transform: scale(1.06);
 }
 
-/* Карточки тура (`[data-no-lift]`) просили сделать плавнее и с меньшим зумом,
-   чем у остальных фото сайта — 1.03/1100ms вместо общих 1.06/800ms (значения
-   держим в паре с Tailwind-классами на самой картинке в tour-calendar-card.tsx,
-   которые остаются источником правды для v1–v4, там этого правила нет).
-   Специфичность `[data-no-lift]` добавляет один атрибутный селектор к
-   правилам выше — этого достаточно, чтобы переопределить их без `!important`. */
-.v6-scene [data-no-lift] .overflow-hidden > img,
-.v6-scene [data-no-lift] .overflow-hidden span > img {
-  transition: transform 1100ms cubic-bezier(0.22, 0.61, 0.36, 1);
-}
-.v6-scene [data-no-lift] .overflow-hidden:hover > img,
-.v6-scene [data-no-lift] .overflow-hidden:hover span > img {
-  transform: scale(1.03);
-}
+/* Карточки тура здесь больше НЕ описываются: у них свой блок «Карточка тура»
+   в конце файла, единый для всех версий и для боевой главной. */
 
 /* `prefers-reduced-motion` соблюдается как везде в проекте, НО с исключением
    на /versions/* через `data-force-motion` (см. force-motion.tsx) — этот же
@@ -987,5 +992,187 @@ html[data-force-motion="true"] .v5-scene [data-no-lift] .overflow-hidden:hover s
 @media (prefers-reduced-motion: reduce) {
   .footer-water-target {
     filter: none;
+  }
+}
+
+/* --- Карточка тура: единственное место с числами анимации ------------------
+   Блок общий для боевой главной и всех версий (`.v5-scene`/`.v6-scene`) —
+   раньше те же значения лежали в трёх местах сразу (Tailwind-классы на
+   картинке плюс по копии правил в секциях v5 и v6), и правка «сделать плавнее»
+   применялась не везде. Разметка — `components/sections/tour-calendar-card.tsx`.
+
+   Что было не так со старым эффектом («дешёвое дёрганье», задача Н8):
+
+   1. ДВА МАСШТАБА РАЗОМ. Tailwind v4 у `scale-[1.03]` пишет отдельное
+      CSS-свойство `scale`, а правила версий — `transform: scale(1.03)`.
+      Свойства разные, браузер применяет ОБА: фактический зум был 1.03×1.03,
+      и анимировались две независимые дорожки с собственными таймингами.
+   2. РАЗЪЕЗЖАЮЩИЕСЯ ТАЙМИНГИ. Тень уезжала за 300–320ms, фото — за 1100ms.
+      Глаз читает такой разрыв как две несвязанные анимации, а не одно движение.
+   3. ОДИНАКОВОЕ ВРЕМЯ ТУДА И ОБРАТНО. 1100ms на увод курсора — это то самое
+      «резко при убирании наведения». Здесь вход длиннее выхода (`--tc-*-in/out`).
+   4. HOVER НА ТАЧ-ЭКРАНАХ. Без `@media (hover: hover)` мобильный браузер
+      после тапа/свайпа оставляет карточку в состоянии наведения — в карусели
+      это выглядело как случайно «залипшая» карточка.
+   5. ПОДЪЁМ КАРТОЧКИ УВОДИЛ ЕЁ ИЗ-ПОД КУРСОРА. Поэтому подъём когда-то и
+      выключили (`data-no-lift`). Сейчас двигается внутренний `__inner`, а
+      рамка попадания (`<a class="tour-card">`) стоит на месте — мигать нечему.
+
+   Конфликт с анимацией появления (`v6ImageIn`) снят отдельно — правилом
+   `[data-no-lift] img { animation: none }` в секции v6 выше.
+
+   СОСТАВ ЭФФЕКТА (правка 2026-08-21: «повкуснее, но современно, не колхозно»).
+   Четыре слоя, одна кривая на все — движение читается как одно:
+
+   - карточка поднимается и набирает мягкую глубокую тень;
+   - фото наезжает до 1.07 заметно дольше карточки — оно ещё идёт, когда
+     карточка уже встала. Этот небольшой рассинхрон и даёт ощущение глубины
+     (в отличие от разъезда из п. 2 — там он был втрое больше и в обратную
+     сторону: быстрая тень при медленном фото);
+   - по фото ОДИН раз проходит мягкий диагональный блик;
+   - у нижней кромки фото поднимается едва заметное притенение, из-за которого
+     фото и оливковая панель под ним «срастаются» в одну плоскость.
+
+   Чего здесь сознательно НЕТ: наклона в 3D, пружинящих кривых, цветных
+   подсветок и рамок — они и читаются как «дёшево». Всё держится на масштабе,
+   тени и свете. */
+.tour-card {
+  /* Вход длиннее выхода: движение «набирает» плавно, а сбрасывается собранно,
+     без резинового отката. */
+  --tc-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --tc-in: 620ms;
+  --tc-out: 420ms;
+  --tc-photo-in: 1000ms;
+  --tc-photo-out: 560ms;
+  --tc-lift: -8px;
+  --tc-zoom: 1.07;
+}
+
+.tour-card .tour-card__inner {
+  transform: translate3d(0, 0, 0);
+  /* Тень задана и в покое (прозрачная), с тем же числом слоёв, что у наведения:
+     браузер не умеет плавно анимировать box-shadow, когда меняется количество
+     слоёв (0 → 3) — переход выглядел бы рывком. Анимируется только цвет.
+     Три слоя, а не один: широкий мягкий даёт «вес», средний — форму,
+     узкий контактный прижимает карточку к фону, иначе она висит наклейкой. */
+  box-shadow:
+    0 28px 50px -28px rgb(31 31 26 / 0),
+    0 12px 22px -14px rgb(31 31 26 / 0),
+    0 2px 5px -3px rgb(31 31 26 / 0);
+  transition:
+    transform var(--tc-out) var(--tc-ease),
+    box-shadow var(--tc-out) var(--tc-ease);
+}
+
+.tour-card .tour-card__frame .tour-card__photo {
+  /* `transform`, а не Tailwind-свойство `scale` — чтобы дорожка была ровно
+     одна (см. п. 1 в шапке блока). */
+  transform: scale(1);
+  /* Центр наезда чуть выше геометрического: в кадре карточки сюжет почти
+     всегда в верхних двух третях, и «в лоб» по центру фото уезжает низом. */
+  transform-origin: center 42%;
+  transition: transform var(--tc-photo-out) var(--tc-ease);
+  will-change: transform;
+}
+
+/* Блик. Узкая полоса света под наклоном, шире рамки с запасом — чтобы вход и
+   выход происходили за кадром, а не «включались» на видимой части. */
+.tour-card .tour-card__sheen {
+  position: absolute;
+  inset: -30% -75%;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(
+    104deg,
+    transparent 42%,
+    rgb(255 255 255 / 0.14) 48%,
+    rgb(255 255 255 / 0.26) 50%,
+    rgb(255 255 255 / 0.14) 52%,
+    transparent 58%
+  );
+  transform: translate3d(-60%, 0, 0);
+}
+
+/* Притенение у нижней кромки фото. Не «фильтр на всю картинку» — только
+   градиент в нижней трети, чтобы стык с оливковой панелью перестал быть
+   резкой линией. */
+.tour-card .tour-card__veil {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(to top, rgb(31 31 26 / 0.42) 0%, rgb(31 31 26 / 0) 42%);
+  transition: opacity var(--tc-out) var(--tc-ease);
+}
+
+@keyframes tourCardSheen {
+  from {
+    opacity: 0;
+    transform: translate3d(-60%, 0, 0);
+  }
+  22% {
+    opacity: 1;
+  }
+  78% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    transform: translate3d(60%, 0, 0);
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .tour-card:hover .tour-card__inner {
+    transform: translate3d(0, var(--tc-lift), 0);
+    box-shadow:
+      0 28px 50px -28px rgb(31 31 26 / 0.42),
+      0 12px 22px -14px rgb(31 31 26 / 0.22),
+      0 2px 5px -3px rgb(31 31 26 / 0.14);
+    transition-duration: var(--tc-in);
+  }
+
+  .tour-card:hover .tour-card__frame .tour-card__photo {
+    transform: scale(var(--tc-zoom));
+    transition-duration: var(--tc-photo-in);
+  }
+
+  /* `forwards` здесь — исключение из правила «только `backwards`» (см. шапку
+     файла и docs/VERSIONS.md). Запрет касается элементов, у которых то же
+     свойство занято `:hover`-переходом: доигравшая анимация забирала его себе
+     навсегда. У блика собственного перехода нет, свойства `transform`/`opacity`
+     этого слоя больше никто не трогает, а `forwards` нужен именно затем, чтобы
+     полоса ушла за кадр и НЕ вернулась в исходную позицию, пока курсор на
+     карточке. Снятие наведения убирает правило — слой сбрасывается сам. */
+  .tour-card:hover .tour-card__sheen {
+    animation: tourCardSheen var(--tc-photo-in) var(--tc-ease) forwards;
+  }
+
+  .tour-card:hover .tour-card__veil {
+    opacity: 1;
+    transition-duration: var(--tc-in);
+  }
+}
+
+/* Фокус с клавиатуры — то же движение, что и при наведении (без блика: он
+   привязан к жесту мыши и на табуляции по карточкам мельтешил бы). */
+.tour-card:focus-visible .tour-card__inner {
+  transform: translate3d(0, var(--tc-lift), 0);
+  box-shadow:
+    0 28px 50px -28px rgb(31 31 26 / 0.42),
+    0 12px 22px -14px rgb(31 31 26 / 0.22),
+    0 2px 5px -3px rgb(31 31 26 / 0.14);
+  transition-duration: var(--tc-in);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:not([data-force-motion="true"]) .tour-card .tour-card__inner,
+  html:not([data-force-motion="true"]) .tour-card .tour-card__frame .tour-card__photo {
+    transform: none !important;
+    transition: box-shadow 300ms ease-out !important;
+  }
+  html:not([data-force-motion="true"]) .tour-card .tour-card__sheen {
+    animation: none !important;
+    opacity: 0 !important;
   }
 }

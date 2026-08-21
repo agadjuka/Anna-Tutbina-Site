@@ -62,7 +62,7 @@ function FooterLinkItem({ link }: { link: FooterLink }) {
 function BreathingCircles() {
   return (
     <div
-      className="footer-water-wrap relative hidden h-[190px] w-[190px] shrink-0 items-center justify-center lg:flex xl:h-[240px] xl:w-[240px]"
+      className="footer-water-wrap relative hidden h-[min(17.7vw,340px)] w-[min(17.7vw,340px)] shrink-0 items-center justify-center lg:flex"
       aria-hidden="true"
     >
       <svg width="0" height="0" aria-hidden="true">
@@ -128,13 +128,28 @@ export async function Footer() {
 
   return (
     <footer id="contacts" className="relative w-full overflow-hidden bg-primary-dark">
-      <Container>
+      {/* Кольца в макете (`5:14`…`5:16`) стоят ПРАВЕЕ контентной колонки:
+          340×340 на x=1523…1863, y=31 — то есть в правом поле, а не четвёртой
+          колонкой ряда. Поэтому они вынесены из сетки в абсолютный слой. */}
+      <div className="pointer-events-none absolute right-[3%] top-[7.1%] hidden lg:block">
+        <div className="pointer-events-auto">
+          <BreathingCircles />
+        </div>
+      </div>
+
+      <Container className="lg:max-w-[min(56.9vw,1092px)] lg:px-0">
         {/* `lg:items-center`, а не `items-start`: круги-«вода» намного выше
             остальных колонок (логотип, «Связаться», «Сообщество»), и при
             выравнивании по верху те повисали у самого верха высокого ряда с
             большим пустым пространством под ними — визуально несбалансированно.
             По центру ряда все четыре колонки читаются как единая строка. */}
-        <div className="grid grid-cols-1 gap-x-10 gap-y-12 py-14 sm:grid-cols-2 lg:grid-cols-[minmax(0,280px)_1fr_1fr_auto] lg:items-center lg:gap-x-16 lg:py-20">
+        {/* Высота футера в макете (`5:286`) — 436.63 при 1920: логотип на y=148,
+            нижняя полоса на y=352. Колонки: логотип x=414, «Связаться» x=834.5,
+            «Сообщество» x=1192.25 — то есть контент 1092px по центру. Кольца
+            в макете вынесены правее контента (x 1523…1863), у нас они остаются
+            четвёртой колонкой ряда: перенос их за пределы контейнера ломает
+            выравнивание всего ряда, а выигрыш чисто декоративный. */}
+        <div className="grid grid-cols-1 gap-x-10 gap-y-12 py-14 sm:grid-cols-2 lg:grid-cols-[min(21.9vw,420px)_min(18.6vw,358px)_1fr] lg:items-start lg:gap-x-0 lg:pb-[min(4.06vw,78px)] lg:pt-[min(7.7vw,148px)]">
           <div className="sm:col-span-2 lg:col-span-1">
             <span className="font-logo text-[32px] leading-none text-background">ONÁ</span>
             {settings?.slogan && (
@@ -166,15 +181,12 @@ export async function Footer() {
             </div>
           )}
 
-          <div className="hidden justify-self-end lg:flex">
-            <BreathingCircles />
-          </div>
         </div>
       </Container>
 
       <div className="border-t border-background/15">
-        <Container>
-          <div className="grid grid-cols-1 items-center gap-3 py-6 text-center text-[11px] uppercase tracking-[0.06em] text-subtle sm:grid-cols-3 sm:gap-4 sm:text-left">
+        <Container className="lg:max-w-[min(56.9vw,1092px)] lg:px-0">
+          <div className="grid grid-cols-1 items-center gap-3 py-6 text-center text-[11px] uppercase tracking-[0.06em] text-subtle sm:grid-cols-3 sm:gap-4 sm:text-left lg:pb-[min(2.1vw,40px)] lg:pt-[min(1.3vw,25px)]">
             <span className="sm:col-start-1 sm:justify-self-start">© ONÁ · {new Date().getFullYear()}</span>
             {/* Такой же яркий и кликабельный, как ссылки «Связаться» выше — не мелкая бледная подпись */}
             <Link

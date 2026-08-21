@@ -137,7 +137,7 @@ export function ToursEmbla({ tours }: ToursEmblaProps) {
           <div className="flex items-stretch gap-5 pr-1 sm:gap-6 lg:gap-8">
             {tours.map((tour) => (
               <div key={tour._id} className={slideClassName}>
-                <TourCalendarCard tour={tour} />
+                <TourCalendarCard tour={tour} variant="mobile" />
               </div>
             ))}
           </div>

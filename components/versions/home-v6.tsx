@@ -58,7 +58,11 @@ export function HomeV6({ data }: { data: HomeData }) {
           <ReviewsSection reviews={reviews} />
         </Reveal>
         <Reveal className="v6-cine">
-          <CollabSection collab={customTour} primaryContacts={primaryContacts} />
+          <CollabSection
+            collab={customTour}
+            primaryContacts={primaryContacts}
+            decorPhoto={homePage?.about?.photos?.[1]}
+          />
         </Reveal>
         <Reveal className="v6-cine">
           <FaqSection items={faqItems} faq={homePage?.faq} />

@@ -1,6 +1,7 @@
 import { Container } from "@/components/ui/container";
 import { SanityImage } from "@/components/ui/sanity-image";
 import { PortableTextContent } from "@/components/ui/portable-text";
+import { SectionEyebrow } from "@/components/ui/section-eyebrow";
 
 interface GuestsContent {
   eyebrow?: string;
@@ -44,18 +45,43 @@ export function GuestsSection({ guests }: GuestsSectionProps) {
   const items = guests.items ?? [];
 
   return (
-    <section id="guests" className="relative bg-background py-16 lg:py-24">
-      <Container>
+    /* Всё ниже снято с узлов Figma (секция `5:189`, 1921×1051):
+       эйбрау y=63, заголовок y=111 (53px/59, курсив — primary), пункты списка
+       с y=209 с шагом 75.6 (25px/26.25, ✦ на x=171, текст на x=219),
+       абзацы y=679 и y=836 (25px/35, выделение — Cormorant 45px),
+       коллаж x 954…1770, y 184…894 (816×710). Метод — `figma-parity-checklist.md`. */
+    <section id="guests" className="relative bg-background py-16 lg:min-h-[min(54.71vw,1051px)] lg:py-0 lg:pb-[min(5.1vw,98px)] lg:pt-[min(3.28vw,63px)]">
+      {/* `size="wide"` — в макете этот блок заметно шире остальных: контент идёт
+          от 165px до 1770px при 1920 (1605px). С общим контейнером 1280px текст
+          стоял на 187px правее макета, а коллаж сжимался по ширине и растягивался
+          по высоте. Правка заказчика, см. `docs/redesign/client-feedback-2026-08.md`
+          п. 3.5. */}
+      {/* Поля по бокам. Раньше здесь стоял голый `lg:px-0`, и это ломало
+          всё между 1024 и 1578px: контейнер `wide` шире экрана на этих
+          ширинах, поэтому запаса от потолка 1578px нет, а собственные поля
+          обнулены — текст упирался прямо в кромки экрана (замер: 0px слева
+          и справа на 1024, 1280 и 1440; на 1600 оставалось 11px). На 1920
+          всё выглядело правильно, потому что поля там берутся не из padding,
+          а из разницы 1920 − 1578, поделённой пополам, — те самые 171px
+          из макета. Замечание заказчика 2026-08-21.
+
+          `clamp` добирает поле до 32px ровно тогда, когда запаса от потолка
+          не хватает, и уходит в ноль, как только он появляется:
+            1920 → 32 − 171 < 0      → 0,   поле 171px (как в макете)
+            1600 → 32 − 11  = 21     → 21,  поле 32px
+            1440 и уже → упирается в 32 →  поле 32px
+          Ступеньки на границе нет — значение меняется плавно с шириной окна. */}
+      <Container size="wide" className="lg:px-[clamp(0px,2rem_-_(100vw_-_1578px)/2,2rem)]">
         {guests.eyebrow && (
-          <p className="text-center text-[13px] font-medium uppercase tracking-[0.18em] text-subtle sm:text-[15px]">
+          <SectionEyebrow className="text-center text-subtle">
             {guests.eyebrow}
-          </p>
+          </SectionEyebrow>
         )}
 
-        <div className="mt-10 flex flex-col gap-12 lg:mt-14 lg:flex-row lg:items-stretch lg:gap-[5%]">
-          <div className="lg:w-[45%]">
+        <div className="mt-10 flex flex-col gap-12 lg:mt-[min(1.46vw,28px)] lg:flex-row lg:items-stretch lg:gap-[3%]">
+          <div className="lg:w-[46.6%]">
             {(guests.heading || guests.headingAccent) && (
-              <h2 className="font-heading text-[32px] leading-tight text-foreground sm:text-[40px] lg:text-[clamp(40px,2.76vw,53px)]">
+              <h2 className="font-heading text-[32px] leading-tight text-foreground sm:text-[40px] lg:text-[clamp(40px,2.76vw,53px)] lg:leading-[min(3.07vw,59px)]">
                 {guests.heading}{" "}
                 {guests.headingAccent && (
                   <span className="italic text-primary">{guests.headingAccent}</span>
@@ -64,13 +90,13 @@ export function GuestsSection({ guests }: GuestsSectionProps) {
             )}
 
             {items.length > 0 && (
-              <ul className="mt-8 space-y-5 lg:mt-10 lg:space-y-[clamp(20px,2.4vw,46px)]">
+              <ul className="mt-8 space-y-5 lg:mt-[min(1.98vw,38px)] lg:space-y-[min(2.57vw,49px)]">
                 {items.map((item, index) => (
-                  <li key={index} className="flex items-baseline gap-4 lg:gap-[clamp(16px,2.5vw,48px)]">
-                    <span aria-hidden="true" className="text-[16px] text-primary lg:text-[clamp(16px,1vw,19px)]">
+                  <li key={index} className="flex items-baseline gap-4 lg:items-center lg:gap-[min(1.86vw,36px)]">
+                    <span aria-hidden="true" className="text-[16px] leading-[26px] text-primary lg:text-[clamp(16px,1vw,19px)] lg:leading-[26.25px]">
                       ✦
                     </span>
-                    <span className="text-[17px] leading-snug text-foreground sm:text-[20px] lg:text-[clamp(20px,1.3vw,25px)]">
+                    <span className="text-[17px] leading-snug text-foreground sm:text-[20px] lg:text-[clamp(20px,1.3vw,25px)] lg:leading-[min(1.37vw,26.25px)]">
                       {item}
                     </span>
                   </li>
@@ -81,28 +107,39 @@ export function GuestsSection({ guests }: GuestsSectionProps) {
             {guests.body && (
               <PortableTextContent
                 value={guests.body}
-                className="mt-10 space-y-6 text-[17px] leading-[1.45] text-foreground sm:text-[20px] lg:mt-12 lg:text-[clamp(20px,1.3vw,25px)] [&_em]:font-heading [&_em]:text-[1.6em] [&_em]:leading-[1]"
+                className="mt-10 space-y-5 text-[17px] leading-[1.45] text-foreground sm:text-[20px] lg:mt-[min(3.44vw,66px)] lg:space-y-[min(2.45vw,47px)] lg:text-[clamp(20px,1.3vw,25px)] lg:leading-[min(1.82vw,35px)] [&_em]:font-heading [&_em]:font-light [&_em]:italic [&_em]:text-[1.25em] lg:[&_em]:text-[1.8em] [&_em]:leading-[1]"
               />
             )}
           </div>
 
           {photos.length > 0 && (
-            <div className="lg:w-[50%]">
-              {/* Десктоп: коллаж с перекрытием, как в макете. Высота — не жёсткий
-                  aspect-ratio, а h-full от растянутой (items-stretch) строки: коллаж
-                  подстраивается под высоту текстовой колонки, не остаётся мелким
-                  островком, когда список+абзацы длиннее своей "естественной" высоты. */}
-              <div className="relative hidden min-h-[500px] w-full lg:block lg:h-full">
+            <div className="lg:mt-[min(3.7vw,71px)] lg:w-[50.4%]">
+              {/* Десктоп: коллаж с перекрытием, как в макете. Пропорция ЖЁСТКАЯ —
+                  816×710 из макета (координаты бокса x 954…1770, y 184…894).
+                  Раньше здесь было `h-full` от растянутой строки: коллаж
+                  подстраивался под высоту текстовой колонки и вместе с ней
+                  вытягивался в почти вертикальный прямоугольник (608×1065 при
+                  1920). Верхнее групповое фото должно быть широким (2.17:1), а
+                  становилось почти квадратным (1.01:1) — `object-cover` срезал
+                  людей по краям, из-за чего в макете видна вся группа, а на сайте
+                  только центр. Это и есть замечание «расположение и масштаб
+                  фотографий привести в соответствие с Figma»
+                  (`docs/redesign/client-feedback-2026-08.md`, п. 3.5). */}
+              <div className="relative hidden w-full lg:block lg:aspect-[816/710]">
                 {photos.slice(0, PHOTOS.length).map((photo, index) => (
                   <div
                     key={index}
                     className={`absolute overflow-hidden ${PHOTOS[index].box}`}
                     style={{ borderRadius: PHOTOS[index].radius }}
                   >
+                    {/* `sizes` обязателен в режиме `fill` (см. CLAUDE.md): плитки
+                        коллажа занимают 20–49% ширины окна, без подсказки браузер
+                        считал бы их во всю ширину и тянул 3840px-вариант. */}
                     <SanityImage
                       image={photo}
                       fill
                       aspectRatio={PHOTOS[index].aspectRatio}
+                      sizes="(max-width: 1023px) 50vw, 30vw"
                       alt=""
                       className="object-cover"
                     />

@@ -10,9 +10,11 @@
 ## ⚠️ Прочитать до первой правки
 
 1. **Сайт сейчас в режиме временных ограничений.** [`middleware.ts`](middleware.ts) редиректит
-   всё, кроме белого списка туров, на `/tours/kas`; [`components/sections/header.tsx`](components/sections/header.tsx)
-   скрывает навигацию флагом `HIDE_NAVIGATION = true`. **Это сделано намеренно — не «чинить».**
+   всё, кроме белого списка туров, на `/tours/kas`. **Это сделано намеренно — не «чинить».**
    Как снять — [`docs/remove-restrictions.md`](docs/remove-restrictions.md).
+   Навигация в шапке при этом **показана** (`HIDE_NAVIGATION = false` с 2026-08-20, по правкам
+   заказчика): её ссылки ведут на закрытую главную и редиректят обратно на `/tours/kas` — так и
+   задумано, см. [`docs/redesign/client-feedback-2026-08.md`](docs/redesign/client-feedback-2026-08.md).
 2. **Главная страница `/` недоступна публично** из-за п.1. Проверять её надо через
    `http://localhost:3000/admin/` (префикс `/admin` — обходной rewrite в middleware).
 3. **`lib/fonts.ts` — генерируемый файл.** Правки руками затираются на `prebuild`.
@@ -92,7 +94,10 @@ docs/                    # документация проекта
 | Файл | О чём |
 |---|---|
 | [`docs/redesign/README.md`](docs/redesign/README.md) | **Редизайн главной по макету Figma — активная задача.** Правила, процесс, реестр блоков |
-| [`docs/VERSIONS.md`](docs/VERSIONS.md) | Несколько версий главной для показа заказчику: хаб `/versions`, как добавить новую версию |
+| [`docs/redesign/client-feedback-2026-08.md`](docs/redesign/client-feedback-2026-08.md) | **Правки заказчика (авг. 2026): разбор каждого замечания, план, открытые вопросы** |
+| [`docs/redesign/figma-parity-checklist.md`](docs/redesign/figma-parity-checklist.md) | **Как приводить блок в соответствие с Figma по координатам узлов.** Метод, статус по блокам, грабли — читать до любой правки вёрстки главной |
+| [`docs/VERSIONS.md`](docs/VERSIONS.md) | Версии главной: как устроен хаб `/versions`. **Сравнение закончено — боевая главная = версия 6** |
+| [`docs/versions-cleanup-plan.md`](docs/versions-cleanup-plan.md) | Как убрать систему версий и отклонённые v1–v5, когда решим. Сейчас они просто скрыты |
 | [`docs/architecture.md`](docs/architecture.md) | Роутинг, рендеринг, поток данных, middleware, SEO, карта компонентов |
 | [`docs/content-model.md`](docs/content-model.md) | Схемы Sanity ↔ GROQ ↔ компоненты, как добавить поле |
 | [`docs/design-system.md`](docs/design-system.md) | Цвета, шрифты, типографика, UI-примитивы |

@@ -34,7 +34,7 @@ export function ContactCta({ label, contacts, className, tone = "light" }: Conta
   const [open, setOpen] = useState(false);
 
   const base =
-    "inline-flex h-12 items-center justify-center rounded-full px-7 text-[13px] font-semibold tracking-[0.02em] transition-colors duration-300 lg:h-[clamp(48px,3vw,58px)] lg:px-8";
+    "inline-flex h-12 items-center justify-center rounded-full px-7 text-[13px] font-semibold tracking-[0.02em] transition-colors duration-300 lg:h-[clamp(48px,3vw,58px)] lg:w-[min(9.85vw,189px)] lg:px-0";
 
   const toneClasses =
     tone === "light"

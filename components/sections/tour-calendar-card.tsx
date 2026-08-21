@@ -1,10 +1,13 @@
 import { SmartLink } from "@/components/ui/smart-link";
 import { SanityImage } from "@/components/ui/sanity-image";
+import { tourFullTitle } from "@/lib/utils/tour-title";
 
 interface TourCalendarCardProps {
   tour: {
     _id: string;
     name: string;
+    /** Место (город/страна) — новое поле Sanity, вторая строка карточки. */
+    place?: string | null;
     slug: { current: string };
     cardImage?: any;
     mainImage?: any;
@@ -12,72 +15,105 @@ interface TourCalendarCardProps {
     overlayName?: string | null;
     overlayDate?: string | null;
   };
+  /**
+   * Где стоит карточка. От этого зависит ТОЛЬКО пропорция фото, тексты
+   * одинаковые.
+   *
+   * - `desktop` — сетка три в ряд (`year-tabs.tsx`). Фото 4:3 из макета.
+   * - `mobile` — карусель (`tours-embla.tsx`). Фото 4:5, карточка вертикальная.
+   *
+   * Почему проп, а не адаптивные классы: пропорцию надо знать не только CSS, но
+   * и серверу Sanity — он режет исходник под `aspectRatio` ещё до отдачи, и одно
+   * значение на оба экрана дало бы двойной кроп (см. `sanity-image.tsx`). При
+   * этом лишних загрузок не появляется: карусель и сетка — уже две независимые
+   * ветки разметки (`lg:hidden` и `hidden lg:flex` в `year-tabs.tsx`), карточка
+   * и раньше рендерилась дважды.
+   */
+  variant?: "desktop" | "mobile";
 }
 
-/* Портретная пропорция фото — по просьбе заказчика карточка стала вертикальной,
-   как в прежней карусели: фото занимает бóльшую долю карточки, текстовая панель
-   снизу — меньшую. В макете Figma здесь было 4:3, но заказчик явно попросил выше.
-   Позже попросил сделать чуть ниже обратно — было 3/4 (0.75), сейчас 4/5 (0.8),
-   разница небольшая, карточка остаётся вертикальной. */
-const IMAGE_ASPECT_RATIO = 4 / 5;
+/* Пропорции фото.
 
-export function TourCalendarCard({ tour }: TourCalendarCardProps) {
+   ДЕСКТОП — из макета (узел `5:166`): 334.66×250.98, ровно 4:3.
+   МОБИЛЬНАЯ — 4:5, вертикальная карточка.
+
+   История: изначально везде было 4:3 по макету → заказчик дважды просил выше
+   (3/4, потом 4/5) → 2026-08-20 попросил вернуть к макету → 2026-08-21 уточнил:
+   на десктопе оставить как в макете, а НА МОБИЛЬНОЙ вернуть прежний вертикальный
+   формат («общая карточка, размер её вертикальный, верни тот, который был»).
+   Значение 4/5 взято из коммита d432fb4 — состояния до августовской ревизии.
+   Текстовая панель при этом не менялась: заказчик просил оставить её как есть. */
+const ASPECT = {
+  desktop: { ratio: 334.66 / 250.98, frame: "aspect-[334.66/250.98]", sizes: "28vw" },
+  mobile: { ratio: 4 / 5, frame: "aspect-[4/5]", sizes: "85vw" },
+} as const;
+
+export function TourCalendarCard({ tour, variant = "desktop" }: TourCalendarCardProps) {
   const image = tour.cardImage?.asset ? tour.cardImage : tour.mainImage;
-  const caption = tour.overlayName?.trim();
   const dates = tour.overlayDate?.trim() || tour.dates;
+  const aspect = ASPECT[variant];
+
+  /* Две строки, как в макете (узлы `5:163` и `5:164`): сверху НАЗВАНИЕ ТУРА
+     мелким шрифтом в верхнем регистре, под ним МЕСТО крупным Cormorant.
+     Место — поле Sanity `place`. Пока оно не заполнено, карточка ведёт себя
+     как раньше: название тура идёт крупной строкой, мелкой строки нет —
+     иначе одно и то же слово стояло бы дважды.
+
+     Надписи поверх фото здесь НЕТ намеренно (убрана 2026-08-21 по правке
+     заказчика): раньше сюда падало `overlayName` — «название тура на фото»
+     со страницы тура, — а когда оно пустое, подставлялось `name`, и на
+     карточке название дублировалось: мелкой строкой под фото и поверх самого
+     фото. В макете (`5:155`) на фото карточки никаких подписей нет. */
+  const place = tour.place?.trim();
+  const tourName = tour.overlayName?.trim() || tour.name;
+  const headline = place || tourName;
+  const kicker = place ? tourName : null;
 
   return (
-    <SmartLink
-      href={`/tours/${tour.slug.current}`}
-      /* Карточка не участвует в общем «подъёме ссылки на 2px» анимированных
-         версий (`.v6-scene a:hover` и родня в globals.css). У карточки свой,
-         более выразительный hover — тень + зум фото; а подъём самой карточки
-         вверх на 2px уводит её нижнюю кромку из-под курсора: наведение
-         сбрасывается, карточка падает обратно, снова ловит курсор — и всё это
-         мигает. Атрибут исключает её из того правила. */
-      data-no-lift=""
-      /* Тень задана явно в состоянии покоя (прозрачная, но с тем же числом
-         слоёв, что у hover), а не через `hover:shadow-lg` от «нет тени» —
-         браузер не умеет плавно анимировать box-shadow, когда меняется
-         количество слоёв (0 → 2), и переход выглядит как рывок вместо
-         анимации. Так оба состояния — один и тот же двухслойный shadow,
-         анимируется только прозрачность. */
-      className="group flex h-full flex-col overflow-hidden rounded-[26px] bg-primary shadow-[0_10px_15px_-3px_rgb(0_0_0_/_0),0_4px_6px_-4px_rgb(0_0_0_/_0)] transition-shadow duration-300 ease-out hover:shadow-[0_10px_15px_-3px_rgb(0_0_0_/_0.12),0_4px_6px_-4px_rgb(0_0_0_/_0.1)]"
-    >
-      <div className="relative aspect-[4/5] w-full shrink-0 overflow-hidden rounded-[26px]">
-        {/* Мобильная карусель — карточка почти во всю ширину, на десктопе три в ряд. */}
-        {/* Значения зума и длительности здесь — единственный источник правды
-            для этой картинки на v5/v6: там их дублирует и явно перебивает
-            (за счёт специфичности) правило `[data-no-lift] .overflow-hidden`
-            в globals.css — держите оба места в синхроне при следующей правке.
-            Зум уменьшен (1.06→1.03) и удлинён (800→1100ms) по просьбе
-            заказчика — «плавнее и меньше зум», прежнее значение читалось
-            резким рывком, особенно на трёх карточках подряд в ряд. */}
-        <SanityImage
-          image={image}
-          fill
-          aspectRatio={IMAGE_ASPECT_RATIO}
-          sizes="(max-width: 1023px) 85vw, 32vw"
-          alt={tour.name}
-          className="object-cover transition-transform duration-[1100ms] ease-[cubic-bezier(0.22,0.61,0.36,1)] group-hover:scale-[1.03]"
-        />
-        {caption && (
-          <p className="pointer-events-none absolute inset-x-0 bottom-4 text-center text-[10px] font-medium uppercase tracking-[1.4px] text-on-primary/80">
-            {caption}
+    /* Ссылка — только рамка попадания курсора: она не двигается и не меняет
+       размер, вся анимация живёт на внутреннем `.tour-card__inner`. Так «подъём»
+       карточки при наведении не уводит её кромку из-под курсора — а именно от
+       этого раньше шло мигание, и поэтому карточку исключали из общего подъёма
+       ссылок атрибутом `data-no-lift` (он остаётся: общий подъём двигал бы саму
+       ссылку). Числа анимации — в одном месте, `app/globals.css`, блок
+       «Карточка тура». */
+    <SmartLink href={`/tours/${tour.slug.current}`} data-no-lift="" className="tour-card block h-full">
+      <div className="tour-card__inner flex h-full flex-col overflow-hidden rounded-[26px] bg-primary">
+        <div className={`tour-card__frame relative w-full shrink-0 overflow-hidden rounded-[26px] ${aspect.frame}`}>
+          <SanityImage
+            image={image}
+            fill
+            aspectRatio={aspect.ratio}
+            sizes={variant === "mobile" ? "85vw" : "(max-width: 1023px) 85vw, 28vw"}
+            alt={tourFullTitle(tour.name, place)}
+            className="tour-card__photo object-cover"
+          />
+          {/* Пустые слои для наведения — блик и притенение у нижней кромки.
+              Разметка нужна, потому что оба эффекта живут поверх фото и должны
+              обрезаться рамкой; что именно они делают — в globals.css. */}
+          <span aria-hidden="true" className="tour-card__sheen" />
+          <span aria-hidden="true" className="tour-card__veil" />
+        </div>
+        {/* Текстовая панель ровно по узлам макета (`5:163`–`5:165`):
+            отступ слева 26px, надзаголовок 20px/18.38 с трекингом 1.47px,
+            название 35px/42 (Cormorant), даты 20px/22.75 полужирные.
+            Вертикаль: фото заканчивается на 251.73, надзаголовок с 275,
+            название с 301, даты с 349, низ карточки 400.13. */}
+        <div className="flex flex-1 flex-col px-5 pb-5 pt-4 lg:min-h-[min(7.7vw,148px)] lg:px-[26px] lg:pb-[28px] lg:pt-[23px]">
+          {kicker && (
+            <p className="text-[12px] font-medium uppercase tracking-[1.3px] text-background lg:text-[17px] lg:leading-[18.38px] lg:tracking-[1.47px]">
+              {kicker}
+            </p>
+          )}
+          <p className="mt-1 font-heading text-[27px] leading-[1.15] text-background lg:mt-[8px] lg:text-[35px] lg:leading-[42px]">
+            {headline}
           </p>
-        )}
-      </div>
-      {/* Панель с подписями компактнее исходной (фото занимает бóльшую долю карточки),
-          но не «впритык»: высота подобрана примерно в полтора раза больше первого
-          варианта — по правке заказчика. */}
-      <div className="flex flex-1 flex-col px-5 pb-7 pt-6">
-        {caption && (
-          <p className="text-[17px] font-medium uppercase tracking-[1.3px] text-background">
-            {caption}
-          </p>
-        )}
-        <p className="mt-1 font-heading text-[30px] leading-[1.15] text-background">{tour.name}</p>
-        {dates && <p className="mt-auto pt-2 text-[18px] font-medium text-background">{dates}</p>}
+          {dates && (
+            <p className="mt-auto pt-2 text-[16px] font-medium text-background lg:pt-[6px] lg:text-[20px] lg:leading-[22.75px]">
+              {dates}
+            </p>
+          )}
+        </div>
       </div>
     </SmartLink>
   );

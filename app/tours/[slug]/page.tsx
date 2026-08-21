@@ -18,7 +18,11 @@ import { TourNavigation } from "@/components/sections/tour-navigation";
 import { WantToJoinButton } from "@/components/sections/want-to-join-button";
 import { normalizeTourReviews, type TourReviewRaw } from "@/lib/utils/reviews";
 import { hasPricingSectionContent } from "@/lib/utils/tour-pricing";
+import { tourFullTitle } from "@/lib/utils/tour-title";
 import { TourPricingSection } from "@/components/sections/tour-pricing-section";
+import { cn } from "@/lib/utils";
+import { TOUR_BLOCK_WIDTH } from "@/lib/tour-layout";
+import { SectionEyebrow } from "@/components/ui/section-eyebrow";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -37,10 +41,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug?: st
     };
   }
 
-  const tour = await sanityClient.fetch<{ name?: string; shortDescription?: string } | null>(
-    tourMetadataQuery,
-    { slug }
-  );
+  const tour = await sanityClient.fetch<{
+    name?: string;
+    place?: string | null;
+    shortDescription?: string;
+  } | null>(tourMetadataQuery, { slug });
 
   if (!tour || !tour.name) {
     return {
@@ -53,16 +58,19 @@ export async function generateMetadata({ params }: { params: Promise<{ slug?: st
     };
   }
 
-  const description = tour.shortDescription || `Подробная информация о туре ${tour.name}`;
+  /* «Место · Название» — в Sanity это два поля, а в заголовке вкладки и в
+     превью ссылки тур должен читаться одной строкой. См. `tourFullTitle`. */
+  const fullTitle = tourFullTitle(tour.name, tour.place);
+  const description = tour.shortDescription || `Подробная информация о туре ${fullTitle}`;
 
   return {
-    title: tour.name,
+    title: fullTitle,
     description,
     alternates: {
       canonical: `/tours/${slug}`,
     },
     openGraph: {
-      title: tour.name,
+      title: fullTitle,
       description,
       url: `/tours/${slug}`,
       type: "article",
@@ -74,7 +82,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug?: st
       ],
     },
     twitter: {
-      title: tour.name,
+      title: fullTitle,
       description,
       images: ["https://www.ona-womantravel.com/Logo/web-app-manifest-512x512.png"],
     },
@@ -112,6 +120,8 @@ interface RecommendedFlights {
 interface TourData {
   _id: string;
   name: string;
+  /** Место (город/страна). Вместе с `name` даёт полное имя тура — `tourFullTitle`. */
+  place?: string | null;
   slug: { current: string };
   mainImage: any;
   overlayName?: any;
@@ -161,19 +171,32 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
           {(tour.dates || tour.price) && (
             <header className="space-y-6">
               <div className="w-full flex justify-center">
-                <div className="max-w-4xl w-full">
-                  <div className="flex flex-wrap items-center gap-6 pt-6 border-t border-border">
+                <div className={cn("w-full", TOUR_BLOCK_WIDTH)}>
+                  {/* Даты и цена — ОДИН стиль на подпись и один на значение.
+                      Раньше здесь стояли три разных набора: подпись «Даты:»
+                      мелким капсом телесного шрифта, само значение — 24px
+                      телесным, а цена — 30px жирным, да ещё и без подписи. Три
+                      начертания в одной строке читались как три разных элемента
+                      (замечание заказчика 2026-08-21).
+
+                      Теперь подписи — тот же `SectionEyebrow`, что над блоками
+                      главной, значения — Cormorant одного кегля. Цена отличается
+                      только цветом (`text-primary`), потому что это акцент. */}
+                  <div className="flex flex-wrap items-end gap-x-10 gap-y-6 border-t border-border pt-6">
                     {tour.dates && (
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm md:text-base uppercase tracking-wider text-muted-foreground font-medium">Даты:</span>
-                        <span className="text-lg md:text-2xl font-medium text-foreground">{tour.dates}</span>
+                      <div>
+                        <SectionEyebrow className="text-subtle">Даты</SectionEyebrow>
+                        <p className="mt-2 font-heading text-[26px] leading-tight text-foreground md:text-[32px]">
+                          {tour.dates}
+                        </p>
                       </div>
                     )}
                     {tour.price && (
-                      <div className="flex items-center gap-2 ml-auto">
-                        <span className="text-2xl md:text-3xl font-bold text-primary">
+                      <div className="md:ml-auto md:text-right">
+                        <SectionEyebrow className="text-subtle">Стоимость</SectionEyebrow>
+                        <p className="mt-2 font-heading text-[26px] leading-tight text-primary md:text-[32px]">
                           от {tour.price.value} {tour.price.currency}
-                        </span>
+                        </p>
                       </div>
                     )}
                   </div>
@@ -184,13 +207,13 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
 
           {tour.mainImage && (
             <div className="w-full flex justify-center">
-              <div className="max-w-4xl w-full">
+              <div className={cn("w-full", TOUR_BLOCK_WIDTH)}>
                 <div className="relative overflow-hidden rounded-2xl shadow-card">
                   <SanityImage
                     image={tour.mainImage}
                     width={1280}
                     height={720}
-                    alt={tour.name}
+                    alt={tourFullTitle(tour.name, tour.place)}
                     className="w-full h-auto object-cover"
                   />
                   {tour.overlayName && (
@@ -261,7 +284,12 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
                 </SectionHeading>
               </div>
               <div className="w-full flex justify-center">
-                <div className="max-w-4xl w-full prose prose-lg">
+                {/* Ширина как у остальных блоков — по правке заказчика 2026-08-21
+                    («раздел о туре не на всю ширину, отличается от других»).
+                    До этого блок намеренно держали уже: строка в 1152px при кегле
+                    20px — это ~150 знаков, длинновато для чтения. Если решим
+                    вернуться к узкой колонке, менять здесь. */}
+                <div className={cn("w-full prose prose-lg", TOUR_BLOCK_WIDTH)}>
                   <PortableTextContent 
                     value={tour.introText} 
                     className="text-base md:text-xl leading-relaxed text-muted-foreground" 
@@ -331,7 +359,7 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
           )}
 
         {tour.atmosphereGallery && tour.atmosphereGallery.length > 0 && (
-          <TourGallery images={tour.atmosphereGallery} tourName={tour.name} title="Атмосфера наших туров" />
+          <TourGallery images={tour.atmosphereGallery} tourName={tourFullTitle(tour.name, tour.place)} title="Атмосфера наших туров" />
         )}
 
         {/* Кнопка "Хочу с Вами!" — в самом низу, сразу под галереей */}

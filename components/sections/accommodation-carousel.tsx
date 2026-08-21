@@ -5,10 +5,11 @@ import type { EmblaCarouselType } from "embla-carousel";
 import { useCallback, useEffect, useState, useMemo } from "react";
 import { SanityImage } from "@/components/ui/sanity-image";
 import { PortableTextContent } from "@/components/ui/portable-text";
-import { cn } from "@/lib/utils";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 import { urlFor } from "@/lib/sanity.client";
+import { cn } from "@/lib/utils";
+import { TOUR_BLOCK_WIDTH } from "@/lib/tour-layout";
 
 interface AccommodationLocation {
   locationName?: string;
@@ -109,7 +110,7 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
 
   return (
     <section className="relative">
-      <div className="max-w-4xl mx-auto">
+      <div className={cn("mx-auto", TOUR_BLOCK_WIDTH)}>
         <div className="relative overflow-hidden">
           <div ref={viewportRef} className="overflow-hidden" style={{ clipPath: 'inset(0)' }}>
             <div className="flex gap-4 md:gap-6 lg:gap-8">
@@ -124,7 +125,14 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
                       {location.locationName && (
                         <div className="mb-4 md:mb-6 pt-0">
                           <div className="relative inline-block">
-                            <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-foreground leading-tight tracking-tight">
+                            {/* Без `tracking-tight`: на 30px это −0.75px на букву,
+                                и названия локаций «плыли» — то самое замечание
+                                заказчика, из-за которого глобальный `tracking-tight`
+                                сняли с заголовков в globals.css. Здесь он пережил ту
+                                правку и остался единственным местом на странице тура,
+                                где заголовок набран теснее соседних (заголовки дней
+                                прямо над ним — с нормальным трекингом). */}
+                            <h3 className="text-[22px] md:text-[26px] lg:text-[30px] font-normal text-foreground leading-tight">
                               {location.locationName}
                             </h3>
                             <div className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-primary via-primary/60 to-transparent rounded-full"></div>
@@ -232,7 +240,7 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
       {/* Стрелки навигации - вне контентной области (только для десктопа) */}
       {locations.length > 1 && (
         <div className="hidden md:flex absolute inset-0 items-center pointer-events-none">
-          <div className="max-w-4xl mx-auto w-full relative h-full">
+          <div className={cn("mx-auto w-full relative h-full", TOUR_BLOCK_WIDTH)}>
             <button
               onClick={scrollPrev}
               disabled={!canScrollPrev}

@@ -3,6 +3,7 @@ import { SectionHeading } from "@/components/ui/section-heading";
 import { PortableTextContent } from "@/components/ui/portable-text";
 import { urlFor } from "@/lib/sanity.client";
 import { cn } from "@/lib/utils";
+import { TOUR_BLOCK_WIDTH } from "@/lib/tour-layout";
 
 interface RecommendedFlights {
   image?: any;
@@ -25,7 +26,7 @@ export function RecommendedFlightsSection({ flights }: RecommendedFlightsSection
       </div>
 
       <div className="w-full flex justify-center">
-        <div className="max-w-4xl w-full space-y-6 md:space-y-8">
+        <div className={cn("w-full space-y-6 md:space-y-8", TOUR_BLOCK_WIDTH)}>
           {/* Изображение */}
           {flights.image && (
             <div className="relative group w-full">

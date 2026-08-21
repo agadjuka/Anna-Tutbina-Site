@@ -23,12 +23,12 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/#collab', request.url));
   }
 
-  // Страница сравнения версий главной и сами версии — открыты без /admin,
-  // потому что ссылку на них заказчик отправляет своему клиенту (см. docs/VERSIONS.md).
-  // На них стоит `robots: noindex`, в поиск не попадут.
-  if (pathname === '/versions' || pathname.startsWith('/versions/')) {
-    return NextResponse.next();
-  }
+  // ⚠️ Сравнение версий завершено (2026-08-20): заказчик выбрал версию 6, она
+  // стала боевой главной. Прежнее публичное исключение для `/versions` снято —
+  // теперь эти страницы попадают под общее ограничение ниже и публично
+  // недоступны. Для себя они по-прежнему открываются через обход:
+  // `/admin/versions` и `/admin/versions/v6`. Полностью удалить их — по плану
+  // `docs/versions-cleanup-plan.md` (сейчас намеренно НЕ удаляем).
 
   const allowedPaths = ['/tours/kas', '/tours/bali-padelcamp', '/tours/bali-padelsurfcamp', '/tours/bali', '/tours/capetown', '/tours/capetown2'];
   const defaultRedirect = '/tours/kas';

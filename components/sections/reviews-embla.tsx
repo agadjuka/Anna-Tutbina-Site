@@ -160,7 +160,13 @@ export function ReviewsEmbla({
           ? [
               "flex-[0_0_85%]",
               "sm:flex-[0_0_82%]",
-              "md:flex-[0_0_calc((100%-4.5rem)/4)]",
+              /* Ровно четыре карточки в ряд на десктопе и ни одной обрезанной —
+                 просьба заказчика. Ниже 1280 четыре штуки становятся слишком
+                 узкими для текста отзыва (на 768 это 162px), поэтому в кадре
+                 2 → 3 → 4 по мере роста экрана. Зазор — 44px из макета. */
+              "md:flex-[0_0_calc((100%-min(2.29vw,44px))/2)]",
+              "lg:flex-[0_0_calc((100%-2*min(2.29vw,44px))/3)]",
+              "xl:flex-[0_0_calc((100%-3*min(2.29vw,44px))/4)]",
             ]
           : "flex-[0_0_82%]"
       ),
@@ -176,8 +182,12 @@ export function ReviewsEmbla({
    * карточки ровно по ширине) подглядывания нет — там фейд честно скрывает край
    * трека и остаётся полезной подсказкой «прокрути дальше».
    */
-  const showLeftFade = canPrev;
-  const showRightFade = canNext;
+  /* 2026-08-20 — заказчик попросил убрать «градиент на боковых отзывах»
+     (`docs/redesign/client-feedback-2026-08.md`, п. 3.6). Фейды по краям трека
+     отключены; логика `canPrev`/`canNext` осталась — она же управляет стрелками.
+     Чтобы вернуть, достаточно поставить сюда обратно `canPrev`/`canNext`. */
+  const showLeftFade = false;
+  const showRightFade = false;
 
   const trackInner = (
     <>
@@ -207,8 +217,13 @@ export function ReviewsEmbla({
         <ReviewsGridRowAlign
           alignKey={reviewsKey}
           className={cn(
-            "flex items-start pr-1",
-            isFull ? "gap-6" : "gap-3 sm:gap-4"
+            /* `items-stretch`, а не `items-start`: заказчик просил «привести
+               плашки с отзывами к единому размеру» — при `items-start` каждая
+               карточка была своей высоты по длине отзыва (замер: 203px против
+               278px в одном ряду). См. `docs/redesign/client-feedback-2026-08.md`
+               п. 3.6. У самой карточки `h-full` уже был. */
+            "flex items-stretch pr-1",
+            isFull ? "gap-6 md:gap-[min(2.29vw,44px)]" : "gap-3 sm:gap-4"
           )}
         >
           {reviews.map((review) => (
@@ -284,7 +299,10 @@ export function ReviewsEmbla({
           "mx-auto w-full",
           isTourLayout
             ? "max-w-full px-0"
-            : "max-w-screen-xl px-4 md:px-8"
+            /* На главной ширину задаёт обёртка секции (1093px из макета), а
+               внутренние отступы этого контейнера сдвигали карточки на 32px
+               правее макета — с md их снимаем, на мобильной оставляем. */
+            : "max-w-screen-xl px-4 md:max-w-full md:px-0"
         )}
       >
         <div className="relative">
@@ -303,7 +321,11 @@ export function ReviewsEmbla({
                      Вынесено за левый край карточек (в поле Container), чтобы не перекрывать текст —
                      на плоских карточках редизайна (без белой заливки на всю ширину) это было заметно. */
                   "absolute -left-3 top-16 z-20 hidden md:flex",
-                  "h-12 w-12 md:-left-8 md:top-20 md:h-14 md:w-14 lg:-left-10 xl:-left-14"
+                  "h-12 w-12 md:-left-8 md:top-20 md:h-14 md:w-14 lg:-left-10 xl:-left-14",
+                  /* На главной стрелки живут под каруселью — так в макете
+                     (`5:226`/`5:228`: 41×40 по центру, y=523). На странице тура
+                     оставляем прежние боковые. */
+                  !isTourLayout && "md:hidden"
                 )}
                 aria-label="Предыдущие отзывы"
               >
@@ -317,7 +339,8 @@ export function ReviewsEmbla({
                   programArrowClass,
                   programArrowHover,
                   "absolute -right-3 top-16 z-20 hidden md:flex",
-                  "h-12 w-12 md:-right-8 md:top-20 md:h-14 md:w-14 lg:-right-10 xl:-right-14"
+                  "h-12 w-12 md:-right-8 md:top-20 md:h-14 md:w-14 lg:-right-10 xl:-right-14",
+                  !isTourLayout && "md:hidden"
                 )}
                 aria-label="Следующие отзывы"
               >
@@ -328,10 +351,20 @@ export function ReviewsEmbla({
         </div>
       </div>
 
-      {/* Низ: мобильные стрелки + точки; десктоп — только точки — как ProgramDaysCarousel */}
+      {/* Низ. На страницах туров — как было: мобильные стрелки + точки, на десктопе
+          только точки. На главной — как в макете: две круглые стрелки 41×40 под
+          каруселью по центру, без точек. */}
       {!single && (
         <div className="mt-6 flex flex-col items-center justify-center gap-4 md:mt-8">
-          <div className="relative h-12 w-full md:hidden">
+          <div
+            className={cn(
+              "relative h-12 w-full",
+              isTourLayout
+                ? "md:hidden"
+                : /* Главная: стрелки 41×40 рядом по центру с зазором 11px — из макета. */
+                  "md:flex md:h-auto md:w-auto md:items-center md:justify-center md:gap-[11px]"
+            )}
+          >
             <button
               type="button"
               onClick={scrollPrev}
@@ -340,14 +373,15 @@ export function ReviewsEmbla({
                 programArrowClass,
                 programArrowActive,
                 "absolute top-1/2 left-0 z-20 -translate-y-1/2",
-                "h-12 w-12"
+                "h-12 w-12",
+                !isTourLayout && "md:static md:h-10 md:w-[41px] md:translate-y-0"
               )}
               aria-label="Предыдущие отзывы"
             >
               <ArrowIconLeft />
             </button>
 
-            <div className="flex h-full items-center justify-center gap-2 px-14">
+            <div className={cn("flex h-full items-center justify-center gap-2 px-14", !isTourLayout && "md:hidden")}>
               {reviews.map((review, i) => (
                 <button
                   key={review._id}
@@ -367,7 +401,8 @@ export function ReviewsEmbla({
                 programArrowClass,
                 programArrowActive,
                 "absolute top-1/2 right-0 z-20 -translate-y-1/2",
-                "h-12 w-12"
+                "h-12 w-12",
+                !isTourLayout && "md:static md:h-10 md:w-[41px] md:translate-y-0"
               )}
               aria-label="Следующие отзывы"
             >
@@ -375,7 +410,7 @@ export function ReviewsEmbla({
             </button>
           </div>
 
-          <div className="hidden md:flex">{dotsRow}</div>
+          <div className={cn("hidden", isTourLayout && "md:flex")}>{dotsRow}</div>
         </div>
       )}
     </section>

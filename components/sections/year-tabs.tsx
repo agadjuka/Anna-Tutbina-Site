@@ -8,6 +8,8 @@ import { TourCalendarCard } from "./tour-calendar-card";
 interface Tour {
   _id: string;
   name: string;
+  /** Место (город/страна) — вторая строка карточки, см. `tour-calendar-card.tsx`. */
+  place?: string | null;
   slug: { current: string };
   cardImage?: any;
   mainImage?: any;
@@ -47,7 +49,7 @@ export function YearTabs({ tours, headingSlot }: YearTabsProps) {
                 type="button"
                 onClick={() => setSelectedYear(year)}
                 className={cn(
-                  "inline-flex h-[52px] items-center justify-center rounded-full border px-8 text-[20px] tracking-[0.03em] transition-colors duration-300",
+                  "inline-flex h-[52px] items-center justify-center rounded-full border px-8 text-[20px] tracking-[0.03em] transition-colors duration-300 lg:w-[125px] lg:px-0",
                   selectedYear === year
                     ? "border-primary bg-primary text-on-primary"
                     : "border-subtle-border text-subtle hover:bg-primary/5"
@@ -68,11 +70,14 @@ export function YearTabs({ tours, headingSlot }: YearTabsProps) {
         + `justify-center` центрирует остаток и неполной последней строки сам,
         в отличие от CSS Grid, где неполная строка осталась бы прижатой к левому краю.
       */}
-      <div className="mt-10 lg:mt-12">
+      <div className="mt-10 lg:mt-0">
         <div className="lg:hidden">
           <ToursEmbla tours={visibleTours} />
         </div>
-        <div className="hidden lg:flex lg:flex-wrap lg:items-stretch lg:justify-center lg:gap-x-10 lg:gap-y-16">
+        {/* Из макета (`5:155`): карточка 335.66×400.13, шаг колонок 457.5 →
+            зазор 121.5px, сетка целиком 1250.66px. Было 40px — карточки
+            разъезжались до 380px и смотрелись крупнее макета. */}
+        <div className="mt-[min(3.85vw,74px)] hidden lg:flex lg:flex-wrap lg:items-stretch lg:justify-center lg:gap-x-[min(6.33vw,121.5px)] lg:gap-y-16">
           {/*
             Ширина карточки — доля контейнера, а не фикс. px: `(100% - 2 зазора) / 3`
             гарантирует ровно 3 в ряд на любой ширине контейнера. С фиксированными
@@ -82,8 +87,8 @@ export function YearTabs({ tours, headingSlot }: YearTabsProps) {
             бы к левому краю.
           */}
           {visibleTours.map((tour) => (
-            <div key={tour._id} className="lg:w-[calc((100%-5rem)/3)]">
-              <TourCalendarCard tour={tour} />
+            <div key={tour._id} className="lg:w-[calc((100%-min(12.66vw,243px))/3)]">
+              <TourCalendarCard tour={tour} variant="desktop" />
             </div>
           ))}
         </div>

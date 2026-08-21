@@ -2,6 +2,8 @@
 
 import { PortableText } from "@portabletext/react";
 import type { PortableTextReactComponents } from "@portabletext/react";
+import { cn } from "@/lib/utils";
+import { TOUR_BLOCK_WIDTH } from "@/lib/tour-layout";
 
 interface IncludedNotIncludedSectionProps {
   included?: any;
@@ -51,7 +53,7 @@ export function IncludedNotIncludedSection({
 
   return (
     <div className="w-full flex justify-center">
-      <div className="max-w-4xl w-full">
+      <div className={cn("w-full", TOUR_BLOCK_WIDTH)}>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16 lg:gap-20">
           {/* Что включено */}
           {included && (

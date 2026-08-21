@@ -1,6 +1,7 @@
 import { SanityImage } from "@/components/ui/sanity-image";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { cn } from "@/lib/utils";
+import { TOUR_BLOCK_WIDTH } from "@/lib/tour-layout";
 
 interface Organizer {
   name?: string;
@@ -24,8 +25,8 @@ export function OrganizersSection({ organizers }: OrganizersSectionProps) {
 
   // Определяем максимальную ширину контейнера
   const getContainerWidth = (count: number) => {
-    if (count === 1) return "max-w-3xl";
-    return "max-w-4xl";
+    if (count === 1) return "max-w-4xl";
+    return TOUR_BLOCK_WIDTH;
   };
 
   return (
@@ -97,7 +98,10 @@ export function OrganizersSection({ organizers }: OrganizersSectionProps) {
                   {/* Имя */}
                   {organizer.name && (
                     <div>
-                      <h3 className="text-lg md:text-xl lg:text-2xl font-sans font-semibold text-foreground mb-3">
+                      {/* Единственный заголовок на сайте, набранный телесным шрифтом
+                          (`font-sans font-semibold`). Приведён к Cormorant, как имена
+                          основательниц в блоке FOUNDERS на главной (задача Н9). */}
+                      <h3 className="text-[22px] md:text-[24px] lg:text-[28px] font-heading font-normal text-foreground mb-3">
                         {organizer.name}
                       </h3>
                       {/* Декоративная линия под именем */}

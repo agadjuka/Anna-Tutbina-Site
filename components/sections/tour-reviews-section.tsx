@@ -5,13 +5,16 @@ import { ReviewsExpandProvider } from "@/components/sections/reviews-expand-cont
 import { ReviewsEmbla } from "@/components/sections/reviews-embla";
 import { SectionHeading } from "@/components/ui/section-heading";
 import type { ReviewItem } from "@/lib/utils/reviews";
+import { cn } from "@/lib/utils";
+import { TOUR_BLOCK_WIDTH } from "@/lib/tour-layout";
 
 interface TourReviewsSectionProps {
   reviews: ReviewItem[];
 }
 
 /**
- * Та же логика, что на главной (карусель при >4), но ширина контента как у «Что нас ждет» — max-w-4xl.
+ * Та же логика, что на главной (карусель при >4), но ширина контента как у «Что нас ждет»
+ * — общая для страницы тура, см. `lib/tour-layout.ts`.
  */
 export function TourReviewsSection({ reviews }: TourReviewsSectionProps) {
   if (!reviews?.length) return null;
@@ -22,7 +25,7 @@ export function TourReviewsSection({ reviews }: TourReviewsSectionProps) {
   return (
     <section id="reviews" className="space-y-6">
       <ReviewsExpandProvider>
-        <div className="mx-auto w-full max-w-4xl">
+        <div className={cn("mx-auto w-full", TOUR_BLOCK_WIDTH)}>
           <div className="relative">
             <SectionHeading as="h2" className="mb-6 md:mb-8">
               Что говорят наши участницы

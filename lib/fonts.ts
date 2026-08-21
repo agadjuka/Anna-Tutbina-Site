@@ -14,11 +14,11 @@ export const headingFont = localFont({
 
 // Шрифт для основного текста из public/fonts/body/
 export const bodyFont = localFont({
-  src: "../public/fonts/body/kinetika.ttf",
+  src: "../public/fonts/body/Gilroy-Light.ttf",
   variable: "--font-body",
   display: "swap",
   fallback: ["system-ui", "arial"],
-  weight: "400",
+  weight: "300",
 });
 
 // Логотип из public/fonts/logo/

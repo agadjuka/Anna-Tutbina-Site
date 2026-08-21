@@ -1,5 +1,6 @@
 import { Container } from "@/components/ui/container";
 import { SanityImage } from "@/components/ui/sanity-image";
+import { SectionEyebrow } from "@/components/ui/section-eyebrow";
 
 interface ValuesItem {
   title?: string;
@@ -62,9 +63,9 @@ export function ValuesSection({ values }: ValuesSectionProps) {
       <Container className="relative">
         <div className="text-center">
           {values?.eyebrow && (
-            <p className="text-[15px] font-medium uppercase tracking-[0.18em] text-background">
+            <SectionEyebrow className="text-background">
               {values.eyebrow}
-            </p>
+            </SectionEyebrow>
           )}
           {values?.heading && (
             <h2 className="mt-3 font-heading text-[32px] uppercase leading-tight text-background sm:text-[40px] lg:text-[clamp(40px,2.8vw,54px)]">

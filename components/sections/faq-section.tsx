@@ -4,6 +4,7 @@ import { useState, useRef, useLayoutEffect } from "react";
 import { Container } from "@/components/ui/container";
 import { PortableTextContent } from "@/components/ui/portable-text";
 import { cn } from "@/lib/utils";
+import { SectionEyebrow } from "@/components/ui/section-eyebrow";
 
 interface FaqItem {
   _id: string;
@@ -63,24 +64,30 @@ export function FaqSection({ items, faq }: FaqSectionProps) {
 
   if (!items?.length) return null;
   return (
-    <section id="faq" className="relative w-full bg-background py-16 lg:py-24">
+    /* Ритм и оформление сняты с узлов Figma (секция `5:263`, 1920×968):
+       эйбрау y=55, заголовок y=112 (интерлиньяж 59), колонка 800px по центру
+       (x 560…1360), строки-карточки 800×83 с шагом 96 (то есть зазор 13),
+       заливка #fafaf8, радиус 18, вопрос — Cormorant 18px/31.5, «+» 20px primary.
+       Раньше здесь были плоские строки с линией-разделителем (осознанное
+       отклонение прошлой сессии) — 2026-08-20 приводим к макету. */
+    <section id="faq" className="relative w-full bg-background py-16 lg:min-h-[min(50.4vw,968px)] lg:py-[min(2.86vw,55px)]">
       <Container>
-        <div className="mb-10 text-center lg:mb-14">
-          <p className="text-[13px] font-medium uppercase tracking-[0.18em] text-subtle sm:text-[15px]">
+        <div className="mb-10 text-center lg:mb-[min(4.99vw,96px)]">
+          <SectionEyebrow className="text-subtle">
             {faq?.eyebrow || "Частые вопросы"}
-          </p>
-          <h2 className="mt-3 font-heading text-[32px] leading-tight text-foreground sm:text-[40px] lg:text-[clamp(40px,2.6vw,50px)]">
-            {faq?.heading || "Вопросы и ответы"}
+          </SectionEyebrow>
+          <h2 className="mt-3 font-heading text-[32px] leading-tight text-foreground sm:text-[40px] lg:mt-[min(1.77vw,34px)] lg:text-[clamp(40px,2.6vw,50px)] lg:leading-[min(3.07vw,59px)]">
+            {faq?.heading || "FAQ"}
           </h2>
         </div>
-        <div className="mx-auto max-w-3xl">
+        <div className="mx-auto max-w-3xl space-y-2 lg:max-w-[min(41.7vw,800px)] lg:space-y-[13px]">
           {items.map((item, idx) => {
             const isOpen = openIndex === idx;
             return (
-              <div key={item._id} className="border-b border-border last:border-b-0">
+              <div key={item._id} className="rounded-[18px] bg-on-primary px-4 lg:px-[26px]">
                 <button
                   className={cn(
-                    "flex w-full items-center justify-between py-5 text-left text-lg transition-colors md:text-xl",
+                    "flex w-full items-center justify-between py-5 text-left text-lg transition-colors md:text-xl lg:min-h-[83px] lg:py-0 lg:text-[18px]",
                     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
                     isOpen ? "text-primary" : "text-foreground"
                   )}
@@ -88,7 +95,14 @@ export function FaqSection({ items, faq }: FaqSectionProps) {
                   aria-expanded={isOpen}
                   aria-controls={`faq-content-${idx}`}
                 >
-                  <span className="pr-4 font-medium leading-snug">{item.question}</span>
+                  {/* `font-heading` без варианта `lg:` — это класс из `@layer utilities`
+                      в globals.css, у него нет адаптивных вариантов (Tailwind их не
+                      генерирует для рукописных утилит), `lg:font-heading` молча не
+                      работает. В макете вопрос и так набран Cormorant на всех
+                      экранах. */}
+                  <span className="pr-4 font-heading font-normal leading-snug lg:leading-[31.5px]">
+                    {item.question}
+                  </span>
                   <PlusIconAnimated open={isOpen} />
                 </button>
                 <div
@@ -104,7 +118,7 @@ export function FaqSection({ items, faq }: FaqSectionProps) {
                   }}
                   aria-hidden={!isOpen}
                 >
-                  <div className="px-1 pb-5">
+                  <div className="px-1 pb-5 lg:px-0 lg:pb-[26px]">
                     <PortableTextContent
                       value={item.answer}
                       smallFont

@@ -6,6 +6,8 @@ import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 import { urlFor } from "@/lib/sanity.client";
 import { SectionHeading } from "@/components/ui/section-heading";
+import { cn } from "@/lib/utils";
+import { TOUR_BLOCK_WIDTH } from "@/lib/tour-layout";
 
 interface TourGalleryProps {
   title?: string;
@@ -99,7 +101,7 @@ export function TourGallery({ title = "Галерея", images, tourName }: Tour
       </div>
 
       <div className="w-full flex justify-center">
-        <div className="max-w-4xl w-full">
+        <div className={cn("w-full", TOUR_BLOCK_WIDTH)}>
           <MobileGalleryCarousel slides={slides} onOpen={(i) => setIndex(i)} />
 
           {/* Justified строковая галерея на desktop */}
