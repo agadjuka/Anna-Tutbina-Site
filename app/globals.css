@@ -1176,3 +1176,652 @@ html[data-force-motion="true"] .v5-scene .overflow-hidden:hover span > img:not(.
     opacity: 0 !important;
   }
 }
+
+/* --- Облегчённые версии главной (v7/v8/v9, см. docs/redesign/lightweight-scale-plan.md) --
+   Ответ на правку заказчика 2026-08-23: «не хватает ощущения лёгкости, каждый
+   блок занимает целый экран, хочется быстрее и легче проходить страницы».
+   Замер подтвердил: 9 экранов прокрутки на 1920, абзацы 27px, H2 до 80px,
+   шаг списка GUESTS 49px — макет Figma честно перенесён, но сам макет крупен.
+
+   Механизм — тот же, что у `.v6-scene`: обычные (не `@layer`) правила в Tailwind
+   v4 перекрывают утилиты без `!important`, поэтому секции `components/sections/`
+   не редактируются НИ ОДНОЙ строкой — вся правка живёт здесь. Боевая `/` и
+   версии v1–v6 не задевает: всё под `html[data-ona-scale]`, атрибут ставит
+   только `page-scale.tsx`, подключённый исключительно в `home-light.tsx`.
+
+   Четыре множителя вместо правки каждого px: `--ona-display` (H2), `--ona-text`
+   (абзацы/списки/карточки), `--ona-micro` (надзаголовки, теги, вопросы FAQ —
+   и так мелкие, жмутся слабее), `--ona-space` (отступы, `min-height` секций).
+   Формула та же, что в законе масштабирования (`docs/design-system.md`):
+   `min(X/1920*100vw, Xpx)`, только каждая часть домножена на переменную —
+   значит на 1920 по-прежнему получается ровно `X * множитель`, а не X.
+
+   Область — ТОЛЬКО `lg` (≥1024px), как и сам закон масштабирования: на этих
+   ширинах уже используются vw-формулы, мобильные брейкпоинты не тронуты.
+
+   Ширины текстовых колонок (`max-width` у H2/абзацев) домножены на ТОТ ЖЕ
+   множитель, что и их шрифт — иначе разбивка строк уедет от макетной (у H2
+   ABOUT ширина 800px держит именно 3 строки «ИСКУССТВО / ПУТЕШЕСТВОВАТЬ /
+   КРАСИВО»). Геометрия фото (пропорции, коллажи, диптих FOUNDERS) НЕ трогается
+   ни в одном варианте — запрос был про типографику и отступы, не про фото.
+
+   ⚠️ Часть селекторов ниже — `[class*="…"]` по буквальной подстроке
+   Tailwind-класса (например `tracking-[0.18em]` у надзаголовков). Это не
+   служебный атрибут, а литеральная строка из `className` — если эти константы
+   когда-нибудь изменят в самой секции, соответствующая правка здесь молча
+   перестанет находить элемент (переопределение просто не сработает, ничего не
+   сломается, но эффект пропадёт). Дешевле, чем заводить `data-*`-атрибуты
+   в восьми секциях ради трёх версий сравнения, но об этом стоит помнить. */
+
+html[data-ona-scale] {
+  --ona-display: 1;
+  --ona-text: 1;
+  --ona-micro: 1;
+  --ona-space: 1;
+  --ona-row: 1;
+}
+html[data-ona-scale="v7"] {
+  --ona-display: 0.82;
+  --ona-text: 0.85;
+  --ona-micro: 0.9;
+  --ona-space: 0.72;
+}
+html[data-ona-scale="v8"],
+html[data-ona-scale="v9"] {
+  --ona-display: 0.68;
+  --ona-text: 0.72;
+  --ona-micro: 0.82;
+  --ona-space: 0.55;
+}
+/* v9 — те же кегли, что v8, но воздуха вокруг текста больше (см. §4 плана). */
+html[data-ona-scale="v9"] {
+  --ona-space: 0.62;
+}
+/* `--ona-row` — смягчённый `--ona-space`, только для высоты блоков
+   «фото + текстовая панель» (ABOUT/FOUNDERS/COLLAB) и карточек VALUES/FAQ.
+   Если контейнер ужимать чистым `--ona-space`, а текст внутри — своим
+   `--ona-text` (обычно мягче), контейнер начинает опустошаться быстрее
+   текста: кнопка садится на нижнюю кромку без отступа, панель с
+   `items-start`/`justify-between` откровенно «отклеивается» от текста и
+   виснет пустым полем снизу — ровно то, что заказчик увидел как «прилипло
+   к верху/низу». `--ona-row` — среднее между «отступы» и «текст», контейнер
+   и его содержимое ужимаются заметно синхроннее. */
+html[data-ona-scale] {
+  --ona-row: calc((var(--ona-space) + var(--ona-text)) / 2);
+  /* FAQ дважды отмечен как «слишком тесно» даже на `--ona-row` — карточки
+     вопросов здесь не часть композиции макета (как панели ABOUT/FOUNDERS/
+     COLLAB), а список контента, и по ощущениям должен ужиматься заметно
+     мягче. Смещаем `--ona-row` к 1 — на v8 это 0.82 вместо 0.635. */
+  --ona-faq: calc((var(--ona-row) + 1) / 2);
+  /* `--ona-panel` — ТОЛЬКО для `min-height` строки «фото + текстовая панель»
+     (ABOUT/FOUNDERS/COLLAB). Механизм «заголовок сверху, кнопка снизу»
+     держится на `margin-top: auto` внутри колонки — а auto-отступ может
+     раздвинуть только РЕАЛЬНО свободное место в контейнере. Замер на 1440
+     показал: при `--ona-row` натуральная высота текстовой колонки уже
+     ПРЕВЫШАЛА уменьшенный `min-height` строки (397px контента против 354px
+     min-height) — свободного места не было вовсе, `margin-top: auto`
+     резолвился в 0px, кнопка стояла вплотную к тексту. `--ona-panel` держит
+     min-height заметно ближе к оригиналу, чтобы почти всегда было что
+     распределять. */
+  --ona-panel: calc((var(--ona-row) + 1) / 2);
+  /* Единый верхний/нижний паддинг панели во всех трёх блоках «фото + текст»
+     (ABOUT/FOUNDERS/COLLAB) — заказчик прямо попросил заголовки на одной
+     высоте. У каждого блока в макете был свой отступ (57/69/65px) — с
+     ОДНИМ значением для всех заголовок стартует на одной и той же Y-позиции
+     независимо от блока, а не «плавает» между ними. */
+  --ona-panel-pad: max(28px, min(calc(3vw * var(--ona-space)), calc(58px * var(--ona-space))));
+  /* Отступ эйбрау→заголовок в тех же трёх блоках — тоже унифицирован. У
+     каждого в макете было своё значение (ABOUT 60px, FOUNDERS 28px, COLLAB
+     0 — `lg:mt-0`), и даже при одинаковом `--ona-panel-pad` заголовки всё
+     равно расходились по высоте на саму эту разницу. */
+  --ona-heading-gap: max(12px, min(calc(1.46vw * var(--ona-space)), calc(28px * var(--ona-space))));
+}
+
+@media (min-width: 1024px) {
+  /* Общая пара «надзаголовок блока» — один и тот же примитив (`SectionEyebrow`)
+     на всех восьми секциях, отличается только цвет/выравнивание в className
+     вызывающей секции. `tracking-[0.18em]` в его классе — уникальная метка,
+     больше нигде на этих секциях не встречается. */
+  html[data-ona-scale] #about p[class*="tracking-[0.18em]"],
+  html[data-ona-scale] #tours p[class*="tracking-[0.18em]"],
+  html[data-ona-scale] #values p[class*="tracking-[0.18em]"],
+  html[data-ona-scale] #guests p[class*="tracking-[0.18em]"],
+  html[data-ona-scale] #founders p[class*="tracking-[0.18em]"],
+  html[data-ona-scale] #reviews p[class*="tracking-[0.18em]"],
+  html[data-ona-scale] #collab p[class*="tracking-[0.18em]"],
+  html[data-ona-scale] #faq p[class*="tracking-[0.18em]"] {
+    font-size: max(10px, min(calc(15 / 1920 * 100vw * var(--ona-micro)), calc(15px * var(--ona-micro))));
+  }
+
+  /* Кнопки-«пилюли» («Наши ценности» в ABOUT/FOUNDERS, «Обсудить идею» в
+     COLLAB) — общий базовый класс с фиксированной высотой `clamp(48px,3vw,58px)`
+     и той же типографикой, что и уменьшенный текст рядом. Без масштабирования
+     кнопка на фоне ужатых заголовка/абзаца читается непропорционально крупной
+     — жалоба «выделяются из текста». Высота/паддинги — по `--ona-row` (тот же
+     смягчённый множитель, что у высоты панелей, кнопка — часть той же
+     композиции), ширина — по `--ona-text`.
+
+     ⚠️ Подстрока БЕЗ `lg:` — принципиально. У кнопки в ABOUT класс высоты
+     задан без брейкпоинт-префикса (`h-[clamp(...)]`, одно значение на все
+     ширины), а у FOUNDERS/COLLAB — с `lg:` (мобильная версия отдельная,
+     `h-12`). Прежний селектор требовал `lg:h-[clamp...]` буквально и в ABOUT
+     ничего не находил — кнопка молча оставалась немасштабированной («до сих
+     пор большая»). Без `lg:` подстрока совпадает в обоих случаях: она просто
+     ищется ВНУТРИ полной строки класса, а `lg:h-[clamp(...)]` содержит
+     `h-[clamp(...)]` как хвост. */
+  html[data-ona-scale] #about [class*="h-[clamp(48px,3vw,58px)]"],
+  html[data-ona-scale] #founders [class*="h-[clamp(48px,3vw,58px)]"],
+  html[data-ona-scale] #collab [class*="h-[clamp(48px,3vw,58px)]"] {
+    height: clamp(calc(48px * var(--ona-row)), calc(3vw * var(--ona-row)), calc(58px * var(--ona-row)));
+    font-size: max(11px, calc(13px * var(--ona-text)));
+  }
+  html[data-ona-scale] #about [class*="w-[min(11.55vw,222px)]"],
+  html[data-ona-scale] #founders [class*="w-[min(11.55vw,222px)]"] {
+    width: min(calc(11.55vw * var(--ona-text)), calc(222px * var(--ona-text)));
+  }
+  html[data-ona-scale] #collab [class*="w-[min(9.85vw,189px)]"] {
+    width: min(calc(9.85vw * var(--ona-text)), calc(189px * var(--ona-text)));
+  }
+
+  /* --- ШАПКА -----------------------------------------------------------------
+     Шапка сайта по общему закону масштабирования НЕ уменьшается (design-system.md:
+     она общая для всех страниц, включая туры). Здесь — намеренное исключение
+     только для страниц сравнения `/versions/v7…v9`: заказчик попросил
+     уменьшить ТОЛЬКО шрифт («как на самой странице»), высоту и поля шапки —
+     нет (первая версия правки трогала и `height`/`padding`, это отменено).
+     Заперто под `html[data-ona-scale]`, на боевую `/` и страницы туров не
+     попадает. */
+  html[data-ona-scale] header[data-site-header] [class*="font-logo text-[30px]"] {
+    font-size: calc(38px * var(--ona-text));
+  }
+  html[data-ona-scale] header[data-site-header] [class*="font-logo-subtitle"] {
+    font-size: max(10px, calc(17px * var(--ona-micro)));
+  }
+  html[data-ona-scale] header[data-site-header] nav [class*="tracking-[0.13em]"] {
+    font-size: max(10px, calc(12px * var(--ona-micro)));
+  }
+
+  /* --- HERO --------------------------------------------------------------
+     Фото-коллаж (bento, Ken Burns) остаётся на весь экран без изменений —
+     заказчик прямо попросил не трогать фотографии. Уменьшается только текст
+     поверх коллажа: надзаголовок, заголовок, подзаголовок, кнопки. Десктопный
+     вариант (`lg:block`) — единственный видимый на этой ширине, мобильный
+     `<h1>`/`<p>` тоже попадают под селектор (он вне `lg:hidden`-обёртки CSS
+     не знает), но невидимы и это ничему не вредит. */
+  html[data-ona-scale] #hero p[class*="text-[15px]"] {
+    font-size: max(10px, min(calc(0.78vw * var(--ona-micro)), calc(15px * var(--ona-micro))));
+  }
+  /* `max-width` оригинала — ФИКСИРОВАННЫЙ `max-w-[900px]`/`max-w-[680px]`,
+     без vw-компонента (в отличие от закона масштабирования блоков ниже: HERO
+     во всех версиях не подчиняется общему закону, только пропорционально
+     уменьшается вместе со своим шрифтом). Первая правка ошибочно добавила
+     vw-часть (`min(46.9vw*D, 900px*D)`) — на 1920 она случайно совпадала с
+     900px*D и ничего не выдавало, а на более узких мониторах (1440 и уже)
+     vw-часть становилась МЕНЬШЕ нужного, колонка сужалась раньше времени и
+     «Больше, чем путешествия» переносилось на две строки. Чистое
+     `calc(900px * D)` держит те же пропорции, что и оригинал — просто уже. */
+  html[data-ona-scale] #hero h1[class*="clamp(52px"] {
+    font-size: clamp(calc(52px * var(--ona-display)), calc(5vw * var(--ona-display)), calc(72px * var(--ona-display)));
+    margin-top: min(calc(1.25vw * var(--ona-space)), calc(24px * var(--ona-space)));
+    max-width: calc(900px * var(--ona-display));
+  }
+  html[data-ona-scale] #hero p[class*="clamp(24px"] {
+    font-size: clamp(calc(24px * var(--ona-text)), calc(1.8vw * var(--ona-text)), calc(32px * var(--ona-text)));
+    margin-top: min(calc(0.83vw * var(--ona-space)), calc(16px * var(--ona-space)));
+    max-width: calc(680px * var(--ona-text));
+  }
+  html[data-ona-scale] #hero [class*="mt-9 flex flex-row flex-nowrap"] {
+    margin-top: min(calc(1.88vw * var(--ona-space)), calc(36px * var(--ona-space)));
+  }
+  /* Кнопки HERO — та же жалоба, что у «Наши ценности»/«Обсудить идею» ниже:
+     фиксированная высота (`h-14`=56px) на фоне уменьшенного текста визуально
+     доминирует. */
+  html[data-ona-scale] #hero [class*="mt-9 flex flex-row flex-nowrap"] a {
+    height: calc(56px * var(--ona-row));
+    padding-left: calc(32px * var(--ona-row));
+    padding-right: calc(32px * var(--ona-row));
+    font-size: max(11px, calc(14px * var(--ona-text)));
+  }
+
+  /* --- ABOUT ------------------------------------------------------------- */
+  html[data-ona-scale] #about > div {
+    /* Пол 507px — без него на узких `lg`-ширинах (1024–1280, замерено: 1024px
+       давал разрыв кнопка/текст 3.4px вместо задуманных ~25–30) `min(vw,px)`
+       схлопывал высоту строки почти до контента, и `margin-top:auto` внизу
+       снова оставался без свободного места. */
+    min-height: max(507px, min(calc(48vw * var(--ona-panel)), calc(922px * var(--ona-panel))));
+  }
+  /* Верхний отступ панели — ОДИНАКОВЫЙ во всех трёх блоках (ABOUT/FOUNDERS/
+     COLLAB, см. `--ona-panel-pad` в блоке переменных выше): заказчик просил
+     заголовки на одной высоте. Если у каждого блока свой отступ (макетный,
+     разный), позиция заголовка «плавает» между блоками даже при одинаковой
+     механике ниже. Кнопка внизу — ОДНИМ `margin-top:auto` (не разделённым
+     пополам с отступом сверху, как было): весь свободный запас уходит целиком
+     в зазор перед кнопкой, а не делится — так кнопка «ниже», а не по центру. */
+  html[data-ona-scale] #about > div > div:nth-child(2) {
+    padding-top: var(--ona-panel-pad);
+    padding-bottom: var(--ona-panel-pad);
+  }
+  html[data-ona-scale] #about h2 {
+    font-size: min(calc(4.17vw * var(--ona-display)), calc(80px * var(--ona-display)));
+    margin-top: var(--ona-heading-gap);
+    max-width: min(calc(41.7vw * var(--ona-display)), calc(800px * var(--ona-display)));
+  }
+  html[data-ona-scale] #about h2 + div {
+    font-size: max(11px, min(calc(1.4vw * var(--ona-text)), calc(27px * var(--ona-text))));
+    margin-top: min(calc(2.5vw * var(--ona-space)), calc(48px * var(--ona-space)));
+    max-width: min(calc(29.2vw * var(--ona-text)), calc(560px * var(--ona-text)));
+  }
+  /* `:not(:last-child)` + `margin-bottom`, а не `* + *` + `margin-top` —
+     принципиально. Tailwind реализует `space-y-*` через `margin-block-end` на
+     всех детях, кроме последнего (не `margin-top` на всех, кроме первого).
+     Смежные вертикальные margin схлопываются в максимум, а не складываются —
+     будь мой `margin-top` меньше макетного `margin-block-end`, схлопывание
+     оставило бы старое (немасштабированное) значение как ни в чём не бывало.
+     Совпадение свойства и селектора с оригиналом — единственный надёжный
+     способ перекрыть именно его, а не «спорить» с ним через margin collapse. */
+  html[data-ona-scale] #about h2 + div > *:not(:last-child) {
+    margin-bottom: min(calc(2.24vw * var(--ona-space)), calc(43px * var(--ona-space)));
+  }
+  html[data-ona-scale] #about a[class*="self-start"] {
+    margin-top: auto;
+  }
+
+  /* --- CALENDAR ------------------------------------------------------------ */
+  html[data-ona-scale] #tours {
+    min-height: min(calc(37.64vw * var(--ona-space)), calc(723px * var(--ona-space)));
+    padding-top: min(calc(4.06vw * var(--ona-space)), calc(78px * var(--ona-space)));
+    padding-bottom: min(calc(4.06vw * var(--ona-space)), calc(78px * var(--ona-space)));
+  }
+  html[data-ona-scale] #tours h2 {
+    font-size: min(calc(3vw * var(--ona-display)), calc(58px * var(--ona-display)));
+    line-height: min(calc(3.07vw * var(--ona-display)), calc(59px * var(--ona-display)));
+    margin-top: min(calc(0.73vw * var(--ona-space)), calc(14px * var(--ona-space)));
+  }
+  html[data-ona-scale] #tours button[class*="rounded-full"] {
+    font-size: max(11px, min(calc(1.04vw * var(--ona-text)), calc(20px * var(--ona-text))));
+  }
+  html[data-ona-scale] #tours [class*="gap-x-"] {
+    margin-top: min(calc(3.85vw * var(--ona-space)), calc(74px * var(--ona-space)));
+  }
+
+  /* Сама карточка тура (`.tour-card`) сознательно НЕ масштабируется — по
+     прямой просьбе заказчика оставить её как есть, без изменений, во всех
+     версиях сравнения. Секция CALENDAR вокруг нeё (заголовок, отступы) —
+     масштабируется как везде на странице. */
+
+  /* --- VALUES -------------------------------------------------------------- */
+  /* Оригинал держит `lg:py-0` — весь нижний «воздух» под сеткой карточек
+     давал только запас `min-height` над контентом (1020px было заведомо
+     больше, чем нужно). Когда `min-height` ужимается, а контент — нет,
+     запас тает и сетка карточек утыкается в самый низ секции. Добавляем
+     явный `padding-bottom` (которого в оригинале не было и не требовалось) —
+     гарантированный отступ, не зависящий от совпадения высот. */
+  html[data-ona-scale] #values {
+    min-height: min(calc(53.1vw * var(--ona-row)), calc(1020px * var(--ona-row)));
+    padding-bottom: min(calc(3.02vw * var(--ona-row)), calc(58px * var(--ona-row)));
+  }
+  html[data-ona-scale] #values h2 {
+    font-size: min(calc(2.81vw * var(--ona-display)), calc(54px * var(--ona-display)));
+    line-height: min(calc(2.6vw * var(--ona-display)), calc(50px * var(--ona-display)));
+    margin-top: min(calc(2.13vw * var(--ona-space)), calc(41px * var(--ona-space)));
+  }
+  html[data-ona-scale] #values > div > div:last-child {
+    margin-top: min(calc(3.6vw * var(--ona-space)), calc(69px * var(--ona-space)));
+    max-width: min(calc(79.2vw * var(--ona-text)), calc(1244px * var(--ona-text)));
+    column-gap: min(calc(4.27vw * var(--ona-space)), calc(82px * var(--ona-space)));
+    row-gap: min(calc(3.8vw * var(--ona-space)), calc(73px * var(--ona-space)));
+  }
+  /* Карточка — `min-height`/паддинги на `--ona-row` (мягче чистого `--ona-space`):
+     чистый `--ona-space` ужимал бокс быстрее контента, и с `flex-start`
+     (по умолчанию у `flex-col`, ничем не переопределён) весь текст вставал
+     наверх с пустым полем снизу — «карточки прилеплены к низу». `--ona-row`
+     держит верх/низ пропорционально ближе к контенту. */
+  html[data-ona-scale] #values > div > div:last-child > div {
+    min-height: min(calc(12.56vw * var(--ona-row)), calc(241px * var(--ona-row)));
+    padding-left: min(calc(1.64vw * var(--ona-row)), calc(32px * var(--ona-row)));
+    padding-right: min(calc(1.64vw * var(--ona-row)), calc(32px * var(--ona-row)));
+    padding-top: min(calc(1.59vw * var(--ona-row)), calc(31px * var(--ona-row)));
+    padding-bottom: min(calc(3vw * var(--ona-row)), calc(58px * var(--ona-row)));
+  }
+  html[data-ona-scale] #values [class*="tracking-[0.108em]"] {
+    font-size: max(10px, min(calc(0.73vw * var(--ona-micro)), calc(14px * var(--ona-micro))));
+  }
+  /* Кружок с номером — на `--ona-row` и с более высоким полом (28px, а не
+     чистая пропорция): заказчик прямо попросил цифру покрупнее, «не читается». */
+  html[data-ona-scale] #values [class*="lg:size-["] {
+    width: max(28px, min(calc(2.08vw * var(--ona-row)), calc(40px * var(--ona-row))));
+    height: max(28px, min(calc(2.08vw * var(--ona-row)), calc(40px * var(--ona-row))));
+  }
+  html[data-ona-scale] #values [class*="italic leading-[25px]"] {
+    font-size: max(13px, min(calc(0.73vw * var(--ona-row)), calc(14px * var(--ona-row))));
+  }
+  html[data-ona-scale] #values p[class*="font-heading text-[22px]"] {
+    margin-top: min(calc(0.47vw * var(--ona-space)), calc(9px * var(--ona-space)));
+    font-size: max(11px, min(calc(1.17vw * var(--ona-text)), calc(22.5px * var(--ona-text))));
+  }
+  html[data-ona-scale] #values p[class*="mt-3 text-[15px]"] {
+    font-size: max(11px, min(calc(0.8vw * var(--ona-text)), calc(15.3px * var(--ona-text))));
+    margin-top: min(calc(1.17vw * var(--ona-space)), calc(22.5px * var(--ona-space)));
+  }
+
+  /* --- GUESTS ---------------------------------------------------------------- */
+  html[data-ona-scale] #guests {
+    min-height: min(calc(54.71vw * var(--ona-space)), calc(1051px * var(--ona-space)));
+    padding-top: min(calc(3.28vw * var(--ona-space)), calc(63px * var(--ona-space)));
+    padding-bottom: min(calc(5.1vw * var(--ona-space)), calc(98px * var(--ona-space)));
+  }
+  html[data-ona-scale] #guests > div > div:last-child {
+    margin-top: min(calc(1.46vw * var(--ona-space)), calc(28px * var(--ona-space)));
+  }
+  html[data-ona-scale] #guests h2 {
+    font-size: min(calc(2.76vw * var(--ona-display)), calc(53px * var(--ona-display)));
+    line-height: min(calc(3.07vw * var(--ona-display)), calc(59px * var(--ona-display)));
+  }
+  html[data-ona-scale] #guests ul {
+    margin-top: min(calc(1.98vw * var(--ona-space)), calc(38px * var(--ona-space)));
+  }
+  /* `<ul>` — обычный блок, не flex/grid: `row-gap` на нём не действует. Реальный
+     механизм у Tailwind — `margin-block-end` на всех `li`, кроме последнего, а
+     не `margin-top` на последующих: смежные margin схлопываются в МАКСИМУМ, а
+     не складываются, поэтому перекрывать нужно то же свойство и того же
+     элемента, что и оригинал — иначе схлопывание молча оставляет макетное
+     значение. */
+  html[data-ona-scale] #guests ul li:not(:last-child) {
+    margin-bottom: min(calc(2.57vw * var(--ona-space)), calc(49px * var(--ona-space)));
+  }
+  html[data-ona-scale] #guests ul li span:first-child {
+    font-size: max(10px, min(calc(1vw * var(--ona-micro)), calc(19px * var(--ona-micro))));
+  }
+  html[data-ona-scale] #guests ul li span:last-child {
+    font-size: max(11px, min(calc(1.3vw * var(--ona-text)), calc(25px * var(--ona-text))));
+    line-height: min(calc(1.37vw * var(--ona-text)), calc(26.25px * var(--ona-text)));
+  }
+  html[data-ona-scale] #guests ul + div {
+    font-size: max(11px, min(calc(1.3vw * var(--ona-text)), calc(25px * var(--ona-text))));
+    line-height: min(calc(1.82vw * var(--ona-text)), calc(35px * var(--ona-text)));
+    margin-top: min(calc(3.44vw * var(--ona-space)), calc(66px * var(--ona-space)));
+  }
+  html[data-ona-scale] #guests ul + div > *:not(:last-child) {
+    margin-bottom: min(calc(2.45vw * var(--ona-space)), calc(47px * var(--ona-space)));
+  }
+
+  /* --- FOUNDERS ---------------------------------------------------------------- */
+  html[data-ona-scale] #founders > div:first-child {
+    min-height: max(455px, min(calc(43.1vw * var(--ona-panel)), calc(828px * var(--ona-panel))));
+  }
+  /* Панель — `flex flex-1` внутри строки, растянутой на всю высоту фото
+     (`self-stretch` по умолчанию у соседа); при `lg:items-start` (оригинал)
+     контент «прилипал» к верхней кромке с пустым полем снизу. Растягиваем
+     колонку на всю высоту панели (`stretch`), саму колонку делаем `flex-col`,
+     а перед кнопкой ставим `margin-top:auto`: она столбиком доедет до низа.
+     Паддинг — ОБЩИЙ `--ona-panel-pad` (см. пояснение у ABOUT): заголовок
+     должен стартовать на той же высоте, что в ABOUT и COLLAB, а не на своей
+     макетной отметке (69px). Верхнего auto-отступа здесь НЕТ (в отличие от
+     промежуточной правки) — весь свободный запас уходит целиком в зазор
+     перед кнопкой, а Y-позиция заголовка держится фиксированным паддингом,
+     одинаковым во всех трёх блоках. */
+  html[data-ona-scale] #founders > div:first-child > div:last-child {
+    padding-top: var(--ona-panel-pad);
+    padding-bottom: var(--ona-panel-pad);
+    align-items: stretch;
+  }
+  html[data-ona-scale] #founders [class*="ml-[10.4%]"] {
+    display: flex;
+    flex-direction: column;
+    max-width: min(calc(38vw * var(--ona-text)), calc(583px * var(--ona-text)));
+  }
+  html[data-ona-scale] #founders h2 {
+    font-size: min(calc(2.76vw * var(--ona-display)), calc(53px * var(--ona-display)));
+    line-height: min(calc(2.6vw * var(--ona-display)), calc(50px * var(--ona-display)));
+    margin-top: var(--ona-heading-gap);
+  }
+  html[data-ona-scale] #founders h2 + div {
+    font-size: max(11px, min(calc(1.41vw * var(--ona-text)), calc(27px * var(--ona-text))));
+    margin-top: min(calc(3.54vw * var(--ona-space)), calc(68px * var(--ona-space)));
+  }
+  html[data-ona-scale] #founders h2 + div > *:not(:last-child) {
+    margin-bottom: min(calc(1.82vw * var(--ona-space)), calc(35px * var(--ona-space)));
+  }
+  html[data-ona-scale] #founders [class*="mt-9 flex flex-col"] {
+    margin-top: auto;
+  }
+  /* Диптих создателей: расстояния вокруг блока — фото и сетка не трогаются. */
+  html[data-ona-scale] #founders [class*="border-t border-background/15"] {
+    padding-top: min(calc(4.1vw * var(--ona-space)), calc(79px * var(--ona-space)));
+    padding-bottom: min(calc(4.1vw * var(--ona-space)), calc(79px * var(--ona-space)));
+  }
+  html[data-ona-scale] #founders [class*="lg:grid-cols-[min(24.7vw"] {
+    margin-top: min(calc(4.27vw * var(--ona-space)), calc(82px * var(--ona-space)));
+  }
+  html[data-ona-scale] #founders figcaption {
+    margin-top: min(calc(1.15vw * var(--ona-space)), calc(22px * var(--ona-space)));
+  }
+  html[data-ona-scale] #founders figcaption > p:first-child {
+    font-size: min(calc(1.82vw * var(--ona-display)), calc(35px * var(--ona-display)));
+    line-height: min(calc(2.28vw * var(--ona-display)), calc(43.75px * var(--ona-display)));
+  }
+  html[data-ona-scale] #founders figcaption p[class*="tracking-[0.18em]"] {
+    font-size: max(10px, min(calc(0.68vw * var(--ona-micro)), calc(13px * var(--ona-micro))));
+    margin-top: min(calc(1.04vw * var(--ona-space)), calc(20px * var(--ona-space)));
+  }
+  html[data-ona-scale] #founders figcaption p:last-child {
+    font-size: max(11px, min(calc(0.885vw * var(--ona-text)), calc(17px * var(--ona-text))));
+    margin-top: min(calc(1.3vw * var(--ona-space)), calc(25px * var(--ona-space)));
+    max-width: min(calc(24.7vw * var(--ona-text)), calc(475px * var(--ona-text)));
+  }
+  /* Верхняя фотка панели растягивается на высоту всей строки (`self-stretch`),
+     а строка в облегчённых версиях ниже макетной — фото и в v6 кадрировалось
+     по центру, теперь обрезка заметнее. Заказчик попросил обрезать сверху,
+     а не снизу — якорим кадр к низу. */
+  html[data-ona-scale] #founders [data-static-photo] img {
+    object-position: bottom;
+  }
+
+  /* --- REVIEWS ---------------------------------------------------------------- */
+  html[data-ona-scale] #reviews {
+    min-height: min(calc(37vw * var(--ona-space)), calc(711px * var(--ona-space)));
+    padding-top: min(calc(3.8vw * var(--ona-space)), calc(73px * var(--ona-space)));
+    padding-bottom: min(calc(3.8vw * var(--ona-space)), calc(73px * var(--ona-space)));
+  }
+  html[data-ona-scale] #reviews div:has(> h2) {
+    margin-bottom: min(calc(4.48vw * var(--ona-space)), calc(86px * var(--ona-space)));
+  }
+  html[data-ona-scale] #reviews h2 {
+    font-size: min(calc(2.6vw * var(--ona-display)), calc(50px * var(--ona-display)));
+    line-height: min(calc(3.07vw * var(--ona-display)), calc(59px * var(--ona-display)));
+    margin-top: min(calc(1.35vw * var(--ona-space)), calc(26px * var(--ona-space)));
+  }
+  /* Карточка отзыва — фиксированные Tailwind-размеры (`text-sm/base`, `px-5…`),
+     не завязаны на закон масштабирования (это контент-карточка, не блок
+     макета), но именно из-за этого раздел визуально не менялся вообще ни в
+     одной версии — самая частая жалоба в этом заходе.
+
+     Паддинги/зазоры — на `--ona-row` с плотными полами, не на чистый
+     `--ona-space`: с чистым `--ona-space` (самый агрессивный из четырёх)
+     карточка на v8 получала паддинг ~9px при аватаре в районе 30px — воздуха
+     не оставалось совсем, «в хлам». `--ona-row` мягче, а полы держат нижнюю
+     границу читаемости и на самом мелком варианте. */
+  html[data-ona-scale] [data-review-card] {
+    padding: max(14px, calc(20px * var(--ona-row)));
+  }
+  html[data-ona-scale] [data-review-header] {
+    padding-bottom: max(8px, calc(12px * var(--ona-row)));
+  }
+  html[data-ona-scale] [data-review-header] > div {
+    gap: max(8px, calc(12px * var(--ona-row)));
+  }
+  /* Кружок-аватар — на два уровня глубже: `> div:first-child` — это только
+     позиционирующая обёртка (`relative shrink-0`) без своего размера, сам
+     размер (`h-10/md:h-12`) у ЕЁ ребёнка. Правка на обёртке не давала кружку
+     сжаться (он не clipped) — фото налезало на имя рядом. Пол 34px — заказчик
+     отметил, что аватар «слишком большой» при плотных паддингах; на `--ona-row`
+     с этим полом он визуально compact, но не теряется рядом с именем. */
+  html[data-ona-scale] [data-review-header] > div > div:first-child > div {
+    width: max(34px, calc(48px * var(--ona-row)));
+    height: max(34px, calc(48px * var(--ona-row)));
+  }
+  html[data-ona-scale] [data-review-card] > div:last-child {
+    padding-top: max(8px, calc(12px * var(--ona-row)));
+  }
+  html[data-ona-scale] [data-review-card] [class*="font-semibold"] {
+    font-size: max(12px, calc(16px * var(--ona-text)));
+  }
+  html[data-ona-scale] [data-review-card] [class*="italic leading-snug"] {
+    font-size: max(11px, calc(14px * var(--ona-micro)));
+  }
+  html[data-ona-scale] [data-review-card] [class*="italic leading-[1.8]"] {
+    font-size: max(12px, calc(16px * var(--ona-text)));
+  }
+  html[data-ona-scale] [data-review-card] button {
+    padding: max(4px, calc(6px * var(--ona-row))) max(10px, calc(14px * var(--ona-row)));
+    font-size: max(10px, calc(13px * var(--ona-micro)));
+  }
+
+  /* --- COLLAB ---------------------------------------------------------------- */
+  html[data-ona-scale] #collab > div {
+    min-height: max(409px, min(calc(38.7vw * var(--ona-panel)), calc(743px * var(--ona-panel))));
+  }
+  /* Тот же приём, что в FOUNDERS/ABOUT (см. пояснение у ABOUT про
+     `--ona-panel-pad`): заголовок+текст сверху на ОДИНАКОВОМ во всех трёх
+     блоках отступе, кнопка (вместе с тегами следом за ней) прибита к низу
+     одним `margin-top:auto` — весь свободный запас уходит туда целиком, а не
+     делится с отступом сверху. */
+  html[data-ona-scale] #collab > div > div:first-child {
+    padding-top: var(--ona-panel-pad);
+    padding-bottom: var(--ona-panel-pad);
+    align-items: stretch;
+  }
+  html[data-ona-scale] #collab [class*="ml-[21.1%]"] {
+    display: flex;
+    flex-direction: column;
+    max-width: min(calc(37vw * var(--ona-text)), calc(711px * var(--ona-text)));
+  }
+  html[data-ona-scale] #collab h2 {
+    font-size: min(calc(2.6vw * var(--ona-display)), calc(50px * var(--ona-display)));
+    line-height: min(calc(3.07vw * var(--ona-display)), calc(59px * var(--ona-display)));
+  }
+  /* Оригинал — `lg:mt-0` (эйбрау и заголовок вплотную); здесь общий с
+     ABOUT/FOUNDERS отступ, чтобы заголовки трёх блоков стояли на одной
+     высоте (см. `--ona-heading-gap`). */
+  html[data-ona-scale] #collab h2 {
+    margin-top: var(--ona-heading-gap);
+  }
+  html[data-ona-scale] #collab h2 + div {
+    font-size: max(11px, min(calc(1.41vw * var(--ona-text)), calc(27px * var(--ona-text))));
+    line-height: min(calc(1.82vw * var(--ona-text)), calc(35px * var(--ona-text)));
+    margin-top: min(calc(1.88vw * var(--ona-space)), calc(36px * var(--ona-space)));
+    max-width: min(calc(26.6vw * var(--ona-text)), calc(510px * var(--ona-text)));
+  }
+  html[data-ona-scale] #collab h2 + div > *:not(:last-child) {
+    margin-bottom: min(calc(1.77vw * var(--ona-space)), calc(34px * var(--ona-space)));
+  }
+  html[data-ona-scale] #collab [class*="lg:max-w-[92%]"] {
+    font-size: max(10px, min(calc(0.78vw * var(--ona-micro)), calc(15px * var(--ona-micro))));
+    margin-top: min(calc(2.6vw * var(--ona-space)), calc(50px * var(--ona-space)));
+  }
+  /* Кнопка `ContactCta` — прибита к низу колонки (`margin-top:auto`, см.
+     пояснение у `#collab > div > div:first-child` выше); всё, что идёт следом
+     по разметке (теги), едет вместе с ней на своём родном отступе `mt-8`. */
+  html[data-ona-scale] #collab [class*="items-center gap-4 lg:items-start"] {
+    position: relative;
+    margin-top: auto;
+  }
+  /* Ряд кнопок Telegram/WhatsApp (`contact-cta.tsx`) раскрывается по клику на
+     «Обсудить идею» ВНУТРИ обычного потока — даже скрытый (`opacity-0`, не
+     `display:none`) он резервирует место (высота ссылок + `gap-4`), и это
+     место сдвигало «Обсудить идею»/теги под собой. Заказчик прямо попросил
+     сделать оверлей: ряд контактов выпадает ПОВЕРХ остального, ничего не
+     раздвигая — ни в открытом, ни в закрытом состоянии. `position:absolute`
+     убирает его из потока насовсем; `top:100%` ставит его сразу под кнопкой
+     ровно там же, где он и был бы в обычном потоке — визуально ничего не
+     меняется при открытии, кроме того, что контент под ним больше не едет. */
+  html[data-ona-scale] #collab [class*="items-center gap-4 lg:items-start"] > div:last-child {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 20;
+    margin-top: 12px;
+  }
+
+  /* --- FAQ ---------------------------------------------------------------- */
+  html[data-ona-scale] #faq {
+    min-height: min(calc(50.4vw * var(--ona-faq)), calc(968px * var(--ona-faq)));
+    padding-top: min(calc(2.86vw * var(--ona-space)), calc(55px * var(--ona-space)));
+    padding-bottom: min(calc(2.86vw * var(--ona-space)), calc(55px * var(--ona-space)));
+  }
+  html[data-ona-scale] #faq div:has(> h2) {
+    margin-bottom: min(calc(4.99vw * var(--ona-space)), calc(96px * var(--ona-space)));
+  }
+  html[data-ona-scale] #faq h2 {
+    font-size: min(calc(2.6vw * var(--ona-display)), calc(50px * var(--ona-display)));
+    line-height: min(calc(3.07vw * var(--ona-display)), calc(59px * var(--ona-display)));
+    margin-top: min(calc(1.77vw * var(--ona-space)), calc(34px * var(--ona-space)));
+  }
+  html[data-ona-scale] #faq [class*="max-w-3xl"] {
+    max-width: min(calc(41.7vw * var(--ona-text)), calc(800px * var(--ona-text)));
+  }
+  /* Колонка строк FAQ — обычный блок (`space-y-2`), не flex/grid: `row-gap`
+     не действовал, зазор между строками оставался макетным (13px) при уже
+     уменьшенном тексте — «межстрочный интервал» бросался в глаза именно
+     поэтому. Реальный механизм у Tailwind — `margin-block-end` на всех
+     строках, кроме последней (не `margin-top` на следующих): смежные margin
+     схлопываются в максимум, а не складываются, поэтому нужно перекрыть то
+     же свойство того же элемента, что и оригинал. */
+  html[data-ona-scale] #faq [class*="max-w-3xl"] > div:not(:last-child) {
+    margin-bottom: min(calc(0.68vw * var(--ona-faq)), calc(13px * var(--ona-faq)));
+  }
+  /* Строки — на `--ona-faq`: заказчик дважды отметил, что карточки вопросов
+     стали слишком тесными даже после первого смягчения (`--ona-row`).
+     `--ona-faq` — заметно ближе к оригиналу (v8: 0.82 вместо 0.635). */
+  html[data-ona-scale] #faq [class*="rounded-[18px]"] {
+    padding-left: min(calc(1.35vw * var(--ona-faq)), calc(26px * var(--ona-faq)));
+    padding-right: min(calc(1.35vw * var(--ona-faq)), calc(26px * var(--ona-faq)));
+  }
+  html[data-ona-scale] #faq button {
+    min-height: min(calc(4.32vw * var(--ona-faq)), calc(83px * var(--ona-faq)));
+    font-size: max(13px, min(calc(0.9375vw * var(--ona-faq)), calc(18px * var(--ona-faq))));
+  }
+  html[data-ona-scale] #faq button > span:first-child {
+    line-height: min(calc(1.64vw * var(--ona-faq)), calc(31.5px * var(--ona-faq)));
+  }
+  /* Паддинг — на ВНУТРЕННЕМ div (`px-1 pb-5 lg:pb-[...]`), а не на обёртке
+     `id="faq-content-…"` (та отвечает за высоту аккордеона через инлайн-стиль
+     `height`, паддинг на ней остаётся видимым даже при `height:0` и добавлял
+     лишние пиксели закрытым строкам). */
+  html[data-ona-scale] #faq [id^="faq-content-"] > div {
+    padding-bottom: min(calc(1.35vw * var(--ona-faq)), calc(26px * var(--ona-faq)));
+  }
+  html[data-ona-scale] #faq [id^="faq-content-"] p {
+    font-size: max(12px, calc(1em * var(--ona-faq)));
+  }
+
+  /* --- FOOTER ---------------------------------------------------------------- */
+  html[data-ona-scale] footer[id="contacts"] > div:first-child {
+    padding-top: min(calc(7.7vw * var(--ona-space)), calc(148px * var(--ona-space)));
+    padding-bottom: min(calc(4.06vw * var(--ona-space)), calc(78px * var(--ona-space)));
+  }
+  html[data-ona-scale] footer[id="contacts"] p[class*="italic leading-[1.55]"] {
+    font-size: max(11px, min(calc(0.86vw * var(--ona-text)), calc(16.5px * var(--ona-text))));
+    margin-top: min(calc(0.83vw * var(--ona-space)), calc(16px * var(--ona-space)));
+  }
+  html[data-ona-scale] footer[id="contacts"] p[class*="tracking-[0.15em]"] {
+    font-size: max(9px, min(calc(0.573vw * var(--ona-micro)), calc(11px * var(--ona-micro))));
+  }
+  html[data-ona-scale] footer[id="contacts"] a[class*="tracking-[0.15em]"] ~ div,
+  html[data-ona-scale] footer[id="contacts"] p[class*="tracking-[0.15em]"] + div {
+    margin-top: min(calc(1.04vw * var(--ona-space)), calc(20px * var(--ona-space)));
+    row-gap: min(calc(0.63vw * var(--ona-space)), calc(12px * var(--ona-space)));
+  }
+  html[data-ona-scale] footer[id="contacts"] a[class*="hover:opacity-70"] {
+    font-size: max(10px, min(calc(0.755vw * var(--ona-text)), calc(14.5px * var(--ona-text))));
+  }
+  html[data-ona-scale] footer[id="contacts"] [class*="border-t border-background/15"] {
+    padding-top: min(calc(1.3vw * var(--ona-space)), calc(25px * var(--ona-space)));
+    padding-bottom: min(calc(2.1vw * var(--ona-space)), calc(40px * var(--ona-space)));
+  }
+  html[data-ona-scale] footer[id="contacts"] [class*="border-t border-background/15"] span,
+  html[data-ona-scale] footer[id="contacts"] [class*="border-t border-background/15"] > div {
+    font-size: max(9px, min(calc(0.573vw * var(--ona-micro)), calc(11px * var(--ona-micro))));
+  }
+}
