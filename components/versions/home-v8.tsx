@@ -1,4 +1,4 @@
-import { HomeLight } from "@/components/versions/home-light";
+import { HomeLight } from "@/components/home/home-light";
 import type { HomeData } from "@/lib/home-data";
 
 /** Лёгкая — буквально то, о чём просил заказчик (см. docs/redesign/lightweight-scale-plan.md). */

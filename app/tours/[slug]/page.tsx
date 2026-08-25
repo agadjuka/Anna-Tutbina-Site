@@ -181,20 +181,44 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
 
                       Теперь подписи — тот же `SectionEyebrow`, что над блоками
                       главной, значения — Cormorant одного кегля. Цена отличается
-                      только цветом (`text-primary`), потому что это акцент. */}
-                  <div className="flex flex-wrap items-end gap-x-10 gap-y-6 border-t border-border pt-6">
+                      только цветом (`text-primary`), потому что это акцент.
+
+                      ⚠️ РАСКЛАДКА ПЕРЕСОБРАНА 2026-08-25, у мобильной и
+                      десктопа она РАЗНАЯ.
+
+                      Промежуточный вариант (21.08) ставил подпись НАД значением
+                      — на телефоне блок разворачивался в четыре строки столбиком
+                      («ДАТЫ» / дата / «СТОИМОСТЬ» / цена), заказчику это не
+                      понравилось.
+
+                      <md: каждая пара занимает всю ширину, подпись прижата к
+                      левому краю, значение — к правому (`w-full justify-between`).
+                      Две строки с выключкой по краям вместо текста, слипшегося
+                      у левого края.
+
+                      md+: пары сжимаются по содержимому (`md:w-auto`,
+                      `md:justify-start`) и встают в одну строку — даты слева,
+                      цена вправо через `md:ml-auto`. Это и есть та раскладка,
+                      что была до 21.08. Десктоп заказчик просил не трогать,
+                      поэтому мобильная логика — база, а `md`-варианты её
+                      снимают, а не наоборот.
+
+                      Возвращена именно РАСКЛАДКА, а не прежняя типографика:
+                      три разных начертания — отдельная жалоба заказчика от
+                      21.08, её чинили специально, и откатывать её не за чем. */}
+                  <div className="flex flex-wrap items-baseline gap-x-6 gap-y-3 border-t border-border pt-6">
                     {tour.dates && (
-                      <div>
+                      <div className="flex w-full items-baseline justify-between gap-2 md:w-auto md:justify-start">
                         <SectionEyebrow className="text-subtle">Даты</SectionEyebrow>
-                        <p className="mt-2 font-heading text-[26px] leading-tight text-foreground md:text-[32px]">
+                        <p className="font-heading text-[26px] leading-tight text-foreground md:text-[32px]">
                           {tour.dates}
                         </p>
                       </div>
                     )}
                     {tour.price && (
-                      <div className="md:ml-auto md:text-right">
+                      <div className="flex w-full items-baseline justify-between gap-2 md:ml-auto md:w-auto md:justify-start">
                         <SectionEyebrow className="text-subtle">Стоимость</SectionEyebrow>
-                        <p className="mt-2 font-heading text-[26px] leading-tight text-primary md:text-[32px]">
+                        <p className="font-heading text-[26px] leading-tight text-primary md:text-[32px]">
                           от {tour.price.value} {tour.price.currency}
                         </p>
                       </div>

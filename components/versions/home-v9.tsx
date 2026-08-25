@@ -1,4 +1,4 @@
-import { HomeLight } from "@/components/versions/home-light";
+import { HomeLight } from "@/components/home/home-light";
 import type { HomeData } from "@/lib/home-data";
 
 /** Воздушная — кегли как у v8, но больше воздуха вокруг текста (см. docs/redesign/lightweight-scale-plan.md). */
