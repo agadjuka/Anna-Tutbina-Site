@@ -1,19 +1,12 @@
 import { unstable_noStore as noStore } from "next/cache";
-import { sanityClient } from "@/lib/sanity.client";
-import { siteSettingsQuery } from "@/lib/sanity.queries";
+import { getSiteSettings } from "@/lib/site-settings";
 import { FloatingContactsButton } from "./floating-contacts-button";
-
-interface SiteSettings {
-  primaryContacts?: Array<{
-    label?: string;
-    url?: string;
-    icon?: string;
-  }>;
-}
 
 export async function FloatingContacts() {
   noStore();
-  const settings = await sanityClient.fetch<SiteSettings | null>(siteSettingsQuery);
+  /* Общий на весь рендер источник настроек — тот же запрос нужен футеру и
+     `getHomeData()`, раньше он уходил в Sanity трижды. См. `lib/site-settings.ts`. */
+  const settings = await getSiteSettings();
 
   const contacts = settings?.primaryContacts ?? [];
 

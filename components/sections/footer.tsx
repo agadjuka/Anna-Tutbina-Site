@@ -2,20 +2,12 @@ import { unstable_noStore as noStore } from "next/cache";
 import Link from "next/link";
 import { Container } from "@/components/ui/container";
 import { SmartLink } from "@/components/ui/smart-link";
-import { sanityClient } from "@/lib/sanity.client";
-import { siteSettingsQuery } from "@/lib/sanity.queries";
+import { getSiteSettings } from "@/lib/site-settings";
 import { cn } from "@/lib/utils";
 
 interface FooterLink {
   label?: string;
   url?: string;
-}
-
-interface SiteSettings {
-  slogan?: string;
-  contactLinks?: FooterLink[];
-  communityLinks?: FooterLink[];
-  footerNote?: string;
 }
 
 /** Три слова дыхательного цикла из макета (`5:17`/`5:18`/`5:19`) — в Figma это
@@ -125,7 +117,10 @@ function BreathingCircles() {
 
 export async function Footer() {
   noStore();
-  const settings = await sanityClient.fetch<SiteSettings | null>(siteSettingsQuery);
+  /* Общий на весь рендер источник настроек — тот же запрос нужен плавающей
+     кнопке контактов и `getHomeData()`, раньше он уходил в Sanity трижды.
+     См. `lib/site-settings.ts`. */
+  const settings = await getSiteSettings();
 
   const contactLinks = settings?.contactLinks ?? [];
   const communityLinks = settings?.communityLinks ?? [];

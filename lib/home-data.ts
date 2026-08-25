@@ -5,8 +5,8 @@ import {
   customTourQuery,
   faqQuery,
   homePageQuery,
-  siteSettingsQuery,
 } from "@/lib/sanity.queries";
+import { getSiteSettings } from "@/lib/site-settings";
 import { isTourVisibleOnSite } from "@/lib/tour-visibility";
 import { flattenReviewsFromTours, type TourReviewRaw } from "@/lib/utils/reviews";
 
@@ -117,6 +117,9 @@ export interface CollabContent {
   homeHeadingAccent?: string;
   homeDescription?: any;
   images?: any[];
+  /** Цветок-декор за текстом блока «Сотрудничество» — своё поле, не общее
+   *  со вторым фото блока «О проекте» (см. `home-light.tsx`). */
+  decorPhoto?: any;
   tags?: string[];
 }
 
@@ -154,7 +157,10 @@ export async function getHomeData(): Promise<HomeData> {
       sanityClient.fetch<CollabContent | null>(customTourQuery),
       sanityClient.fetch(faqQuery),
       sanityClient.fetch<HomePageDoc | null>(homePageQuery),
-      sanityClient.fetch<{ primaryContacts?: ContactItem[] } | null>(siteSettingsQuery),
+      /* Через общий кэшируемый источник, а не своим `fetch`: тот же запрос
+         параллельно делают футер и плавающая кнопка контактов, и до 25.08 он
+         уходил в Sanity трижды за одну загрузку. См. `lib/site-settings.ts`. */
+      getSiteSettings(),
     ]);
 
   const tours: TourItem[] = toursRaw
