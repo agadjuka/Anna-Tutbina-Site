@@ -178,24 +178,44 @@ export function Header() {
         <nav
           id="mobile-nav"
           aria-label="Мобильная навигация"
+          /* Схлопывание — через `grid-template-rows: 1fr → 0fr`, а НЕ через
+             `max-height`. Причина конкретная (замер 2026-08-25 на 390px):
+             реальная высота меню 270px, а `max-h-96` — 384px. Первые ~110мс из
+             300 `max-height` шёл 384 → 266, то есть панель физически НЕ
+             двигалась (её высоту ограничивал контент, а не max-height), при
+             этом прозрачность за то же время уже падала до 0.69. Дальше кромка
+             уезжала вверх рывком, будучи почти невидимой: сначала панель
+             «гасла», а следом за ней с запозданием проходила тонкая полоска —
+             её сметающийся нижний край. Жалоба заказчика ровно про это.
+
+             `0fr` схлопывает строку до ФАКТИЧЕСКОЙ высоты контента, поэтому
+             мёртвой зоны нет: высота и прозрачность идут синхронно с первого
+             кадра. `overflow-hidden` переехал на внутреннюю обёртку — это
+             обязательное условие приёма, иначе контент не обрежется при 0fr.
+
+             `transition-all` заменён на явный список свойств: `all` тянул за
+             собой и `backdrop-filter`, что на полупрозрачной панели давало
+             лишние артефакты. */
           className={cn(
-            "absolute left-0 top-full w-full overflow-hidden bg-primary/[0.96] backdrop-blur-md transition-all duration-300 lg:hidden",
-            menuOpen ? "max-h-96 opacity-100" : "pointer-events-none max-h-0 opacity-0"
+            "absolute left-0 top-full grid w-full bg-primary/[0.96] backdrop-blur-md transition-[grid-template-rows,opacity] duration-300 ease-out motion-reduce:transition-none lg:hidden",
+            menuOpen ? "grid-rows-[1fr] opacity-100" : "pointer-events-none grid-rows-[0fr] opacity-0"
           )}
         >
-          <ul className="flex flex-col px-4 pb-5 pt-1 md:px-8">
-            {NAV_ITEMS.map((item) => (
-              <li key={item.href}>
-                <SmartLink
-                  href={item.href}
-                  onClick={closeMenu}
-                  className={cn("block py-2.5", NAV_LINK_TYPO)}
-                >
-                  {item.label}
-                </SmartLink>
-              </li>
-            ))}
-          </ul>
+          <div className="overflow-hidden">
+            <ul className="flex flex-col px-4 pb-5 pt-1 md:px-8">
+              {NAV_ITEMS.map((item) => (
+                <li key={item.href}>
+                  <SmartLink
+                    href={item.href}
+                    onClick={closeMenu}
+                    className={cn("block py-2.5", NAV_LINK_TYPO)}
+                  >
+                    {item.label}
+                  </SmartLink>
+                </li>
+              ))}
+            </ul>
+          </div>
         </nav>
       )}
     </header>
