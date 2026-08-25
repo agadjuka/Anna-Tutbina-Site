@@ -180,8 +180,13 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
                       (замечание заказчика 2026-08-21).
 
                       Теперь подписи — тот же `SectionEyebrow`, что над блоками
-                      главной, значения — Cormorant одного кегля. Цена отличается
-                      только цветом (`text-primary`), потому что это акцент.
+                      главной, значения — Cormorant одного кегля. С 25.08 у даты
+                      и цены стиль значения СОВПАДАЕТ полностью, включая цвет
+                      (`text-primary`) — правка заказчика «сделай стиль у
+                      значения дат таким же, как у значения цены». Раньше дата
+                      была `text-foreground`, а цена выделялась цветом как
+                      акцент; выделения больше нет, пара читается как одна
+                      строка данных.
 
                       ⚠️ РАСКЛАДКА ПЕРЕСОБРАНА 2026-08-25, у мобильной и
                       десктопа она РАЗНАЯ.
@@ -210,7 +215,7 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
                     {tour.dates && (
                       <div className="flex w-full items-baseline justify-between gap-2 md:w-auto md:justify-start">
                         <SectionEyebrow className="text-subtle">Даты</SectionEyebrow>
-                        <p className="font-heading text-[26px] leading-tight text-foreground md:text-[32px]">
+                        <p className="font-heading text-[26px] leading-tight text-primary md:text-[32px]">
                           {tour.dates}
                         </p>
                       </div>
