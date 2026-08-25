@@ -232,6 +232,7 @@ export const customTourQuery = groq`
     homeHeading,
     homeHeadingAccent,
     mainImage,
+    decorPhoto{${IMAGE_PROJECTION}},
     images[]{${IMAGE_PROJECTION}},
     description,
     homeDescription,

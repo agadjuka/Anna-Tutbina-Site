@@ -19,19 +19,24 @@ API-роутов нет, форм с отправкой данных нет — 
 
 | Роут | Файл | Рендеринг | Данные |
 |---|---|---|---|
-| `/` | `app/page.tsx` | `force-dynamic` + `noStore()` | `getHomeData()` — один общий загрузчик (`lib/home-data.ts`), внутри `Promise.all` по `toursQuery`, `toursWithReviewsQuery`, `customTourQuery`, `faqQuery`, `homePageQuery`, `siteSettingsQuery`. Вёрстка вынесена в `HomeV6` (см. ниже) |
-| `/versions` | `app/versions/page.tsx` | статический | — (список берётся из `lib/versions.ts`). **Публично закрыт**, только через `/admin/versions` |
-| `/versions/[id]` | `app/versions/[id]/page.tsx` | `force-dynamic` + `noStore()` | тот же `getHomeData()`. Тоже только через `/admin/versions/<id>` |
+| `/` | `app/page.tsx` | `force-dynamic` + `noStore()` | `getHomeData()` — один общий загрузчик (`lib/home-data.ts`), внутри `Promise.all` по `toursQuery`, `toursWithReviewsQuery`, `customTourQuery`, `faqQuery`, `homePageQuery`, `siteSettingsQuery`. Вёрстка вынесена в `HomeLight` из `components/home/` (см. ниже) |
+| `/versions` | `app/versions/page.tsx` | статический | — (список берётся из `lib/versions.ts`). **Публично закрыт**, только через `/admin/versions`. С 25.08.2026 список пуст — все версии в архиве |
+| `/versions/[id]` | `app/versions/[id]/page.tsx` | `force-dynamic` + `noStore()` | тот же `getHomeData()`. Тоже только через `/admin/versions/<id>`; страницы живы, но это архив |
 | `/tours/[slug]` | `app/tours/[slug]/page.tsx` | `force-dynamic`, `revalidate = 0` | `tourBySlugQuery`; метаданные — `tourMetadataQuery` |
 | `/custom-tour` | `app/custom-tour/page.tsx` | статический | `customTourQuery` — **публично недоступен**, middleware редиректит на `/#collab` |
 | `/robots.txt` | `app/robots.ts` | статический | — |
 | `/sitemap.xml` | `app/sitemap.ts` | статический | `toursSlugsQuery` |
 
-Главная и все её варианты используют **один загрузчик данных и одни и те же секции** —
-`app/page.tsx` рендерит `HomeV6` (заказчик выбрал версию 6 — 2026-08-20), тот же компонент
-показывается как «Версия 6» на `/admin/versions`. Версии 1–5 скрыты (статус `archived`),
-план их удаления — [versions-cleanup-plan.md](versions-cleanup-plan.md).
-Как устроены версии — [VERSIONS.md](VERSIONS.md).
+Главная и все её архивные варианты используют **один загрузчик данных и одни и те же
+секции** — `app/page.tsx` рендерит `HomeLight` с `scale="v8"` (заказчик выбрал облегчённый
+вариант «версия 8» — 2026-08-25). `scale` включает CSS-слой уменьшенной типографики и
+отступов через атрибут `data-ona-scale` на `<html>`, разбор —
+[redesign/lightweight-scale-plan.md](redesign/lightweight-scale-plan.md).
+
+Сравнение версий на этом закрыто: **все девять записей `lib/versions.ts` в статусе
+`archived`**, хаб пуст, боевая главная из `components/versions/` не импортирует ничего.
+План удаления папки — [versions-cleanup-plan.md](versions-cleanup-plan.md), как был
+устроен механизм — [VERSIONS.md](VERSIONS.md).
 
 Кэш выключен намеренно: правки в Studio должны появляться на сайте сразу, без пересборки.
 Плата за это — запрос в Sanity на каждый заход. Если понадобится скорость, правильный шаг —
@@ -117,12 +122,22 @@ API-роутов нет, форм с отправкой данных нет — 
 - `footer`, `floating-contacts` (client) — плавающая кнопка связи. Контакты приходят
   из Sanity (`siteSettingsQuery` → `primaryContacts`), в коде не захардкожены.
 
-### Версии главной (`components/versions/`)
+### Боевая главная (`components/home/`)
 
-`home-v6` — **боевая главная** (её рендерит `app/page.tsx`). `home-v1`…`home-v5` — отклонённые
-варианты, оставлены для сравнения и скрыты с хаба; `registry.tsx` связывает id с компонентом,
-`version-badge` — плашка возврата к списку, `force-motion` — принудительное включение анимаций
-на `/versions/*`. См. [VERSIONS.md](VERSIONS.md) и [versions-cleanup-plan.md](versions-cleanup-plan.md).
+`home-light.tsx` — состав секций главной (те же секции, что у остальных страниц, без
+собственной вёрстки) плюс включение облегчённого масштаба: инлайновый `<script>` ставит
+`data-ona-scale` до первой отрисовки, а `page-scale.tsx` (client) снимает атрибут при уходе
+со страницы, чтобы масштаб не «протёк» на страницы туров при клиентской навигации. Из-за
+скрипта у `<html>` в `app/layout.tsx` стоит `suppressHydrationWarning`.
+
+### Архив версий главной (`components/versions/`)
+
+`home-v1`…`home-v9` — отклонённые варианты, скрыты с хаба (все в статусе `archived`) и
+доступны только по прямым ссылкам `/admin/versions/<id>`; `registry.tsx` связывает id с
+компонентом, `version-badge` — плашка возврата к списку, `force-motion` — принудительное
+включение анимаций на `/versions/*`. **Боевая главная от этой папки не зависит** — её можно
+удалить целиком, см. [versions-cleanup-plan.md](versions-cleanup-plan.md) и
+[VERSIONS.md](VERSIONS.md).
 
 ### Примитивы (`components/ui/`)
 

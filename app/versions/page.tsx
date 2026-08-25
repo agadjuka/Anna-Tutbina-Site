@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui/container";
 import { SmartLink } from "@/components/ui/smart-link";
-import { getVisibleVersions } from "@/lib/versions";
+import { VERSIONS, getVisibleVersions } from "@/lib/versions";
 
 export const metadata: Metadata = {
   title: "Версии главной страницы",
@@ -12,9 +12,15 @@ export const metadata: Metadata = {
 /**
  * Хаб: список версий главной с описанием и кнопкой «Смотреть».
  * Содержимое собирается из `lib/versions.ts` — руками здесь ничего не правится.
+ *
+ * ⚠️ С 2026-08-25 список ПУСТ: сравнение закрыто, заказчик выбрал версию 8,
+ * все записи реестра переведены в `archived` (см. `lib/versions.ts`). Страница
+ * оставлена до общей уборки — `docs/versions-cleanup-plan.md`, — и показывает
+ * заглушку вместо пустого места.
  */
 export default function VersionsHubPage() {
   const versions = getVisibleVersions();
+  const archived = VERSIONS.filter((v) => v.status === "archived");
 
   return (
     <main className="min-h-screen bg-background py-16 lg:py-24">
@@ -26,10 +32,36 @@ export default function VersionsHubPage() {
           <h1 className="mt-3 font-heading text-[34px] leading-tight text-foreground sm:text-[44px]">
             Версии главной страницы
           </h1>
-          <p className="mt-4 text-[16px] leading-[1.6] text-text-deep sm:text-[17px]">
-            Ниже — варианты оформления главной страницы. Контент во всех версиях одинаковый,
-            отличается подача. Откройте любую и сравните.
-          </p>
+          {versions.length === 0 ? (
+            <>
+              <p className="mt-4 text-[16px] leading-[1.6] text-text-deep sm:text-[17px]">
+                Сравнение закрыто: заказчик выбрал <strong>версию 8 («Лёгкая»)</strong>, она стала
+                главной страницей сайта. Все варианты убраны в архив — открывать их для показа
+                больше не нужно.
+              </p>
+              <p className="mt-4 text-[15px] leading-[1.6] text-subtle">
+                Архив (служебные ссылки, из списка убраны):{" "}
+                {archived.map((version, index) => (
+                  <span key={version.id}>
+                    {index > 0 && ", "}
+                    <SmartLink
+                      href={`/versions/${version.id}`}
+                      className="underline underline-offset-4 transition-colors hover:text-foreground"
+                      title={version.title}
+                    >
+                      {version.id}
+                    </SmartLink>
+                  </span>
+                ))}
+                .
+              </p>
+            </>
+          ) : (
+            <p className="mt-4 text-[16px] leading-[1.6] text-text-deep sm:text-[17px]">
+              Ниже — варианты оформления главной страницы. Контент во всех версиях одинаковый,
+              отличается подача. Откройте любую и сравните.
+            </p>
+          )}
 
           <ul className="mt-10 space-y-4 lg:mt-12">
             {versions.map((version) => (

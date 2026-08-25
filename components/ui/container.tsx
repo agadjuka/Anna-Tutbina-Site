@@ -28,6 +28,11 @@ const MAX_WIDTH: Record<NonNullable<ContainerProps["size"]>, string> = {
 export function Container({ children, className, size = "default", ...props }: ContainerProps) {
   return (
     <div
+      // `data-container` — зацепка для закона масштабирования главной: на `/`
+      // ширина контента задаётся одним множителем (`1216 * --ona-u` в
+      // `globals.css`), а не этими максимумами. На остальных страницах
+      // атрибут ни на что не влияет — правило заперто под `html[data-ona-scale]`.
+      data-container={size}
       className={cn(MAX_WIDTH[size], "mx-auto px-4 md:px-8", className)}
       {...props}
     >

@@ -57,7 +57,15 @@ export function ValuesSectionEditorial({ values }: ValuesSectionEditorialProps) 
           Приглушение 45% — на ОБЁРТКЕ, а не на картинке: так «фильтр» не может
           отвалиться от фото, даже если картинку анимируют (v6ImageIn анимирует
           именно `opacity` у `img`). Плюс `data-static-photo` по-прежнему
-          исключает фото из общей анимации появления. */}
+          исключает фото из общей анимации появления.
+
+          ⚠️ У правого слоя `left` = −0.5, а не снятые с макета +0.21. Плюсовое
+          смещение уводило картинку ВПРАВО от кромки своей половины: при 1920
+          это 2px, где не нарисовано ничего, и сквозь них просвечивал фон
+          секции — по всей высоте блока шла вертикальная линия. Заказчик её и
+          заметил («съехали фотки и между ними образовалась линия»). Минус
+          даёт нахлёст внутрь (обёртка `overflow-hidden`, лишнее срезается),
+          поэтому шва не будет ни на какой ширине окна, включая дробные. */}
       {values?.backgroundImage?.asset && (
         <div
           className="absolute inset-y-0 left-0 w-1/2 overflow-hidden opacity-45"
@@ -82,7 +90,7 @@ export function ValuesSectionEditorial({ values }: ValuesSectionEditorialProps) 
             image={values.backgroundImageRight}
             fill
             sizes="50vw"
-            figmaCrop={{ width: 107.91, height: 125.92, left: 0.21, top: -16.41 }}
+            figmaCrop={{ width: 107.91, height: 125.92, left: -0.5, top: -16.41 }}
             alt=""
             className="object-cover"
           />

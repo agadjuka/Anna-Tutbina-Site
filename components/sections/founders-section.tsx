@@ -112,6 +112,10 @@ export function FoundersSection({ founders }: FoundersSectionProps) {
               image={founders.photo}
               fill
               aspectRatio={1006 / 828}
+              /* Кадр — по центру по вертикали (умолчание Sanity: исходник
+                 2304×4096, кадр под пропорцию макета 2304×1897, срезается
+                 поровну сверху и снизу). Пробовали держать за нижнюю кромку
+                 (`cropAnchor="bottom"`) — заказчик выбрал центр. */
               className="object-cover"
               alt=""
             />

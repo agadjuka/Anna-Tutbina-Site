@@ -39,6 +39,20 @@ interface SanityImageProps {
    * Обёртке нужен `overflow-hidden` — картинка намеренно больше неё.
    */
   figmaCrop?: { width: number; height: number; left: number; top: number };
+  /**
+   * С какого края держать кадр, когда сервер режет исходник под `aspectRatio`.
+   *
+   * По умолчанию Sanity кропает ПО ЦЕНТРУ: у вертикального исходника одинаково
+   * срезаются и верх, и низ. Для портретных кадров это часто не то, что нужно —
+   * например, у фото создателей (исходник 2304×4096, кадр 2304×1897) центр
+   * отрезал снизу 1099px и обрезал ногами девушек. `"bottom"` прижимает кадр к
+   * нижней кромке: срезается только верх.
+   *
+   * Значения — как у Sanity (`crop`): center | top | bottom | left | right.
+   * Работает только вместе с `aspectRatio` и без `figmaCrop` (там кадр задаёт
+   * макет, серверного кропа нет вовсе).
+   */
+  cropAnchor?: "center" | "top" | "bottom" | "left" | "right";
 }
 
 export function SanityImage({
@@ -52,6 +66,7 @@ export function SanityImage({
   sizes,
   priority = false,
   figmaCrop,
+  cropAnchor,
 }: SanityImageProps) {
   if (!image?.asset) {
     return (
@@ -78,7 +93,15 @@ export function SanityImage({
       ? figmaCrop
         /* Без `.height()` — сервер отдаёт кадр целиком, кроп задаёт макет. */
         ? urlFor(image).width(fillWidth).auto("format").quality(90).url()
-        : urlFor(image).width(fillWidth).height(fillHeight).auto("format").quality(90).url()
+        : (() => {
+            const b = urlFor(image).width(fillWidth).height(fillHeight);
+            /* `fit("crop")` обязателен вместе с `crop(...)`: без него Sanity
+               игнорирует запрошенные пропорции и отдаёт исходник целиком. */
+            return (cropAnchor ? b.fit("crop").crop(cropAnchor) : b)
+              .auto("format")
+              .quality(90)
+              .url();
+          })()
       : urlFor(image).width(width * 2).height(height * 2).auto("format").quality(90).url();
 
     /* Кадр из макета. Режим `fill` тут использовать НЕЛЬЗЯ: next/image падает
