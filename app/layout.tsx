@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { headingFont, bodyFont, logoFont, logoSubtitleFont } from "@/lib/fonts";
+import {
+  headingFont,
+  bodyFont,
+  logoFont,
+  logoSubtitleFont,
+  handwritingFont,
+} from "@/lib/fonts";
 import { Footer } from "@/components/sections/footer";
 import { Header } from "@/components/sections/header";
 import { FloatingContacts } from "@/components/ui/floating-contacts";
@@ -61,7 +67,7 @@ export default function RootLayout({
   return (
     <html
       lang="ru"
-      className={`${headingFont.variable} ${bodyFont.variable} ${logoFont.variable} ${logoSubtitleFont.variable}`}
+      className={`${headingFont.variable} ${bodyFont.variable} ${logoFont.variable} ${logoSubtitleFont.variable} ${handwritingFont.variable}`}
       suppressHydrationWarning
     >
       <body className="antialiased">

@@ -38,3 +38,13 @@ export const logoSubtitleFont = localFont({
   fallback: ["Georgia", "serif"],
   weight: "400",
 });
+
+// Рукописный акцент из public/fonts/handwriting/
+export const handwritingFont = localFont({
+  src: "../public/fonts/handwriting/Denistina-Regular.ttf",
+  variable: "--font-handwriting",
+  display: "swap",
+  fallback: ["Segoe Script", "Brush Script MT", "cursive"],
+  weight: "400",
+  preload: false,
+});

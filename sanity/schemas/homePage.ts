@@ -75,6 +75,74 @@ const homePage = defineType({
           validation: (Rule) => Rule.max(5),
           of: [{type: 'image', options: {hotspot: true}}],
         }),
+
+        /* --- Вариант первого экрана с видео (версия 10) -------------------
+           Отдельный объект, а не правка полей выше: коллажный HERO на боевой
+           главной продолжает жить своей жизнью, и заказчик может править тексты
+           обоих вариантов независимо, пока сравнивает.
+
+           Видео по умолчанию лежит статикой в `public/video/` и раздаётся с CDN
+           хостинга (иммутабельный кэш, ~3.5 МБ широкое и ~0.8 МБ узкое). Поля
+           ниже нужны, только если файл захотят заменить из Studio — тогда он
+           поедет с CDN Sanity. Пусто = используется статика, см.
+           `components/sections/hero-section-video.tsx`. */
+        defineField({
+          name: 'video',
+          title: 'Видео-вариант первого экрана',
+          description:
+            'Используется только на версии 10 (/admin/versions/v10). Тексты здесь свои, ' +
+            'не связаны с полями коллажного HERO выше.',
+          type: 'object',
+          options: {collapsible: true, collapsed: false},
+          fields: [
+            eyebrowField('wellness lifestyle · комьюнити · путешествия через состояния'),
+            defineField({
+              name: 'heading',
+              title: 'Заголовок',
+              description: 'Выводится заглавными буквами шрифтом Cormorant.',
+              type: 'string',
+              initialValue: 'Больше, чем путешествия',
+            }),
+            defineField({
+              name: 'handwritten',
+              title: 'Рукописная строка',
+              description:
+                'Подпись под заголовком, шрифт Denistina. Перенос строки в этом поле — ' +
+                'это перенос строки на сайте (в макете две строки).',
+              type: 'text',
+              rows: 2,
+              initialValue: 'для женщин, которые выбирают\nне просто отдых, а состояние',
+            }),
+            defineField({
+              name: 'file',
+              title: 'Видео (широкое, для десктопа)',
+              description:
+                'Необязательно. Пусто — берётся /video/hero-wide.mp4 из репозитория. ' +
+                'Формат строго MP4 / H.264: файлы .MOV с iPhone (HEVC) браузеры не играют. ' +
+                'Соотношение сторон примерно 1.9:1, без звука.',
+              type: 'file',
+              options: {accept: 'video/mp4'},
+            }),
+            defineField({
+              name: 'fileNarrow',
+              title: 'Видео (узкое, для телефона)',
+              description:
+                'Необязательно. Пусто — берётся /video/hero-narrow.mp4. ' +
+                'Тот же ролик, кадрированный в 4:3 и полегче по весу.',
+              type: 'file',
+              options: {accept: 'video/mp4'},
+            }),
+            defineField({
+              name: 'poster',
+              title: 'Постер (первый кадр)',
+              description:
+                'Необязательно. Показывается, пока видео не загрузилось. ' +
+                'Пусто — берётся /video/hero-poster.jpg.',
+              type: 'image',
+              options: {hotspot: true},
+            }),
+          ],
+        }),
       ],
     }),
 

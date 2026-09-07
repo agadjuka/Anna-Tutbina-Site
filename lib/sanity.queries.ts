@@ -154,7 +154,20 @@ export const homePageQuery = groq`
       heading,
       subheading,
       subheadingAccent,
-      photos[]{${IMAGE_PROJECTION}}
+      photos[]{${IMAGE_PROJECTION}},
+      // Видео-вариант первого экрана (версия 10). Файлы необязательны: пусто —
+      // компонент берёт статику из public/video/. Ассет разворачиваем здесь,
+      // иначе на клиенте останется ссылка вида file-... вместо URL.
+      // ⚠️ Комментарии в GROQ — только двойным слэшем, /* */ роняет запрос
+      // в 500; обратные кавычки тоже нельзя — запрос лежит в шаблонной строке.
+      video{
+        eyebrow,
+        heading,
+        handwritten,
+        file{asset->{url, mimeType}},
+        fileNarrow{asset->{url, mimeType}},
+        poster{${IMAGE_PROJECTION}}
+      }
     },
     about{
       eyebrow,

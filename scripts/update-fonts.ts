@@ -10,12 +10,15 @@ const fontsDir = join(process.cwd(), "public", "fonts");
 const headingsDir = join(fontsDir, "headings");
 const bodyDir = join(fontsDir, "body");
 const logoDir = join(fontsDir, "logo");
+/** Рукописный акцент (подпись под заголовком первого экрана). */
+const handwritingDir = join(fontsDir, "handwriting");
 const outputFile = join(process.cwd(), "lib", "fonts.ts");
 
 function getFallback(folder: string): string {
   if (folder === "headings")
     return '["Cormorant Garamond", "Times New Roman", "serif"]';
   if (folder === "logo") return '["Georgia", "serif"]';
+  if (folder === "handwriting") return '["Segoe Script", "Brush Script MT", "cursive"]';
   return '["system-ui", "arial"]';
 }
 
@@ -95,11 +98,33 @@ function generateFontsFile() {
   const headingFonts = pickHeadingFonts(findFonts(headingsDir));
   const bodyFonts = findFonts(bodyDir);
   const logoFonts = findFonts(logoDir);
+  const handwritingFonts = findFonts(handwritingDir);
 
   const headingCode = generateFontCode(headingFonts, "headings", "--font-heading");
   const bodyCode = generateFontCode(bodyFonts, "body", "--font-body");
   const mainLogoFonts = logoFonts.filter(f => !f.toLowerCase().includes('script') && !f.toLowerCase().includes('theartist'));
   const subtitleLogoFonts = logoFonts.filter(f => f.toLowerCase().includes('script') || f.toLowerCase().includes('theartist'));
+
+  // Рукописный шрифт — необязательный: без файла в папке экспорта просто нет.
+  /* ⚠️ `preload: false` — единственный шрифт проекта без предзагрузки, и это
+     намеренно. Переменная шрифта висит на `<html>`, то есть на КАЖДОЙ странице,
+     а сам шрифт используется только на видео-HERO (версия 10). С предзагрузкой
+     Next тянул бы эти ~52 КБ на боевой главной и на всех страницах туров, где
+     рукописного текста нет вовсе. Без неё файл скачивается лишь тогда, когда
+     на странице реально встретился `font-handwriting`. */
+  const handwritingBlock =
+    handwritingFonts.length > 0
+      ? [
+          "",
+          "// Рукописный акцент из public/fonts/handwriting/",
+          `export const handwritingFont = ${generateFontCode(
+            handwritingFonts,
+            "handwriting",
+            "--font-handwriting"
+          ).replace(/\n\}\)$/, "\n  preload: false,\n})")};`,
+          "",
+        ].join("\n")
+      : ["", "// Рукописный шрифт не найден в папке handwriting", ""].join("\n");
 
   const logoCode =
     mainLogoFonts.length > 0
@@ -139,7 +164,7 @@ export const logoFont = ${logoCode};
 
 // Шрифт для подзаголовка логотипа
 export const logoSubtitleFont = ${subtitleLogoCode};
-`;
+${handwritingBlock}`;
 
   writeFileSync(outputFile, content, "utf-8");
   console.log("✅ Файл lib/fonts.ts успешно обновлен!");
@@ -148,6 +173,9 @@ export const logoSubtitleFont = ${subtitleLogoCode};
   );
   console.log(`   Основной текст: ${bodyFonts.length > 0 ? bodyFonts.join(", ") : "не найдено"}`);
   console.log(`   Логотип: ${logoFonts.length > 0 ? logoFonts.join(", ") : "не найдено"}`);
+  console.log(
+    `   Рукописный: ${handwritingFonts.length > 0 ? handwritingFonts.join(", ") : "не найдено"}`
+  );
 }
 
 generateFontsFile();

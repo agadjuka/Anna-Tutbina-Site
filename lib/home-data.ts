@@ -42,12 +42,24 @@ export interface TourItem {
 
 type TourItemFromSanity = TourItem & { hideFromSite?: boolean | null };
 
+/** Видео-вариант первого экрана (версия 10). Все поля необязательны: пустой
+ *  объект = HERO берёт статику из `public/video/` и тексты по умолчанию. */
+export interface HeroVideoContent {
+  eyebrow?: string;
+  heading?: string;
+  handwritten?: string;
+  file?: { asset?: { url?: string; mimeType?: string } };
+  fileNarrow?: { asset?: { url?: string; mimeType?: string } };
+  poster?: any;
+}
+
 export interface HeroContent {
   eyebrow?: string;
   heading?: string;
   subheading?: string;
   subheadingAccent?: string;
   photos?: any[];
+  video?: HeroVideoContent;
 }
 
 export interface AboutContent {

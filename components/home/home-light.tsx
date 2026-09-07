@@ -1,4 +1,5 @@
 import { HeroSectionFullscreenV4 } from "@/components/sections/hero-section-fullscreen-v4";
+import { HeroSectionVideo } from "@/components/sections/hero-section-video";
 import { AboutSection } from "@/components/sections/about-section";
 import { CalendarSection } from "@/components/sections/calendar-section";
 import { ValuesSectionEditorial } from "@/components/sections/values-section-editorial";
@@ -47,7 +48,21 @@ import type { HomeData } from "@/lib/home-data";
  * «уменьшить анимацию» секции появятся только прозрачностью, без сдвига и
  * масштаба — это правильное поведение, менять не надо.
  */
-export function HomeLight({ data, scale }: { data: HomeData; scale: "v7" | "v8" | "v9" }) {
+export function HomeLight({
+  data,
+  scale,
+  hero = "collage",
+}: {
+  data: HomeData;
+  scale: "v7" | "v8" | "v9";
+  /**
+   * Какой первый экран показать. `collage` — боевой bento из пяти фото;
+   * `video` — фоновый ролик (версия 10, `hero-section-video.tsx`). Всё, что
+   * ниже HERO, у обоих вариантов одинаковое, поэтому версия 10 — это не копия
+   * страницы, а тот же `HomeLight` с другим значением этого пропа.
+   */
+  hero?: "collage" | "video";
+}) {
   const { homePage, tours, reviews, customTour, faqItems, primaryContacts } = data;
 
   return (
@@ -67,7 +82,11 @@ export function HomeLight({ data, scale }: { data: HomeData; scale: "v7" | "v8" 
       <PageScale scale={scale} />
       <div className="v6-scene">
         <main className="min-h-screen">
-          {homePage?.hero && <HeroSectionFullscreenV4 hero={homePage.hero} />}
+          {hero === "video" ? (
+            <HeroSectionVideo video={homePage?.hero?.video} />
+          ) : (
+            homePage?.hero && <HeroSectionFullscreenV4 hero={homePage.hero} />
+          )}
 
           <Reveal className="v6-cine">
             {homePage?.about && <AboutSection about={homePage.about} />}

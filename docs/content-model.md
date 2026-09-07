@@ -120,3 +120,38 @@ image{ ..., asset->{ _id, metadata{dimensions{width,height,aspectRatio}} } }
 ⚠️ После изменения схемы **нужен `npm run sanity:deploy`** — иначе поле не
 появится в интерфейсе Studio (в данных оно уже есть, значения проставлены
 скриптом).
+
+---
+
+## `hero.video` — видео-вариант первого экрана, добавлено 2026-09-07
+
+Группа полей внутри `homePage.hero`, которую читает **только версия 10**
+(`/admin/versions/v10`, разбор — [`redesign/video-hero.md`](redesign/video-hero.md)).
+Боевая главная её игнорирует: там по-прежнему коллаж из `hero.photos`.
+
+| Шаг | Файл | Что |
+|---|---|---|
+| 1. Схема | [`sanity/schemas/homePage.ts`](../sanity/schemas/homePage.ts) | объект `video` в группе «Первый экран» |
+| 2. Запрос | [`lib/sanity.queries.ts`](../lib/sanity.queries.ts) | проекция `hero{ …, video{…} }` в `homePageQuery` |
+| 3. Тип | [`lib/home-data.ts`](../lib/home-data.ts) | `HeroVideoContent`, поле `video?` в `HeroContent` |
+| 4. Рендер | [`components/sections/hero-section-video.tsx`](../components/sections/hero-section-video.tsx) | первый экран версии 10 |
+
+Поля:
+
+| Поле | Тип | Пусто = |
+|---|---|---|
+| `eyebrow` | `string` | фолбэк в коде компонента |
+| `heading` | `string` | фолбэк в коде компонента |
+| `handwritten` | `text` | фолбэк; **перенос строки в поле = перенос строки на сайте** |
+| `file` | `file` | берётся статика `/video/hero-wide.mp4` |
+| `fileNarrow` | `file` | берётся `/video/hero-narrow.mp4` (или `file`, если он загружен) |
+| `poster` | `image` | берётся `/video/hero-poster.jpg` |
+
+Тексты уже проставлены в датасете — и в `homePage`, и в `drafts.homePage`.
+
+⚠️ **Видео только MP4 / H.264.** Файл `.MOV` с айфона — это HEVC, его не играют ни Chrome,
+ни Firefox. Как перекодировать — команды `ffmpeg` в [`redesign/video-hero.md`](redesign/video-hero.md).
+
+⚠️ **Комментарии внутри GROQ — только `//`.** Блочный `/* … */` роняет запрос в 500
+(`expected '}' following object body`), а обратные кавычки закрывают шаблонную строку,
+в которой лежит запрос. На обоих напоролись при добавлении этой проекции.

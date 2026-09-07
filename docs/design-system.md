@@ -32,12 +32,13 @@ Tailwind CSS v4 без `tailwind.config`: вся тема объявлена б�
 | `--font-body` | Kinetika | `body`, основной текст, `<strong>` |
 | `--font-logo` | La Luxes | Логотип «ONÁ» в шапке и футере |
 | `--font-logo-subtitle` | MADE TheArtist Script | Подпись «woman space & travel» |
+| `--font-handwriting` | Denistina | Рукописная подпись под заголовком видео-HERO (только версия 10) |
 
-Утилиты: `.font-heading`, `.font-sans`, `.font-logo`, `.font-logo-subtitle`.
+Утилиты: `.font-heading`, `.font-sans`, `.font-logo`, `.font-logo-subtitle`, `.font-handwriting`.
 
 ### Как менять шрифт
 
-1. Положить файл (`.ttf/.otf/.woff/.woff2`) в `public/fonts/headings|body|logo/`.
+1. Положить файл (`.ttf/.otf/.woff/.woff2`) в `public/fonts/headings|body|logo|handwriting/`.
 2. `npm run update-fonts` — перегенерирует `lib/fonts.ts`.
 3. Проверить результат в `lib/fonts.ts` и на странице.
 
@@ -45,6 +46,8 @@ Tailwind CSS v4 без `tailwind.config`: вся тема объявлена б�
 
 - в `headings/` приоритет у файла со словом *cormorant* в имени, иначе берётся первый попавшийся;
 - в `logo/` файл со словом *script* или *theartist* уходит в `--font-logo-subtitle`, остальные — в `--font-logo`;
+- папка `handwriting/` необязательна: пустая или отсутствующая — `handwritingFont` просто не экспортируется
+  (появилась 2026-09-07 вместе с видео-HERO, см. `redesign/video-hero.md`);
 - начертание определяется по имени файла (`regular` → 400, `bold` → 700 и т. д.);
 - **`lib/fonts.ts` править руками бессмысленно** — `prebuild` перезапишет файл при каждой сборке.
 
