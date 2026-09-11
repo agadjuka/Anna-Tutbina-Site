@@ -23,11 +23,11 @@ export function TourReviewsSection({ reviews }: TourReviewsSectionProps) {
   const equalWidthRow = reviews.length > 0 && reviews.length < 4;
 
   return (
-    <section id="reviews" className="space-y-6">
+    <section id="reviews" className="space-y-6 lg:space-y-[calc(19.2*var(--ona-u))]">
       <ReviewsExpandProvider>
         <div className={cn("mx-auto w-full", TOUR_BLOCK_WIDTH)}>
           <div className="relative">
-            <SectionHeading as="h2" className="mb-6 md:mb-8">
+            <SectionHeading as="h2" className="mb-6 md:mb-8 lg:mb-[calc(16*var(--ona-u))]">
               Что говорят наши участницы
             </SectionHeading>
           </div>
@@ -47,8 +47,8 @@ export function TourReviewsSection({ reviews }: TourReviewsSectionProps) {
                 alignKey={reviews.map((r) => r._id).join("|")}
                 className={
                   equalWidthRow
-                    ? "hidden md:flex md:flex-row md:items-stretch md:gap-6"
-                    : "hidden grid-cols-1 items-stretch gap-4 md:grid sm:grid-cols-2 lg:grid-cols-4 md:gap-6"
+                    ? "hidden md:flex md:flex-row md:items-stretch md:gap-6 lg:gap-[calc(19.2*var(--ona-u))]"
+                    : "hidden grid-cols-1 items-stretch gap-4 md:grid sm:grid-cols-2 lg:grid-cols-4 md:gap-6 lg:gap-[calc(19.2*var(--ona-u))]"
                 }
               >
                 {reviews.map((review) =>

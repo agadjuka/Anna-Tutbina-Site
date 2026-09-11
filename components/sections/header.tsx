@@ -36,9 +36,11 @@ const NAV_ITEMS = [
   { label: "контакты", href: "/#contacts" },
 ] as const;
 
-/** Общая типографика пунктов меню: 12px, uppercase, трекинг 1.56px из макета. */
+/** Общая типографика пунктов меню: 12px, uppercase, трекинг из макета; от `lg`
+ * кегль 10 × `--ona-u` — как на главной (с 11.09 шапка одинаковая на всех
+ * страницах; высоту и поля шапки заказчик просил не трогать). */
 const NAV_LINK_TYPO =
-  "text-xs font-medium uppercase leading-[21px] tracking-[0.13em] text-background";
+  "text-xs font-medium uppercase leading-[21px] tracking-[0.13em] text-background lg:text-[calc(10*var(--ona-u))]";
 
 export function Header() {
   const headerRef = useRef<HTMLElement>(null);
@@ -130,10 +132,10 @@ export function Header() {
           className="flex flex-col items-start justify-center text-background transition-opacity hover:opacity-90"
           aria-label="ONÁ — на главную"
         >
-          <span className="font-logo text-[30px] leading-none tracking-tight md:text-[34px] lg:text-[38px]">
+          <span className="font-logo text-[30px] leading-none tracking-tight md:text-[34px] lg:text-[calc(27.36*var(--ona-u))]">
             ONÁ
           </span>
-          <span className="font-logo-subtitle -mt-1.5 text-[13px] tracking-wide opacity-95 md:-mt-2 md:text-[15px] lg:text-[17px]">
+          <span className="font-logo-subtitle -mt-1.5 text-[13px] tracking-wide opacity-95 md:-mt-2 md:text-[15px] lg:text-[calc(13.94*var(--ona-u))]">
             woman space &amp; travel
           </span>
         </SmartLink>

@@ -21,7 +21,7 @@ import { hasPricingSectionContent } from "@/lib/utils/tour-pricing";
 import { tourFullTitle } from "@/lib/utils/tour-title";
 import { TourPricingSection } from "@/components/sections/tour-pricing-section";
 import { cn } from "@/lib/utils";
-import { TOUR_BLOCK_WIDTH } from "@/lib/tour-layout";
+import { TOUR_BLOCK_WIDTH, TOUR_COVER_WIDTH } from "@/lib/tour-layout";
 import { SectionEyebrow } from "@/components/ui/section-eyebrow";
 
 export const dynamic = "force-dynamic";
@@ -165,13 +165,13 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
   const reviews = normalizeTourReviews(tour.reviews, tour._id);
 
   return (
-    <main className="min-h-screen bg-background py-12 md:py-16">
+    <main className="min-h-screen bg-background py-12 md:py-16 lg:py-[calc(51.2*var(--ona-u))]">
       <Container>
-        <div className="space-y-12 md:space-y-16">
+        <div className="space-y-12 md:space-y-16 lg:space-y-[calc(51.2*var(--ona-u))]">
           {(tour.dates || tour.price) && (
             <header className="space-y-6">
               <div className="w-full flex justify-center">
-                <div className={cn("w-full", TOUR_BLOCK_WIDTH)}>
+                <div className={cn("w-full", TOUR_BLOCK_WIDTH, TOUR_COVER_WIDTH)}>
                   {/* Даты и цена — ОДИН стиль на подпись и один на значение.
                       Раньше здесь стояли три разных набора: подпись «Даты:»
                       мелким капсом телесного шрифта, само значение — 24px
@@ -211,11 +211,11 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
                       Возвращена именно РАСКЛАДКА, а не прежняя типографика:
                       три разных начертания — отдельная жалоба заказчика от
                       21.08, её чинили специально, и откатывать её не за чем. */}
-                  <div className="flex flex-wrap items-baseline gap-x-6 gap-y-3 border-t border-border pt-6">
+                  <div className="flex flex-wrap items-baseline gap-x-6 gap-y-3 border-t border-border pt-6 lg:gap-x-[calc(19.2*var(--ona-u))] lg:pt-[calc(19.2*var(--ona-u))]">
                     {tour.dates && (
                       <div className="flex w-full items-baseline justify-between gap-2 md:w-auto md:justify-start">
                         <SectionEyebrow className="text-subtle">Даты</SectionEyebrow>
-                        <p className="font-heading text-[26px] leading-tight text-primary md:text-[32px]">
+                        <p className="font-heading text-[26px] leading-tight text-primary md:text-[32px] lg:text-[calc(23.3*var(--ona-u))] lg:leading-[calc(27.96*var(--ona-u))]">
                           {tour.dates}
                         </p>
                       </div>
@@ -223,7 +223,7 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
                     {tour.price && (
                       <div className="flex w-full items-baseline justify-between gap-2 md:ml-auto md:w-auto md:justify-start">
                         <SectionEyebrow className="text-subtle">Стоимость</SectionEyebrow>
-                        <p className="font-heading text-[26px] leading-tight text-primary md:text-[32px]">
+                        <p className="font-heading text-[26px] leading-tight text-primary md:text-[32px] lg:text-[calc(23.3*var(--ona-u))] lg:leading-[calc(27.96*var(--ona-u))]">
                           от {tour.price.value} {tour.price.currency}
                         </p>
                       </div>
@@ -236,7 +236,7 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
 
           {tour.mainImage && (
             <div className="w-full flex justify-center">
-              <div className={cn("w-full", TOUR_BLOCK_WIDTH)}>
+              <div className={cn("w-full", TOUR_BLOCK_WIDTH, TOUR_COVER_WIDTH)}>
                 <div className="relative overflow-hidden rounded-2xl shadow-card">
                   <SanityImage
                     image={tour.mainImage}
@@ -254,7 +254,7 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
                             block: {
                               normal: ({ children }) => (
                                 <p 
-                                  className="text-lg md:text-xl lg:text-2xl xl:text-3xl font-normal drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]"
+                                  className="text-lg md:text-xl lg:text-[calc(24*var(--ona-u))] font-normal drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]"
                                   style={{ color: 'rgba(255, 255, 255, 0.75)' }}
                                 >
                                   {children}
@@ -275,7 +275,7 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
                             block: {
                               normal: ({ children }) => (
                                 <p 
-                                  className="text-base md:text-lg lg:text-xl xl:text-2xl font-normal drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]"
+                                  className="text-base md:text-lg lg:text-[calc(19.2*var(--ona-u))] font-normal drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]"
                                   style={{ color: 'rgba(255, 255, 255, 0.75)' }}
                                 >
                                   {children}
@@ -306,9 +306,9 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
           )}
 
           {tour.introText && (
-            <section id="about-tour" className="space-y-6">
+            <section id="about-tour" className="space-y-6 lg:space-y-[calc(19.2*var(--ona-u))]">
               <div className="relative">
-                <SectionHeading as="h2" className="mb-4">
+                <SectionHeading as="h2" className="mb-4 lg:mb-[calc(16*var(--ona-u))]">
                   О туре
                 </SectionHeading>
               </div>
@@ -321,7 +321,7 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
                 <div className={cn("w-full prose prose-lg", TOUR_BLOCK_WIDTH)}>
                   <PortableTextContent 
                     value={tour.introText} 
-                    className="text-base md:text-xl leading-relaxed text-muted-foreground" 
+                    className="text-base md:text-xl leading-relaxed text-muted-foreground lg:text-[calc(12.9*var(--ona-u))] lg:leading-[calc(20.6*var(--ona-u))]" 
                   />
                 </div>
               </div>
@@ -329,9 +329,9 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
           )}
 
           {tour.programByDays && tour.programByDays.length > 0 && (
-            <section id="program" className="space-y-6">
+            <section id="program" className="space-y-6 lg:space-y-[calc(19.2*var(--ona-u))]">
               <div className="relative">
-                <SectionHeading as="h2" className="mb-6 md:mb-8">
+                <SectionHeading as="h2" className="mb-6 md:mb-8 lg:mb-[calc(16*var(--ona-u))]">
                   Что нас ждет
                 </SectionHeading>
               </div>
@@ -340,9 +340,9 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
           )}
 
           {tour.accommodation && tour.accommodation.length > 0 && (
-            <section id="accommodation" className="space-y-6">
+            <section id="accommodation" className="space-y-6 lg:space-y-[calc(19.2*var(--ona-u))]">
               <div className="relative">
-                <SectionHeading as="h2" className="mb-6 md:mb-8">
+                <SectionHeading as="h2" className="mb-6 md:mb-8 lg:mb-[calc(16*var(--ona-u))]">
                   Размещение
                 </SectionHeading>
               </div>
@@ -351,9 +351,9 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
           )}
 
           {hasPricingSectionContent(tour.pricingDetails) && (
-            <section id="pricing" className="space-y-6">
+            <section id="pricing" className="space-y-6 lg:space-y-[calc(19.2*var(--ona-u))]">
               <div className="relative">
-                <SectionHeading as="h2" className="mb-4">
+                <SectionHeading as="h2" className="mb-4 lg:mb-[calc(16*var(--ona-u))]">
                   Стоимость
                 </SectionHeading>
               </div>
@@ -362,9 +362,9 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
           )}
 
           {(tour.included || tour.notIncluded) && (
-            <section id="conditions" className="space-y-6">
+            <section id="conditions" className="space-y-6 lg:space-y-[calc(19.2*var(--ona-u))]">
               <div className="relative">
-                <SectionHeading as="h2" className="mb-6 md:mb-8">
+                <SectionHeading as="h2" className="mb-6 md:mb-8 lg:mb-[calc(16*var(--ona-u))]">
                   Условия
                 </SectionHeading>
               </div>
@@ -392,7 +392,7 @@ export default async function TourPage({ params }: { params: Promise<{ slug?: st
         )}
 
         {/* Кнопка "Хочу с Вами!" — в самом низу, сразу под галереей */}
-        <section className="pt-0 -mt-24 md:-mt-32 pb-0">
+        <section className="pt-0 -mt-24 md:-mt-32 lg:-mt-[calc(102.4*var(--ona-u))] pb-0">
           <WantToJoinButton contacts={siteSettings?.primaryContacts ?? []} />
         </section>
         </div>

@@ -25,13 +25,13 @@ function normalizeColumns(raw: PricingDetailsSanity): { title: string; text: str
 function SinglePricingCard({ title, text }: { title: string; text: string }) {
   return (
     <div className="flex min-h-0 flex-col overflow-hidden rounded-2xl border border-border/80 bg-card shadow-card">
-      <div className="flex min-h-[3.5rem] items-center justify-center bg-primary px-4 py-3 text-center md:px-5 md:py-4">
-        <p className="font-heading text-sm md:text-base font-medium uppercase tracking-[0.12em] text-white text-balance">
+      <div className="flex min-h-[3.5rem] items-center justify-center bg-primary px-4 py-3 text-center md:px-5 md:py-4 lg:min-h-[calc(44.8*var(--ona-u))] lg:px-[calc(16*var(--ona-u))] lg:py-[calc(12.8*var(--ona-u))]">
+        <p className="font-heading text-sm md:text-base font-medium uppercase tracking-[0.12em] text-white text-balance lg:text-[calc(11*var(--ona-u))]">
           {title || "\u00a0"}
         </p>
       </div>
-      <div className="flex flex-1 flex-col px-4 py-5 md:px-5 md:py-6">
-        <p className="flex-1 whitespace-pre-wrap text-base md:text-lg leading-relaxed text-muted-foreground">
+      <div className="flex flex-1 flex-col px-4 py-5 md:px-5 md:py-6 lg:px-[calc(16*var(--ona-u))] lg:py-[calc(19.2*var(--ona-u))]">
+        <p className="flex-1 whitespace-pre-wrap text-base md:text-lg leading-relaxed text-muted-foreground lg:text-[calc(12.9*var(--ona-u))] lg:leading-[calc(20.6*var(--ona-u))]">
           {text || "\u00a0"}
         </p>
       </div>
@@ -52,9 +52,9 @@ function PricingHeadersThenBodies({
       {columns.map((col, i) => (
         <div
           key={`h-${i}-${col.title}`}
-          className="flex min-h-0 items-center justify-center bg-primary px-4 py-3 text-center md:px-5 md:py-4 rounded-t-2xl border border-border/80 border-b-0"
+          className="flex min-h-0 items-center justify-center bg-primary px-4 py-3 text-center md:px-5 md:py-4 lg:px-[calc(16*var(--ona-u))] lg:py-[calc(12.8*var(--ona-u))] rounded-t-2xl border border-border/80 border-b-0"
         >
-          <p className="font-heading text-sm md:text-base font-medium uppercase tracking-[0.12em] text-white text-balance">
+          <p className="font-heading text-sm md:text-base font-medium uppercase tracking-[0.12em] text-white text-balance lg:text-[calc(11*var(--ona-u))]">
             {col.title || "\u00a0"}
           </p>
         </div>
@@ -62,9 +62,9 @@ function PricingHeadersThenBodies({
       {columns.map((col, i) => (
         <div
           key={`b-${i}-${col.title}`}
-          className="flex min-h-0 flex-col rounded-b-2xl border border-border/80 border-t-0 bg-card px-4 py-5 shadow-card md:px-5 md:py-6"
+          className="flex min-h-0 flex-col rounded-b-2xl border border-border/80 border-t-0 bg-card px-4 py-5 shadow-card md:px-5 md:py-6 lg:px-[calc(16*var(--ona-u))] lg:py-[calc(19.2*var(--ona-u))]"
         >
-          <p className="flex-1 whitespace-pre-wrap text-base md:text-lg leading-relaxed text-muted-foreground">
+          <p className="flex-1 whitespace-pre-wrap text-base md:text-lg leading-relaxed text-muted-foreground lg:text-[calc(12.9*var(--ona-u))] lg:leading-[calc(20.6*var(--ona-u))]">
             {col.text || "\u00a0"}
           </p>
         </div>
@@ -84,7 +84,7 @@ export function TourPricingSection({ pricingDetails }: TourPricingSectionProps) 
         <div className="max-w-4xl w-full prose prose-lg">
           <PortableTextContent
             value={pricingDetails}
-            className="text-base md:text-xl leading-relaxed text-muted-foreground text-justify"
+            className="text-base md:text-xl leading-relaxed text-muted-foreground text-justify lg:text-[calc(12.9*var(--ona-u))] lg:leading-[calc(20.6*var(--ona-u))]"
           />
         </div>
       </div>
@@ -97,16 +97,16 @@ export function TourPricingSection({ pricingDetails }: TourPricingSectionProps) 
   const n = columns.length;
 
   /* Вся ширина родителя — grid-cols-* даёт равные колонки */
-  const splitGridTwo = "grid w-full min-w-0 grid-cols-2 gap-x-4 gap-y-0 md:gap-x-6";
-  const splitGridThree = "grid w-full min-w-0 grid-cols-3 gap-x-4 gap-y-0 md:gap-x-6";
+  const splitGridTwo = "grid w-full min-w-0 grid-cols-2 gap-x-4 gap-y-0 md:gap-x-6 lg:gap-x-[calc(19.2*var(--ona-u))]";
+  const splitGridThree = "grid w-full min-w-0 grid-cols-3 gap-x-4 gap-y-0 md:gap-x-6 lg:gap-x-[calc(19.2*var(--ona-u))]";
 
   return (
     <div className="w-full flex justify-center">
-      <div className={cn("w-full space-y-8 md:space-y-10", TOUR_BLOCK_WIDTH)}>
+      <div className={cn("w-full space-y-8 md:space-y-10 lg:space-y-[calc(32*var(--ona-u))]", TOUR_BLOCK_WIDTH)}>
         {n > 0 && (
           <div className="w-full">
             {n === 1 ? (
-              <div className="mx-auto w-full max-w-md">
+              <div className="mx-auto w-full max-w-md lg:max-w-[calc(358.4*var(--ona-u))]">
                 <SinglePricingCard title={columns[0].title} text={columns[0].text} />
               </div>
             ) : n === 2 ? (
@@ -136,7 +136,7 @@ export function TourPricingSection({ pricingDetails }: TourPricingSectionProps) 
 
         {mainText.length > 0 && (
           <div className="w-full">
-            <p className="whitespace-pre-wrap text-base md:text-xl leading-relaxed text-muted-foreground text-justify">
+            <p className="whitespace-pre-wrap text-base md:text-xl leading-relaxed text-muted-foreground text-justify lg:text-[calc(12.9*var(--ona-u))] lg:leading-[calc(20.6*var(--ona-u))]">
               {mainText}
             </p>
           </div>

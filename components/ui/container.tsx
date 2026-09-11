@@ -28,12 +28,13 @@ const MAX_WIDTH: Record<NonNullable<ContainerProps["size"]>, string> = {
 export function Container({ children, className, size = "default", ...props }: ContainerProps) {
   return (
     <div
-      // `data-container` — зацепка для закона масштабирования главной: на `/`
-      // ширина контента задаётся одним множителем (`1216 * --ona-u` в
-      // `globals.css`), а не этими максимумами. На остальных страницах
-      // атрибут ни на что не влияет — правило заперто под `html[data-ona-scale]`.
+      // От `lg` ширина контента одна на всём сайте: 1053 × `--ona-u` (82.3 %
+      // окна на любой ширине; на 1920 — 1580, поля по 170px, как в макете).
+      // Боковые паддинги обнулены — поля уже учтены в самом множителе.
+      // Максимумы `MAX_WIDTH` действуют только ниже `lg`.
+      // `data-container` — зацепка для тестов/аудитов, стилей на нём нет.
       data-container={size}
-      className={cn(MAX_WIDTH[size], "mx-auto px-4 md:px-8", className)}
+      className={cn(MAX_WIDTH[size], "mx-auto px-4 md:px-8 lg:w-[calc(1053*var(--ona-u))] lg:max-w-none lg:px-0", className)}
       {...props}
     >
       {children}

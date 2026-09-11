@@ -18,15 +18,15 @@ export function RecommendedFlightsSection({ flights }: RecommendedFlightsSection
   if (!flights || (!flights.image && !flights.text)) return null;
 
   return (
-    <section id="flights" className="space-y-6">
+    <section id="flights" className="space-y-6 lg:space-y-[calc(19.2*var(--ona-u))]">
       <div className="relative">
-        <SectionHeading as="h2" className="mb-6 md:mb-8">
+        <SectionHeading as="h2" className="mb-6 md:mb-8 lg:mb-[calc(16*var(--ona-u))]">
           Рекомендованные рейсы
         </SectionHeading>
       </div>
 
       <div className="w-full flex justify-center">
-        <div className={cn("w-full space-y-6 md:space-y-8", TOUR_BLOCK_WIDTH)}>
+        <div className={cn("w-full space-y-6 md:space-y-8 lg:space-y-[calc(25.6*var(--ona-u))]", TOUR_BLOCK_WIDTH)}>
           {/* Изображение */}
           {flights.image && (
             <div className="relative group w-full">
@@ -54,7 +54,7 @@ export function RecommendedFlightsSection({ flights }: RecommendedFlightsSection
             <div className="w-full prose prose-lg max-w-none">
               <PortableTextContent 
                 value={flights.text} 
-                className="text-base md:text-lg leading-relaxed text-muted-foreground text-justify" 
+                className="text-base md:text-lg leading-relaxed text-muted-foreground text-justify lg:text-[calc(12.9*var(--ona-u))] lg:leading-[calc(20.6*var(--ona-u))]" 
               />
             </div>
           )}

@@ -42,7 +42,7 @@ export function TourNavigation({ sections }: TourNavigationProps) {
   const secondRow = availableSections.slice(firstRowCount);
 
   return (
-    <div className="md:flex md:flex-nowrap items-center md:justify-between gap-2 md:gap-3 pb-1 mt-2">
+    <div className="md:flex md:flex-nowrap items-center md:justify-between gap-2 md:gap-3 pb-1 mt-2 lg:mt-[calc(6.4*var(--ona-u))]">
       <div className="md:hidden space-y-2 w-full">
         <div className="flex flex-wrap items-center justify-center gap-2">
           {firstRow.map((section) => (
@@ -98,16 +98,17 @@ export function TourNavigation({ sections }: TourNavigationProps) {
         )}
       </div>
 
-      <div className="hidden md:flex md:flex-nowrap items-center md:justify-between gap-3 flex-1">
+      <div className="hidden md:flex md:flex-nowrap items-center md:justify-between gap-3 flex-1 lg:gap-[calc(9.6*var(--ona-u))]">
         {availableSections.map((section) => (
           <button
             key={section.id}
             onClick={() => scrollToSection(section.id)}
             className={cn(
               "group relative inline-flex items-center justify-center",
-              "px-3 py-1.5",
+              "px-3 py-1.5 lg:px-[calc(9.6*var(--ona-u))] lg:py-[calc(4.8*var(--ona-u))]",
               "flex-1 min-w-0",
-              "text-xs",
+              /* От `lg` — 11 × `--ona-u`, как вкладки годов в календаре главной. */
+              "text-xs lg:text-[calc(11*var(--ona-u))] lg:leading-[calc(14.67*var(--ona-u))]",
               "font-normal tracking-normal",
               "text-muted-foreground",
               "hover:text-primary",

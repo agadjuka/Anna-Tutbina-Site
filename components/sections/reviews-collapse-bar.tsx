@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback } from "react";
+import { cn } from "@/lib/utils";
 import { useReviewsExpand } from "@/components/sections/reviews-expand-context";
 import { FitOneLineActionLabel } from "@/components/sections/fit-one-line-action-label";
 import {
@@ -34,7 +35,7 @@ export function ReviewsCollapseBar() {
 
   return (
     <div className="mt-6 flex w-full min-w-0 justify-center md:mt-8">
-      <button type="button" onClick={handleCollapse} className={reviewActionButtonClass}>
+      <button type="button" onClick={handleCollapse} className={cn(reviewActionButtonClass, "lg:px-[calc(10*var(--ona-u))] lg:py-[calc(4*var(--ona-u))] lg:text-[calc(10.66*var(--ona-u))]")}>
         <FitOneLineActionLabel>Свернуть</FitOneLineActionLabel>
         <svg
           className={reviewActionIconClass}

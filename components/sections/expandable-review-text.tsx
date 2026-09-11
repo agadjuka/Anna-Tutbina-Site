@@ -126,7 +126,7 @@ export function ExpandableReviewText({ text }: ExpandableReviewTextProps) {
         <Paragraph
           ref={pRef}
           className={cn(
-            "mb-0 text-sm md:text-base italic leading-[1.8] text-muted-foreground transition-opacity",
+            "mb-0 text-sm md:text-base italic leading-[1.8] text-muted-foreground transition-opacity lg:text-[calc(12*var(--ona-u))]",
             reviewCardTextWrapClass
           )}
           style={{
@@ -163,7 +163,7 @@ export function ExpandableReviewText({ text }: ExpandableReviewTextProps) {
             type="button"
             onClick={expandAll}
             aria-expanded={expanded}
-            className={reviewActionButtonClass}
+            className={cn(reviewActionButtonClass, "lg:px-[calc(10*var(--ona-u))] lg:py-[calc(4*var(--ona-u))] lg:text-[calc(10.66*var(--ona-u))]")}
           >
             <FitOneLineActionLabel>Читать дальше</FitOneLineActionLabel>
             <svg

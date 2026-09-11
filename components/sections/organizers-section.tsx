@@ -18,9 +18,9 @@ export function OrganizersSection({ organizers }: OrganizersSectionProps) {
 
   // Определяем расположение в зависимости от количества
   const getLayout = (count: number) => {
-    if (count === 1) return "flex flex-col md:flex-row items-center md:items-start gap-8 md:gap-12";
-    if (count === 2) return "space-y-12 md:space-y-16";
-    return "space-y-12 md:space-y-16";
+    if (count === 1) return "flex flex-col md:flex-row items-center md:items-start gap-8 md:gap-12 lg:gap-[calc(38.4*var(--ona-u))]";
+    if (count === 2) return "space-y-12 md:space-y-16 lg:space-y-[calc(51.2*var(--ona-u))]";
+    return "space-y-12 md:space-y-16 lg:space-y-[calc(51.2*var(--ona-u))]";
   };
 
   // Определяем максимальную ширину контейнера
@@ -30,9 +30,9 @@ export function OrganizersSection({ organizers }: OrganizersSectionProps) {
   };
 
   return (
-    <section id="organizers" className="space-y-6">
+    <section id="organizers" className="space-y-6 lg:space-y-[calc(19.2*var(--ona-u))]">
       <div className="relative">
-        <SectionHeading as="h2" className="mb-6 md:mb-8">
+        <SectionHeading as="h2" className="mb-6 md:mb-8 lg:mb-[calc(16*var(--ona-u))]">
           Организаторы
         </SectionHeading>
       </div>
@@ -55,8 +55,8 @@ export function OrganizersSection({ organizers }: OrganizersSectionProps) {
                   className={cn(
                   "group relative",
                   "flex flex-col md:flex-row items-center md:items-start",
-                  "gap-6 md:gap-8 lg:gap-12",
-                  index < organizers.length - 1 && "pb-12 md:pb-16 border-b border-border"
+                  "gap-6 md:gap-8 lg:gap-[calc(38.4*var(--ona-u))]",
+                  index < organizers.length - 1 && "pb-12 md:pb-16 lg:pb-[calc(51.2*var(--ona-u))] border-b border-border"
                 )}
               >
                 {/* Фото организатора */}
@@ -73,10 +73,10 @@ export function OrganizersSection({ organizers }: OrganizersSectionProps) {
                         "ring-2 ring-border group-hover:ring-primary/40",
                         "transition-all duration-500 shadow-lg",
                         isSingle 
-                          ? "w-32 h-32 md:w-36 md:h-36 lg:w-40 lg:h-40"
+                          ? "w-32 h-32 md:w-36 md:h-36 lg:size-[calc(128*var(--ona-u))]"
                           : isTwo
-                          ? "w-28 h-28 md:w-32 md:h-32 lg:w-36 lg:h-36"
-                          : "w-24 h-24 md:w-28 md:h-28 lg:w-32 lg:h-32"
+                          ? "w-28 h-28 md:w-32 md:h-32 lg:size-[calc(115.2*var(--ona-u))]"
+                          : "w-24 h-24 md:w-28 md:h-28 lg:size-[calc(102.4*var(--ona-u))]"
                       )}>
                         <SanityImage
                           image={organizer.photo}
@@ -94,21 +94,22 @@ export function OrganizersSection({ organizers }: OrganizersSectionProps) {
                 )}
 
                 {/* Текстовый контент */}
-                <div className="flex-1 text-center md:text-left space-y-4">
+                <div className="flex-1 text-center md:text-left space-y-4 lg:space-y-[calc(12.8*var(--ona-u))]">
                   {/* Имя */}
                   {organizer.name && (
                     <div>
                       {/* Единственный заголовок на сайте, набранный телесным шрифтом
                           (`font-sans font-semibold`). Приведён к Cormorant, как имена
                           основательниц в блоке FOUNDERS на главной (задача Н9). */}
-                      <h3 className="text-[22px] md:text-[24px] lg:text-[28px] font-heading font-normal text-foreground mb-3">
+                      {/* От `lg` — как имена создателей на главной: 27.8 / 32.5 × `--ona-u`. */}
+                      <h3 className="text-[22px] md:text-[24px] lg:text-[calc(27.8*var(--ona-u))] lg:leading-[calc(32.5*var(--ona-u))] font-heading font-normal text-foreground mb-3 lg:mb-[calc(9.6*var(--ona-u))]">
                         {organizer.name}
                       </h3>
                       {/* Декоративная линия под именем */}
                       <div className={cn(
                         "h-px bg-gradient-to-r transition-all duration-500",
                         "from-transparent via-primary/50 to-transparent",
-                        isSingle ? "w-20 md:w-24" : "w-16 md:w-20",
+                        isSingle ? "w-20 md:w-24 lg:w-[calc(76.8*var(--ona-u))]" : "w-16 md:w-20 lg:w-[calc(64*var(--ona-u))]",
                         "opacity-60 group-hover:opacity-100"
                       )} />
                     </div>
@@ -123,7 +124,8 @@ export function OrganizersSection({ organizers }: OrganizersSectionProps) {
                         : isTwo
                         ? "text-sm md:text-base"
                         : "text-sm md:text-base",
-                      "max-w-none"
+                      "max-w-none",
+                      "lg:text-[calc(12.9*var(--ona-u))] lg:leading-[calc(20.6*var(--ona-u))]"
                     )}>
                       {organizer.bio}
                     </p>

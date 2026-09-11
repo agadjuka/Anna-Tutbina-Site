@@ -23,15 +23,15 @@ export function ReviewsSection({ reviews }: ReviewsSectionProps) {
     /* Ритм из макета (узел `5:210`, 1921×711): эйбрау y=73, заголовок y=146
        (интерлиньяж 59), карусель y=291, карточки 400×200 с зазором 44,
        видимая область 1093px по центру, стрелки y=523. */
-    <section id="reviews" className="relative bg-background py-16 lg:min-h-[min(37vw,711px)] lg:py-[min(3.8vw,73px)]">
+    <section id="reviews" className="relative bg-background py-16 lg:min-h-[calc(260.48*var(--ona-u))] lg:py-[calc(26.75*var(--ona-u))]">
       <Container>
       <ReviewsExpandProvider>
         <div className="relative">
-          <div className="mb-10 text-center lg:mb-[min(4.48vw,86px)]">
+          <div className="mb-10 text-center lg:mb-[calc(16*var(--ona-u))]">
             <SectionEyebrow className="text-subtle">
               Отзывы
             </SectionEyebrow>
-            <h2 className="mt-3 font-heading text-[32px] uppercase leading-tight text-foreground sm:text-[33px] lg:mt-[min(1.35vw,26px)] lg:text-[min(2.6vw,50px)] lg:leading-[min(3.07vw,59px)]">
+            <h2 className="mt-3 font-heading text-[32px] uppercase leading-tight text-foreground sm:text-[33px] lg:mt-[calc(9.5*var(--ona-u))] lg:text-[calc(22.63*var(--ona-u))] lg:leading-[calc(26.72*var(--ona-u))]">
               Что говорят наши участницы
             </h2>
           </div>

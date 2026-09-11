@@ -13,16 +13,16 @@ export function ReviewCard({ review }: ReviewCardProps) {
   return (
     <div
       data-review-card
-      className="group relative flex h-full min-w-0 w-full max-w-full flex-col rounded-[26px] bg-on-primary px-5 pt-4 pb-4 transition-shadow duration-300 hover:shadow-lg md:px-6 md:pt-5 md:pb-5"
+      className="group relative flex h-full min-w-0 w-full max-w-full flex-col rounded-[26px] bg-on-primary px-5 pt-4 pb-4 transition-shadow duration-300 hover:shadow-lg md:px-6 md:pt-5 md:pb-5 lg:p-[calc(14*var(--ona-u))]"
     >
       {/* Шапка: высота по ряду синхронизируется ReviewsGridRowAlign (сетка и карусель) */}
       <div
         data-review-header
-        className="relative z-10 flex min-h-0 min-w-0 flex-col justify-start border-b border-border/60 pb-3 box-border"
+        className="relative z-10 flex min-h-0 min-w-0 flex-col justify-start border-b border-border/60 pb-3 box-border lg:pb-[calc(8*var(--ona-u))]"
       >
-        <div className="flex w-full min-w-0 items-start gap-3">
+        <div className="flex w-full min-w-0 items-start gap-3 lg:gap-[calc(8*var(--ona-u))]">
           <div className="relative shrink-0 self-start">
-            <div className="relative h-10 w-10 overflow-hidden rounded-full ring-1 ring-primary/20 md:h-12 md:w-12">
+            <div className="relative h-10 w-10 overflow-hidden rounded-full ring-1 ring-primary/20 md:h-12 md:w-12 lg:size-[calc(34*var(--ona-u))]">
               <SanityImage
                 image={review.authorImage}
                 width={56}
@@ -35,7 +35,7 @@ export function ReviewCard({ review }: ReviewCardProps) {
           <div className="flex min-h-0 min-w-0 flex-1 flex-col gap-0.5">
             <Paragraph
               className={cn(
-                "mb-0 text-sm font-semibold text-foreground md:text-base",
+                "mb-0 text-sm font-semibold text-foreground md:text-base lg:text-[calc(12*var(--ona-u))]",
                 reviewCardTextWrapClass
               )}
             >
@@ -44,7 +44,7 @@ export function ReviewCard({ review }: ReviewCardProps) {
             {review.profession?.trim() ? (
               <p
                 className={cn(
-                  "mb-0 text-xs italic leading-snug text-muted-foreground md:text-sm",
+                  "mb-0 text-xs italic leading-snug text-muted-foreground md:text-sm lg:text-[calc(11.48*var(--ona-u))]",
                   reviewCardTextWrapClass
                 )}
               >
@@ -55,7 +55,7 @@ export function ReviewCard({ review }: ReviewCardProps) {
         </div>
       </div>
 
-      <div className="relative z-10 flex min-h-0 min-w-0 flex-1 flex-col pt-3 md:pt-4">
+      <div className="relative z-10 flex min-h-0 min-w-0 flex-1 flex-col pt-3 md:pt-4 lg:pt-[calc(8*var(--ona-u))]">
         <ExpandableReviewText text={review.text} />
       </div>
     </div>

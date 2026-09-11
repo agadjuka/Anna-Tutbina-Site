@@ -38,12 +38,19 @@ export function TourGallery({ title = "Галерея", images, tourName }: Tour
   const [mounted, setMounted] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(0);
+  /* Множитель закона одного множителя (`--ona-u` в globals.css), посчитанный в
+     JS: высота строки и зазоры галереи задаются здесь числами, а не классами.
+     От 1024 — ширина окна / 1280 с потолком 1.5; `null` — ниже `lg`, там
+     остаются прежние размеры. */
+  const [unit, setUnit] = useState<number | null>(null);
   useEffect(() => {
     setMounted(true);
     function onResize() {
       if (containerRef.current) {
         setContainerWidth(containerRef.current.offsetWidth);
       }
+      const w = window.innerWidth;
+      setUnit(w >= 1024 ? Math.min(w / 1280, 1.5) : null);
     }
     onResize();
     window.addEventListener('resize', onResize);
@@ -51,8 +58,10 @@ export function TourGallery({ title = "Галерея", images, tourName }: Tour
   }, []);
 
   // Параметры
-  const rowHeight = 320; // фиксированная высота строки
-  const gap = 8; // между фото
+  // Высота строки и зазор: ниже `lg` — прежние 320/8, от `lg` — × 0.8 (облегчение,
+  // как у всего сайта) × множитель, чтобы галерея масштабировалась вместе со страницей.
+  const rowHeight = unit === null ? 320 : 256 * unit;
+  const gap = unit === null ? 8 : 6.4 * unit;
   const minRowImages = 2;
   const maxRowImages = 5;
   // Разделение на строки (максимально pack)
@@ -93,9 +102,9 @@ export function TourGallery({ title = "Галерея", images, tourName }: Tour
   if (!slides.length) return null;
 
   return (
-    <section id="gallery" className="space-y-6">
+    <section id="gallery" className="space-y-6 lg:space-y-[calc(19.2*var(--ona-u))]">
       <div className="relative">
-        <SectionHeading as="h2" className="mb-4">
+        <SectionHeading as="h2" className="mb-4 lg:mb-[calc(16*var(--ona-u))]">
           {title}
         </SectionHeading>
       </div>
@@ -106,7 +115,7 @@ export function TourGallery({ title = "Галерея", images, tourName }: Tour
 
           {/* Justified строковая галерея на desktop */}
           <div ref={containerRef} className="hidden md:block w-full">
-            <div className="flex flex-col gap-y-[12px]">
+            <div className="flex flex-col gap-y-[12px] lg:gap-y-[calc(9.6*var(--ona-u))]">
               {rows.map((row, rowIdx) => (
                 <div key={rowIdx} className="flex flex-row" style={{ gap }}>
                   {row.photos.map((s, i) => (

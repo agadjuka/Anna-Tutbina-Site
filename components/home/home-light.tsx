@@ -8,12 +8,11 @@ import { FoundersSection } from "@/components/sections/founders-section";
 import { ReviewsSection } from "@/components/sections/reviews-section";
 import { CollabSection } from "@/components/sections/collab-section";
 import { FaqSection } from "@/components/sections/faq-section";
-import { PageScale } from "@/components/home/page-scale";
 import { Reveal } from "@/components/ui/reveal";
 import type { HomeData } from "@/lib/home-data";
 
 /**
- * ГЛАВНАЯ СТРАНИЦА САЙТА (боевая, `app/page.tsx` → `scale="v8" hero="video"`).
+ * ГЛАВНАЯ СТРАНИЦА САЙТА (боевая, `app/page.tsx` → `hero="video"`).
  *
  * С 2026-08-25 — облегчённый масштаб v8, с 2026-09-11 — ещё и видео на первом
  * экране вместо коллажа (проп `hero`, см. ниже).
@@ -26,10 +25,11 @@ import type { HomeData } from "@/lib/home-data";
  * (`lib/versions.ts`, статус `archived`) и уйдут вместе со всей папкой
  * `components/versions/` — см. `docs/versions-cleanup-plan.md`.
  *
- * Секции — ровно те же, что были у `HomeV6`, без единой правки внутри них: весь
- * эффект масштаба даёт CSS-слой в `globals.css` (`html[data-ona-scale]`),
- * включаемый атрибутом на `<html>`. HERO не масштабируется (полноэкранный
- * первый экран — отдельный вопрос, не про «тяжесть» прокрутки).
+ * Размеры облегчённого масштаба v8 с 11.09.2026 записаны прямо в классах
+ * секций (закон одного множителя, `--ona-u` на `:root` в `globals.css`) — они
+ * «по умолчанию», без отдельного слоя переопределений и без атрибута на
+ * `<html>`. Прежний проп `scale` (v7/v8/v9) и `PageScale` удалены: архивные
+ * v7 и v9 теперь выглядят как v8 — они всё равно в архиве.
  *
  * АНИМАЦИИ ВЕРНУЛИСЬ 2026-08-25 (`docs/redesign/animations-restore.md`).
  * Пока это был один из трёх вариантов сравнения, движение выключали намеренно —
@@ -42,10 +42,6 @@ import type { HomeData } from "@/lib/home-data";
  * ⚠️ HERO намеренно БЕЗ `<Reveal>` — он сам себе первый экран и появляется
  * по-своему (Ken Burns, маркер прокрутки). Так было во всех версиях с v2 по v6.
  *
- * ⚠️ `<script>` масштаба и `<PageScale>` остаются ВЫШЕ `.v6-scene`: `FaqSection`
- * меряет высоту аккордеона в своём `useLayoutEffect`, и если масштаб применится
- * позже — она запомнит чужую высоту (подробности в `page-scale.tsx`).
- *
  * ⚠️ `prefers-reduced-motion` тут СОБЛЮДАЕТСЯ, в отличие от `/versions/*`, где
  * его форсировал `<ForceMotion>`. У пользователя с системной настройкой
  * «уменьшить анимацию» секции появятся только прозрачностью, без сдвига и
@@ -53,11 +49,9 @@ import type { HomeData } from "@/lib/home-data";
  */
 export function HomeLight({
   data,
-  scale,
   hero = "collage",
 }: {
   data: HomeData;
-  scale: "v7" | "v8" | "v9";
   /**
    * Какой первый экран показать. `video` — фоновый ролик (`hero-section-video.tsx`),
    * он на боевой главной с 2026-09-11; `collage` — прежний bento из пяти фото.
@@ -73,19 +67,6 @@ export function HomeLight({
 
   return (
     <>
-      {/* Масштаб выставляется ДО первой отрисовки: `PageScale` — клиентский
-          компонент, его `useLayoutEffect` срабатывает только после гидрации, и
-          на боевой главной это дало бы видимый скачок (страница рисуется
-          макетными кеглями v6, через полсекунды ужимается до v8). Инлайновый
-          скрипт исполняется парсером до отрисовки содержимого ниже, поэтому
-          первый кадр уже правильного размера. `scale` — union из трёх литералов,
-          подставлять в строку безопасно. */}
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `document.documentElement.setAttribute("data-ona-scale","${scale}")`,
-        }}
-      />
-      <PageScale scale={scale} />
       <div className="v6-scene">
         <main className="min-h-screen">
           {hero === "video" ? (

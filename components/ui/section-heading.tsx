@@ -35,7 +35,7 @@ export function SectionHeading({
           заголовок («ЧТО ГОВОРЯТ НАШИ УЧАСТНИЦЫ») помещается в одну строку и
           линиям остаётся почти по 290px с каждой стороны (на 45px оставалось
           по 51px, на 50px — по 10px, и они читались как чёрточки). */}
-      <div className="flex w-full items-center gap-4 md:gap-6">
+      <div className="flex w-full items-center gap-4 md:gap-6 lg:gap-[calc(19.2*var(--ona-u))]">
         <div className={cn("h-px min-w-[10vw] flex-1 md:min-w-0", lineColor)} />
         <Component
           className={cn(
@@ -52,7 +52,10 @@ export function SectionHeading({
                Волосяные линии по бокам остаются — это приём страницы тура,
                заказчик просил выровнять типографику, а не убрать оформление. */
             "font-heading font-normal uppercase text-center leading-tight break-normal whitespace-normal hyphens-none",
-            "text-[22px] sm:text-[26px] lg:text-[clamp(26px,1.875vw,36px)]",
+            /* С 11.09.2026 от `lg` — ровно как H2 главной (REVIEWS/COLLAB/FAQ):
+               22.63 / 26.72 при 1280 × `--ona-u` (Илья: «заголовки такого же
+               размера, как на главной»). */
+            "text-[22px] sm:text-[26px] lg:text-[calc(22.63*var(--ona-u))] lg:leading-[calc(26.72*var(--ona-u))]",
             /* Потолок ширины — только с `lg`. Он заставляет два самых длинных
                заголовка перенестись на две строки, и разброс длины линий
                сжимается с 125–524px до ~300–520px (решение заказчика:

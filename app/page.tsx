@@ -19,8 +19,9 @@ export const metadata: Metadata = {
  * (решение Ильи 2026-09-11). Вёрстка живёт в `components/home/home-light.tsx` —
  * тот же самый компонент, что и на странице сравнения, без копирования кода.
  *
- * - `scale="v8"` включает CSS-слой уменьшенной типографики и отступов
- *   (`html[data-ona-scale]` в `globals.css`) — согласован заказчиком 25.08;
+ * - облегчённый масштаб v8 (согласован заказчиком 25.08) — «по умолчанию»:
+ *   с 11.09 его размеры записаны прямо в классах секций (закон одного
+ *   множителя, см. `globals.css` → `:root { --ona-u }`);
  * - `hero="video"` ставит первым экраном фоновый ролик вместо bento-коллажа из
  *   пяти фото. ⚠️ Этот HERO НЕ полноэкранный — по высоте он равен видео, это
  *   сознательное отступление от правила, разбор в `docs/redesign/video-hero.md`.
@@ -39,5 +40,5 @@ export default async function HomePage() {
   noStore();
   const data = await getHomeData();
 
-  return <HomeLight data={data} scale="v8" hero="video" />;
+  return <HomeLight data={data} hero="video" />;
 }

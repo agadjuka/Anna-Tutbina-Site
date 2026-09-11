@@ -28,11 +28,14 @@ export function WantToJoinButton({ contacts }: WantToJoinButtonProps) {
     return null;
   }
 
+  /* От `lg` все размеры × 0.8 × `--ona-u` — то же облегчение, что у всего сайта
+     (закон одного множителя). Кегль кнопки не сведён к пилюлям главной (11):
+     это главный призыв страницы тура, он остаётся крупным. */
   return (
-    <div className="flex flex-col items-center justify-center pt-8 md:pt-10 pb-0 gap-6">
-      <div className="relative flex flex-col items-center gap-4">
+    <div className="flex flex-col items-center justify-center pt-8 md:pt-10 pb-0 gap-6 lg:gap-[calc(19.2*var(--ona-u))] lg:pt-[calc(32*var(--ona-u))]">
+      <div className="relative flex flex-col items-center gap-4 lg:gap-[calc(12.8*var(--ona-u))]">
         {/* Иконки контактов */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 lg:gap-[calc(12.8*var(--ona-u))]">
           {contacts.map((contact, index) => {
             if (!contact.url || !contact.label) return null;
 
@@ -50,7 +53,7 @@ export function WantToJoinButton({ contacts }: WantToJoinButtonProps) {
                 aria-label={contact.label}
                 title={contact.label}
                 className={cn(
-                  "h-14 w-14 md:h-16 md:w-16 p-3 shrink-0 flex items-center justify-center rounded-full bg-muted text-muted-foreground transition-all overflow-visible shadow-lg",
+                  "h-14 w-14 md:h-16 md:w-16 lg:size-[calc(51.2*var(--ona-u))] lg:p-[calc(9.6*var(--ona-u))] p-3 shrink-0 flex items-center justify-center rounded-full bg-muted text-muted-foreground transition-all overflow-visible shadow-lg",
                   open
                     ? isWhatsApp
                       ? "opacity-100 translate-y-0 scale-100 duration-500 hover:text-[#25D366] hover:bg-muted hover:scale-110 hover:shadow-xl"
@@ -60,7 +63,7 @@ export function WantToJoinButton({ contacts }: WantToJoinButtonProps) {
                 style={{ transitionProperty: "opacity, transform, background-color, color" }}
                 onClick={() => setOpen(false)}
               >
-                {IconComponent && <IconComponent className="h-7 w-7 md:h-8 md:w-8" />}
+                {IconComponent && <IconComponent className="h-7 w-7 md:h-8 md:w-8 lg:size-[calc(25.6*var(--ona-u))]" />}
               </Link>
             );
           })}
@@ -72,7 +75,7 @@ export function WantToJoinButton({ contacts }: WantToJoinButtonProps) {
           title="Хочу с Вами!"
           aria-pressed={open}
           onClick={() => setOpen((v) => !v)}
-          className="relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full bg-gradient-to-r from-primary via-primary-dark to-primary px-10 py-5 text-lg font-medium text-white shadow-2xl transition-all duration-500 hover:shadow-primary/25 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background group md:px-12 md:py-6 md:text-xl"
+          className="relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full bg-gradient-to-r from-primary via-primary-dark to-primary px-10 py-5 text-lg font-medium text-white shadow-2xl transition-all duration-500 hover:shadow-primary/25 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background group md:px-12 md:py-6 md:text-xl lg:px-[calc(38.4*var(--ona-u))] lg:py-[calc(19.2*var(--ona-u))] lg:text-[calc(16*var(--ona-u))] lg:leading-[calc(22.4*var(--ona-u))]"
           style={{
             backgroundSize: "200% 100%",
             animation: open ? "none" : "gradient-shift 3s ease-in-out infinite, pulse-glow 2s ease-in-out infinite",
@@ -123,9 +126,9 @@ export function WantToJoinButton({ contacts }: WantToJoinButtonProps) {
           )}
 
           {/* Содержимое кнопки */}
-          <span className="relative z-10 flex items-center gap-2">
+          <span className="relative z-10 flex items-center gap-2 lg:gap-[calc(6.4*var(--ona-u))]">
             <Heart
-              className="h-5 w-5 md:h-6 md:w-6"
+              className="h-5 w-5 md:h-6 md:w-6 lg:size-[calc(19.2*var(--ona-u))]"
               fill="currentColor"
             />
             <span>Хочу с Вами!</span>

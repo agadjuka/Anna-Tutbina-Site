@@ -9,5 +9,5 @@ import type { HomeData } from "@/lib/home-data";
  * Разбор раскладок и хранения файлов — в `components/sections/hero-section-video.tsx`.
  */
 export function HomeV10({ data }: { data: HomeData }) {
-  return <HomeLight data={data} scale="v8" hero="video" />;
+  return <HomeLight data={data} hero="video" />;
 }

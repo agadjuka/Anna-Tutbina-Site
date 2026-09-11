@@ -218,7 +218,7 @@ export function ReviewsEmbla({
       )}
 
       <div
-        className="overflow-x-hidden overflow-y-visible py-2"
+        className="overflow-x-hidden overflow-y-visible py-2 lg:py-[calc(8*var(--ona-u))]"
         ref={viewportRef}
       >
         <ReviewsGridRowAlign
@@ -300,7 +300,7 @@ export function ReviewsEmbla({
 
   /* ----- full: как ProgramDaysCarousel; стрелки внутри полосы (не за пределами — иначе режет overflow) ----- */
   return (
-    <section className="pt-2 md:pt-4">
+    <section className="pt-2 md:pt-4 lg:pt-[calc(16*var(--ona-u))]">
       <div
         className={cn(
           "mx-auto w-full",
@@ -362,7 +362,7 @@ export function ReviewsEmbla({
           только точки. На главной — как в макете: две круглые стрелки 41×40 под
           каруселью по центру, без точек. */}
       {!single && (
-        <div className="mt-6 flex flex-col items-center justify-center gap-4 md:mt-8">
+        <div className="mt-6 flex flex-col items-center justify-center gap-4 md:mt-8 lg:mt-[calc(32*var(--ona-u))]">
           <div
             className={cn(
               "relative h-12 w-full",

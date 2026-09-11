@@ -116,11 +116,11 @@ export function ProgramDaysCarousel({ days }: ProgramDaysCarouselProps) {
         <div className="relative">
           <div className="overflow-hidden">
             <div ref={viewportRef} className="overflow-hidden">
-              <div className="flex gap-4 md:gap-6 lg:gap-8">
+              <div className="flex gap-4 md:gap-6 lg:gap-[calc(25.6*var(--ona-u))]">
                 {days.map((day, index) => (
                   <div
                     key={index}
-                    className="min-w-0 shrink-0 w-full flex flex-col md:flex-row gap-4 md:gap-6 lg:gap-8"
+                    className="min-w-0 shrink-0 w-full flex flex-col md:flex-row gap-4 md:gap-6 lg:gap-[calc(25.6*var(--ona-u))]"
                   >
                     {/* Левая часть - фотографии в сетке 2x2.
 
@@ -131,7 +131,7 @@ export function ProgramDaysCarousel({ days }: ProgramDaysCarouselProps) {
                         плитки вырастают до ~276px и колонки уравновешиваются. */}
                     <div className="w-full md:w-1/2">
                       {day.dayImage && day.dayImage.length > 0 ? (
-                        <div className="grid grid-cols-2 gap-2 md:gap-2.5">
+                        <div className="grid grid-cols-2 gap-2 md:gap-2.5 lg:gap-[calc(8*var(--ona-u))]">
                           {day.dayImage.slice(0, 4).map((img, imgIdx) => {
                             const slideIndex = findSlideIndex(index, imgIdx);
                             return (
@@ -182,12 +182,14 @@ export function ProgramDaysCarousel({ days }: ProgramDaysCarouselProps) {
                     {/* Правая часть - текст */}
                     {/* Без `md:ml-6 lg:ml-8`: внешний ряд уже задаёт `gap-6/gap-8`, и отступ
                         удваивался — между фото и текстом зияло 64px пустоты. */}
-                    <div className="w-full md:w-1/2 flex flex-col justify-center space-y-3 md:space-y-4">
+                    <div className="w-full md:w-1/2 flex flex-col justify-center space-y-3 md:space-y-4 lg:space-y-[calc(12.8*var(--ona-u))]">
                       {/* Cormorant обычного начертания, без `font-bold`: 700 не используется
                           на сайте больше нигде, и жирный Cormorant рядом с тонкими
-                          заголовками главной читался инородно (задача Н9). */}
+                          заголовками главной читался инородно (задача Н9).
+                          От `lg` — как название тура в карточке календаря
+                          главной: 23.3 / 27.96 × `--ona-u`. */}
                       {day.dayTitle && (
-                        <h3 className="text-[22px] md:text-[26px] lg:text-[30px] font-normal text-foreground leading-tight">
+                        <h3 className="text-[22px] md:text-[26px] lg:text-[calc(23.3*var(--ona-u))] lg:leading-[calc(27.96*var(--ona-u))] font-normal text-foreground leading-tight">
                           {day.dayTitle}
                         </h3>
                       )}
@@ -195,7 +197,7 @@ export function ProgramDaysCarousel({ days }: ProgramDaysCarouselProps) {
                         <div className="prose prose-lg max-w-none">
                           <PortableTextContent
                             value={day.dayDescription}
-                            className="text-sm md:text-base leading-relaxed text-muted-foreground"
+                            className="text-sm md:text-base leading-relaxed text-muted-foreground lg:text-[calc(12.9*var(--ona-u))] lg:leading-[calc(20.6*var(--ona-u))]"
                           />
                         </div>
                       )}
@@ -217,13 +219,13 @@ export function ProgramDaysCarousel({ days }: ProgramDaysCarouselProps) {
               disabled={!canScrollPrev}
               className={cn(
                 "absolute top-1/2 -translate-y-1/2 z-10 pointer-events-auto",
-                "w-12 h-12 md:w-14 md:h-14 rounded-full",
+                "w-12 h-12 md:w-14 md:h-14 rounded-full lg:size-[calc(44.8*var(--ona-u))]",
                 "flex items-center justify-center",
                 "border-2 border-primary bg-transparent backdrop-blur-sm",
                 "transition-all duration-200",
                 "hover:bg-primary/10 hover:shadow-xl hover:scale-110",
                 "disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:scale-100",
-                "left-0 -translate-x-full -ml-4 md:-ml-6"
+                "left-0 -translate-x-full -ml-4 md:-ml-6 lg:-ml-[calc(19.2*var(--ona-u))]"
               )}
               aria-label="Предыдущий день"
             >
@@ -233,7 +235,7 @@ export function ProgramDaysCarousel({ days }: ProgramDaysCarouselProps) {
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                className="text-primary"
+                className="text-primary lg:size-[calc(19.2*var(--ona-u))]"
               >
                 <path
                   d="M15 18L9 12L15 6"
@@ -250,13 +252,13 @@ export function ProgramDaysCarousel({ days }: ProgramDaysCarouselProps) {
               disabled={!canScrollNext}
               className={cn(
                 "absolute top-1/2 -translate-y-1/2 z-10 pointer-events-auto",
-                "w-12 h-12 md:w-14 md:h-14 rounded-full",
+                "w-12 h-12 md:w-14 md:h-14 rounded-full lg:size-[calc(44.8*var(--ona-u))]",
                 "flex items-center justify-center",
                 "border-2 border-primary bg-transparent backdrop-blur-sm",
                 "transition-all duration-200",
                 "hover:bg-primary/10 hover:shadow-xl hover:scale-110",
                 "disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:scale-100",
-                "right-0 translate-x-full -mr-4 md:-mr-6"
+                "right-0 translate-x-full -mr-4 md:-mr-6 lg:-mr-[calc(19.2*var(--ona-u))]"
               )}
               aria-label="Следующий день"
             >
@@ -266,7 +268,7 @@ export function ProgramDaysCarousel({ days }: ProgramDaysCarouselProps) {
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                className="text-primary"
+                className="text-primary lg:size-[calc(19.2*var(--ona-u))]"
               >
                 <path
                   d="M9 18L15 12L9 6"
@@ -283,7 +285,7 @@ export function ProgramDaysCarousel({ days }: ProgramDaysCarouselProps) {
 
       {/* Индикаторы точек (dots) и мобильные кнопки навигации */}
       {days.length > 1 && (
-        <div className="flex flex-col md:flex-row items-center justify-center gap-4 mt-6 md:mt-8">
+        <div className="flex flex-col md:flex-row items-center justify-center gap-4 mt-6 md:mt-8 lg:mt-[calc(25.6*var(--ona-u))]">
           {/* Мобильные кнопки навигации */}
           <div className="relative md:hidden w-full h-12">
             <button
@@ -306,7 +308,7 @@ export function ProgramDaysCarousel({ days }: ProgramDaysCarouselProps) {
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                className="text-primary"
+                className="text-primary lg:size-[calc(19.2*var(--ona-u))]"
               >
                 <path
                   d="M15 18L9 12L15 6"
@@ -354,7 +356,7 @@ export function ProgramDaysCarousel({ days }: ProgramDaysCarouselProps) {
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                className="text-primary"
+                className="text-primary lg:size-[calc(19.2*var(--ona-u))]"
               >
                 <path
                   d="M9 18L15 12L9 6"
@@ -368,15 +370,15 @@ export function ProgramDaysCarousel({ days }: ProgramDaysCarouselProps) {
           </div>
 
           {/* Индикаторы для десктопа */}
-          <div className="hidden md:flex justify-center gap-2">
+          <div className="hidden md:flex justify-center gap-2 lg:gap-[calc(6.4*var(--ona-u))]">
             {days.map((_, idx) => (
               <button
                 key={idx}
                 onClick={() => embla?.scrollTo(idx)}
                 className={cn(
-                  "w-2 h-2 rounded-full transition-all duration-300",
+                  "w-2 h-2 rounded-full transition-all duration-300 lg:h-[calc(6.4*var(--ona-u))] lg:w-[calc(6.4*var(--ona-u))]",
                   selectedIndex === idx
-                    ? "bg-primary w-8"
+                    ? "bg-primary w-8 lg:w-[calc(25.6*var(--ona-u))]"
                     : "bg-muted hover:bg-primary/50"
                 )}
                 aria-label={`Перейти к дню ${idx + 1}`}

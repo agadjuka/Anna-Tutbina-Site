@@ -113,7 +113,7 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
       <div className={cn("mx-auto", TOUR_BLOCK_WIDTH)}>
         <div className="relative overflow-hidden">
           <div ref={viewportRef} className="overflow-hidden" style={{ clipPath: 'inset(0)' }}>
-            <div className="flex gap-4 md:gap-6 lg:gap-8">
+            <div className="flex gap-4 md:gap-6 lg:gap-[calc(25.6*var(--ona-u))]">
               {locations.map((location, index) => (
                 <div
                   key={index}
@@ -123,7 +123,7 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
                     <div className="relative">
                       {/* Заголовок над фотографиями */}
                       {location.locationName && (
-                        <div className="mb-4 md:mb-6 pt-0">
+                        <div className="mb-4 md:mb-6 pt-0 lg:mb-[calc(19.2*var(--ona-u))]">
                           <div className="relative inline-block">
                             {/* Без `tracking-tight`: на 30px это −0.75px на букву,
                                 и названия локаций «плыли» — то самое замечание
@@ -132,10 +132,10 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
                                 правку и остался единственным местом на странице тура,
                                 где заголовок набран теснее соседних (заголовки дней
                                 прямо над ним — с нормальным трекингом). */}
-                            <h3 className="text-[22px] md:text-[26px] lg:text-[30px] font-normal text-foreground leading-tight">
+                            <h3 className="text-[22px] md:text-[26px] lg:text-[calc(23.3*var(--ona-u))] lg:leading-[calc(27.96*var(--ona-u))] font-normal text-foreground leading-tight">
                               {location.locationName}
                             </h3>
-                            <div className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-primary via-primary/60 to-transparent rounded-full"></div>
+                            <div className="absolute -bottom-2 left-0 right-0 h-1 lg:-bottom-[calc(6.4*var(--ona-u))] lg:h-[calc(3.2*var(--ona-u))] bg-gradient-to-r from-primary via-primary/60 to-transparent rounded-full"></div>
                           </div>
                         </div>
                       )}
@@ -156,7 +156,7 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
                           : 1;
 
                         return (
-                          <div className="grid grid-cols-2 gap-4 md:gap-6 lg:gap-8 mb-4 md:mb-6">
+                          <div className="grid grid-cols-2 gap-4 md:gap-6 lg:gap-[calc(25.6*var(--ona-u))] mb-4 md:mb-6 lg:mb-[calc(19.2*var(--ona-u))]">
                             {imagesToShow.map((img, imgIdx) => {
                               const slideIndex = findSlideIndex(index, imgIdx);
                               const dims = img?.asset?.metadata?.dimensions;
@@ -219,11 +219,11 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
                           <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary via-primary/60 to-transparent rounded-full"></div>
                           
                           {/* Текстовое содержимое */}
-                          <div className="pl-6 md:pl-8 pt-4 pb-4 md:pt-5 md:pb-5">
+                          <div className="pl-6 md:pl-8 pt-4 pb-4 md:pt-5 md:pb-5 lg:py-[calc(16*var(--ona-u))] lg:pl-[calc(25.6*var(--ona-u))]">
                             <div className="prose prose-lg max-w-none">
                               <PortableTextContent
                                 value={location.locationDescription}
-                                className="text-base md:text-lg lg:text-xl leading-relaxed text-muted-foreground"
+                                className="text-base md:text-lg lg:text-[calc(12.9*var(--ona-u))] lg:leading-[calc(20.6*var(--ona-u))] leading-relaxed text-muted-foreground"
                               />
                             </div>
                           </div>
@@ -246,13 +246,13 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
               disabled={!canScrollPrev}
               className={cn(
                 "absolute top-1/2 -translate-y-1/2 z-10 pointer-events-auto",
-                "w-12 h-12 md:w-14 md:h-14 rounded-full",
+                "w-12 h-12 md:w-14 md:h-14 rounded-full lg:size-[calc(44.8*var(--ona-u))]",
                 "flex items-center justify-center",
                 "bg-white/95 backdrop-blur-sm border-2 border-primary",
                 "transition-all duration-200",
                 "hover:bg-white hover:shadow-xl hover:scale-110",
                 "disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:scale-100",
-                "left-0 -translate-x-full -ml-4 md:-ml-6"
+                "left-0 -translate-x-full -ml-4 md:-ml-6 lg:-ml-[calc(19.2*var(--ona-u))]"
               )}
               aria-label="Предыдущая локация"
             >
@@ -262,7 +262,7 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                className="text-primary"
+                className="text-primary lg:size-[calc(19.2*var(--ona-u))]"
               >
                 <path
                   d="M15 18L9 12L15 6"
@@ -279,13 +279,13 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
               disabled={!canScrollNext}
               className={cn(
                 "absolute top-1/2 -translate-y-1/2 z-10 pointer-events-auto",
-                "w-12 h-12 md:w-14 md:h-14 rounded-full",
+                "w-12 h-12 md:w-14 md:h-14 rounded-full lg:size-[calc(44.8*var(--ona-u))]",
                 "flex items-center justify-center",
                 "bg-white/95 backdrop-blur-sm border-2 border-primary",
                 "transition-all duration-200",
                 "hover:bg-white hover:shadow-xl hover:scale-110",
                 "disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:scale-100",
-                "right-0 translate-x-full -mr-4 md:-mr-6"
+                "right-0 translate-x-full -mr-4 md:-mr-6 lg:-mr-[calc(19.2*var(--ona-u))]"
               )}
               aria-label="Следующая локация"
             >
@@ -295,7 +295,7 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                className="text-primary"
+                className="text-primary lg:size-[calc(19.2*var(--ona-u))]"
               >
                 <path
                   d="M9 18L15 12L9 6"
@@ -312,7 +312,7 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
 
       {/* Индикаторы точек (dots) и мобильные кнопки навигации */}
       {locations.length > 1 && (
-        <div className="flex flex-col md:flex-row items-center justify-center gap-4 mt-4 md:mt-6">
+        <div className="flex flex-col md:flex-row items-center justify-center gap-4 mt-4 md:mt-6 lg:mt-[calc(19.2*var(--ona-u))]">
           {/* Мобильные кнопки навигации */}
           <div className="relative md:hidden w-full h-12">
             <button
@@ -335,7 +335,7 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                className="text-primary"
+                className="text-primary lg:size-[calc(19.2*var(--ona-u))]"
               >
                 <path
                   d="M15 18L9 12L15 6"
@@ -383,7 +383,7 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                className="text-primary"
+                className="text-primary lg:size-[calc(19.2*var(--ona-u))]"
               >
                 <path
                   d="M9 18L15 12L9 6"
@@ -397,15 +397,15 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
           </div>
 
           {/* Индикаторы для десктопа */}
-          <div className="hidden md:flex justify-center gap-2">
+          <div className="hidden md:flex justify-center gap-2 lg:gap-[calc(6.4*var(--ona-u))]">
             {locations.map((_, idx) => (
               <button
                 key={idx}
                 onClick={() => embla?.scrollTo(idx)}
                 className={cn(
-                  "w-2 h-2 rounded-full transition-all duration-300",
+                  "w-2 h-2 rounded-full transition-all duration-300 lg:h-[calc(6.4*var(--ona-u))] lg:w-[calc(6.4*var(--ona-u))]",
                   selectedIndex === idx
-                    ? "bg-primary w-8"
+                    ? "bg-primary w-8 lg:w-[calc(25.6*var(--ona-u))]"
                     : "bg-muted hover:bg-primary/50"
                 )}
                 aria-label={`Перейти к локации ${idx + 1}`}
