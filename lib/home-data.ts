@@ -101,11 +101,22 @@ export interface FoundersLink {
   url?: string;
 }
 
+export type SocialPlatform = "instagram" | "telegram" | "youtube";
+
+export interface FounderSocial {
+  platform?: SocialPlatform;
+  url?: string;
+}
+
 export interface FounderPerson {
   photo?: any;
   name?: string;
   role?: string;
+  /** Короткое описание — видно всегда. */
   description?: string;
+  /** Продолжение — раскрывается по «Читать дальше». */
+  descriptionMore?: string;
+  socials?: FounderSocial[];
 }
 
 export interface FoundersContent {
@@ -116,6 +127,8 @@ export interface FoundersContent {
   links?: FoundersLink[];
   founderOne?: FounderPerson;
   founderTwo?: FounderPerson;
+  /** Подпись по центру под диптихом создателей. */
+  diptychCaption?: string;
 }
 
 export interface FaqHeadingContent {

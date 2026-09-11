@@ -21,6 +21,73 @@ const eyebrowField = (initialValue: string) =>
     initialValue,
   })
 
+/** Соцсети, для которых на сайте есть иконка (`components/ui/social-icons.tsx`). */
+const SOCIAL_PLATFORMS = [
+  {title: 'Instagram', value: 'instagram'},
+  {title: 'Telegram', value: 'telegram'},
+  {title: 'YouTube', value: 'youtube'},
+]
+
+/**
+ * Карточка создателя в диптихе «Создатели проекта» (с 11.09.2026 — два фото
+ * вплотную по центру, текст по бокам). Короткое описание видно всегда,
+ * продолжение раскрывается кнопкой «Читать дальше».
+ */
+const founderPersonField = (name: string, title: string) =>
+  defineField({
+    name,
+    title,
+    type: 'object',
+    fields: [
+      {name: 'photo', title: 'Фотография', type: 'image', options: {hotspot: true}},
+      {name: 'name', title: 'Имя', type: 'string'},
+      {name: 'role', title: 'Роль', type: 'string', initialValue: 'основатель'},
+      {
+        name: 'description',
+        title: 'Описание — коротко',
+        description: 'Видно всегда. Одно-два предложения.',
+        type: 'text',
+        rows: 3,
+      },
+      {
+        name: 'descriptionMore',
+        title: 'Описание — продолжение',
+        description:
+          'Раскрывается по кнопке «Читать дальше» под коротким описанием. Пусто — кнопки не будет.',
+        type: 'text',
+        rows: 6,
+      },
+      {
+        name: 'socials',
+        title: 'Соцсети',
+        description: 'Иконки под текстом, в этом порядке.',
+        type: 'array',
+        of: [
+          {
+            type: 'object',
+            fields: [
+              {
+                name: 'platform',
+                title: 'Соцсеть',
+                type: 'string',
+                options: {list: SOCIAL_PLATFORMS, layout: 'radio', direction: 'horizontal'},
+                validation: (Rule) => Rule.required(),
+              },
+              {
+                name: 'url',
+                title: 'Ссылка',
+                type: 'url',
+                validation: (Rule) => Rule.required(),
+              },
+            ],
+            preview: {select: {title: 'platform', subtitle: 'url'}},
+          },
+        ],
+      },
+    ],
+    preview: {select: {title: 'name', subtitle: 'role', media: 'photo'}},
+  })
+
 const homePage = defineType({
   name: 'homePage',
   title: 'Главная страница',
@@ -358,29 +425,14 @@ const homePage = defineType({
             },
           ],
         }),
+        founderPersonField('founderOne', 'Создатель 1 (фото слева)'),
+        founderPersonField('founderTwo', 'Создатель 2 (фото справа)'),
         defineField({
-          name: 'founderOne',
-          title: 'Создатель 1',
-          type: 'object',
-          fields: [
-            {name: 'photo', title: 'Фотография', type: 'image', options: {hotspot: true}},
-            {name: 'name', title: 'Имя', type: 'string'},
-            {name: 'role', title: 'Роль', type: 'string', initialValue: 'основатель'},
-            {name: 'description', title: 'Описание', type: 'text', rows: 4},
-          ],
-          preview: {select: {title: 'name', subtitle: 'role', media: 'photo'}},
-        }),
-        defineField({
-          name: 'founderTwo',
-          title: 'Создатель 2',
-          type: 'object',
-          fields: [
-            {name: 'photo', title: 'Фотография', type: 'image', options: {hotspot: true}},
-            {name: 'name', title: 'Имя', type: 'string'},
-            {name: 'role', title: 'Роль', type: 'string', initialValue: 'основатель'},
-            {name: 'description', title: 'Описание', type: 'text', rows: 4},
-          ],
-          preview: {select: {title: 'name', subtitle: 'role', media: 'photo'}},
+          name: 'diptychCaption',
+          title: 'Подпись под фото создателей',
+          description: 'Строка по центру под двумя фото. Выводится заглавными буквами.',
+          type: 'string',
+          initialValue: 'Для нас важно быть не организаторами — а частью вашего путешествия',
         }),
       ],
     }),

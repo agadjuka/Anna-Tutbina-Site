@@ -47,9 +47,11 @@ export function AboutSection({ about }: AboutSectionProps) {
         </div>
 
         {/* Отступы в процентах считаются от ширины РОДИТЕЛЯ-строки (1921), а не самой
-              панели — поэтому 5.03%, а не 9.35%: текст в макете начинается на x=961,
-              фото занимает 45%, значит от левого края строки это 50.03%. */}
-          <div className="relative flex flex-1 items-center overflow-hidden px-6 py-14 sm:px-10 md:px-16 lg:flex-col lg:items-stretch lg:justify-between lg:px-0 lg:pb-[min(3.18vw,61px)] lg:pl-[5.03%] lg:pr-[2.2%] lg:pt-[min(2.97vw,57px)]">
+              панели — поэтому 5%, а не 9.35%: текст в макете начинается на x=961,
+              то есть ровно с центральной оси страницы (фото 45% + 5%). Было 5.03%
+              (961/1921) — текст стоял на полпикселя правее центра, а с 11.09 все
+              стыки и оси главной выверены по одному центру (Илья 11.09). */}
+          <div className="relative flex flex-1 items-center overflow-hidden px-6 py-14 sm:px-10 md:px-16 lg:flex-col lg:items-stretch lg:justify-between lg:px-0 lg:pb-[min(3.18vw,61px)] lg:pl-[5%] lg:pr-[2.2%] lg:pt-[min(2.97vw,57px)]">
           {/* Декоративный «цветок» (Figma 20:15). Бокс — ровно как в макете:
               736×981 при секции 1921×922, прижат к правому краю секции, сверху
               выходит за неё на 59px, снизу заканчивается по кромке. Ассет в

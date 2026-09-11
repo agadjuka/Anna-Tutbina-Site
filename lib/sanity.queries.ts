@@ -197,8 +197,11 @@ export const homePageQuery = groq`
       body,
       photo{${IMAGE_PROJECTION}},
       links[]{label, url},
-      founderOne{photo{${IMAGE_PROJECTION}}, name, role, description},
-      founderTwo{photo{${IMAGE_PROJECTION}}, name, role, description}
+      // Диптих создателей (с 11.09.2026): короткий текст + продолжение под
+      // «Читать дальше», иконки соцсетей, подпись под фото.
+      founderOne{photo{${IMAGE_PROJECTION}}, name, role, description, descriptionMore, socials[]{platform, url}},
+      founderTwo{photo{${IMAGE_PROJECTION}}, name, role, description, descriptionMore, socials[]{platform, url}},
+      diptychCaption
     },
     testimonials{eyebrow, heading},
     faq{eyebrow, heading}

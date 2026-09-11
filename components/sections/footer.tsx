@@ -10,17 +10,6 @@ interface FooterLink {
   url?: string;
 }
 
-/** Три слова дыхательного цикла из макета (`5:17`/`5:18`/`5:19`) — в Figma это
- * кадры прототипа (opacity 0), на сайте — бесконечный CSS-цикл, см. globals.css. */
-/* Кегль в px — как в макете при 1920. Сам круг масштабируется
- * (`min(17.7vw,340px)`), поэтому слова внутри тоже переводятся в пропорцию
- * при рендере ниже — иначе на узком экране они торчали из круга. */
-const BREATH_WORDS: { word: string; size: number }[] = [
-  { word: "вдох", size: 17 },
-  { word: "пауза", size: 23 },
-  { word: "выдох", size: 23 },
-];
-
 function FooterLinkItem({ link }: { link: FooterLink }) {
   if (!link.label) return null;
 
@@ -45,76 +34,6 @@ function FooterLinkItem({ link }: { link: FooterLink }) {
   );
 }
 
-/** Декоративные концентрические кольца с циклом «вдох · пауза · выдох» (`5:14`–`5:19`).
- * Только десктоп — на мобильном места под чисто декоративный элемент нет, тот же
- * принцип, что и с коллажем GUESTS/фото-кластерами HERO (см. docs/redesign).
- *
- * Кольца-«вода»: контур колец пропущен через SVG-фильтр (feTurbulence +
- * feDisplacementMap) — в покое лёгкое переливание (SMIL `<animate>` зациклен
- * прямо в фильтре, без JS), при наведении на блок CSS переключает фильтр на
- * более сильный/быстрый вариант — рябь читается как «потревоженная вода».
- * Центральный круг и слова — вне фильтра, текст должен читаться чётко.
- * Эффект общий для всех версий сайта (компонент не привязан к v1/v2/v3…). */
-function BreathingCircles() {
-  return (
-    <div
-      className="footer-water-wrap relative hidden h-[min(17.7vw,340px)] w-[min(17.7vw,340px)] shrink-0 items-center justify-center lg:flex"
-      aria-hidden="true"
-    >
-      <svg width="0" height="0" aria-hidden="true">
-        <defs>
-          {/* v2 фильтра: прошлая версия (baseFrequency/scale слишком высокие) на тонких
-              обводках колец давала не рябь, а рваные зигзаги — параметры уменьшены
-              на порядок и добавлено лёгкое размытие после смещения, чтобы контур
-              оставался мягким, "нежным", а не ломаным. */}
-          <filter id="onaWaterIdle" x="-40%" y="-40%" width="180%" height="180%">
-            <feTurbulence type="fractalNoise" baseFrequency="0.006 0.009" numOctaves="1" seed="7" result="n">
-              <animate attributeName="baseFrequency" dur="22s" values="0.005 0.008;0.008 0.011;0.005 0.008" repeatCount="indefinite" />
-            </feTurbulence>
-            <feDisplacementMap in="SourceGraphic" in2="n" scale="2.2" xChannelSelector="R" yChannelSelector="G" result="d" />
-            <feGaussianBlur in="d" stdDeviation="0.35" />
-          </filter>
-          <filter id="onaWaterActive" x="-50%" y="-50%" width="200%" height="200%">
-            <feTurbulence type="fractalNoise" baseFrequency="0.012 0.017" numOctaves="2" seed="7" result="n2">
-              <animate attributeName="baseFrequency" dur="3.2s" values="0.01 0.015;0.017 0.023;0.01 0.015" repeatCount="indefinite" />
-            </feTurbulence>
-            <feDisplacementMap in="SourceGraphic" in2="n2" scale="6.5" xChannelSelector="R" yChannelSelector="G" result="d2" />
-            <feGaussianBlur in="d2" stdDeviation="0.3" />
-          </filter>
-        </defs>
-      </svg>
-
-      {/* Волны — расходятся от края центрального круга наружу, зациклены со сдвигом фазы.
-          Цвет — светлый `background`, а не `primary`: футер залит `primary-dark`, и кольца
-          цветом `primary` на нём практически не читались (разница ~15 единиц яркости). */}
-      <div className="footer-water-target absolute inset-0">
-        {[0, 1, 2].map((i) => (
-          <div
-            key={i}
-            className="footer-breathe-ripple absolute inset-[25%] rounded-full border-[1.5px] border-background/45"
-            style={{ animationDelay: `${i * 2}s` }}
-          />
-        ))}
-        <div className="absolute inset-0 rounded-full border-[1.5px] border-background/20" />
-        <div className="absolute inset-[13%] rounded-full border-[1.5px] border-background/30" />
-      </div>
-
-      <div className="footer-breathe-circle absolute inset-[25%] rounded-full border border-primary bg-background opacity-90" />
-      <div className="relative flex h-[50%] w-[50%] items-center justify-center">
-        {BREATH_WORDS.map(({ word, size }, i) => (
-          <span
-            key={word}
-            className="footer-breathe-word absolute font-heading italic leading-none text-text-deep"
-            style={{ fontSize: `min(${((size / 1920) * 100).toFixed(3)}vw, ${size}px)`, animationDelay: `${-i * 3}s` }}
-          >
-            {word}
-          </span>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 export async function Footer() {
   noStore();
   /* Общий на весь рендер источник настроек — тот же запрос нужен плавающей
@@ -127,27 +46,13 @@ export async function Footer() {
 
   return (
     <footer id="contacts" className="relative w-full overflow-hidden bg-primary-dark">
-      {/* Кольца в макете (`5:14`…`5:16`) стоят ПРАВЕЕ контентной колонки:
-          340×340 на x=1523…1863, y=31 — то есть в правом поле, а не четвёртой
-          колонкой ряда. Поэтому они вынесены из сетки в абсолютный слой. */}
-      <div className="pointer-events-none absolute right-[3%] top-[7.1%] hidden lg:block">
-        <div className="pointer-events-auto">
-          <BreathingCircles />
-        </div>
-      </div>
-
       <Container className="lg:max-w-[min(56.9vw,1092px)] lg:px-0">
-        {/* `lg:items-center`, а не `items-start`: круги-«вода» намного выше
-            остальных колонок (логотип, «Связаться», «Сообщество»), и при
-            выравнивании по верху те повисали у самого верха высокого ряда с
-            большим пустым пространством под ними — визуально несбалансированно.
-            По центру ряда все четыре колонки читаются как единая строка. */}
         {/* Высота футера в макете (`5:286`) — 436.63 при 1920: логотип на y=148,
             нижняя полоса на y=352. Колонки: логотип x=414, «Связаться» x=834.5,
-            «Сообщество» x=1192.25 — то есть контент 1092px по центру. Кольца
-            в макете вынесены правее контента (x 1523…1863), у нас они остаются
-            четвёртой колонкой ряда: перенос их за пределы контейнера ломает
-            выравнивание всего ряда, а выигрыш чисто декоративный. */}
+            «Сообщество» x=1192.25 — то есть контент 1092px по центру.
+            Декоративные кольца «вдох · пауза · выдох» справа от колонок (`5:14`…
+            `5:19`) убраны по просьбе заказчика 08.09
+            (`docs/redesign/client-feedback-2026-09-11.md`, п. 5). */}
         <div className="grid grid-cols-1 gap-x-10 gap-y-12 py-14 sm:grid-cols-2 lg:grid-cols-[min(21.9vw,420px)_min(18.6vw,358px)_1fr] lg:items-start lg:gap-x-0 lg:pb-[min(4.06vw,78px)] lg:pt-[min(7.7vw,148px)]">
           <div className="sm:col-span-2 lg:col-span-1">
             <span className="font-logo text-[32px] leading-none text-background lg:text-[min(1.67vw,32px)]">ONÁ</span>

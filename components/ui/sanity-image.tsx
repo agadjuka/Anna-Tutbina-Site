@@ -53,6 +53,13 @@ interface SanityImageProps {
    * макет, серверного кропа нет вовсе).
    */
   cropAnchor?: "center" | "top" | "bottom" | "left" | "right";
+  /**
+   * Качество повторного сжатия оптимизатором Next (`next/image`), по умолчанию
+   * 75. Для зернистых «плёночных» кадров ставить 90: картинка приходит из
+   * Sanity уже сжатой, и второе сжатие на 75 размывает зерно в квадраты.
+   * Допустимые значения — `images.qualities` в `next.config.ts`.
+   */
+  quality?: number;
 }
 
 export function SanityImage({
@@ -67,6 +74,7 @@ export function SanityImage({
   priority = false,
   figmaCrop,
   cropAnchor,
+  quality,
 }: SanityImageProps) {
   if (!image?.asset) {
     return (
@@ -118,6 +126,7 @@ export function SanityImage({
           height={1600}
           sizes={sizes ?? "100vw"}
           priority={priority}
+          quality={quality}
           className={cn("absolute max-w-none", className)}
           style={{
             objectFit: "cover",
@@ -140,6 +149,7 @@ export function SanityImage({
              молча). Здесь оно хотя бы явное, а вызывающий код может сузить. */
           sizes={sizes ?? "100vw"}
           priority={priority}
+          quality={quality}
           className={className}
           style={{ objectFit: "cover" }}
         />

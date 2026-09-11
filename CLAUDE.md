@@ -116,7 +116,8 @@ docs/                    # документация проекта
 | [`docs/redesign/README.md`](docs/redesign/README.md) | **Редизайн главной по макету Figma — активная задача.** Правила, процесс, реестр блоков |
 | [`docs/redesign/video-hero.md`](docs/redesign/video-hero.md) | **Видео на первом экране — боевая главная с 11.09.** HERO по высоте равен видео (не экрану!), перекодировка ролика, шрифт Denistina, чёрный экран и прочие грабли |
 | [`docs/redesign/animations-restore.md`](docs/redesign/animations-restore.md) | **Как вернуть анимации на главную.** Слой версии 6 цел, но не подключён — пошаговая инструкция, грабли, что проверить |
-| [`docs/redesign/client-feedback-2026-08-25.md`](docs/redesign/client-feedback-2026-08-25.md) | **План правок по замечаниям заказчика от 25.08 — актуальная задача.** Замеры, эталон из макета, порядок работ |
+| [`docs/redesign/client-feedback-2026-09-11.md`](docs/redesign/client-feedback-2026-09-11.md) | **Спецификация правок заказчика от 07–08.09 — актуальная задача.** Новый диптих создателей с «Читать дальше», коллаж GUESTS, VALUES, футер. Числа при 1280, чек-листы приёмки |
+| [`docs/redesign/client-feedback-2026-08-25.md`](docs/redesign/client-feedback-2026-08-25.md) | План правок по замечаниям заказчика от 25.08 (выполнен). Замеры, эталон из макета, порядок работ |
 | [`docs/redesign/client-feedback-2026-08.md`](docs/redesign/client-feedback-2026-08.md) | Правки заказчика (авг. 2026): разбор каждого замечания, журнал предыдущих кругов |
 | [`docs/redesign/figma-parity-checklist.md`](docs/redesign/figma-parity-checklist.md) | **Как приводить блок в соответствие с Figma по координатам узлов.** Метод, статус по блокам, грабли — читать до любой правки вёрстки главной |
 | [`docs/redesign/lightweight-scale-plan.md`](docs/redesign/lightweight-scale-plan.md) | **Облегчённый масштаб главной — то, что сейчас на боевой `/`.** Замеры, механизм CSS-масштаба, семь коэффициентов, грабли — читать до правки размеров |

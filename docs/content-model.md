@@ -160,3 +160,35 @@ image{ ..., asset->{ _id, metadata{dimensions{width,height,aspectRatio}} } }
 ⚠️ **Комментарии внутри GROQ — только `//`.** Блочный `/* … */` роняет запрос в 500
 (`expected '}' following object body`), а обратные кавычки закрывают шаблонную строку,
 в которой лежит запрос. На обоих напоролись при добавлении этой проекции.
+
+---
+
+## `founders` — диптих создателей, поля добавлены 2026-09-11
+
+Нижняя часть секции «Создатели» — два фото по центру, текст по бокам, «Читать дальше»
+(спецификация — [`redesign/client-feedback-2026-09-11.md`](redesign/client-feedback-2026-09-11.md), п. 1).
+
+| Шаг | Файл | Что |
+|---|---|---|
+| 1. Схема | [`sanity/schemas/homePage.ts`](../sanity/schemas/homePage.ts) | хелпер `founderPersonField()` + поле `diptychCaption` |
+| 2. Запрос | [`lib/sanity.queries.ts`](../lib/sanity.queries.ts) | проекция `founders{ …, founderOne{…}, founderTwo{…}, diptychCaption }` |
+| 3. Тип | [`lib/home-data.ts`](../lib/home-data.ts) | `FounderPerson`, `FounderSocial`, `SocialPlatform` |
+| 4. Рендер | [`components/sections/founders-diptych.tsx`](../components/sections/founders-diptych.tsx) | клиентский компонент (раскрытие текста) |
+
+| Поле | Тип | Пусто = |
+|---|---|---|
+| `founderOne` / `founderTwo` `.description` | `text` | короткого текста нет |
+| `.descriptionMore` | `text` | нет кнопки «Читать дальше» |
+| `.socials[]` | `{platform: instagram \| telegram \| youtube, url}` | нет иконок |
+| `diptychCaption` | `string` | нет подписи под фото |
+
+`founderOne` — фото слева, `founderTwo` — справа. Иконки соцсетей — в коде
+([`components/ui/social-icons.tsx`](../components/ui/social-icons.tsx)), новая соцсеть =
+новый путь SVG там + значение в `SOCIAL_PLATFORMS` в схеме.
+
+⚠️ **Обрезка фото создателей в Studio (`crop`) сброшена 11.09** — у старого диптиха с
+«лепестками» она была сильной (у Алёны видна только середина кадра), новому макету нужен
+кадр целиком. Если кто-то снова обрежет фото в Studio — на сайте обрежется тоже.
+
+Тексты, соцсети и подпись проставлены скриптом 11.09; резервная копия документа до правки —
+`Фото/backups/homePage-2026-09-11-before-feedback.json` (папка не в git).

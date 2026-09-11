@@ -1,30 +1,9 @@
 import Link from "next/link";
 import { SanityImage } from "@/components/ui/sanity-image";
 import { PortableTextContent } from "@/components/ui/portable-text";
-import { cn } from "@/lib/utils";
 import { SectionEyebrow } from "@/components/ui/section-eyebrow";
-
-interface FoundersLink {
-  label?: string;
-  url?: string;
-}
-
-interface FounderPerson {
-  photo?: any;
-  name?: string;
-  role?: string;
-  description?: string;
-}
-
-interface FoundersContent {
-  eyebrow?: string;
-  heading?: string;
-  body?: any;
-  photo?: any;
-  links?: FoundersLink[];
-  founderOne?: FounderPerson;
-  founderTwo?: FounderPerson;
-}
+import { FoundersDiptych } from "@/components/sections/founders-diptych";
+import type { FoundersContent } from "@/lib/home-data";
 
 interface FoundersSectionProps {
   founders?: FoundersContent | null;
@@ -32,60 +11,6 @@ interface FoundersSectionProps {
 
 /* Якорь на секцию этой же страницы — см. пояснение в hero-section.tsx */
 const CTA = { label: "Наши ценности", href: "#values" };
-
-/**
- * Форма фото создателей — «лепесток» из Figma (`5:248`). Радиусы заданы в
- * процентах от сторон, поэтому форма одинаковая на любой ширине контейнера
- * (та же техника, что и коллаж в GUESTS).
- *
- * В макете у двух персон формы разные — приведены к одной по просьбе заказчика:
- * разные асимметричные «кляксы» рядом читались как ошибка вёрстки, а не как приём.
- */
-const FOUNDER_PHOTO_SHAPE =
-  "rounded-tl-[71%] rounded-tr-[26%] rounded-br-[72%] rounded-bl-[25%]";
-
-function FounderCard({ person }: { person?: FounderPerson }) {
-  if (!person?.name) return null;
-
-  return (
-    <figure className="flex w-full flex-col items-center text-center lg:items-start lg:text-left">
-      <div
-        className={cn(
-          "relative aspect-[3/4] w-full max-w-[240px] overflow-hidden sm:max-w-[300px] lg:aspect-[343/457] lg:max-w-[min(17.9vw,343px)]",
-          FOUNDER_PHOTO_SHAPE
-        )}
-      >
-        {person.photo?.asset ? (
-          <SanityImage
-            image={person.photo}
-            fill
-            aspectRatio={3 / 4}
-            className="object-cover"
-            alt={person.name}
-          />
-        ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-subtle-border via-primary to-text-deep" />
-        )}
-      </div>
-
-      <figcaption className="mt-6 lg:mt-[min(1.15vw,22px)]">
-        <p className="font-heading text-[24px] italic leading-tight text-background sm:text-[26px] lg:text-[min(1.82vw,35px)] lg:leading-[min(2.28vw,43.75px)]">
-          {person.name}
-        </p>
-        {person.role && (
-          <p className="mt-2 text-[11px] font-medium uppercase tracking-[0.18em] text-subtle sm:text-[11.5px] lg:mt-[min(1.04vw,20px)] lg:text-[clamp(12px,0.68vw,13px)]">
-            {person.role}
-          </p>
-        )}
-        {person.description && (
-          <p className="mx-auto mt-4 max-w-[320px] text-[14.5px] font-light leading-[1.6] text-background/90 lg:mx-0 lg:mt-[min(1.3vw,25px)] lg:max-w-[min(24.7vw,475px)] lg:text-[clamp(12px,0.885vw,17px)] lg:leading-[1.65]">
-            {person.description}
-          </p>
-        )}
-      </figcaption>
-    </figure>
-  );
-}
 
 export function FoundersSection({ founders }: FoundersSectionProps) {
   if (!founders) return null;
@@ -95,7 +20,9 @@ export function FoundersSection({ founders }: FoundersSectionProps) {
 
   return (
     <section id="founders" className="relative w-full overflow-hidden bg-primary">
-      {/* Верхняя панель снята с узла `57:282` (1920×828): фото слева 1006 (52.4%),
+      {/* Верхняя панель снята с узла `57:282` (1920×828): фото слева 1006 (52.4%;
+          с 11.09.2026 — ровно 50%, чтобы стык фото/панель стоял на центральной
+          оси страницы под стыком текст/коллаж в GUESTS — просьба заказчика),
           текст с x=1101 — это 10.4% ширины ПРАВОЙ панели, эйбрау y=69,
           заголовок y=117 (53px/50), текст y=335 (27px/35, колонка 489),
           кнопка y=692 (221.66×57.63). `min-h`, а не `aspect` — см. ABOUT. */}
@@ -104,7 +31,7 @@ export function FoundersSection({ founders }: FoundersSectionProps) {
             `[data-static-photo] img`: фото приглушено постоянным `opacity-60`,
             общая v6-анимация появления фото с этим не совместима. */}
         <div
-          className="relative h-[60vh] max-h-[440px] w-full self-stretch opacity-60 sm:h-[70vh] sm:max-h-[560px] lg:h-auto lg:max-h-none lg:w-[52.4%]"
+          className="relative h-[60vh] max-h-[440px] w-full self-stretch opacity-60 sm:h-[70vh] sm:max-h-[560px] lg:h-auto lg:max-h-none lg:w-1/2"
           data-static-photo=""
         >
           {founders.photo?.asset ? (
@@ -176,26 +103,40 @@ export function FoundersSection({ founders }: FoundersSectionProps) {
       </div>
 
       {/*
-        Нижняя лента: диптих создателей — отдельная секция в макете (`5:230`,
-        1920×946). Колонки стоят на x=332 и x=1164 (то есть шириной 475 с
-        зазором 357, вся полоса 1307), текст выключен влево, фото 343×457,
-        имя с y=660, роль с y=723, текст с y=770. На мобильной — прежняя
-        центрированная колонка.
+        Диптих «Создатели проекта» — с 11.09.2026 по макету заказчика от 07.09
+        (вместо двух фото-«лепестков» с текстом под ними;
+        `docs/redesign/client-feedback-2026-09-11.md`, п. 1). Числа при 1280:
+
+          надзаголовок по центру, 49 от верха → фото с y=114;
+          два фото 325×420 ВПЛОТНУЮ, стык ровно по центру страницы;
+          текст по бокам в колонках 210 с зазором 36 до фото: слева выключен
+          вправо, справа — влево; внизу подпись в две строки, 47 до низа.
+
+        Сетка на десктопе — четыре колонки «текст | фото | фото | текст»;
+        разметка персоны (фото + текст) одна на обе раскладки, на десктопе её
+        обёртка растворяется (`lg:contents`). Всё поведение «Читать дальше» —
+        в `founders-diptych.tsx`.
+        Фон темнее верхней панели — как в макете (≈ #57574B → `primary-dark`).
       */}
       {hasPeople && (
-        <div className="relative mx-auto w-full max-w-[1920px] px-6 sm:px-10 md:px-16 lg:px-0">
-          <div className="border-t border-background/15 pb-16 pt-14 lg:border-t-0 lg:pb-[min(4.1vw,79px)] lg:pt-[min(4.1vw,79px)]">
-            {/* В макете диптих — отдельная секция со своим надзаголовком
-                «создатели проекта» на y=79; фото начинаются с y=181. */}
+        <div className="relative bg-primary-dark px-6 pb-16 pt-14 sm:px-10 lg:px-0 lg:pb-[calc(44*var(--ona-u,1px))] lg:pt-[calc(44*var(--ona-u,1px))]">
+          {/* Содержимое — не шире 1280 × множитель: выше 1920 множитель
+              перестаёт расти, и без потолка сетка и надзаголовок жили бы на
+              всю ширину окна (аудит `audit-scale.mjs` ловил это на 2560).
+              ⚠️ Именно `max-w`, а не `w`: `--ona-u` считается от `100vw`,
+              ВМЕСТЕ с полосой прокрутки, а центрирование — по ширине без неё.
+              С `w-[1280u]` блок на Windows вылезал на ширину полосы (15–17px)
+              и стык фото уезжал вправо от центра страницы на ~8px. */}
+          <div className="lg:mx-auto lg:max-w-[calc(1280*var(--ona-u,1px))]">
             {founders.eyebrow && (
-              <SectionEyebrow className="hidden text-center text-subtle lg:block">
-                {founders.eyebrow}
-              </SectionEyebrow>
+              <SectionEyebrow className="text-center text-subtle">{founders.eyebrow}</SectionEyebrow>
             )}
-            <div className="mx-auto grid max-w-[860px] grid-cols-1 justify-items-center gap-14 sm:grid-cols-2 sm:gap-10 lg:ml-[min(17.29vw,332px)] lg:mr-0 lg:mt-[min(4.27vw,82px)] lg:max-w-[min(68.1vw,1307px)] lg:grid-cols-[min(24.7vw,475px)_min(24.7vw,475px)] lg:justify-between lg:justify-items-start lg:gap-0">
-              <FounderCard person={founders.founderOne} />
-              <FounderCard person={founders.founderTwo} />
-            </div>
+
+            <FoundersDiptych
+              founderOne={founders.founderOne}
+              founderTwo={founders.founderTwo}
+              caption={founders.diptychCaption}
+            />
           </div>
         </div>
       )}
