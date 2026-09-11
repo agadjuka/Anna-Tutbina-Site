@@ -25,8 +25,17 @@ export function FoundersSection({ founders }: FoundersSectionProps) {
           оси страницы под стыком текст/коллаж в GUESTS — просьба заказчика),
           текст с x=1101 — это 10.4% ширины ПРАВОЙ панели, эйбрау y=69,
           заголовок y=117 (53px/50), текст y=335 (27px/35, колонка 489),
-          кнопка y=692 (221.66×57.63). `min-h`, а не `aspect` — см. ABOUT. */}
-      <div className="flex flex-col lg:mx-auto lg:min-h-[min(43.1vw,828px)] lg:max-w-[1920px] lg:flex-row">
+          кнопка y=692 (221.66×57.63). `min-h`, а не `aspect` — см. ABOUT.
+
+          Размеры lg — по закону одного множителя (`calc(<px при 1280> *
+          var(--ona-u))`, CLAUDE.md). Высоту строки задаёт контент панели:
+          `min-h 380` — только страховка; фото кадрируется по центру. Паддинги
+          и зазоры панели — общие переменные `--ona-panel-*` (globals.css):
+          заголовки ABOUT/FOUNDERS/COLLAB стоят на одной высоте.
+          ⚠️ `max-w 300` у заголовка держит перенос «ЗА КАЖДЫМ / ПУТЕШЕСТВИЕМ /
+          СТОЯТ ЛЮДИ» (рабочий диапазон при кегле 29 — 234…343): поменяют текст
+          в Sanity — пересчитать. */}
+      <div className="flex flex-col lg:mx-auto lg:min-h-[calc(380*var(--ona-u))] lg:max-w-[1920px] lg:flex-row">
         {/* `data-static-photo` — см. пояснение в globals.css у правила
             `[data-static-photo] img`: фото приглушено постоянным `opacity-60`,
             общая v6-анимация появления фото с этим не совместима. */}
@@ -51,8 +60,8 @@ export function FoundersSection({ founders }: FoundersSectionProps) {
           )}
         </div>
 
-        <div className="relative flex flex-1 items-center px-6 py-14 sm:px-10 md:px-16 lg:items-start lg:px-0 lg:pt-[min(3.59vw,69px)]">
-          <div className="mx-auto w-full max-w-[520px] lg:mx-0 lg:ml-[10.4%] lg:mr-[6%] lg:max-w-[min(38vw,583px)]">
+        <div className="relative flex flex-1 items-center px-6 py-14 sm:px-10 md:px-16 lg:items-stretch lg:px-0 lg:pb-[var(--ona-panel-pad-bottom)] lg:pt-[var(--ona-panel-pad-top)]">
+          <div className="mx-auto w-full max-w-[520px] lg:mx-0 lg:ml-[10.4%] lg:mr-[6%] lg:flex lg:max-w-[calc(350.21*var(--ona-u))] lg:flex-col">
             {founders.eyebrow && (
               <SectionEyebrow className="text-center text-subtle lg:text-left">
                 {founders.eyebrow}
@@ -60,7 +69,7 @@ export function FoundersSection({ founders }: FoundersSectionProps) {
             )}
 
             {founders.heading && (
-              <h2 className="mt-4 text-center font-heading text-[34px] uppercase leading-[0.95] text-background lg:mt-[min(1.46vw,28px)] lg:text-left lg:text-[min(2.76vw,53px)] lg:leading-[min(2.6vw,50px)]">
+              <h2 className="mt-4 text-center font-heading text-[34px] uppercase leading-[0.95] text-background lg:mt-[var(--ona-panel-eyebrow-gap)] lg:max-w-[calc(300*var(--ona-u))] lg:text-left lg:text-[calc(29*var(--ona-u))] lg:leading-[calc(28*var(--ona-u))]">
                 {founders.heading}
               </h2>
             )}
@@ -68,14 +77,14 @@ export function FoundersSection({ founders }: FoundersSectionProps) {
             {founders.body && (
               <PortableTextContent
                 value={founders.body}
-                className="mt-6 space-y-4 text-center text-[16px] leading-[1.5] text-background sm:text-[18px] lg:mt-[min(3.54vw,68px)] lg:max-w-[min(25.5vw,489px)] lg:space-y-[min(1.82vw,35px)] lg:text-left lg:text-[clamp(12px,1.41vw,27px)] lg:leading-[min(1.82vw,35px)]"
+                className="mt-6 space-y-4 text-center text-[16px] leading-[1.5] text-background sm:text-[18px] lg:mt-[var(--ona-panel-heading-gap)] lg:max-w-none lg:space-y-[calc(12.81*var(--ona-u))] lg:text-left lg:text-[calc(14*var(--ona-u))] lg:leading-[calc(19.5*var(--ona-u))]"
               />
             )}
 
-            <div className="mt-9 flex flex-col items-center gap-6 lg:mt-[min(2.6vw,50px)] lg:flex-row lg:items-center lg:justify-start lg:gap-9">
+            <div className="mt-9 flex flex-col items-center gap-6 lg:mt-[var(--ona-panel-button-gap)] lg:flex-row lg:items-center lg:justify-start lg:gap-9">
               <Link
                 href={CTA.href}
-                className="inline-flex h-12 items-center justify-center rounded-full border border-background px-7 text-[13px] font-semibold tracking-[0.02em] text-background transition-colors duration-300 hover:bg-background hover:text-primary lg:h-[clamp(48px,3vw,58px)] lg:w-[min(11.55vw,222px)] lg:px-0"
+                className="inline-flex h-12 items-center justify-center rounded-full border border-background px-7 text-[13px] font-semibold tracking-[0.02em] text-background transition-colors duration-300 hover:bg-background hover:text-primary lg:h-[calc(30.48*var(--ona-u))] lg:w-[calc(106.44*var(--ona-u))] lg:px-0 lg:text-[calc(11*var(--ona-u))]"
               >
                 {CTA.label}
               </Link>

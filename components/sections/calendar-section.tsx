@@ -35,7 +35,7 @@ export function CalendarSection({ calendar, tours }: CalendarSectionProps) {
         </SectionEyebrow>
       )}
       {calendar?.heading && (
-        <h2 className="mt-3 font-heading text-[32px] uppercase leading-tight text-primary sm:text-[33px] lg:mt-[min(0.73vw,14px)] lg:text-[min(3vw,58px)] lg:leading-[min(3.07vw,59px)]">
+        <h2 className="mt-3 font-heading text-[32px] uppercase leading-tight text-primary sm:text-[33px] lg:mt-[calc(5.14*var(--ona-u))] lg:text-[calc(26.11*var(--ona-u))] lg:leading-[calc(26.72*var(--ona-u))]">
           {calendar.heading}
         </h2>
       )}
@@ -47,7 +47,7 @@ export function CalendarSection({ calendar, tours }: CalendarSectionProps) {
        (интерлиньяж 59), таблетки годов y=116 (125×52), карточки y=245.
        Контент шире стандартного контейнера: в макете он идёт от x=339 до 1590,
        то есть 1251px — поэтому `size="wide"` плюс ограничение внутри. */
-    <section id="tours" className="relative bg-background py-16 lg:min-h-[min(37.64vw,723px)] lg:py-[min(4.06vw,78px)]">
+    <section id="tours" className="relative bg-background py-16 lg:min-h-[calc(264.99*var(--ona-u))] lg:py-[calc(28.58*var(--ona-u))]">
       {/* Нижний предел `clamp` у заголовка опущен с 40px до 30px (и так же
           во всех остальных блоках главной). Формула `3vw` даёт 57.6px на 1920 —
           как в макете, — но на 1280 она хочет 38.4px, а пол в 40px этого не

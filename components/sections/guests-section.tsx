@@ -107,24 +107,28 @@ export function GuestsSection({ guests }: GuestsSectionProps) {
   return (
     /* Текстовая колонка снята с узлов Figma (секция `5:189`): эйбрау, заголовок
        (курсив — primary), пункты списка с ✦, абзацы с выделением Cormorant.
-       Размеры на главной задаёт слой масштаба в `globals.css` (раздел GUESTS).
+       Размеры lg — по закону одного множителя (кегли облегчённые v8,
+       согласованы 25.08; шаг списка 34 = строка маркера 26.25 + 8). Высота
+       секции 592 — ради макетных пропорций плиток коллажа (см. ниже), текст
+       стоит по центру высоты; ширина текста 491 (= 526.5 − 35.5 до стыка) —
+       на ней абзацы дают 3 и 4 строки.
 
        Раскладка с 11.09.2026: текст — в левой половине (левый край = край общего
        контейнера страницы), коллаж — абсолютным слоем в правой половине,
        ровно от центра страницы. Стык стоит на той же вертикали, что и стык
        водопад/панель в FOUNDERS ниже — заказчик провёл по ней красную линию. */
-    <section id="guests" className="relative bg-background pt-16 lg:py-0">
+    <section id="guests" className="relative bg-background pt-16 lg:flex lg:min-h-[calc(592*var(--ona-u))] lg:flex-col lg:justify-center lg:py-[calc(40*var(--ona-u))]">
       <Container size="wide">
-        <div className="lg:w-[calc(526.5*var(--ona-u,1px))]">
+        <div className="lg:w-[calc(526.5*var(--ona-u))] lg:pr-[calc(35.5*var(--ona-u))]">
           {guests.eyebrow && (
             <SectionEyebrow className="text-center text-subtle lg:text-left">
               {guests.eyebrow}
             </SectionEyebrow>
           )}
 
-          <div className="mt-10 lg:mt-[min(1.46vw,28px)]">
+          <div className="mt-10 lg:mt-[calc(10.28*var(--ona-u))]">
             {(guests.heading || guests.headingAccent) && (
-              <h2 className="font-heading text-[32px] leading-tight text-foreground sm:text-[33px] lg:text-[min(2.76vw,53px)] lg:leading-[min(3.07vw,59px)]">
+              <h2 className="font-heading text-[32px] leading-tight text-foreground sm:text-[33px] lg:text-[calc(24.02*var(--ona-u))] lg:leading-[calc(26.72*var(--ona-u))]">
                 {guests.heading}{" "}
                 {guests.headingAccent && (
                   <span className="italic text-primary">{guests.headingAccent}</span>
@@ -133,13 +137,13 @@ export function GuestsSection({ guests }: GuestsSectionProps) {
             )}
 
             {items.length > 0 && (
-              <ul className="mt-8 space-y-5 lg:mt-[min(1.98vw,38px)] lg:space-y-[min(2.57vw,49px)]">
+              <ul className="mt-8 space-y-5 lg:mt-[calc(13.94*var(--ona-u))] lg:space-y-[calc(8*var(--ona-u))]">
                 {items.map((item, index) => (
                   <li key={index} className="flex items-baseline gap-4 lg:items-center lg:gap-[min(1.86vw,36px)]">
-                    <span aria-hidden="true" className="text-[16px] leading-[26px] text-primary lg:text-[clamp(12px,1vw,19px)] lg:leading-[26.25px]">
+                    <span aria-hidden="true" className="text-[16px] leading-[26px] text-primary lg:text-[calc(10.5*var(--ona-u))] lg:leading-[calc(26.25*var(--ona-u))]">
                       ✦
                     </span>
-                    <span className="text-[17px] leading-snug text-foreground sm:text-[20px] lg:text-[clamp(12px,1.3vw,25px)] lg:leading-[min(1.37vw,26.25px)]">
+                    <span className="text-[17px] leading-snug text-foreground sm:text-[20px] lg:text-[calc(12.9*var(--ona-u))] lg:leading-[calc(13.6*var(--ona-u))]">
                       {item}
                     </span>
                   </li>
@@ -150,7 +154,7 @@ export function GuestsSection({ guests }: GuestsSectionProps) {
             {guests.body && (
               <PortableTextContent
                 value={guests.body}
-                className="mt-10 space-y-5 text-[17px] leading-[1.45] text-foreground sm:text-[20px] lg:mt-[min(3.44vw,66px)] lg:space-y-[min(2.45vw,47px)] lg:text-[clamp(12px,1.3vw,25px)] lg:leading-[min(1.82vw,35px)] [&_em]:font-heading [&_em]:font-light [&_em]:italic [&_em]:text-[1.25em] lg:[&_em]:text-[1.8em] [&_em]:leading-[1]"
+                className="mt-10 space-y-5 text-[17px] leading-[1.45] text-foreground sm:text-[20px] lg:mt-[calc(24.22*var(--ona-u))] lg:space-y-[calc(17.25*var(--ona-u))] lg:text-[calc(12.9*var(--ona-u))] lg:leading-[calc(18.05*var(--ona-u))] [&_em]:font-heading [&_em]:font-light [&_em]:italic [&_em]:text-[1.25em] lg:[&_em]:text-[1.8em] [&_em]:leading-[1]"
               />
             )}
           </div>

@@ -51,13 +51,13 @@ export function CollabSection({ collab, primaryContacts = [], decorPhoto }: Coll
           `docs/redesign/client-feedback-2026-08.md` п. 3.7. */}
       {/* `min-h`, а не `aspect-ratio`: с жёсткой пропорцией теги внизу вылезали
           за кромку секции и обрезались `overflow-hidden` (та же грабля, что в ABOUT). */}
-      <div className="flex flex-col lg:mx-auto lg:min-h-[min(38.7vw,743px)] lg:max-w-[1920px] lg:flex-row">
+      <div className="flex flex-col lg:mx-auto lg:min-h-[calc(380*var(--ona-u))] lg:max-w-[1920px] lg:flex-row">
         {/* Раскладка снята с узлов Figma (секция `5:253`, 1920×743): эйбрау y=65,
             заголовок y=85 (50px/59), абзацы y=239 и y=381 (шириной 510),
             кнопка y=553 (189×57.6), теги y=661. Текст начинается на x=204 —
             это 21.1% ширины ПАНЕЛИ (967px), а не 10.6% ширины секции:
             процентные отступы считаются от родителя, легко ошибиться вдвое. */}
-        <div className="relative order-2 flex flex-1 items-center px-6 py-14 text-center sm:px-10 md:px-16 lg:order-1 lg:items-start lg:px-0 lg:pt-[min(3.39vw,65px)] lg:text-left">
+        <div className="relative order-2 flex flex-1 items-center px-6 py-14 text-center sm:px-10 md:px-16 lg:order-1 lg:items-stretch lg:px-0 lg:pb-[var(--ona-panel-pad-bottom)] lg:pt-[var(--ona-panel-pad-top)] lg:text-left">
           {/* Цветок из макета: намеренно срезается краями секции (у секции
               `overflow-hidden`), как нарисовано. Только на десктопе — на
               мобильной панель узкая, декор превращается в грязное пятно за
@@ -110,7 +110,7 @@ export function CollabSection({ collab, primaryContacts = [], decorPhoto }: Coll
               />
             </div>
           )}
-          <div className="mx-auto w-full max-w-[560px] lg:mx-0 lg:ml-[21.1%] lg:mr-[3%] lg:max-w-[min(37vw,711px)]">
+          <div className="mx-auto w-full max-w-[560px] lg:mx-0 lg:ml-[21.1%] lg:mr-[3%] lg:flex lg:max-w-[calc(340.99*var(--ona-u))] lg:flex-col">
             {collab.eyebrow && (
               <SectionEyebrow className="text-background">
                 {collab.eyebrow}
@@ -118,7 +118,11 @@ export function CollabSection({ collab, primaryContacts = [], decorPhoto }: Coll
             )}
 
             {(collab.homeHeading || collab.homeHeadingAccent) && (
-              <h2 className="mt-4 font-heading text-[34px] uppercase leading-[0.95] text-background lg:mt-0 lg:text-[min(2.6vw,50px)] lg:leading-[min(3.07vw,59px)]">
+              /* ⚠️ `max-w 284` держит перенос «НЕ НАШЛИ / ПОДХОДЯЩИЙ ФОРМАТ?»
+                 (просьба заказчика; рабочий диапазон при 1280 — 274…294).
+                 Поменяют текст в Sanity — пересчитать. Паддинги и зазоры
+                 панели — общие `--ona-panel-*`, как в ABOUT/FOUNDERS. */
+              <h2 className="mt-4 font-heading text-[34px] uppercase leading-[0.95] text-background lg:mt-[var(--ona-panel-eyebrow-gap)] lg:max-w-[calc(284*var(--ona-u))] lg:text-[calc(22.63*var(--ona-u))] lg:leading-[calc(26.72*var(--ona-u))]">
                 {collab.homeHeading}{" "}
                 {collab.homeHeadingAccent && (
                   <em className="font-heading italic">{collab.homeHeadingAccent}</em>
@@ -129,13 +133,13 @@ export function CollabSection({ collab, primaryContacts = [], decorPhoto }: Coll
             {collab.homeDescription && (
               <PortableTextContent
                 value={collab.homeDescription}
-                className="mt-6 space-y-4 text-[16px] leading-[1.5] text-background sm:text-[18px] lg:mt-[min(1.88vw,36px)] lg:max-w-[min(26.6vw,510px)] lg:space-y-[min(1.77vw,34px)] lg:text-[clamp(12px,1.41vw,27px)] lg:leading-[min(1.82vw,35px)]"
+                className="mt-6 space-y-4 text-[16px] leading-[1.5] text-background sm:text-[18px] lg:mt-[var(--ona-panel-heading-gap)] lg:max-w-[calc(245.15*var(--ona-u))] lg:space-y-[calc(12.46*var(--ona-u))] lg:text-[calc(12.99*var(--ona-u))] lg:leading-[calc(16.77*var(--ona-u))]"
               />
             )}
 
             {/* Раскрывает реальные контакты вместо перехода на /custom-tour: там нет
                 никакого способа связаться, и путь пользователя упирался в тупик. */}
-            <ContactCta label={CTA_LABEL} contacts={primaryContacts} className="mt-9 lg:mt-[min(3.33vw,64px)]" />
+            <ContactCta label={CTA_LABEL} contacts={primaryContacts} className="mt-9 lg:mt-[var(--ona-panel-button-gap)]" />
 
             {/* Теги. Два требования заказчика (2026-08-21) сразу:
                 правая граница ряда — там же, где кончается заголовок, и
@@ -158,7 +162,7 @@ export function CollabSection({ collab, primaryContacts = [], decorPhoto }: Coll
                 остаётся перенос и кегль 12px — на телефоне четыре русские
                 фразы в строку не помещаются ни при каком читаемом кегле. */}
             {collab.tags && collab.tags.length > 0 && (
-              <div className="mt-8 flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 whitespace-nowrap text-[12px] tracking-[0.02em] text-background/80 sm:gap-x-[clamp(8px,1.25vw,24px)] sm:text-[clamp(12px,0.78vw,15px)] lg:mt-[min(2.6vw,50px)] lg:max-w-[92%] lg:flex-nowrap lg:justify-start lg:text-[min(0.78vw,15px)]">
+              <div className="mt-8 flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 whitespace-nowrap text-[12px] tracking-[0.02em] text-background/80 sm:gap-x-[clamp(8px,1.25vw,24px)] sm:text-[clamp(12px,0.78vw,15px)] lg:mt-[calc(18.3*var(--ona-u))] lg:max-w-[92%] lg:flex-nowrap lg:justify-start lg:text-[calc(10*var(--ona-u))]">
                 {/* Точка принадлежит СЛЕДУЮЩЕМУ тегу, а не предыдущему.
                     Когда ряд переносится, строка иначе заканчивалась точкой
                     («Корпоративные туры ·»), и это читалось как опечатка.

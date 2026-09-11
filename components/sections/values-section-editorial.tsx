@@ -41,7 +41,7 @@ export function ValuesSectionEditorial({ values }: ValuesSectionEditorialProps) 
        эйбрау y=58, заголовок y=119 (интерлиньяж 50), сетка карточек с y=246,
        карточка 400×268, зазоры 91×81, ширина сетки 1382 (x 269…1651).
        Разбор — `docs/redesign/client-feedback-2026-08.md`. */
-    <section id="values" className="relative overflow-hidden bg-primary py-16 lg:min-h-[min(53.1vw,1020px)] lg:py-0">
+    <section id="values" className="relative overflow-hidden bg-primary py-16 lg:pb-[calc(39*var(--ona-u))] lg:pt-0">
       {/* `data-static-photo` — эти фото приглушены постоянным `opacity-45` на
           самой картинке; в v6 общая анимация появления фото (`v6ImageIn`,
           globals.css) без этого атрибута анимирует opacity к 1 и в конце
@@ -102,7 +102,10 @@ export function ValuesSectionEditorial({ values }: ValuesSectionEditorialProps) 
           (340×310 против 395×278), и тот же текст занимал 5–6 строк вместо
           четырёх. Правка заказчика, см. `docs/redesign/client-feedback-2026-08.md`
           пп. 3.4. */}
-      <Container size="wide" className="relative lg:pt-[min(3.02vw,58px)]">
+      {/* Отступ сверху до надзаголовка = отступу от карточек до низа (39 при
+          1280): заказчик 08.09 отметил галочками ровно эти два расстояния.
+          `min-height` у секции нет — высоту задаёт контент. */}
+      <Container size="wide" className="relative lg:pt-[calc(39*var(--ona-u))]">
         <div className="text-center">
           {values?.eyebrow && (
             <SectionEyebrow className="text-background">
@@ -110,7 +113,7 @@ export function ValuesSectionEditorial({ values }: ValuesSectionEditorialProps) 
             </SectionEyebrow>
           )}
           {values?.heading && (
-            <h2 className="mt-3 font-heading text-[32px] uppercase leading-tight text-background sm:text-[33px] lg:mt-[min(2.13vw,41px)] lg:text-[min(2.81vw,54px)] lg:leading-[min(2.6vw,50px)]">
+            <h2 className="mt-3 font-heading text-[32px] uppercase leading-tight text-background sm:text-[33px] lg:mt-[calc(15*var(--ona-u))] lg:text-[calc(24.46*var(--ona-u))] lg:leading-[calc(22.63*var(--ona-u))]">
               {values.heading}
             </h2>
           )}
@@ -165,11 +168,11 @@ export function ValuesSectionEditorial({ values }: ValuesSectionEditorialProps) 
             Исходные (=макетные) значения на 1920px, если понадобится вернуть:
             сетка 1382, зазоры 91×81, карточка min-h 268, поля 35/34/64,
             кружок 44 и 16px, заголовок 25px, текст 17px. */}
-        <div className="mt-10 hidden sm:grid sm:grid-cols-2 sm:gap-6 lg:mx-auto lg:mt-[min(3.6vw,69px)] lg:max-w-[min(79.2vw,1244px)] lg:grid-cols-3 lg:gap-x-[min(4.27vw,82px)] lg:gap-y-[min(3.8vw,73px)]">
+        <div className="mt-10 hidden sm:grid sm:grid-cols-2 sm:gap-6 lg:mx-auto lg:mt-[calc(25.34*var(--ona-u))] lg:max-w-[calc(729.91*var(--ona-u))] lg:grid-cols-3 lg:gap-x-[calc(30.06*var(--ona-u))] lg:gap-y-[calc(26.75*var(--ona-u))]">
           {items.map((item, index) => (
             <div
               key={index}
-              className="flex flex-col rounded-2xl bg-background px-8 pt-7 pb-10 text-center shadow-[0_1px_2px_rgba(0,0,0,0.04)] ring-1 ring-black/[0.03] sm:rounded-[24px] lg:min-h-[min(12.56vw,241px)] lg:px-[min(1.64vw,32px)] lg:pb-[min(3vw,58px)] lg:pt-[min(1.59vw,31px)]"
+              className="flex flex-col rounded-2xl bg-background px-8 pt-7 pb-10 text-center shadow-[0_1px_2px_rgba(0,0,0,0.04)] ring-1 ring-black/[0.03] sm:rounded-[24px] lg:min-h-[calc(102.09*var(--ona-u))] lg:px-[calc(13.33*var(--ona-u))] lg:pb-[calc(24.38*var(--ona-u))] lg:pt-[calc(12.92*var(--ona-u))]"
             >
               {/* Кружок с номером — в макете это слой «Border»: прозрачный, с
                   обводкой `1px #69695c`, 44×44, радиус 22 (то есть круг), номер
@@ -177,18 +180,18 @@ export function ValuesSectionEditorial({ values }: ValuesSectionEditorialProps) 
                   primary-кружок 48px со светлой цифрой — правка заказчика
                   2026-08-20: «прозрачный кружок и в мобильной, и в десктопной».
                   С 2026-08-21 уменьшен вместе со всей карточкой: 40px / 14px. */}
-              <div className="mx-auto flex size-10 shrink-0 items-center justify-center rounded-full border border-primary lg:size-[min(2.08vw,40px)]">
-                <span className="font-heading text-[14px] italic leading-[25px] text-primary lg:text-[clamp(12px,0.73vw,14px)] lg:leading-[min(1.3vw,25px)]">
+              <div className="mx-auto flex size-10 shrink-0 items-center justify-center rounded-full border border-primary lg:size-[calc(28*var(--ona-u))]">
+                <span className="font-heading text-[14px] italic leading-[25px] text-primary lg:text-[calc(13*var(--ona-u))] lg:leading-[min(1.3vw,25px)]">
                   {String(index + 1).padStart(2, "0")}
                 </span>
               </div>
               {item.title && (
-                <p className="mt-4 font-heading text-[22px] leading-normal text-foreground lg:mt-[9px] lg:text-[clamp(12px,1.17vw,22.5px)] lg:leading-[1.47]">
+                <p className="mt-4 font-heading text-[22px] leading-normal text-foreground lg:mt-[calc(3.31*var(--ona-u))] lg:text-[calc(11*var(--ona-u))] lg:leading-[1.47]">
                   {item.title}
                 </p>
               )}
               {item.text && (
-                <p className="mt-3 text-[15px] font-light leading-[1.35] text-text-deep lg:mt-[min(1.17vw,22.5px)] lg:px-0 lg:text-[clamp(12px,0.8vw,15.3px)] lg:leading-[1.29]">
+                <p className="mt-3 text-[15px] font-light leading-[1.35] text-text-deep lg:mt-[calc(8.24*var(--ona-u))] lg:px-0 lg:text-[calc(11*var(--ona-u))] lg:leading-[1.29]">
                   {item.text}
                 </p>
               )}

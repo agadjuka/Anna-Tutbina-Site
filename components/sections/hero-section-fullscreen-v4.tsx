@@ -263,14 +263,14 @@ export function HeroSectionFullscreenV4({ hero }: HeroSectionFullscreenV4Props) 
 
         <div className="relative z-10 flex h-full flex-col items-center justify-end px-8 pb-24 pt-32 text-center">
           {hero?.eyebrow && (
-            <p className="hero-fade-up text-[15px] font-medium uppercase leading-[1.35] tracking-[0.18em] text-background">
+            <p className="hero-fade-up text-[15px] font-medium uppercase leading-[1.35] tracking-[0.18em] text-background lg:text-[calc(10*var(--ona-u))]">
               {hero.eyebrow}
             </p>
           )}
 
           {hero?.heading && (
             <h1
-              className="hero-fade-up mt-6 max-w-[900px] font-heading text-[clamp(52px,5vw,72px)] leading-[0.95] text-background"
+              className="hero-fade-up mt-6 max-w-[900px] font-heading text-[clamp(52px,5vw,72px)] leading-[0.95] text-background lg:mt-[calc(8.8*var(--ona-u))] lg:max-w-[calc(612*var(--ona-u))] lg:text-[calc(43.52*var(--ona-u))]"
               style={{ animationDelay: "120ms" }}
             >
               {hero.heading}
@@ -279,7 +279,7 @@ export function HeroSectionFullscreenV4({ hero }: HeroSectionFullscreenV4Props) 
 
           {(hero?.subheading || hero?.subheadingAccent) && (
             <p
-              className="hero-fade-up mt-4 max-w-[680px] font-heading text-[clamp(24px,1.8vw,32px)] leading-[1.15] text-background"
+              className="hero-fade-up mt-4 max-w-[680px] font-heading text-[clamp(24px,1.8vw,32px)] leading-[1.15] text-background lg:mt-[calc(5.84*var(--ona-u))] lg:max-w-[calc(489.6*var(--ona-u))] lg:text-[calc(17.28*var(--ona-u))]"
               style={{ animationDelay: "240ms" }}
             >
               {hero.subheading}
@@ -289,12 +289,12 @@ export function HeroSectionFullscreenV4({ hero }: HeroSectionFullscreenV4Props) 
           )}
 
           <div
-            className="hero-fade-up mt-9 flex flex-row flex-nowrap items-center justify-center gap-6"
+            className="hero-fade-up mt-9 flex flex-row flex-nowrap items-center justify-center gap-6 lg:mt-[calc(13.24*var(--ona-u))]"
             style={{ animationDelay: "360ms" }}
           >
             <Link
               href={CTA_PRIMARY.href}
-              className={cn(CTA_BASE, "border border-background bg-background text-foreground")}
+              className={cn(CTA_BASE, "border border-background bg-background text-foreground lg:h-[calc(35.56*var(--ona-u))] lg:px-[calc(20.32*var(--ona-u))] lg:text-[calc(11*var(--ona-u))]")}
             >
               {CTA_PRIMARY.label}
             </Link>
@@ -302,7 +302,7 @@ export function HeroSectionFullscreenV4({ hero }: HeroSectionFullscreenV4Props) 
               href={CTA_SECONDARY.href}
               className={cn(
                 CTA_BASE,
-                "border border-background/70 bg-transparent text-background hover:bg-background hover:text-foreground"
+                "border border-background/70 bg-transparent text-background hover:bg-background hover:text-foreground lg:h-[calc(35.56*var(--ona-u))] lg:px-[calc(20.32*var(--ona-u))] lg:text-[calc(11*var(--ona-u))]"
               )}
             >
               {CTA_SECONDARY.label}

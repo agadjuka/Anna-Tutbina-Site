@@ -34,7 +34,7 @@ export function ContactCta({ label, contacts, className, tone = "light" }: Conta
   const [open, setOpen] = useState(false);
 
   const base =
-    "inline-flex h-12 items-center justify-center rounded-full px-7 text-[13px] font-semibold tracking-[0.02em] transition-colors duration-300 lg:h-[clamp(48px,3vw,58px)] lg:w-[min(9.85vw,189px)] lg:px-0";
+    "inline-flex h-12 items-center justify-center rounded-full px-7 text-[13px] font-semibold tracking-[0.02em] transition-colors duration-300 lg:h-[calc(30.48*var(--ona-u))] lg:w-[calc(106*var(--ona-u))] lg:px-0 lg:text-[calc(11*var(--ona-u))]";
 
   const toneClasses =
     tone === "light"
@@ -42,7 +42,12 @@ export function ContactCta({ label, contacts, className, tone = "light" }: Conta
       : "border border-primary text-primary hover:bg-primary hover:text-on-primary";
 
   return (
-    <div className={cn("flex flex-col items-center gap-4 lg:items-start", className)}>
+    /* `lg:relative` + `lg:absolute` у ряда контактов: раскрытые Telegram/WhatsApp
+       выпадают ПОВЕРХ контента, ничего не раздвигая (просьба заказчика) —
+       даже скрытый (`opacity-0`) ряд в потоке резервировал место и сдвигал
+       теги под кнопкой. Ширина кнопки 106 — как у «Наши ценности»: при
+       ширине по макету текст «Обсудить идею» в неё не влезал. */
+    <div className={cn("flex flex-col items-center gap-4 lg:relative lg:items-start", className)}>
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
@@ -54,7 +59,7 @@ export function ContactCta({ label, contacts, className, tone = "light" }: Conta
 
       <div
         className={cn(
-          "flex items-center gap-3 transition-all duration-300",
+          "flex items-center gap-3 transition-all duration-300 lg:absolute lg:left-0 lg:top-full lg:z-20 lg:mt-[calc(12*var(--ona-u))]",
           open ? "translate-y-0 opacity-100" : "pointer-events-none -translate-y-1 opacity-0"
         )}
       >

@@ -31,7 +31,7 @@ export function AboutSection({ about }: AboutSectionProps) {
           кнопку. `min-h` держит пропорцию макета там, где текст влезает, и даёт
           секции подрасти там, где нет. Потолок 922px — чтобы на мониторах шире
           1921px секция не раздувалась вместе с `vw`. */}
-      <div className="flex flex-col lg:mx-auto lg:min-h-[min(48vw,922px)] lg:max-w-[1921px] lg:flex-row">
+      <div className="flex flex-col lg:mx-auto lg:min-h-[calc(380*var(--ona-u))] lg:max-w-[1921px] lg:flex-row">
         <div className="relative h-[70vh] max-h-[520px] w-full sm:h-[80vh] sm:max-h-[640px] lg:h-auto lg:max-h-none lg:w-[45%]">
           {mainPhoto ? (
             <SanityImage
@@ -51,7 +51,7 @@ export function AboutSection({ about }: AboutSectionProps) {
               то есть ровно с центральной оси страницы (фото 45% + 5%). Было 5.03%
               (961/1921) — текст стоял на полпикселя правее центра, а с 11.09 все
               стыки и оси главной выверены по одному центру (Илья 11.09). */}
-          <div className="relative flex flex-1 items-center overflow-hidden px-6 py-14 sm:px-10 md:px-16 lg:flex-col lg:items-stretch lg:justify-between lg:px-0 lg:pb-[min(3.18vw,61px)] lg:pl-[5%] lg:pr-[2.2%] lg:pt-[min(2.97vw,57px)]">
+          <div className="relative flex flex-1 items-center overflow-hidden px-6 py-14 sm:px-10 md:px-16 lg:flex-col lg:items-stretch lg:justify-between lg:px-0 lg:pb-[var(--ona-panel-pad-bottom)] lg:pl-[5%] lg:pr-[2.2%] lg:pt-[var(--ona-panel-pad-top)]">
           {/* Декоративный «цветок» (Figma 20:15). Бокс — ровно как в макете:
               736×981 при секции 1921×922, прижат к правому краю секции, сверху
               выходит за неё на 59px, снизу заканчивается по кромке. Ассет в
@@ -111,7 +111,7 @@ export function AboutSection({ about }: AboutSectionProps) {
               /* `max-w` держит разбивку макета «ИСКУССТВО / ПУТЕШЕСТВОВАТЬ /
                  КРАСИВО»: он уже, чем «ПУТЕШЕСТВОВАТЬ КРАСИВО» одной строкой,
                  но шире самого длинного слова. */
-              <h2 className="mt-4 font-heading text-[34px] uppercase leading-[0.95] text-on-primary sm:text-[44px] lg:mt-[min(3.1vw,60px)] lg:max-w-[min(41.7vw,800px)] lg:text-[min(4.17vw,80px)] lg:leading-[0.8125]">
+              <h2 className="mt-4 font-heading text-[34px] uppercase leading-[0.95] text-on-primary sm:text-[44px] lg:mt-[var(--ona-panel-eyebrow-gap)] lg:max-w-[calc(362.96*var(--ona-u))] lg:text-[calc(36.3*var(--ona-u))] lg:leading-[0.8125]">
                 {about.heading}
               </h2>
             )}
@@ -119,7 +119,7 @@ export function AboutSection({ about }: AboutSectionProps) {
             {about.body && (
               <PortableTextContent
                 value={about.body}
-                className="mt-6 space-y-5 text-[16px] leading-[1.5] text-on-primary/90 sm:text-[18px] lg:mt-[min(2.5vw,48px)] lg:max-w-[min(29.2vw,560px)] lg:space-y-[min(2.24vw,43px)] lg:text-[clamp(12px,1.4vw,27px)] lg:leading-[1.296]"
+                className="mt-6 space-y-5 text-[16px] leading-[1.5] text-on-primary/90 sm:text-[18px] lg:mt-[var(--ona-panel-heading-gap)] lg:max-w-[calc(269.11*var(--ona-u))] lg:space-y-[calc(15.77*var(--ona-u))] lg:text-[calc(12.9*var(--ona-u))] lg:leading-[1.296]"
               />
             )}
 
@@ -138,7 +138,7 @@ export function AboutSection({ about }: AboutSectionProps) {
               Ширина 221.66px из макета: она заметно шире, чем «по содержимому». */}
           <Link
             href={CTA.href}
-            className="z-10 hidden h-[clamp(48px,3vw,58px)] w-[min(11.55vw,222px)] shrink-0 items-center justify-center self-start rounded-full border border-on-primary text-[13px] font-semibold tracking-[0.02em] text-on-primary transition-colors duration-300 hover:bg-on-primary hover:text-primary lg:inline-flex"
+            className="z-10 hidden h-[clamp(48px,3vw,58px)] w-[min(11.55vw,222px)] shrink-0 items-center justify-center self-start rounded-full border border-on-primary text-[13px] font-semibold tracking-[0.02em] text-on-primary transition-colors duration-300 hover:bg-on-primary hover:text-primary lg:mt-[var(--ona-panel-button-gap)] lg:inline-flex lg:h-[calc(30.48*var(--ona-u))] lg:w-[calc(106.44*var(--ona-u))] lg:text-[calc(11*var(--ona-u))]"
           >
             {CTA.label}
           </Link>

@@ -118,16 +118,19 @@ export function TourCalendarCard({ tour, variant = "desktop" }: TourCalendarCard
                «THE SACRED JOURNEY» — помещается в строку с запасом на всех
                ширинах от 1024px. Благодаря `min-h` строка занимает своё место
                даже у туров без надзаголовка, поэтому название и даты в соседних
-               карточках стоят на одном уровне. */
-            <p className="text-[12px] font-medium uppercase tracking-[0.108em] text-background lg:min-h-[1.08em] lg:text-[clamp(12px,0.885vw,17px)] lg:leading-[1.08] lg:tracking-[0.07em]">
+               карточках стоят на одном уровне.
+               Кегли карточки на `--ona-u` — ровно те, что были при 1280:
+               карточку заказчик просил не менять, множитель только держит её
+               копией самой себя на любой ширине (без полов `clamp`). */
+            <p className="text-[12px] font-medium uppercase tracking-[0.108em] text-background lg:min-h-[1.08em] lg:text-[calc(12*var(--ona-u))] lg:leading-[calc(12.96*var(--ona-u))] lg:tracking-[0.07em]">
               {kicker}
             </p>
           )}
-          <p className="mt-1 font-heading text-[27px] leading-[1.15] text-background lg:mt-[min(0.42vw,8px)] lg:text-[min(1.82vw,35px)] lg:leading-[1.2]">
+          <p className="mt-1 font-heading text-[27px] leading-[1.15] text-background lg:mt-[calc(5.38*var(--ona-u))] lg:text-[calc(23.3*var(--ona-u))] lg:leading-[calc(27.96*var(--ona-u))]">
             {headline}
           </p>
           {dates && (
-            <p className="mt-auto pt-2 text-[16px] font-medium text-background lg:pt-[min(0.31vw,6px)] lg:text-[clamp(12px,1.04vw,20px)] lg:leading-[1.14]">
+            <p className="mt-auto pt-2 text-[16px] font-medium text-background lg:pt-[min(0.31vw,6px)] lg:text-[calc(13.31*var(--ona-u))] lg:leading-[calc(15.18*var(--ona-u))]">
               {dates}
             </p>
           )}
