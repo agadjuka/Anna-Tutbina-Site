@@ -13,7 +13,7 @@ export function middleware(request: NextRequest) {
 
   // ⚠️ Якорь `#collab` тут ни на что не влияет: фрагмент URL не уходит на сервер,
   // поэтому со стороны middleware следующий запрос — просто `/`, и он попадает под
-  // общее ограничение ниже (не входит в allowedPaths) → редиректит в /tours/kas,
+  // общее ограничение ниже (не входит в allowedPaths) → редиректит в /tours/capetown,
   // а не на секцию сотрудничества. Оставлено как есть: реальный сценарий, который
   // это должно было чинить, уже решён в другом месте — кнопка «Обсудить идею»
   // в COLLAB больше не ведёт на /custom-tour вообще, а раскрывает контакты на месте
@@ -31,7 +31,9 @@ export function middleware(request: NextRequest) {
   // `docs/versions-cleanup-plan.md` (сейчас намеренно НЕ удаляем).
 
   const allowedPaths = ['/tours/kas', '/tours/bali-padelcamp', '/tours/bali-padelsurfcamp', '/tours/bali', '/tours/capetown', '/tours/capetown2'];
-  const defaultRedirect = '/tours/kas';
+  // Точка входа сайта. С 11.09.2026 — Кейптаун (решение Ильи), до этого был /tours/kas;
+  // сам /tours/kas по-прежнему открыт (он в allowedPaths).
+  const defaultRedirect = '/tours/capetown';
 
   if (!allowedPaths.includes(pathname)) {
     return NextResponse.redirect(new URL(defaultRedirect, request.url));

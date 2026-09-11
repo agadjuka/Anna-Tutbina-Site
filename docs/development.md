@@ -16,7 +16,7 @@ cp .env.example .env.local   # и подставить значения
 npm run dev                  # http://localhost:3000
 ```
 
-Из-за временных ограничений `http://localhost:3000/` редиректит на `/tours/kas`.
+Из-за временных ограничений `http://localhost:3000/` редиректит на `/tours/capetown`.
 Полный сайт открывается через префикс: `http://localhost:3000/admin/`.
 
 ### Sanity Studio
@@ -138,7 +138,7 @@ Vercel (в репозитории их нет). Studio деплоится отд
 **Изменил `lib/fonts.ts`, после сборки всё вернулось** — файл генерируется, правьте
 `public/fonts/` и/или `scripts/update-fonts.ts`.
 
-**Открываю `/`, кидает на `/tours/kas`** — так и задумано, см.
+**Открываю `/`, кидает на `/tours/capetown`** — так и задумано, см.
 [remove-restrictions.md](remove-restrictions.md). Для просмотра — `/admin/`.
 
 **Сборка ругается «The "middleware" file convention is deprecated»** — известная депрекация
