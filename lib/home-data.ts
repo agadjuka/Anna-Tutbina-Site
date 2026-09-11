@@ -42,7 +42,7 @@ export interface TourItem {
 
 type TourItemFromSanity = TourItem & { hideFromSite?: boolean | null };
 
-/** Видео-вариант первого экрана (версия 10). Все поля необязательны: пустой
+/** Видео-вариант первого экрана — боевой с 2026-09-11. Все поля необязательны: пустой
  *  объект = HERO берёт статику из `public/video/` и тексты по умолчанию. */
 export interface HeroVideoContent {
   eyebrow?: string;

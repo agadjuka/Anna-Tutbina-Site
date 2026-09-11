@@ -29,11 +29,12 @@ API-роутов нет, форм с отправкой данных нет — 
 
 Главная и все её архивные варианты используют **один загрузчик данных и одни и те же
 секции** — `app/page.tsx` рендерит `HomeLight` с `scale="v8"` (заказчик выбрал облегчённый
-вариант «версия 8» — 2026-08-25). `scale` включает CSS-слой уменьшенной типографики и
+вариант «версия 8» — 2026-08-25) и `hero="video"` (видео на первом экране вместо коллажа —
+2026-09-11, [redesign/video-hero.md](redesign/video-hero.md)). `scale` включает CSS-слой уменьшенной типографики и
 отступов через атрибут `data-ona-scale` на `<html>`, разбор —
 [redesign/lightweight-scale-plan.md](redesign/lightweight-scale-plan.md).
 
-Сравнение версий на этом закрыто: **все девять записей `lib/versions.ts` в статусе
+Сравнение версий на этом закрыто: **все записи `lib/versions.ts` в статусе
 `archived`**, хаб пуст, боевая главная из `components/versions/` не импортирует ничего.
 План удаления папки — [versions-cleanup-plan.md](versions-cleanup-plan.md), как был
 устроен механизм — [VERSIONS.md](VERSIONS.md).
@@ -116,9 +117,8 @@ API-роутов нет, форм с отправкой данных нет — 
 **Общие**
 - `header` (client) — sticky-шапка, логотип, навигация (скрыта флагом), пишет реальную высоту
   в CSS-переменную `--header-height` (её использует `scroll-margin-top` в `globals.css`
-  и подтяжка полноэкранного HERO). Показ/скрытие поверх полноэкранного HERO решает CSS
-  (`body:has([data-hero-fullscreen])` + `data-shown`), не React — подробности
-  в [design-system.md](design-system.md).
+  и подтяжка HERO главной под шапку). Над первым экраном шапка видна всегда —
+  подробности в [design-system.md](design-system.md).
 - `footer`, `floating-contacts` (client) — плавающая кнопка связи. Контакты приходят
   из Sanity (`siteSettingsQuery` → `primaryContacts`), в коде не захардкожены.
 

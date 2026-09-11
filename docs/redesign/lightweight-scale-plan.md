@@ -398,7 +398,7 @@ curl -s http://localhost:3000<путь> | grep -n "ваш-селектор"
 | Файл | Что в нём |
 |---|---|
 | `app/globals.css` | весь слой (секция «Облегчённый масштаб главной» в конце) |
-| `app/page.tsx` | боевая главная: `HomeLight scale="v8"` |
+| `app/page.tsx` | боевая главная: `HomeLight scale="v8" hero="video"` (видео-HERO масштабом не затрагивается — у него свой множитель, см. `video-hero.md`) |
 | `components/home/home-light.tsx` | состав секций + инлайновый скрипт с атрибутом |
 | `components/home/page-scale.tsx` | снимает/возвращает `data-ona-scale` при клиентской навигации |
 | `app/layout.tsx` | `suppressHydrationWarning` на `<html>` |

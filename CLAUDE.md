@@ -52,7 +52,7 @@ Studio — **отдельный npm-пакет** в `sanity/` со своими 
 ```
 app/                     # роуты App Router
   layout.tsx             # <html>, шрифты, Header/Footer/FloatingContacts, глобальные meta
-  page.tsx               # главная: рендерит HomeLight scale="v8" (components/home/)
+  page.tsx               # главная: HomeLight scale="v8" hero="video" (components/home/)
   tours/[slug]/page.tsx  # страница тура (самый большой роут, ~340 строк)
   custom-tour/page.tsx   # «Индивидуальный тур»
   robots.ts, sitemap.ts  # SEO-роуты
@@ -114,7 +114,7 @@ docs/                    # документация проекта
 | Файл | О чём |
 |---|---|
 | [`docs/redesign/README.md`](docs/redesign/README.md) | **Редизайн главной по макету Figma — активная задача.** Правила, процесс, реестр блоков |
-| [`docs/redesign/video-hero.md`](docs/redesign/video-hero.md) | **Видео на первом экране — версия 10.** Перекодировка ролика, две раскладки без растяжения, шрифт Denistina, грабли |
+| [`docs/redesign/video-hero.md`](docs/redesign/video-hero.md) | **Видео на первом экране — боевая главная с 11.09.** HERO по высоте равен видео (не экрану!), перекодировка ролика, шрифт Denistina, чёрный экран и прочие грабли |
 | [`docs/redesign/animations-restore.md`](docs/redesign/animations-restore.md) | **Как вернуть анимации на главную.** Слой версии 6 цел, но не подключён — пошаговая инструкция, грабли, что проверить |
 | [`docs/redesign/client-feedback-2026-08-25.md`](docs/redesign/client-feedback-2026-08-25.md) | **План правок по замечаниям заказчика от 25.08 — актуальная задача.** Замеры, эталон из макета, порядок работ |
 | [`docs/redesign/client-feedback-2026-08.md`](docs/redesign/client-feedback-2026-08.md) | Правки заказчика (авг. 2026): разбор каждого замечания, журнал предыдущих кругов |

@@ -48,6 +48,9 @@
 В [`home-light.tsx`](../../components/home/home-light.tsx): `<main>` обёрнут в
 `<div className="v6-scene">`, каждая секция — в `<Reveal className="v6-cine">`.
 
+> С 2026-09-11 первым экраном стоит видео (`HeroSectionVideo`, проп `hero="video"`), сниппет
+> ниже — состояние на 25.08. Правило то же: HERO без `<Reveal>`, секции под ним — в нём.
+
 ```tsx
 <div className="v6-scene">
   <main className="min-h-screen">

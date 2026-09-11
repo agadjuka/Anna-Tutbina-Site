@@ -123,18 +123,23 @@ image{ ..., asset->{ _id, metadata{dimensions{width,height,aspectRatio}} } }
 
 ---
 
-## `hero.video` — видео-вариант первого экрана, добавлено 2026-09-07
+## `hero.video` — видео на первом экране, добавлено 2026-09-07
 
-Группа полей внутри `homePage.hero`, которую читает **только версия 10**
-(`/admin/versions/v10`, разбор — [`redesign/video-hero.md`](redesign/video-hero.md)).
-Боевая главная её игнорирует: там по-прежнему коллаж из `hero.photos`.
+Группа полей внутри `homePage.hero`, из которой **с 2026-09-11 собран первый экран
+боевой главной** (разбор — [`redesign/video-hero.md`](redesign/video-hero.md)).
+
+⚠️ Прежние поля коллажа (`hero.eyebrow`, `heading`, `subheading`, `subheadingAccent`,
+`photos`) на главной больше **не выводятся** — их читают только архивные версии.
+В Studio они убраны в свёрнутый `fieldset` «Коллаж из фото — на главной сейчас НЕ
+используется», а объект `video` поставлен первым. Форма данных при этом не менялась:
+`fieldset` — только отображение, поэтому вернуть коллаж можно без миграции.
 
 | Шаг | Файл | Что |
 |---|---|---|
 | 1. Схема | [`sanity/schemas/homePage.ts`](../sanity/schemas/homePage.ts) | объект `video` в группе «Первый экран» |
 | 2. Запрос | [`lib/sanity.queries.ts`](../lib/sanity.queries.ts) | проекция `hero{ …, video{…} }` в `homePageQuery` |
 | 3. Тип | [`lib/home-data.ts`](../lib/home-data.ts) | `HeroVideoContent`, поле `video?` в `HeroContent` |
-| 4. Рендер | [`components/sections/hero-section-video.tsx`](../components/sections/hero-section-video.tsx) | первый экран версии 10 |
+| 4. Рендер | [`components/sections/hero-section-video.tsx`](../components/sections/hero-section-video.tsx) | первый экран главной |
 
 Поля:
 

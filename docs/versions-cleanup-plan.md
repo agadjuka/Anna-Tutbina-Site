@@ -15,8 +15,8 @@
 
 | Что | Как скрыто | Файл |
 |---|---|---|
-| Боевая главная | рендерит `HomeLight scale="v8"` из `components/home/`, из `components/versions/` не импортирует **ничего** | [`app/page.tsx`](../app/page.tsx) |
-| Версии 1–9, **все** | статус `archived` → хаб пуст, прямые ссылки `/versions/v1…v9` ещё работают | [`lib/versions.ts`](../lib/versions.ts) |
+| Боевая главная | рендерит `HomeLight scale="v8" hero="video"` из `components/home/`, из `components/versions/` не импортирует **ничего** | [`app/page.tsx`](../app/page.tsx) |
+| Версии 1–10, **все** | статус `archived` → хаб пуст, прямые ссылки `/versions/v1…v10` ещё работают | [`lib/versions.ts`](../lib/versions.ts) |
 | Хаб `/versions` | список пустой, вместо него заглушка «сравнение закрыто» + служебные ссылки на архив | [`app/versions/page.tsx`](../app/versions/page.tsx) |
 | Публичный доступ к `/versions` | исключение в middleware снято ещё 20.08 → редиректит на `/tours/kas`, как остальной сайт. Для себя — `/admin/versions` | [`middleware.ts`](../middleware.ts) |
 | `/stitch-preview/*` | под общим ограничением middleware, публично недоступен (так было и раньше) | — |
@@ -64,16 +64,22 @@
 удалить  components/sections/hero-section-fullscreen.tsx        (был у v3)
 ```
 
-Остаются в работе (их использует главная): `hero-section-fullscreen-v4.tsx`,
-`values-section-editorial.tsx`, `about/calendar/guests/founders/reviews/collab/faq`.
+Остаются в работе (их использует главная): `hero-section-video.tsx` +
+`hero-video-media.tsx`, `values-section-editorial.tsx`,
+`about/calendar/guests/founders/reviews/collab/faq`.
+
+⚠️ **`hero-section-fullscreen-v4.tsx` (коллаж) — решить отдельно.** С 11.09 на главной
+его не видно: `home-light.tsx` рендерит его только при `hero="collage"`, а так
+вызывают лишь архивные v7/v8/v9. После удаления версий у коллажа останется одна роль —
+быстрый откат с видео. Если откат не нужен — удалить компонент вместе с пропом `hero`
+и полями коллажа в схеме (`fieldset: 'collage'` в `homePage.ts`); если нужен — оставить.
 
 `components/ui/reveal.tsx` тоже **остаётся**, хотя главная его больше не
 оборачивает: `Reveal` используется внутри `values-section-editorial.tsx`.
 Проверять `grep`ом, а не по памяти.
 
 После этого разумно переименовать для чистоты:
-`hero-section-fullscreen-v4.tsx` → `hero-section.tsx`,
-`values-section-editorial.tsx` → `values-section.tsx` (имена освободятся).
+`values-section-editorial.tsx` → `values-section.tsx` (имя освободится).
 
 ### Шаг 4. CSS в `app/globals.css`
 
@@ -97,9 +103,10 @@
 - **секция «Облегчённый масштаб главной» в конце файла** — это и есть размеры
   боевой `/`. Значения `html[data-ona-scale="v7"]` и `="v9"` можно убрать
   (нужны только архивным ссылкам), `="v8"` — **нельзя ни в коем случае**;
-- блок «Шапка поверх полноэкранного HERO» — `body:has([data-hero-fullscreen="all"])`;
-  из него можно убрать только правило с `data-hero-fullscreen="mobile"` (оно было
-  нужно v3, у главной HERO полноэкранный везде);
+- блок-комментарий «Шапка поверх полноэкранного HERO» — правил скрытия в нём уже нет
+  (удалены 20.08), остался только поясняющий текст; видео-HERO главной атрибута
+  `data-hero-fullscreen` не ставит;
+- **секция «Видео-HERO» в самом конце файла** — это первый экран боевой главной;
 - блок «Анимация первого экрана (блок HERO)» и блок, озаглавленный
   «Версия 3: мобильный HERO на весь экран» — **заголовок врёт**: там `heroKenburns`
   и `hero-scroll-cue`, которые использует HERO боевой главной. Блок оставить,
