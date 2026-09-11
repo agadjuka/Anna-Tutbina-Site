@@ -18,7 +18,9 @@
 2. **Главная страница `/` недоступна публично** из-за п.1. Проверять её надо через
    `http://localhost:3000/admin/` (префикс `/admin` — обходной rewrite в middleware).
 3. **`lib/fonts.ts` — генерируемый файл.** Правки руками затираются на `prebuild`.
-   Менять шрифты = класть файлы в `public/fonts/{headings,body,logo}/` и запускать `npm run update-fonts`.
+   Менять шрифты = класть **WOFF2 с подмножеством символов** в `public/fonts/{headings,body,logo,handwriting}/`
+   и запускать `npm run update-fonts` (команда сжатия и почему `display: block` — `docs/design-system.md`,
+   «Загрузка шрифтов без мигания»; до 11.09 на первом экране моргал шрифт).
 4. **Весь контент живёт в Sanity, не в коде.** Тексты, фото, цены, программы туров, отзывы, FAQ
    правятся в Studio. В коде — только вёрстка и запросы. См. [`docs/content-model.md`](docs/content-model.md).
 5. **Никогда не коммитить** `.env*` (кроме `.env.example`), `Фото/`, `Шрифты/`, `.next/`, `sanity/dist/`.

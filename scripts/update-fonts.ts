@@ -4,6 +4,23 @@ import { join } from "path";
 /**
  * Автоматически обновляет lib/fonts.ts на основе шрифтов в папках
  * Запускайте этот скрипт после добавления новых шрифтов в папки
+ *
+ * ⚠️ ЗАГРУЗКА ШРИФТОВ БЕЗ «МИГАНИЯ» (11.09.2026). Все фирменные шрифты:
+ *
+ * 1. **WOFF2 с подмножеством символов** (латиница + кириллица + пунктуация,
+ *    с сохранением кернинга и лигатур). Исходные TTF/OTF весили 791 КБ на пять
+ *    файлов (один Cormorant — 481 КБ), WOFF2 — 236 КБ. Новый шрифт класть
+ *    сюда уже сжатым; команда — в `docs/design-system.md`, «Шрифты».
+ * 2. **`display: "block"`, а не `"swap"`.** Со `swap` браузер сначала рисует
+ *    текст запасным шрифтом и подменяет его, когда догрузится фирменный, —
+ *    на первом экране это и было «мигание шрифта» (замечание Ильи). С `block`
+ *    текст не рисуется, пока шрифт не пришёл (у предзагруженного WOFF2 с того
+ *    же домена — миллисекунды), и подмены нет вовсе. Потолок ожидания задаёт
+ *    браузер (~3 с), дальше — запасной шрифт.
+ * 3. **Предзагрузка у всех**, включая рукописный (раньше `preload: false`).
+ *
+ * Плавное проявление текста первого экрана по готовности шрифтов — в
+ * `app/layout.tsx` (скрипт `fonts-loading`) и `globals.css` (`.fonts-loading`).
  */
 
 const fontsDir = join(process.cwd(), "public", "fonts");
@@ -66,7 +83,7 @@ function generateFontCode(fontFiles: string[], folder: string, varName: string):
     return `localFont({
   src: "../public/fonts/${folder}/${file}",
   variable: "${varName}",
-  display: "swap",
+  display: "block",
   fallback: ${getFallback(folder)},
   weight: "${weight}",
 })`;
@@ -89,7 +106,7 @@ function generateFontCode(fontFiles: string[], folder: string, varName: string):
 ${srcArray}
   ],
   variable: "${varName}",
-  display: "swap",
+  display: "block",
   fallback: ${getFallback(folder)},
 })`;
 }
@@ -106,19 +123,10 @@ function generateFontsFile() {
   const subtitleLogoFonts = logoFonts.filter(f => f.toLowerCase().includes('script') || f.toLowerCase().includes('theartist'));
 
   // Рукописный шрифт — необязательный: без файла в папке экспорта просто нет.
-  /* ⚠️ `preload: false` — единственный шрифт проекта без предзагрузки, и это
-     намеренно. Переменная шрифта висит на `<html>`, то есть на КАЖДОЙ странице,
-     а сам шрифт нужен только видео-HERO главной. С предзагрузкой Next тянул бы
-     эти ~52 КБ и на всех страницах туров, где рукописного текста нет вовсе, —
-     а пока действуют ограничения доступа (`middleware.ts`), публично открыты
-     ТОЛЬКО страницы туров. Без предзагрузки файл скачивается, когда на странице
-     реально встретился `font-handwriting`; на главной подмену шрифта прячет
-     появление строки (`hero-fade-up`, задержка 260 мс).
-
-     Когда главную откроют публично, стоит вынести этот шрифт в отдельный
-     модуль, импортируемый только из HERO: тогда Next будет предзагружать его
-     на `/` и только там (предзагрузка у next/font привязана к маршруту модуля,
-     который вызвал функцию шрифта). */
+  /* До 11.09.2026 у него стояло `preload: false` (52 КБ TTF не хотелось тянуть
+     на страницах туров, где рукописи нет). В WOFF2 он весит 27 КБ, а без
+     предзагрузки строка первого экрана появлялась с подменой шрифта, —
+     предзагрузка теперь как у всех. */
   const handwritingBlock =
     handwritingFonts.length > 0
       ? [
@@ -128,7 +136,7 @@ function generateFontsFile() {
             handwritingFonts,
             "handwriting",
             "--font-handwriting"
-          ).replace(/\n\}\)$/, "\n  preload: false,\n})")};`,
+          )};`,
           "",
         ].join("\n")
       : ["", "// Рукописный шрифт не найден в папке handwriting", ""].join("\n");
@@ -137,9 +145,9 @@ function generateFontsFile() {
     mainLogoFonts.length > 0
       ? generateFontCode(mainLogoFonts, "logo", "--font-logo")
       : `localFont({
-  src: "../public/fonts/logo/LaLuxes-regular.otf",
+  src: "../public/fonts/logo/LaLuxes-regular.woff2",
   variable: "--font-logo",
-  display: "swap",
+  display: "block",
   fallback: ["Georgia", "serif"],
   weight: "400",
 })`;
@@ -148,9 +156,9 @@ function generateFontsFile() {
     subtitleLogoFonts.length > 0
       ? generateFontCode(subtitleLogoFonts, "logo", "--font-logo-subtitle")
       : `localFont({
-  src: "../public/fonts/logo/MADE TheArtist Script PERSONAL USE.otf",
+  src: "../public/fonts/logo/MADE TheArtist Script PERSONAL USE.woff2",
   variable: "--font-logo-subtitle",
-  display: "swap",
+  display: "block",
   fallback: ["cursive"],
   weight: "400",
 })`;

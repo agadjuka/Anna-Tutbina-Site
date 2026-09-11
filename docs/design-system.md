@@ -29,18 +29,47 @@ Tailwind CSS v4 без `tailwind.config`: вся тема объявлена б�
 | Переменная | Шрифт | Где применяется |
 |---|---|---|
 | `--font-heading` | Cormorant Regular | Все `h1`–`h6` (задано глобально в `globals.css`) |
-| `--font-body` | Kinetika | `body`, основной текст, `<strong>` |
+| `--font-body` | Gilroy Light | `body`, основной текст, `<strong>` |
 | `--font-logo` | La Luxes | Логотип «ONÁ» в шапке и футере |
 | `--font-logo-subtitle` | MADE TheArtist Script | Подпись «woman space & travel» |
-| `--font-handwriting` | Denistina | Рукописная подпись под заголовком видео-HERO главной. Без предзагрузки — см. `scripts/update-fonts.ts` |
+| `--font-handwriting` | Denistina | Рукописная подпись под заголовком видео-HERO главной |
 
 Утилиты: `.font-heading`, `.font-sans`, `.font-logo`, `.font-logo-subtitle`, `.font-handwriting`.
 
+### Загрузка шрифтов без «мигания» (с 11.09.2026)
+
+Жалоба Ильи: на первом экране текст сначала рисовался одним шрифтом, потом менялся.
+Причина — `font-display: swap` (браузер показывает запасной шрифт и подменяет его) плюс
+тяжёлые TTF/OTF (один Cormorant — 481 КБ) и рукописный шрифт без предзагрузки. Теперь:
+
+1. **Файлы — WOFF2 с подмножеством символов** (латиница, кириллица, пунктуация; кернинг
+   и лигатуры сохранены). Пять шрифтов: 791 КБ → 236 КБ. Оригиналы —
+   `Шрифты/originals-2026-09-11/` (не в git).
+2. **`display: "block"`** у всех (генератор `scripts/update-fonts.ts`): пока шрифт не
+   пришёл, текст не рисуется вовсе, подмены нет. Потолок ожидания у браузера ~3 с.
+3. **Предзагрузка у всех пяти**, включая рукописный.
+4. **Проявление первого экрана.** Скрипт в `<head>` (`app/layout.tsx`) ставит на `<html>`
+   `data-fonts="loading"` и снимает, когда `document.fonts.load()` подтвердил все пять
+   шрифтов (не дольше 3 с). Пока атрибут висит, текст шапки и `.hero-video__text`
+   прозрачны, а `hero-fade-up` на паузе (`globals.css`, «Проявление первого экрана»); потом
+   всё проявляется разом и уже в своём шрифте. Без JS ничего не прячется.
+
+Проверено с искусственно задержанными шрифтами (+1.2 с), с анимациями и без: ни одного
+кадра, где текст виден запасным шрифтом.
+
 ### Как менять шрифт
 
-1. Положить файл (`.ttf/.otf/.woff/.woff2`) в `public/fonts/headings|body|logo|handwriting/`.
-2. `npm run update-fonts` — перегенерирует `lib/fonts.ts`.
-3. Проверить результат в `lib/fonts.ts` и на странице.
+1. Сжать файл в WOFF2 с подмножеством символов (нужен `pip install fonttools brotli`):
+
+   ```bash
+   pyftsubset "Шрифт.ttf" --unicodes="U+0020-007E,U+00A0-024F,U+0300-036F,U+0400-052F,U+1E00-1EFF,U+2000-206F,U+2070-209F,U+20A0-20CF,U+2100-218F,U+2190-21FF,U+2200-22FF,U+2500-27BF,U+2B00-2BFF,U+FB00-FB06" --layout-features='*' --name-IDs='*' --name-languages='*' --notdef-outline --flavor=woff2 --output-file="Шрифт.woff2"
+   ```
+
+   Оригинал — в `Шрифты/`, в `public/fonts/` — только `.woff2` (генератор берёт все файлы
+   папки, лишний TTF рядом превратится во второе начертание).
+2. Положить `.woff2` в `public/fonts/headings|body|logo|handwriting/`.
+3. `npm run update-fonts` — перегенерирует `lib/fonts.ts`.
+4. Проверить результат в `lib/fonts.ts` и на странице.
 
 Правила генератора (`scripts/update-fonts.ts`), о них легко споткнуться:
 
