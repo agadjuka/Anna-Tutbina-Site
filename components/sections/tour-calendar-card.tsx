@@ -1,4 +1,4 @@
-import { SmartLink } from "@/components/ui/smart-link";
+import Link from "next/link";
 import { SanityImage } from "@/components/ui/sanity-image";
 import { tourFullTitle } from "@/lib/utils/tour-title";
 
@@ -77,7 +77,7 @@ export function TourCalendarCard({ tour, variant = "desktop" }: TourCalendarCard
        ссылок атрибутом `data-no-lift` (он остаётся: общий подъём двигал бы саму
        ссылку). Числа анимации — в одном месте, `app/globals.css`, блок
        «Карточка тура». */
-    <SmartLink href={`/tours/${tour.slug.current}`} data-no-lift="" className="tour-card block h-full">
+    <Link href={`/tours/${tour.slug.current}`} data-no-lift="" className="tour-card block h-full">
       <div className="tour-card__inner flex h-full flex-col overflow-hidden rounded-[26px] bg-primary">
         <div className={`tour-card__frame relative w-full shrink-0 overflow-hidden rounded-[26px] ${aspect.frame}`}>
           <SanityImage
@@ -136,6 +136,6 @@ export function TourCalendarCard({ tour, variant = "desktop" }: TourCalendarCard
           )}
         </div>
       </div>
-    </SmartLink>
+    </Link>
   );
 }

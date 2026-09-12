@@ -16,8 +16,8 @@ cp .env.example .env.local   # и подставить значения
 npm run dev                  # http://localhost:3000
 ```
 
-Из-за временных ограничений `http://localhost:3000/` редиректит на `/tours/capetown`.
-Полный сайт открывается через префикс: `http://localhost:3000/admin/`.
+`http://localhost:3000/` открывает главную: ограничения доступа сняты 12.09.2026,
+`middleware.ts` и префикс `/admin` удалены.
 
 ### Sanity Studio
 
@@ -79,7 +79,7 @@ Sanity) в проекте нет и быть не должно: сайт тол�
 3. `npm run lint` — новых ошибок быть не должно (о существующих см.
    [known-issues.md](known-issues.md)).
 4. `npm run build` — сборка проходит.
-5. Визуально: главная и страница тура через `/admin/`, обязательно на мобильной ширине —
+5. Визуально: главная `/` и страница тура `/tours/capetown`, обязательно на мобильной ширине —
    почти вся сложная логика (карусели, раскрытие отзывов, выравнивание высот) заточена под мобильные.
 
 ## Деплой
@@ -138,8 +138,8 @@ Vercel (в репозитории их нет). Studio деплоится отд
 **Изменил `lib/fonts.ts`, после сборки всё вернулось** — файл генерируется, правьте
 `public/fonts/` и/или `scripts/update-fonts.ts`.
 
-**Открываю `/`, кидает на `/tours/capetown`** — так и задумано, см.
-[remove-restrictions.md](remove-restrictions.md). Для просмотра — `/admin/`.
+**`/versions` отдаёт 404** — система версий главной удалена 12.09.2026, снятый код в
+`Архив/versions-system-2026-09-12/` (см. [remove-restrictions.md](remove-restrictions.md)).
 
 **Сборка ругается «The "middleware" file convention is deprecated»** — известная депрекация
 Next 16, на работу не влияет, миграция в [known-issues.md](known-issues.md).

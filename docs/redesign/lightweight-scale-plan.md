@@ -32,11 +32,11 @@
 > Заказчик выбрал «Лёгкую» — `app/page.tsx` рендерит `HomeLight scale="v8"`,
 > код переехал из `components/versions/` в **`components/home/`**. Сравнение
 > закрыто, все девять версий переведены в `archived`
-> ([`../versions-cleanup-plan.md`](../versions-cleanup-plan.md)).
+> (система версий удалена 12.09.2026, снятый код — в `Архив/versions-system-2026-09-12/`).
 >
 > **Этот файл больше не про черновик — он описывает размеры живого сайта.**
 > Правки в секции «Облегчённый масштаб главной» в `app/globals.css` меняют
-> продакшн. Смотреть: `http://localhost:3000/admin/` (главная публично закрыта,
+> продакшн. Смотреть: `http://localhost:3000/` (главная публично закрыта,
 > нужен префикс `/admin`).
 
 **Запрос заказчика (2026-08-23, скрин переписки):**
@@ -148,7 +148,7 @@ npm i -D playwright
 ```
 
 ```bash
-node scripts/audit-scale.mjs http://localhost:3000/admin/
+node scripts/audit-scale.mjs http://localhost:3000/
 ```
 
 Playwright намеренно не в зависимостях проекта — он нужен только для этой
@@ -372,7 +372,7 @@ VALUES без заливки, FAQ без плашек» **не делались*
 скомпилированного CSS:**
 
 ```bash
-curl -s http://localhost:3000/admin/versions/v8 | grep -o '/_next/static/[^"]*\.css'
+curl -s http://localhost:3000//v8 | grep -o '/_next/static/[^"]*\.css'
 curl -s http://localhost:3000<путь> | grep -n "ваш-селектор"
 ```
 

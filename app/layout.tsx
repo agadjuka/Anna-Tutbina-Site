@@ -83,9 +83,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   /*
-   * `suppressHydrationWarning` на `<html>`: атрибуты на корень ставят и наш код
-   * (`data-fonts` скриптом шрифтов ниже, `data-force-motion` на страницах
-   * версий), и расширения браузера. До
+   * `suppressHydrationWarning` на `<html>`: атрибуты на корень ставит наш
+   * скрипт шрифтов ниже (`data-fonts`) и расширения браузера. До
    * 11.09.2026 здесь же был `data-ona-scale` масштаба главной (удалён — размеры
    * теперь в самих компонентах). React такие атрибуты в SSR-выводе не ждёт и
    * ругается «hydrated but some attributes … didn't match». Флаг действует

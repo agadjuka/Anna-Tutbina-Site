@@ -1,25 +1,9 @@
 "use client";
 
-import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Menu, X } from "lucide-react";
-import { SmartLink } from "@/components/ui/smart-link";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
-
-/**
- * Временная настройка для скрытия навигации.
- *
- * 2026-08-20 выключена по правкам заказчика («в шапке необходимо отобразить
- * разделы так, как предусмотрено в референсе в Figma»): меню должно быть видно
- * и на главной, и на страницах туров. Сам режим ограничений доступа
- * (`middleware.ts`) при этом не тронут — сайт по-прежнему закрыт, вход через
- * `/admin`. Следствие, о котором договорились явно: посетитель публичной
- * `/tours/capetown` видит пункты меню, ведущие на закрытую главную, и по клику
- * возвращается на `/tours/capetown` редиректом.
- *
- * Разбор правки — `docs/redesign/client-feedback-2026-08.md`, п. 3.1.
- */
-const HIDE_NAVIGATION = false;
 
 /**
  * Пункты меню по макету (Figma, нода 5:307). Верхний регистр задаётся стилями,
@@ -44,13 +28,8 @@ const NAV_LINK_TYPO =
 
 export function Header() {
   const headerRef = useRef<HTMLElement>(null);
-  const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-
-  // Показываем навигацию, если мы в режиме админа (путь начинается с /admin/)
-  const showNavigation =
-    !HIDE_NAVIGATION || pathname?.startsWith("/admin/") || pathname === "/admin";
 
   useEffect(() => {
     /* Порог — не 0, а треть экрана: иначе шапка мигала бы от каждого микро-скролла
@@ -85,7 +64,7 @@ export function Header() {
     const updateHeight = () => {
       document.documentElement.style.setProperty(
         "--header-height",
-        `${header.offsetHeight}px`
+        `${header.offsetHeight}px`,
       );
     };
 
@@ -121,12 +100,12 @@ export function Header() {
       data-shown={shown ? "true" : "false"}
       className={cn(
         "sticky top-0 left-0 z-50 w-full bg-primary/[0.86] text-background backdrop-blur-md",
-        "transition-[opacity,transform] duration-500 ease-out motion-reduce:transition-none"
+        "transition-[opacity,transform] duration-500 ease-out motion-reduce:transition-none",
       )}
     >
       {/* Шапка шире контентного контейнера: в макете логотип и меню прижаты к краям (~128px при 1920) */}
       <div className="relative flex h-16 w-full items-center justify-between px-4 md:h-[72px] md:px-8 lg:h-[86px] lg:px-16 xl:px-32">
-        <SmartLink
+        <Link
           href="/"
           onClick={closeMenu}
           className="flex flex-col items-start justify-center text-background transition-opacity hover:opacity-90"
@@ -138,49 +117,46 @@ export function Header() {
           <span className="font-logo-subtitle -mt-1.5 text-[13px] tracking-wide opacity-95 md:-mt-2 md:text-[15px] lg:text-[calc(13.94*var(--ona-u))]">
             woman space &amp; travel
           </span>
-        </SmartLink>
+        </Link>
 
-        {showNavigation && (
-          <>
-            <nav className="hidden lg:block" aria-label="Основная навигация">
-              <ul className="flex items-center gap-8 xl:gap-9">
-                {NAV_ITEMS.map((item) => (
-                  <li key={item.href}>
-                    <SmartLink
-                      href={item.href}
-                      className={cn(
-                        "group relative block py-1 transition-opacity duration-300 hover:opacity-80",
-                        NAV_LINK_TYPO
-                      )}
-                    >
-                      <span className="whitespace-nowrap text-inherit">{item.label}</span>
-                      <span className="absolute -bottom-0.5 left-0 h-px w-0 bg-background transition-all duration-300 group-hover:w-full" />
-                    </SmartLink>
-                  </li>
-                ))}
-              </ul>
-            </nav>
+        <nav className="hidden lg:block" aria-label="Основная навигация">
+          <ul className="flex items-center gap-8 xl:gap-9">
+            {NAV_ITEMS.map((item) => (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  className={cn(
+                    "group relative block py-1 transition-opacity duration-300 hover:opacity-80",
+                    NAV_LINK_TYPO,
+                  )}
+                >
+                  <span className="whitespace-nowrap text-inherit">
+                    {item.label}
+                  </span>
+                  <span className="absolute -bottom-0.5 left-0 h-px w-0 bg-background transition-all duration-300 group-hover:w-full" />
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
 
-            <button
-              type="button"
-              onClick={() => setMenuOpen((open) => !open)}
-              className="-mr-2 flex h-10 w-10 items-center justify-center text-background lg:hidden"
-              aria-expanded={menuOpen}
-              aria-controls="mobile-nav"
-              aria-label={menuOpen ? "Закрыть меню" : "Открыть меню"}
-            >
-              {menuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </button>
-          </>
-        )}
+        <button
+          type="button"
+          onClick={() => setMenuOpen((open) => !open)}
+          className="-mr-2 flex h-10 w-10 items-center justify-center text-background lg:hidden"
+          aria-expanded={menuOpen}
+          aria-controls="mobile-nav"
+          aria-label={menuOpen ? "Закрыть меню" : "Открыть меню"}
+        >
+          {menuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+        </button>
       </div>
 
       {/* Панель мобильного меню — absolute, чтобы не менять высоту шапки и не ломать --header-height */}
-      {showNavigation && (
-        <nav
-          id="mobile-nav"
-          aria-label="Мобильная навигация"
-          /* Схлопывание — через `grid-template-rows: 1fr → 0fr`, а НЕ через
+      <nav
+        id="mobile-nav"
+        aria-label="Мобильная навигация"
+        /* Схлопывание — через `grid-template-rows: 1fr → 0fr`, а НЕ через
              `max-height`. Причина конкретная (замер 2026-08-25 на 390px):
              реальная высота меню 270px, а `max-h-96` — 384px. Первые ~110мс из
              300 `max-height` шёл 384 → 266, то есть панель физически НЕ
@@ -198,28 +174,29 @@ export function Header() {
              `transition-all` заменён на явный список свойств: `all` тянул за
              собой и `backdrop-filter`, что на полупрозрачной панели давало
              лишние артефакты. */
-          className={cn(
-            "absolute left-0 top-full grid w-full bg-primary/[0.96] backdrop-blur-md transition-[grid-template-rows,opacity] duration-300 ease-out motion-reduce:transition-none lg:hidden",
-            menuOpen ? "grid-rows-[1fr] opacity-100" : "pointer-events-none grid-rows-[0fr] opacity-0"
-          )}
-        >
-          <div className="overflow-hidden">
-            <ul className="flex flex-col px-4 pb-5 pt-1 md:px-8">
-              {NAV_ITEMS.map((item) => (
-                <li key={item.href}>
-                  <SmartLink
-                    href={item.href}
-                    onClick={closeMenu}
-                    className={cn("block py-2.5", NAV_LINK_TYPO)}
-                  >
-                    {item.label}
-                  </SmartLink>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </nav>
-      )}
+        className={cn(
+          "absolute left-0 top-full grid w-full bg-primary/[0.96] backdrop-blur-md transition-[grid-template-rows,opacity] duration-300 ease-out motion-reduce:transition-none lg:hidden",
+          menuOpen
+            ? "grid-rows-[1fr] opacity-100"
+            : "pointer-events-none grid-rows-[0fr] opacity-0",
+        )}
+      >
+        <div className="overflow-hidden">
+          <ul className="flex flex-col px-4 pb-5 pt-1 md:px-8">
+            {NAV_ITEMS.map((item) => (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  onClick={closeMenu}
+                  className={cn("block py-2.5", NAV_LINK_TYPO)}
+                >
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </nav>
     </header>
   );
 }

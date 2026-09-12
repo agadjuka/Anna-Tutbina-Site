@@ -14,18 +14,12 @@ interface RevealProps {
 
 /**
  * Проявление блока при попадании во вьюпорт — обёртка без собственной вёрстки,
- * не меняет поток документа. Используется версиями главной с анимацией
- * (см. `docs/VERSIONS.md`), оборачивает обычные серверные секции без дублирования кода.
+ * не меняет поток документа: оборачивает обычные серверные секции, не дублируя
+ * их код.
  *
  * При системной настройке «уменьшить анимацию» блок не выключается совсем, а
  * переходит на появление ТОЛЬКО прозрачностью, без сдвига по вертикали:
  * дискомфорт вызывает именно движение, а плавное затухание безопасно.
- *
- * Исключение — страницы `/versions/*` (см. `force-motion.tsx`): там анимация
- * форсируется через `<html data-force-motion="true">` независимо от системной
- * настройки, потому что это страница для оценки самой анимации — приглушать её
- * там бессмысленно (так и произошло на практике: заказчик с этой настройкой на
- * устройстве не видел вообще никакого движения при просмотре версии 2).
  */
 export function Reveal({ children, className, delayMs = 0, variant = "up" }: RevealProps) {
   const ref = useRef<HTMLDivElement>(null);
@@ -36,8 +30,7 @@ export function Reveal({ children, className, delayMs = 0, variant = "up" }: Rev
     const el = ref.current;
     if (!el) return;
 
-    const forced = document.documentElement.getAttribute("data-force-motion") === "true";
-    setReducedMotion(!forced && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+    setReducedMotion(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
 
     /* `threshold: 0`, а не доля площади. С прежним `0.12` секции, которые
        заметно выше экрана (на мобильном это отзывы, FAQ, CALENDAR), могли

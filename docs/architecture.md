@@ -20,24 +20,22 @@ API-роутов нет, форм с отправкой данных нет — 
 | Роут | Файл | Рендеринг | Данные |
 |---|---|---|---|
 | `/` | `app/page.tsx` | `force-dynamic` + `noStore()` | `getHomeData()` — один общий загрузчик (`lib/home-data.ts`), внутри `Promise.all` по `toursQuery`, `toursWithReviewsQuery`, `customTourQuery`, `faqQuery`, `homePageQuery`, `siteSettingsQuery`. Вёрстка вынесена в `HomeLight` из `components/home/` (см. ниже) |
-| `/versions` | `app/versions/page.tsx` | статический | — (список берётся из `lib/versions.ts`). **Публично закрыт**, только через `/admin/versions`. С 25.08.2026 список пуст — все версии в архиве |
-| `/versions/[id]` | `app/versions/[id]/page.tsx` | `force-dynamic` + `noStore()` | тот же `getHomeData()`. Тоже только через `/admin/versions/<id>`; страницы живы, но это архив |
 | `/tours/[slug]` | `app/tours/[slug]/page.tsx` | `force-dynamic`, `revalidate = 0` | `tourBySlugQuery`; метаданные — `tourMetadataQuery` |
-| `/custom-tour` | `app/custom-tour/page.tsx` | статический | `customTourQuery` — **публично недоступен**, middleware редиректит на `/#collab` |
+| `/custom-tour` | `app/custom-tour/page.tsx` | статический | `customTourQuery`; на страницу ведёт ссылка в футере, она же в `sitemap.xml` |
 | `/robots.txt` | `app/robots.ts` | статический | — |
 | `/sitemap.xml` | `app/sitemap.ts` | статический | `toursSlugsQuery` |
 
-Главная и все её архивные варианты используют **один загрузчик данных и одни и те же
-секции** — `app/page.tsx` рендерит `HomeLight` с `hero="video"` (видео на первом экране
-вместо коллажа — 2026-09-11, [redesign/video-hero.md](redesign/video-hero.md)). Облегчённый
+Главная собирается из тех же секций, что и остальные страницы, и грузит данные одним
+загрузчиком: `app/page.tsx` рендерит `HomeLight` (первый экран — видео, 2026-09-11,
+[redesign/video-hero.md](redesign/video-hero.md)). Облегчённый
 масштаб «версии 8» (выбран заказчиком 2026-08-25) с 11.09 — размеры по умолчанию, записанные
 прямо в классах компонентов по закону одного множителя (`--ona-u`); он же действует на
 страницах туров. Разбор — [redesign/lightweight-scale-plan.md](redesign/lightweight-scale-plan.md).
 
 Сравнение версий на этом закрыто: **все записи `lib/versions.ts` в статусе
 `archived`**, хаб пуст, боевая главная из `components/versions/` не импортирует ничего.
-План удаления папки — [versions-cleanup-plan.md](versions-cleanup-plan.md), как был
-устроен механизм — [VERSIONS.md](VERSIONS.md).
+Как была устроена система версий — в архиве снятого кода
+(`Архив/versions-system-2026-09-12/VERSIONS.md`).
 
 Кэш выключен намеренно: правки в Studio должны появляться на сайте сразу, без пересборки.
 Плата за это — запрос в Sanity на каждый заход. Если понадобится скорость, правильный шаг —
@@ -46,32 +44,14 @@ API-роутов нет, форм с отправкой данных нет — 
 `app/layout.tsx` задаёт `<html lang="ru">`, подключает CSS-переменные четырёх локальных шрифтов,
 глобальные meta/OpenGraph и оборачивает страницы в `Header` / `FloatingContacts` / `Footer`.
 
-## middleware.ts — временные ограничения
+## middleware — удалён 12.09.2026
 
-Действует на всё, кроме `api`, `_next/static`, `_next/image` и путей с точкой (файлы,
-`robots.txt`, `sitemap.xml`).
+Пока сайт готовили к публикации, в корне жил `middleware.ts`: он редиректил всё, кроме белого
+списка туров, на `/tours/capetown` и давал обходной префикс `/admin`, которым смотрели закрытые
+страницы. Сайт открыт целиком — файла больше нет, слоя перед роутингом у приложения не осталось.
+Несуществующий тур теперь отдаёт 404, а не редирект.
 
-1. Путь начинается с `/admin` → `rewrite` на путь без префикса. Это «служебный вход»: полный
-   сайт со всей навигацией без снятия ограничений для посетителей.
-2. `/custom-tour` → `redirect` на `/#collab`.
-3. ~~`/versions` и `/versions/*` пропускались без префикса `/admin`~~ — исключение снято
-   2026-08-20, когда сравнение версий закончилось: теперь эти страницы попадают под общее
-   ограничение (п. 4) и открываются только через `/admin/versions`.
-4. Иначе путь должен быть в `allowedPaths` (сейчас шесть страниц туров), любой другой —
-   `redirect` на `/tours/capetown`.
-
-Следствия, о которых надо помнить:
-
-- **`/` и `/custom-tour` посетителю недоступны**, хотя `/` перечислена в `sitemap.xml`
-  и указана как canonical.
-- Несуществующий тур даёт редирект, а не 404.
-- `/admin` не защищён паролем — это обфускация, а не авторизация.
-- `/tours/capetown` — цель редиректа по умолчанию (с 11.09.2026, до этого `/tours/kas`), то есть **точка входа для всего сайта**.
-  Если этот тур скрыт или снят с публикации в Sanity, случайный посетитель домена
-  получает 404 (такое уже случалось — см. [known-issues.md](known-issues.md)).
-
-Как снимать ограничения — [remove-restrictions.md](remove-restrictions.md).
-Открытые вопросы по этому блоку — в [known-issues.md](known-issues.md).
+Как закрыть сайт снова (готовый код) — [remove-restrictions.md](remove-restrictions.md).
 
 ## Видимость туров
 
@@ -129,14 +109,12 @@ API-роутов нет, форм с отправкой данных нет — 
 `data-ona-scale` на `<html>` (инлайновый скрипт + `page-scale.tsx`); с переносом размеров в
 компоненты этот механизм удалён.
 
-### Архив версий главной (`components/versions/`)
+### Система версий главной — удалена 12.09.2026
 
-`home-v1`…`home-v9` — отклонённые варианты, скрыты с хаба (все в статусе `archived`) и
-доступны только по прямым ссылкам `/admin/versions/<id>`; `registry.tsx` связывает id с
-компонентом, `version-badge` — плашка возврата к списку, `force-motion` — принудительное
-включение анимаций на `/versions/*`. **Боевая главная от этой папки не зависит** — её можно
-удалить целиком, см. [versions-cleanup-plan.md](versions-cleanup-plan.md) и
-[VERSIONS.md](VERSIONS.md).
+Папок `components/versions/`, `app/versions/`, реестра `lib/versions.ts` и черновиков
+`app/stitch-preview/` + `components/stitch/` больше нет: заказчик выбрал вариант, он и есть
+боевая главная. Снятый код лежит в `Архив/versions-system-2026-09-12/` (не в git) и в истории
+git до коммита уборки — там же инструкция, как вернуть систему при необходимости.
 
 ### Примитивы (`components/ui/`)
 

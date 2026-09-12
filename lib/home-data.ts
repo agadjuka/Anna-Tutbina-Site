@@ -13,10 +13,9 @@ import { flattenReviewsFromTours, type TourReviewRaw } from "@/lib/utils/reviews
 /**
  * Единая загрузка данных главной страницы.
  *
- * Все версии главной (см. `lib/versions.ts`) показывают один и тот же контент из Sanity —
- * различается только вёрстка. Поэтому запрос живёт здесь, а не в каждой версии:
- * новая версия не копирует пол-страницы кода и не может «отстать» по данным,
- * если в Sanity появится новое поле.
+ * Один загрузчик на всю страницу: секции получают уже готовые данные пропами,
+ * сами в Sanity не ходят. Так новое поле в Sanity не может «не доехать» до
+ * какой-то секции, а запросы не дублируются на каждый блок.
  */
 
 type SanitySlug = { current: string };
@@ -54,11 +53,6 @@ export interface HeroVideoContent {
 }
 
 export interface HeroContent {
-  eyebrow?: string;
-  heading?: string;
-  subheading?: string;
-  subheadingAccent?: string;
-  photos?: any[];
   video?: HeroVideoContent;
 }
 

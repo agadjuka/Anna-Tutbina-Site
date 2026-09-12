@@ -34,10 +34,12 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
-    "**/*.mts",
-    "middleware.ts"
+    "**/*.mts"
   ],
   "exclude": [
+    "Архив",
+    "Фото",
+    "Шрифты",
     "node_modules",
     "sanity",
     "версия 6"

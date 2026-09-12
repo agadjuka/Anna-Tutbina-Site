@@ -9,14 +9,14 @@
 
 ## ⚠️ Прочитать до первой правки
 
-1. **Сайт сейчас в режиме временных ограничений.** [`middleware.ts`](middleware.ts) редиректит
-   всё, кроме белого списка туров, на `/tours/capetown` (до 11.09.2026 — `/tours/kas`). **Это сделано намеренно — не «чинить».**
-   Как снять — [`docs/remove-restrictions.md`](docs/remove-restrictions.md).
-   Навигация в шапке при этом **показана** (`HIDE_NAVIGATION = false` с 2026-08-20, по правкам
-   заказчика): её ссылки ведут на закрытую главную и редиректят обратно на `/tours/capetown` — так и
-   задумано, см. [`docs/redesign/client-feedback-2026-08.md`](docs/redesign/client-feedback-2026-08.md).
-2. **Главная страница `/` недоступна публично** из-за п.1. Проверять её надо через
-   `http://localhost:3000/admin/` (префикс `/admin` — обходной rewrite в middleware).
+1. **Сайт открыт целиком с 12.09.2026.** Временные ограничения доступа сняты, `middleware.ts`
+   удалён вместе с обходным префиксом `/admin`: главная `/`, страницы туров и `/custom-tour`
+   открываются напрямую. Ссылки вида `/admin/...` больше не работают.
+   Как закрыть сайт снова — [`docs/remove-restrictions.md`](docs/remove-restrictions.md).
+2. **Система версий главной удалена 12.09.2026** (заказчик выбрал вариант, он и есть боевая
+   главная). Снятый код — `Архив/versions-system-2026-09-12/` (папка не в git) и история git
+   до коммита уборки. Вместе с ней удалены черновики Stitch и секции, которые использовали
+   только старые версии.
 3. **`lib/fonts.ts` — генерируемый файл.** Правки руками затираются на `prebuild`.
    Менять шрифты = класть **WOFF2 с подмножеством символов** в `public/fonts/{headings,body,logo,handwriting}/`
    и запускать `npm run update-fonts` (команда сжатия и почему `display: block` — `docs/design-system.md`,
@@ -61,7 +61,6 @@ app/                     # роуты App Router
   globals.css            # Tailwind v4 @theme — токены цветов, базовые стили, утилиты
 components/home/         # боевая главная: состав секций
 components/sections/     # крупные секции страниц (см. docs/architecture.md)
-components/versions/     # ⚠️ АРХИВ отклонённых версий главной, к удалению (docs/versions-cleanup-plan.md)
 components/ui/           # примитивы: Container, Button, Heading, SanityImage, PortableTextContent…
 lib/
   sanity.client.ts       # клиент Sanity + urlFor()
@@ -70,7 +69,6 @@ lib/
   utils/                 # reviews.ts, tour-pricing.ts
 sanity/                  # Studio: схемы, структура, конфиг
 scripts/update-fonts.ts  # генератор lib/fonts.ts
-middleware.ts            # временные ограничения доступа + /admin-обход
 docs/                    # документация проекта
 ```
 
@@ -114,7 +112,7 @@ docs/                    # документация проекта
 - **После любой правки размеров прогнать аудит устойчивости** (`scripts/audit-scale.mjs`, см.
   lightweight-scale-plan.md §0.1): он открывает страницу на 1024/1280/1366/1440/1600/1920/2560
   и показывает элементы, у которых поменялось число строк. Гонять и на главной
-  (`/admin/`), и на туре (`/admin/tours/capetown`). **Норма — пустой список.**
+  (`/`), и на туре (`/tours/capetown`). **Норма — пустой список.**
 - **Новую утилиту объявлять через `@utility`, не через `@layer utilities`** (см. грабли ниже).
 
 ---
@@ -131,14 +129,12 @@ docs/                    # документация проекта
 | [`docs/redesign/client-feedback-2026-08.md`](docs/redesign/client-feedback-2026-08.md) | Правки заказчика (авг. 2026): разбор каждого замечания, журнал предыдущих кругов |
 | [`docs/redesign/figma-parity-checklist.md`](docs/redesign/figma-parity-checklist.md) | **Как приводить блок в соответствие с Figma по координатам узлов.** Метод, статус по блокам, грабли — читать до любой правки вёрстки главной |
 | [`docs/redesign/lightweight-scale-plan.md`](docs/redesign/lightweight-scale-plan.md) | **Закон одного множителя — масштаб всего сайта (главная + туры).** Раньше: облегчённый масштаб главной — то, что сейчас на боевой `/`.** Замеры, механизм CSS-масштаба, семь коэффициентов, грабли — читать до правки размеров |
-| [`docs/VERSIONS.md`](docs/VERSIONS.md) | Версии главной: как был устроен хаб `/versions`. **Сравнение закрыто 25.08.2026, все версии в архиве** — файл исторический |
-| [`docs/versions-cleanup-plan.md`](docs/versions-cleanup-plan.md) | Как удалить всю систему версий, когда решим. **Готово к выполнению: боевая главная от `components/versions/` больше не зависит** |
 | [`docs/architecture.md`](docs/architecture.md) | Роутинг, рендеринг, поток данных, middleware, SEO, карта компонентов |
 | [`docs/content-model.md`](docs/content-model.md) | Схемы Sanity ↔ GROQ ↔ компоненты, как добавить поле |
 | [`docs/design-system.md`](docs/design-system.md) | Цвета, шрифты, типографика, UI-примитивы |
 | [`docs/development.md`](docs/development.md) | Установка, env, Studio, деплой, траблшутинг |
 | [`docs/known-issues.md`](docs/known-issues.md) | Технический долг и план исправлений — **смотреть перед рефакторингом** |
-| [`docs/remove-restrictions.md`](docs/remove-restrictions.md) | Как снять временные ограничения доступа |
+| [`docs/remove-restrictions.md`](docs/remove-restrictions.md) | Доступ к страницам: ограничения снят(ы) 12.09.2026, что осталось в middleware и как вернуть |
 | [`docs/brand-guidelines.md`](docs/brand-guidelines.md) | Исходный бриф по фирменному стилю от заказчика |
 
 ---
@@ -150,15 +146,14 @@ docs/                    # документация проекта
 - ESLint падает с ошибками на существующем коде (`no-explicit-any`, `react-hooks/set-state-in-effect`) —
   **это накопленный долг, а не следствие ваших правок.** Сверяйтесь с `docs/known-issues.md`.
 - Тестов в проекте нет. Проверка изменений = `npx tsc --noEmit` + `npm run build` + визуальный прогон
-  через `/admin/`.
+  через `/`.
 - **`overflow-x` на `html/body/main` — только `clip`, не `hidden`.** `hidden` делает `<body>`
   и `<main>` скролл-контейнерами (спека: `overflow-y` становится `auto`) — от этого ломался
   полноэкранный HERO, «залипала» прокрутка на мобильном и переставал работать `sticky` у шапки.
   Подробности — `docs/design-system.md`.
-- **Анимации в версиях главной: `animation-fill-mode: backwards`, никогда `both`.** Доигравшая
+- **Анимации появления: `animation-fill-mode: backwards`, никогда `both`.** Доигравшая
   анимация с `forwards` навсегда забирает себе свойство и ломает `:hover` (элемент прыгает
   обратно в конце перехода). Элементы со своим hover-эффектом или статичной прозрачностью
-  исключаются атрибутами `data-no-lift` / `data-static-photo`. Подробности — `docs/VERSIONS.md`.
 - **Рукописный класс в `@layer utilities` не получает вариантов Tailwind.** В v4 такой класс —
   просто CSS-правило, сборщик не считает его утилитой, и `lg:font-heading`, `[&_em]:font-heading`,
   `hover:shadow-card-hover` **не выдают никакого правила** и молча не работают: класс в разметке
@@ -176,7 +171,7 @@ docs/                    # документация проекта
   (не flex/grid), а `opacity-0` продолжает резервировать место в потоке.
 - **`npm run build` при запущенном `npm run dev` ломает дев-сервер.** Оба пишут в один `.next`,
   и после сборки дев начинает отдавать **404 на все динамические роуты** — включая боевой
-  `/tours/capetown` и `/admin/versions/*`. Выглядит как сломанный роутинг, хотя код цел.
+  `/tours/capetown`. Выглядит как сломанный роутинг, хотя код цел.
   Лечится `rm -rf .next` и рестартом дева. Проверять сборку — после остановки дев-сервера.
 - **⚠️ Turbopack иногда теряет CSS-правила при горячей пересборке.** Правило есть в
   `globals.css`, а в отданном браузеру `_next/static/chunks/*.css` его нет; `touch` не помогает,

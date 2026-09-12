@@ -1,7 +1,6 @@
 import { unstable_noStore as noStore } from "next/cache";
 import Link from "next/link";
 import { Container } from "@/components/ui/container";
-import { SmartLink } from "@/components/ui/smart-link";
 import { getSiteSettings } from "@/lib/site-settings";
 import { cn } from "@/lib/utils";
 
@@ -23,14 +22,14 @@ function FooterLinkItem({ link }: { link: FooterLink }) {
 
   const isExternal = /^https?:\/\//.test(link.url);
   return (
-    <SmartLink
+    <Link
       href={link.url}
       target={isExternal ? "_blank" : undefined}
       rel={isExternal ? "noopener noreferrer" : undefined}
       className={className}
     >
       {link.label}
-    </SmartLink>
+    </Link>
   );
 }
 

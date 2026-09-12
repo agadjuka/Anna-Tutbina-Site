@@ -1,8 +1,7 @@
-import { HeroSectionFullscreenV4 } from "@/components/sections/hero-section-fullscreen-v4";
 import { HeroSectionVideo } from "@/components/sections/hero-section-video";
 import { AboutSection } from "@/components/sections/about-section";
 import { CalendarSection } from "@/components/sections/calendar-section";
-import { ValuesSectionEditorial } from "@/components/sections/values-section-editorial";
+import { ValuesSection } from "@/components/sections/values-section";
 import { GuestsSection } from "@/components/sections/guests-section";
 import { FoundersSection } from "@/components/sections/founders-section";
 import { ReviewsSection } from "@/components/sections/reviews-section";
@@ -12,68 +11,35 @@ import { Reveal } from "@/components/ui/reveal";
 import type { HomeData } from "@/lib/home-data";
 
 /**
- * ГЛАВНАЯ СТРАНИЦА САЙТА (боевая, `app/page.tsx` → `hero="video"`).
+ * ГЛАВНАЯ СТРАНИЦА САЙТА — состав секций боевой `/` (`app/page.tsx`).
  *
- * С 2026-08-25 — облегчённый масштаб v8, с 2026-09-11 — ещё и видео на первом
- * экране вместо коллажа (проп `hero`, см. ниже).
+ * Размеры — облегчённые (заказчик выбрал их 25.08.2026) и записаны прямо в
+ * классах секций по закону одного множителя (`--ona-u` на `:root` в
+ * `globals.css`), без отдельного слоя переопределений.
  *
- * Изначально — общая реализация «облегчённых» версий сравнения v7/v8/v9 (ответ
- * на правку заказчика 2026-08-23 про тяжеловесность главной, разбор и цифры в
- * `docs/redesign/lightweight-scale-plan.md`). Заказчик выбрал вариант v8, и этот
- * компонент переехал из `components/versions/` сюда: он больше не «версия», а
- * боевая главная. Версии v7/v9 продолжают ссылаться на него, но они в архиве
- * (`lib/versions.ts`, статус `archived`) и уйдут вместе со всей папкой
- * `components/versions/` — см. `docs/versions-cleanup-plan.md`.
+ * Первый экран — видео (`hero-section-video.tsx`), с 11.09.2026. Прежний
+ * bento-коллаж из пяти фото удалён 12.09 вместе с системой версий; код —
+ * `Архив/versions-system-2026-09-12/` и история git.
  *
- * Размеры облегчённого масштаба v8 с 11.09.2026 записаны прямо в классах
- * секций (закон одного множителя, `--ona-u` на `:root` в `globals.css`) — они
- * «по умолчанию», без отдельного слоя переопределений и без атрибута на
- * `<html>`. Прежний проп `scale` (v7/v8/v9) и `PageScale` удалены: архивные
- * v7 и v9 теперь выглядят как v8 — они всё равно в архиве.
- *
- * АНИМАЦИИ ВЕРНУЛИСЬ 2026-08-25 (`docs/redesign/animations-restore.md`).
- * Пока это был один из трёх вариантов сравнения, движение выключали намеренно —
- * заказчик сравнивал только размеры. Когда v8 стал боевой главной, вместе с ним
- * на `/` переехало и отсутствие анимаций, хотя кинематографичный слой версии 6
- * заказчик согласовал ещё 20.08. Слой не удалялся — он заперт под `.v6-scene`
- * и просто не срабатывал, потому что элемента с этим классом на странице не
- * было. Теперь обёртка на месте, каждая секция — в `<Reveal className="v6-cine">`.
+ * АНИМАЦИИ: кинематографичное появление секций при прокрутке — обёртка
+ * `.v6-scene` + `<Reveal className="v6-cine">` у каждой секции (правила в
+ * `globals.css`, разбор — `docs/redesign/animations-restore.md`).
  *
  * ⚠️ HERO намеренно БЕЗ `<Reveal>` — он сам себе первый экран и появляется
- * по-своему (Ken Burns, маркер прокрутки). Так было во всех версиях с v2 по v6.
+ * по-своему (Ken Burns, маркер прокрутки).
  *
- * ⚠️ `prefers-reduced-motion` тут СОБЛЮДАЕТСЯ, в отличие от `/versions/*`, где
- * его форсировал `<ForceMotion>`. У пользователя с системной настройкой
- * «уменьшить анимацию» секции появятся только прозрачностью, без сдвига и
- * масштаба — это правильное поведение, менять не надо.
+ * ⚠️ `prefers-reduced-motion` соблюдается: у пользователя с системной
+ * настройкой «уменьшить анимацию» секции появляются только прозрачностью, без
+ * сдвига и масштаба — это правильное поведение, менять не надо.
  */
-export function HomeLight({
-  data,
-  hero = "collage",
-}: {
-  data: HomeData;
-  /**
-   * Какой первый экран показать. `video` — фоновый ролик (`hero-section-video.tsx`),
-   * он на боевой главной с 2026-09-11; `collage` — прежний bento из пяти фото.
-   * Всё, что ниже HERO, у обоих вариантов одинаковое.
-   *
-   * Значение по умолчанию намеренно осталось `collage`: без пропа `HomeLight`
-   * вызывают архивные версии v7/v8/v9, и они должны показывать ровно то, что
-   * показывали при сравнении. Боевая главная передаёт `video` явно.
-   */
-  hero?: "collage" | "video";
-}) {
+export function HomeLight({ data }: { data: HomeData }) {
   const { homePage, tours, reviews, customTour, faqItems, primaryContacts } = data;
 
   return (
     <>
       <div className="v6-scene">
         <main className="min-h-screen">
-          {hero === "video" ? (
-            <HeroSectionVideo video={homePage?.hero?.video} />
-          ) : (
-            homePage?.hero && <HeroSectionFullscreenV4 hero={homePage.hero} />
-          )}
+          <HeroSectionVideo video={homePage?.hero?.video} />
 
           <Reveal className="v6-cine">
             {homePage?.about && <AboutSection about={homePage.about} />}
@@ -82,7 +48,7 @@ export function HomeLight({
             <CalendarSection calendar={homePage?.calendar} tours={tours} />
           </Reveal>
           <Reveal className="v6-cine">
-            <ValuesSectionEditorial values={homePage?.values} />
+            <ValuesSection values={homePage?.values} />
           </Reveal>
           <Reveal className="v6-cine">
             <GuestsSection guests={homePage?.guests} />
