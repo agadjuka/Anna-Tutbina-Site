@@ -134,7 +134,8 @@ export function ToursEmbla({ tours }: ToursEmblaProps) {
         )}
 
         <div className="overflow-x-hidden overflow-y-visible py-2" ref={viewportRef}>
-          <div className="flex items-stretch gap-5 pr-1 sm:gap-6 lg:gap-8">
+          {/* Один тур — карусели нет, карточка встаёт по центру, а не к левому краю. */}
+          <div className={cn("flex items-stretch gap-5 sm:gap-6 lg:gap-8", single ? "justify-center" : "pr-1")}>
             {tours.map((tour) => (
               <div key={tour._id} className={slideClassName}>
                 <TourCalendarCard tour={tour} variant="mobile" />
