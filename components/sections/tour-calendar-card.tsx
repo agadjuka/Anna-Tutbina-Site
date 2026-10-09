@@ -45,7 +45,7 @@ interface TourCalendarCardProps {
    Текстовая панель при этом не менялась: заказчик просил оставить её как есть. */
 const ASPECT = {
   desktop: { ratio: 334.66 / 250.98, frame: "aspect-[334.66/250.98]", sizes: "28vw" },
-  mobile: { ratio: 4 / 5, frame: "aspect-[4/5]", sizes: "85vw" },
+  mobile: { ratio: 4 / 3, frame: "aspect-[4/3]", sizes: "75vw" },
 } as const;
 
 export function TourCalendarCard({ tour, variant = "desktop" }: TourCalendarCardProps) {
@@ -84,7 +84,7 @@ export function TourCalendarCard({ tour, variant = "desktop" }: TourCalendarCard
             image={image}
             fill
             aspectRatio={aspect.ratio}
-            sizes={variant === "mobile" ? "85vw" : "(max-width: 1023px) 85vw, 28vw"}
+            sizes={variant === "mobile" ? "75vw" : "(max-width: 1023px) 85vw, 28vw"}
             alt={tourFullTitle(tour.name, place)}
             className="tour-card__photo object-cover"
           />
@@ -111,7 +111,7 @@ export function TourCalendarCard({ tour, variant = "desktop" }: TourCalendarCard
             цифры из макета (17 / 35 / 20px, поля 26/23/28), а ниже ужиматься
             пропорционально ширине карточки. Трекинг и интерлиньяж переведены
             в `em`, иначе они не следовали бы за кеглем. */}
-        <div className="flex flex-1 flex-col px-5 pb-5 pt-4 lg:min-h-[min(7.7vw,148px)] lg:px-[min(1.35vw,26px)] lg:pb-[min(1.46vw,28px)] lg:pt-[min(1.2vw,23px)]">
+        <div className="flex flex-1 flex-col px-4 pb-4 pt-3 lg:min-h-[min(7.7vw,148px)] lg:px-[min(1.35vw,26px)] lg:pb-[min(1.46vw,28px)] lg:pt-[min(1.2vw,23px)]">
           {kicker && (
             /* Ровно ОДНА строка (`min-h` = один интерлиньяж). Кегль и трекинг
                подобраны так, что самое длинное из нынешних названий —
@@ -122,15 +122,15 @@ export function TourCalendarCard({ tour, variant = "desktop" }: TourCalendarCard
                Кегли карточки на `--ona-u` — ровно те, что были при 1280:
                карточку заказчик просил не менять, множитель только держит её
                копией самой себя на любой ширине (без полов `clamp`). */
-            <p className="text-[12px] font-medium uppercase tracking-[0.108em] text-background lg:min-h-[1.08em] lg:text-[calc(12*var(--ona-u))] lg:leading-[calc(12.96*var(--ona-u))] lg:tracking-[0.07em]">
+            <p className="text-[11px] font-medium uppercase tracking-[0.108em] text-background lg:min-h-[1.08em] lg:text-[calc(12*var(--ona-u))] lg:leading-[calc(12.96*var(--ona-u))] lg:tracking-[0.07em]">
               {kicker}
             </p>
           )}
-          <p className="mt-1 font-heading text-[27px] leading-[1.15] text-background lg:mt-[calc(5.38*var(--ona-u))] lg:text-[calc(23.3*var(--ona-u))] lg:leading-[calc(27.96*var(--ona-u))]">
+          <p className="mt-1 font-heading text-[22px] leading-[1.15] text-background lg:mt-[calc(5.38*var(--ona-u))] lg:text-[calc(23.3*var(--ona-u))] lg:leading-[calc(27.96*var(--ona-u))]">
             {headline}
           </p>
           {dates && (
-            <p className="mt-auto pt-2 text-[16px] font-medium text-background lg:pt-[min(0.31vw,6px)] lg:text-[calc(13.31*var(--ona-u))] lg:leading-[calc(15.18*var(--ona-u))]">
+            <p className="mt-auto pt-2 text-[14px] font-medium text-background lg:pt-[min(0.31vw,6px)] lg:text-[calc(13.31*var(--ona-u))] lg:leading-[calc(15.18*var(--ona-u))]">
               {dates}
             </p>
           )}

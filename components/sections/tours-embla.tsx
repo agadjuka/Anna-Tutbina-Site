@@ -107,7 +107,7 @@ export function ToursEmbla({ tours }: ToursEmblaProps) {
 
   /** На lg три карточки помещаются без скролла при ≤3 турах — но трек остаётся
    * каруселью на любом количестве, просто стрелки/точки скрыты, когда скроллить некуда. */
-  const slideClassName = "min-w-0 shrink-0 flex-[0_0_85%] sm:flex-[0_0_60%] md:flex-[0_0_calc((100%-2rem)/2)] lg:flex-[0_0_calc((100%-4rem)/3)]";
+  const slideClassName = "min-w-0 shrink-0 flex-[0_0_75%] sm:flex-[0_0_50%] md:flex-[0_0_calc((100%-2rem)/2)] lg:flex-[0_0_calc((100%-4rem)/3)]";
 
   // Фейд по краю — только там, где за ним страница фона, а не соседняя карточка
   // (см. урок из reviews-embla.tsx: на мобильном слайды всегда «подглядывают»,
