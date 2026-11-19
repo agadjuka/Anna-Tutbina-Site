@@ -3,7 +3,7 @@
 import useEmblaCarousel from "embla-carousel-react";
 import type { EmblaCarouselType } from "embla-carousel";
 import { useCallback, useEffect, useState, useMemo } from "react";
-import { SanityImage } from "@/components/ui/sanity-image";
+import { PhotoCarousel, NESTED_CAROUSEL_ATTR } from "@/components/sections/photo-carousel";
 import { PortableTextContent } from "@/components/ui/portable-text";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
@@ -54,6 +54,8 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
     containScroll: "keepSnaps",
     dragFree: false,
     loop: false,
+    // Перетаскивание, начатое на фото, принадлежит вложенной карусели фото.
+    watchDrag: (_api, evt) => !(evt.target as HTMLElement | null)?.closest?.(`[${NESTED_CAROUSEL_ATTR}]`),
   });
 
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -65,12 +67,10 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
   const slides = useMemo(() => buildSlides(locations), [locations]);
 
   const findSlideIndex = useCallback((locationIndex: number, imageIndex: number): number => {
+    // Считаем только фото с `asset` — так же, как `buildSlides` и `PhotoCarousel`.
     let currentIndex = 0;
     for (let i = 0; i < locationIndex; i++) {
-      const images = locations[i]?.locationImages;
-      if (images && images.length > 0) {
-        currentIndex += images.length;
-      }
+      currentIndex += (locations[i]?.locationImages ?? []).filter((img) => img?.asset).length;
     }
     return currentIndex + imageIndex;
   }, [locations]);
@@ -140,77 +140,17 @@ export function AccommodationCarousel({ locations }: AccommodationCarouselProps)
                         </div>
                       )}
 
-                      {/* Фотографии в сетке 2x2 - главный элемент */}
-                      {location.locationImages && location.locationImages.length > 0 ? (() => {
-                        // Вычисляем среднее соотношение сторон для всех изображений в локации
-                        const imagesToShow = location.locationImages.slice(0, 4);
-                        const aspectRatios = imagesToShow
-                          .map(img => {
-                            const dims = img?.asset?.metadata?.dimensions;
-                            return dims?.aspectRatio || (dims?.width && dims?.height ? dims.width / dims.height : 1);
-                          })
-                          .filter(ar => ar > 0);
-                        
-                        const averageAspectRatio = aspectRatios.length > 0
-                          ? aspectRatios.reduce((sum, ar) => sum + ar, 0) / aspectRatios.length
-                          : 1;
-
-                        return (
-                          <div className="grid grid-cols-2 gap-4 md:gap-6 lg:gap-[calc(25.6*var(--ona-u))] mb-4 md:mb-6 lg:mb-[calc(19.2*var(--ona-u))]">
-                            {imagesToShow.map((img, imgIdx) => {
-                              const slideIndex = findSlideIndex(index, imgIdx);
-                              const dims = img?.asset?.metadata?.dimensions;
-                              
-                              return (
-                                <button
-                                  key={imgIdx}
-                                  type="button"
-                                  onClick={() => setLightboxIndex(slideIndex)}
-                                  className={cn(
-                                    "group relative overflow-hidden",
-                                    "bg-gray-100 cursor-pointer transition-all duration-300",
-                                    "hover:scale-[1.02]"
-                                  )}
-                                  style={{ aspectRatio: averageAspectRatio }}
-                                >
-                                  <SanityImage
-                                    image={img}
-                                    width={dims?.width || 1200}
-                                    height={dims?.height || 800}
-                                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                                    alt={location.locationName || `Локация ${index + 1}`}
-                                  />
-                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-all duration-300 flex items-center justify-center">
-                                  <svg
-                                    width="40"
-                                    height="40"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-white drop-shadow-lg"
-                                  >
-                                    <path
-                                      d="M15 12C15 13.6569 13.6569 15 12 15C10.3431 15 9 13.6569 9 12C9 10.3431 10.3431 9 12 9C13.6569 9 15 10.3431 15 12Z"
-                                      stroke="currentColor"
-                                      strokeWidth="1.5"
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                    />
-                                    <path
-                                      d="M2.458 12C3.732 7.943 7.523 5 12 5C16.478 5 20.268 7.943 21.542 12C20.268 16.057 16.478 19 12 19C7.523 19 3.732 16.057 2.458 12Z"
-                                      stroke="currentColor"
-                                      strokeWidth="1.5"
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                    />
-                                  </svg>
-                                </div>
-                              </button>
-                            );
-                          })}
-                          </div>
-                        );
-                      })() : null}
+                      {/* Фотографии — вложенная карусель: свайп, стрелки, точки. */}
+                      {location.locationImages?.some((img) => img?.asset) ? (
+                        <PhotoCarousel
+                          images={location.locationImages}
+                          alt={location.locationName || `Локация ${index + 1}`}
+                          aspectRatio={3 / 2}
+                          sizes="(max-width: 767px) 100vw, (max-width: 1023px) 72vw, 60vw"
+                          onOpen={(imgIdx) => setLightboxIndex(findSlideIndex(index, imgIdx))}
+                          className="mb-4 md:mb-6 lg:mb-[calc(19.2*var(--ona-u))]"
+                        />
+                      ) : null}
 
                       {/* Описание снизу */}
                       {location.locationDescription && (
