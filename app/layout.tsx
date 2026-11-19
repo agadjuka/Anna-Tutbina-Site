@@ -9,6 +9,7 @@ import {
 } from "@/lib/fonts";
 import { Footer } from "@/components/sections/footer";
 import { Header } from "@/components/sections/header";
+import { BackgroundImageLoader } from "@/components/ui/background-image-loader";
 import { FloatingContacts } from "@/components/ui/floating-contacts";
 
 export const metadata: Metadata = {
@@ -103,6 +104,7 @@ export default function RootLayout({
       <body className="antialiased">
         <Header />
         {children}
+        <BackgroundImageLoader />
         <FloatingContacts />
         <Footer />
       </body>
